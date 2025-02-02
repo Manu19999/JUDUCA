@@ -16,11 +16,11 @@ let connection;
 
 const connect = async () => {
   try {
-      connection = await conexionbd(); // Await the connection
+      connection = await conexionbd(); 
       console.log('Base de datos conectada correctamente');
   } catch (error) {
       console.error('Error al conectar a la base de datos:', error);
-      process.exit(1); // Exit if cannot connect to the DB
+      process.exit(1); 
   }
 };
 
@@ -37,8 +37,8 @@ app.get('/', async (req, res) => {
     const query = 'SELECT * FROM TBL_EVENTOS';
   
     try {
-        const [results] = await connection.query(query); // Using promise-based query
-        res.json(results); // Send the query results as JSON
+        const [results] = await connection.query(query); 
+        res.json(results); 
     } catch (err) {
         console.error('Error ejecutando la consulta:', err);
         res.status(500).send('Error en la consulta');
