@@ -34,7 +34,7 @@ app.use(cors({
 
 /*PRUEBA*/
 app.get('/', async (req, res) => {
-    const query = 'SELECT * FROM TBL_EVENTOS';
+    const query = 'SELECT * FROM TBL_USUARIOS';
   
     try {
         const [results] = await connection.query(query); 
