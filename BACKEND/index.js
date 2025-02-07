@@ -27,7 +27,7 @@ const connect = async () => {
 connect();
 
 app.use(cors({
-    origin: 'http://localhost:3000', // Permitir sólo desde el frontend
+    origin: 'http://localhost:5173', // Permitir sólo desde el frontend
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
     credentials: true, // Para permitir cookies en las solicitudes
 }));
