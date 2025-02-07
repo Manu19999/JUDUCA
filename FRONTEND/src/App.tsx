@@ -1,11 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CreateEvent from "./pages/CreateEvent";
+import CrearCredenciales from "./pages/CrearCredenciales";
+
+
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/crear-evento" element={<CreateEvent />} />
+        <Route path="/crear-credencial" element={<CrearCredenciales />} />
+
       </Routes>
     </Router>
   );
