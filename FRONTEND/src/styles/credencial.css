@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(to bottom, #001f3f, #004080);
+    background: linear-gradient(to bottom, #253A69, #253A69);
     padding: 20px;
   }
   
@@ -17,9 +17,8 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background: #FFFFFF;
+    background: #FFF;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   
 
@@ -28,7 +27,7 @@
     text-align: center;
     font-size: 24px;
     font-weight: bold;
-    color: #003366;
+    color: #253A69;
     /* Azul oscuro */
     margin-bottom: 15px;
 }
@@ -38,12 +37,12 @@ input,
 textarea {
     width: 100%;
     padding: 10px;
-    border: 2px solid #003366;
+    border: 2px solid #253A69;
     /* Azul oscuro */
     border-radius: 5px;
-    background: #FFFFFF;
+    background: #FFF;
     /* Fondo blanco */
-    color: #003366;
+    color: #253A69;
     /* Azul oscuro */
     font-size: 16px;
 }
@@ -60,7 +59,7 @@ textarea:focus {
 label {
     font-size: 16px;
     font-weight: bold;
-    color: #003366;
+    color: #253A69;
     /* Azul oscuro */
     display: block;
     margin-top: 10px;
@@ -76,14 +75,14 @@ label {
 
 .checkbox-container label {
     font-size: 16px;
-    color: #003366;
+    color: #253A69;
 }
 
 /* Botón */
 button {
-    background: #FFCC00;
+    background: #ffcc00;
     /* Amarillo dorado */
-    color: #003366;
+    color: #253A69;
     /* Azul oscuro */
     padding: 12px;
     font-size: 18px;
@@ -96,6 +95,6 @@ button {
 }
 
 button:hover {
-    background: #e6b800;
+    background: #ffcc00;
     /* Amarillo dorado más oscuro */
 }
