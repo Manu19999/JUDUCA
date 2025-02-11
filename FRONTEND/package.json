@@ -1,0 +1,30 @@
+{
+  "name": "vite-bs",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "/src/main.jsx",
+  "homepage": "https://santosalarcon.github.io/vite-react-bootstrap",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "update": "npm-check-updates -u",
+    "deploy": "vite build && gh-pages -d dist"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.0",
+    "bootstrap-icons": "^1.10.5",
+    "gh-pages": "^5.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.1.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "@vitejs/plugin-react": "^4.0.1",
+    "npm-check-updates": "^16.10.13",
+    "vite": "^4.3.9"
+  }
+}
