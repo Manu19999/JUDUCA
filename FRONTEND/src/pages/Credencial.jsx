@@ -1,9 +1,11 @@
 import React from "react";
 import CredencialForm from "../components/credencial"; // Asegúrate de que la ruta sea correcta
+import Nav from '../components/Dashboard/nav';
 
 const CrearCredenciales = () => {
   return (
-    <div className="container mx-auto p-4">
+    <div  >
+      <Nav />
       <CredencialForm />
     </div>
   );

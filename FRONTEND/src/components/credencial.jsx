@@ -51,10 +51,6 @@ const CredencialForm = () => {
           <label>FECHA DE VENCIMIENTO</label>
           <input type="datetime-local" name="fechaVencimiento" value={credencial.fechaVencimiento} onChange={handleChange} required />
 
-          <div className="checkbox-container">
-          <label>Activo</label>
-            <input type="checkbox" name="activo" checked={credencial.activo} onChange={handleChange} />
-          </div>
 
           <button type="submit">ASIGNAR</button>
         </form>
