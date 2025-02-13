@@ -1,0 +1,107 @@
+/* ===== HERO SECTION ===== */
+.hero-section {
+  position: relative;
+  background: url("../../assets/CDUUNAH.jpg") no-repeat center center/cover;
+  height: 80vh;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  background-attachment: fixed; /* Efecto Parallax */
+}
+
+/* Overlay oscuro para mejorar la legibilidad */
+.hero-section .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* Contenido del Hero */
+.hero-content {
+  position: relative;
+  z-index: 1;
+  animation: fadeSlideIn 1.2s ease-out forwards;
+}
+
+/* Título con iluminación al pasar el mouse */
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.5);
+  transition: text-shadow 0.3s ease;
+}
+
+.hero-title:hover {
+  text-shadow: 5px 5px 20px rgba(255, 255, 255, 0.8);
+}
+
+/* Subtítulo con animación de aparición */
+.hero-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards 0.5s;
+}
+
+/* Botón con efecto de escala e iluminación */
+.explore-button {
+  background-color: var(--secondary-color);
+  color: black;
+  font-weight: bold;
+  padding: 12px 30px;
+  border: none;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.3);
+}
+
+.explore-button:hover {
+  background-color: white;
+  color: var(--primary-color);
+  transform: scale(1.1);
+  box-shadow: 0px 6px 15px rgba(255, 255, 255, 0.5);
+}
+
+/* ===== ANIMACIONES ===== */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero-section {
+    height: 60vh;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .explore-button {
+    padding: 10px 25px;
+    font-size: 1rem;
+  }
+}

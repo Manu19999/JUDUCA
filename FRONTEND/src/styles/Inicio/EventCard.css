@@ -1,0 +1,93 @@
+/* ===== EVENT CARD STYLES ===== */
+:root {
+  --card-bg-color: #fff;
+  --card-hover-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+  --card-radius: 15px;
+  --card-padding: 1.5rem;
+  --text-color: #ffffff;
+  --text-muted: #eee;
+  --description-color: #ddd;
+  --overlay-bg: rgba(0, 0, 0, 0.7);
+  --image-height: 220px;
+  --hover-zoom: 1.1;
+  --hover-brightness: 0.8;
+}
+
+/* Tarjeta principal */
+.event-card {
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  height: 100%;
+  position: relative;
+  background-color: var(--card-bg-color);
+}
+
+.event-card:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--card-hover-shadow);
+}
+
+/* Imagen */
+.event-image {
+  width: 100%;
+  height: var(--image-height);
+  object-fit: cover;
+  border-top-left-radius: var(--card-radius);
+  border-top-right-radius: var(--card-radius);
+  transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
+}
+
+.event-card:hover .event-image {
+  transform: scale(var(--hover-zoom));
+  filter: brightness(var(--hover-brightness));
+}
+
+/* Cuerpo de la tarjeta */
+.event-card .card-body {
+  padding: var(--card-padding);
+  color: var(--text-color);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 90%;
+  z-index: 1; /* Aseguramos que esté encima del fondo */
+}
+
+/* Fondo detrás del texto */
+.event-card .card-body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--overlay-bg);
+  border-radius: calc(var(--card-radius) - 5px); /* Mantiene bordes consistentes */
+  z-index: -1;
+}
+
+/* Título del evento */
+.card-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+/* Fecha del evento */
+.card-text {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-muted);
+}
+
+/* Descripción del evento */
+.event-description {
+  font-size: 0.9rem;
+  color: var(--description-color);
+  margin-bottom: 0;
+}

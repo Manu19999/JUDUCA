@@ -1,56 +1,101 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+/* ===== Reset Global ===== css globales */
+* {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth; /* Desplazamiento suave al hacer clic en enlaces */
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* ===== Tipografía Global ===== */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: white !important;
+  color: var(--text-color) !important;
+  line-height: 1.6;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
+/* ===== Variables CSS ===== */
+:root {
+  --primary-color: #003366; /* Azul UNAH */
+  --secondary-color: #FFD700; /* Amarillo UNAH */
+  --text-color: #333;
+  --bg-light: #f8f9fa;
+  --transition-speed: 0.3s;
 }
-button:hover {
-  border-color: #646cff;
+
+/* ===== Enlaces Globales ===== */
+a {
+  text-decoration: none;
+  color: var(--primary-color);
+  padding: 0 5px;
+  transition: background-color 0.3s ease;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+
+a:hover {
+  color: var(--secondary-color);
+  background-color: rgba(0, 0, 0, 0.1); /* Fondo suave */
+}
+
+
+/* ===== Botones Generales ===== */
+.btn-primary {
+  background-color: var(--primary-color) !important;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  transition: background var(--transition-speed), transform var(--transition-speed);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+  background-color: var(--secondary-color) !important;
+  color: black !important;
+  transform: translateY(-2px); /* Efecto de elevación al pasar el mouse */
+}
+
+/* ===== Navbar Global (Se aplicará por defecto a cualquier navbar) ===== */
+.navbar-custom {
+  background: linear-gradient(to right, var(--primary-color), #0055A4);
+  padding: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Secciones Generales (para dar consistencia al diseño) ===== */
+section {
+  padding: 50px 0;
+  background: var(--bg-light);
+}
+
+/* ===== Tarjetas (Cards) ===== */
+.card {
+  border: none;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== Animación de Fade-In para elementos al cargar ===== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInAnimation 0.8s ease-out forwards;
+}
+
+@keyframes fadeInAnimation {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Pie de Página (Footer) ===== */
+.footer-custom {
+  background-color: var(--primary-color);
+  color: white;
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
 }
