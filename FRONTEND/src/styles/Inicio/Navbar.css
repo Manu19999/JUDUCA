@@ -1,77 +1,87 @@
-/* ===== Navbar Moderno ===== */
+/* ===== Navbar Moderno ===== */ 
 .navbar-custom {
-    background: linear-gradient(to right, #003366, #0055A4);
-    padding: 15px 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    transition: background 0.3s ease-in-out;
-  }
-  
-  /* ===== Logo ===== */
-  .logo {
-    color: white;
-    font-weight: bold;
-    font-size: 1.5rem;
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .logo:hover {
-    transform: scale(1.05);
-  }
-  
-  /* ===== Menú de Navegación ===== */
+  background: linear-gradient(to right, #003366, #0055A4);
+  padding: 15px 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease-in-out;
+}
+
+/* ===== Logo ===== */
+.logo {
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+  transition: transform 0.3s ease-in-out;
+  display: flex;
+  align-items: center; /* Alinea el logo con el texto */
+  gap: 10px; /* Espaciado entre la imagen y el texto */
+  text-decoration: none;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.logo-img {
+  width: 40px; /* Ajusta el tamaño del logo */
+  height: 40px;
+  object-fit: contain;
+}
+
+/* ===== Menú de Navegación ===== */
+.nav-links {
+  display: flex;
+  gap: 25px; /* Espaciado entre los enlaces */
+}
+
+/* ===== Enlaces del Navbar ===== */
+.nav-link-custom {
+  color: white !important;
+  font-size: 1.1rem;
+  padding: 8px 15px;
+  transition: color 0.3s ease-in-out, transform 0.2s;
+}
+
+.nav-link-custom:hover {
+  color: #FFC107 !important;
+  transform: translateY(-2px);
+}
+
+/* ===== Botón de Acceder ===== */
+.btn-acceder {
+  border: 2px solid white;
+  color: white;
+  font-weight: bold;
+  padding: 8px 20px;
+  transition: background 0.3s ease-in-out, transform 0.2s;
+}
+
+.btn-acceder:hover {
+  background: #FFC107;
+  color: black;
+  border-color: #FFC107;
+  transform: scale(1.05);
+}
+
+/* ===== Estilos Responsivos ===== */
+@media (max-width: 992px) {
   .nav-links {
-    display: flex;
-    gap: 25px; /* Espaciado entre los enlaces */
-  }
-  
-  /* ===== Enlaces del Navbar ===== */
-  .nav-link-custom {
-    color: white !important;
-    font-size: 1.1rem;
-    padding: 8px 15px;
-    transition: color 0.3s ease-in-out, transform 0.2s;
-  }
-  
-  .nav-link-custom:hover {
-    color: #FFC107 !important;
-    transform: translateY(-2px);
-  }
-  
-  /* ===== Botón de Acceder ===== */
-  .btn-acceder {
-    border: 2px solid white;
-    color: white;
-    font-weight: bold;
-    padding: 8px 20px;
-    transition: background 0.3s ease-in-out, transform 0.2s;
-  }
-  
-  .btn-acceder:hover {
-    background: #FFC107;
-    color: black;
-    border-color: #FFC107;
-    transform: scale(1.05);
-  }
-  
-  /* ===== Estilos Responsivos ===== */
-  @media (max-width: 992px) {
-    .nav-links {
       flex-direction: column;
       gap: 15px;
       padding-top: 15px;
       align-items: center; /* Centra los enlaces */
-    }
-  
-    .btn-acceder {
+  }
+
+  .btn-acceder {
       width: auto; /* Ancho proporcional al contenido */
       margin-top: 15px; /* Espacio superior */
       padding: 10px 20px; /* Tamaño adecuado para móviles */
-     
-    }
-    /* Centrar el botón en móviles */
-    .navbar-custom .navbar-collapse {
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* Centra todo el contenido */
-    }
   }
+
+  /* Centrar el botón en móviles */
+  .navbar-custom .navbar-collapse {
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Centra todo el contenido */
+  }
+}

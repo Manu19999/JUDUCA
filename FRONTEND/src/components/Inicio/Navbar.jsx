@@ -2,6 +2,7 @@ import React from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"; // Importa useNavigate
 import "../../styles/Inicio/Navbar.css";
+import logo from '../../assets/UNAH-escudo.png'
 
 const CustomNavbar = () => {
   const navigate = useNavigate(); // Hook para redirigir
@@ -14,8 +15,9 @@ const CustomNavbar = () => {
     <Navbar expand="lg" className="navbar-custom" fixed="top">
       <Container>
         {/* Logo a la izquierda */}
-        <Navbar.Brand href="#home" className="logo">Eventos</Navbar.Brand>
-
+        <Navbar.Brand href="/Inicio" className="logo d-flex align-items-center">
+        <img src={logo} alt="Logo" className="logo-img" /> <span>UNAH</span>
+      </Navbar.Brand>
         {/* Botón para abrir el menú en móviles */}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
