@@ -31,6 +31,14 @@ const navigate = () => {
               <NavDropdown.Divider />
               <NavDropdown.Item href="#reportes">Reportes</NavDropdown.Item>
             </NavDropdown>
+            <NavDropdown title="Vouchers y tickets" id="basic-na-dropdown">
+              <NavDropdown.Item href="/voucher">Vouchers</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="#voucher">Tickets </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="#usuarios">Comedores</NavDropdown.Item>
+              <NavDropdown.Divider />
+            </NavDropdown>
           </Nav>
         </Navbar.Collapse>
       </Container>
