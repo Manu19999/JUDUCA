@@ -5,10 +5,12 @@ import React, { useEffect, useState } from "react";
 import Home from "./pages/Home"; // Importa la nueva página de inicio
 import Login from "./pages/Login"; //página para iniciar sesión
 import Dashboard from "./pages/Dashboard"; // Importa la nueva página de inicio
-
+import Vouchers from "./pages/voucher"; 
 
 import CreateEvent from "./pages/Evento";
 import CreateCredencial from "./pages/credencial";
+
+
 
 
 function App() {
@@ -20,6 +22,13 @@ function App() {
         <Route path="/crear-evento" element={<CreateEvent />} />
         <Route path="/crear-credencial" element={<CreateCredencial />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/voucher" element={<Vouchers />} />
+
+
+
+
+
+
 
       </Routes>
     </Router>
