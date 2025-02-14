@@ -24,7 +24,8 @@ const navigate = () => {
             <Nav.Link href="#calendario">Calendario</Nav.Link>
             <Nav.Link href="#contacto">Contacto</Nav.Link>
             <NavDropdown title="Gestión" id="basic-na-dropdown">
-              <NavDropdown.Item href="/crear-credencial">Credenciales</NavDropdown.Item>
+              <NavDropdown.Item href="/crear-credencial">Crear Credenciales</NavDropdown.Item>
+              <NavDropdown.Item href="/Credencial">Gestionar Credenciales</NavDropdown.Item>
               <NavDropdown.Item href="#eventos">Eventos</NavDropdown.Item>
               <NavDropdown.Item href="#usuarios">Usuarios</NavDropdown.Item>
               <NavDropdown.Divider />

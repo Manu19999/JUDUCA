@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard"; // Importa la nueva página de inicio
 
 import CreateEvent from "./pages/Evento";
 import CreateCredencial from "./pages/credencial";
+import ConfigCredencial from "./pages/ConfCredencial"; // Importa la nueva página de inicio
 
 
 function App() {
@@ -17,9 +18,11 @@ function App() {
       <Routes>
         <Route path="/inicio" element={<Home />} />
         <Route path="/login" element={<Login />}/>
+        <Route path="/dashboard" element={<Dashboard />} />
+
         <Route path="/crear-evento" element={<CreateEvent />} />
         <Route path="/crear-credencial" element={<CreateCredencial />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/Credencial" element={<ConfigCredencial />} />
 
       </Routes>
     </Router>
