@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/Credencial/credencial.css";
 
+
 const CredencialForm = () => {
   const [credenciales, setCredenciales] = useState([]);
   const [credencial, setCredencial] = useState({
