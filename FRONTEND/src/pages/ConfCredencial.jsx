@@ -1,5 +1,5 @@
 import React from "react";
-import Nav from '../components/Dashboard/nav';
+import Nav from '../components/Dashboard/navDashboard';
 import ConfiguracionCredencial from "../components/Credencial/configCredencial"; // Asegúrate de 
 
 const ConfCredenciales = () => {

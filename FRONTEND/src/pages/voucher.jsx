@@ -1,4 +1,4 @@
-import Nav from '../components/Dashboard/nav';
+import Nav from '../components/Dashboard/navDashboard';
 import Vouchers from '../components/Vouchers/vouchers';
 const voucher = () => {
   return (

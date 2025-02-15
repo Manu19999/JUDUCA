@@ -1,6 +1,6 @@
 import React from "react";
 import CredencialForm from "../components/Credencial/credencial"; 
-import Nav from '../components/Dashboard/nav';
+import Nav from '../components/Dashboard/navDashboard';
 
 const CrearCredenciales = () => {
   return (
