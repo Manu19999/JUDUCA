@@ -1,4 +1,6 @@
-/* ===== Reset Global ===== css globales */
+/* ===== Estilos globales ======= */
+@import "@fontsource/montserrat";
+
 * {
   margin: 0;
   padding: 0;
@@ -8,7 +10,7 @@
 
 /* ===== Tipografía Global ===== */
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: "Montserrat", sans-serif !important;
   background-color: white !important;
   color: var(--text-color) !important;
   line-height: 1.6;
@@ -16,86 +18,25 @@ body {
 
 /* ===== Variables CSS ===== */
 :root {
-  --primary-color: #003366; /* Azul UNAH */
-  --secondary-color: #FFD700; /* Amarillo UNAH */
+  --primary-color: #253a69; /* Azul */
+  --secondary-color: #ffcc00; /* Amarillo */
+  --hover: #DEA93F; /* Amarillo para efecto hover */
   --text-color: #333;
   --bg-light: #f8f9fa;
   --transition-speed: 0.3s;
 }
 
-/* ===== Enlaces Globales ===== */
-a {
-  text-decoration: none;
-  color: var(--primary-color);
-  padding: 0 5px;
-  transition: background-color 0.3s ease;
+/* ===== Enlaces del Navbar ===== */
+.nav-link-custom {
+  color: white !important;
+  font-size: 1.1rem;
+  padding: 8px 15px;
+  text-decoration: none; /* Elimina subrayado */
+  transition: color 0.3s ease-in-out, transform 0.2s, background-color 0.3s ease;
 }
 
-a:hover {
-  color: var(--secondary-color);
+.nav-link-custom:hover {
+  color: var(--secondary-color) !important; /* Usa la variable */
+  transform: translateY(-2px);
   background-color: rgba(0, 0, 0, 0.1); /* Fondo suave */
-}
-
-
-/* ===== Botones Generales ===== */
-.btn-primary {
-  background-color: var(--primary-color) !important;
-  border: none;
-  padding: 10px 20px;
-  font-weight: bold;
-  transition: background var(--transition-speed), transform var(--transition-speed);
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.btn-primary:hover {
-  background-color: var(--secondary-color) !important;
-  color: black !important;
-  transform: translateY(-2px); /* Efecto de elevación al pasar el mouse */
-}
-
-/* ===== Navbar Global (Se aplicará por defecto a cualquier navbar) ===== */
-.navbar-custom {
-  background: linear-gradient(to right, var(--primary-color), #0055A4);
-  padding: 15px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* ===== Secciones Generales (para dar consistencia al diseño) ===== */
-section {
-  padding: 50px 0;
-  background: var(--bg-light);
-}
-
-/* ===== Tarjetas (Cards) ===== */
-.card {
-  border: none;
-  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* ===== Animación de Fade-In para elementos al cargar ===== */
-.fade-in {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInAnimation 0.8s ease-out forwards;
-}
-
-@keyframes fadeInAnimation {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ===== Pie de Página (Footer) ===== */
-.footer-custom {
-  background-color: var(--primary-color);
-  color: white;
-  text-align: center;
-  padding: 20px;
-  font-size: 0.9rem;
 }
