@@ -1,59 +1,49 @@
 /* ===== Navbar Moderno ===== */ 
 .navbar-custom {
-  background: linear-gradient(to right, #003366, #0055A4);
-  padding: 15px 20px;
+  background: linear-gradient(to right, #253a69, #054d91);
+  padding: 0 20px; /* Reduce el padding superior/inferior para evitar expansión */
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   transition: background 0.3s ease-in-out;
+  height:65px; /* Altura fija */
+  display: flex;
+  align-items: center; /* Centra verticalmente los elementos */
+  justify-content: space-between; /* Distribuye el contenido horizontalmente */
+  overflow: hidden;
 }
 
 /* ===== Logo ===== */
 .logo {
-  color: white;
-  font-weight: bold;
-  font-size: 1.5rem;
-  transition: transform 0.3s ease-in-out;
   display: flex;
-  align-items: center; /* Alinea el logo con el texto */
-  gap: 10px; /* Espaciado entre la imagen y el texto */
+  align-items: center; /* Centrar verticalmente */
+  gap: 10px;
   text-decoration: none;
 }
 
-.logo:hover {
-  transform: scale(1.05);
-}
-
 .logo-img {
-  width: 40px; /* Ajusta el tamaño del logo */
-  height: 40px;
-  object-fit: contain;
+  width: 100px; /* Tamaño más grande */
+  max-width: 100px;
+  height: auto; /* Ajuste proporcional */
+  max-height: 60px; /* Para que no sobresalga del navbar */
+  object-fit: contain; 
 }
 
 /* ===== Menú de Navegación ===== */
 .nav-links {
   display: flex;
   gap: 25px; /* Espaciado entre los enlaces */
-}
-
-/* ===== Enlaces del Navbar ===== */
-.nav-link-custom {
-  color: white !important;
-  font-size: 1.1rem;
-  padding: 8px 15px;
-  transition: color 0.3s ease-in-out, transform 0.2s;
-}
-
-.nav-link-custom:hover {
-  color: #FFC107 !important;
-  transform: translateY(-2px);
+  align-items: center; /* Asegura que estén alineados verticalmente */
 }
 
 /* ===== Botón de Acceder ===== */
 .btn-acceder {
+  margin-bottom: 13px;
   border: 2px solid white;
   color: white;
   font-weight: bold;
   padding: 8px 20px;
   transition: background 0.3s ease-in-out, transform 0.2s;
+  display: flex;
+  align-items: center; /* Centra el texto del botón */
 }
 
 .btn-acceder:hover {
@@ -62,26 +52,96 @@
   border-color: #FFC107;
   transform: scale(1.05);
 }
+/* ===== Estilos personalizados para el botón de toggle ===== */
+.navbar-custom .navbar-toggler {
+  margin-bottom: 13px;
+  border: 1px solid white; /* Borde blanco inicial */
+  background-color: transparent; /* Fondo azul oscuro inicial */
+  padding: 0.5rem 0.75rem; /* Padding compacto */
+  transition: all 0.3s ease-in-out; /* Transición suave para todos los cambios */
+}
 
+/* Eliminar el borde de enfoque (outline) al hacer clic */
+.navbar-custom .navbar-toggler:focus {
+  outline: none; /* Elimina el contorno predeterminado */
+  box-shadow: none; /* Elimina la sombra (si la hay) */
+}
+
+/* Estilo del ícono inicial (blanco) */
+.navbar-custom .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  transition: background-image 0.3s ease-in-out; /* Transición suave para el ícono */
+}
+
+/* Estilos al pasar el mouse (hover) */
+.navbar-custom .navbar-toggler:hover {
+  background-color: white; /* Fondo blanco */
+  border-color: #1D386E; /* Borde azul */
+}
+
+.navbar-custom .navbar-toggler:hover .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%231D386E' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Estilos cuando el menú está desplegado ([aria-expanded="true"]) */
+.navbar-custom .navbar-toggler[aria-expanded="true"] {
+  background-color: white; /* Fondo blanco */
+  border-color: #1D386E; /* Borde azul */
+}
+
+.navbar-custom .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%231D386E' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Estilos cuando el menú está minimizado ([aria-expanded="false"]) */
+.navbar-custom .navbar-toggler[aria-expanded="false"] {
+  background-color: #1D386E; /* Fondo azul oscuro */
+  border-color: white; /* Borde blanco */
+}
+
+.navbar-custom .navbar-toggler[aria-expanded="false"] .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
 /* ===== Estilos Responsivos ===== */
 @media (max-width: 992px) {
+  .navbar-custom {
+    flex-direction: column;
+    height: auto; /* Permitir altura dinámica en pantallas pequeñas */
+    padding: 10px 20px;
+  }
+
   .nav-links {
-      flex-direction: column;
-      gap: 15px;
-      padding-top: 15px;
-      align-items: center; /* Centra los enlaces */
+    flex-direction: column;
+    gap: 15px;
+    padding-top: 10px;
+    align-items: center;
   }
 
   .btn-acceder {
-      width: auto; /* Ancho proporcional al contenido */
-      margin-top: 15px; /* Espacio superior */
-      padding: 10px 20px; /* Tamaño adecuado para móviles */
+    width: auto;
+    margin-top: 10px;
+    padding: 10px 20px;
   }
 
-  /* Centrar el botón en móviles */
   .navbar-custom .navbar-collapse {
-      display: flex;
-      flex-direction: column;
-      align-items: center; /* Centra todo el contenido */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .logo-img {
+    width: 80px; 
+    max-width: 80px;
+    max-height: 40px; /* Ajuste adicional para pantallas pequeñas */
+  }
+}
+
+@media (max-width: 576px) {
+  .logo-img {
+    width: 70px;
+    max-width: 70px;
+    max-height: 35px;
   }
 }

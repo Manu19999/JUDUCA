@@ -13,6 +13,7 @@
     "deploy": "vite build && gh-pages -d dist"
   },
   "dependencies": {
+    "@fontsource/montserrat": "^5.1.1",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.10.5",
     "gh-pages": "^5.0.0",

@@ -14,7 +14,7 @@
 .login-box {
   background: white;
   padding: 2rem;
-  border-radius: 15px;
+  border-radius: 8px;
   box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.2); /* Sombra suave */
   max-width: 400px;
   width: 100%;

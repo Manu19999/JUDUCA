@@ -1,107 +1,132 @@
-/* ===== HERO SECTION ===== */
 .hero-section {
   position: relative;
-  background: url("../../assets/CDUUNAH.jpg") no-repeat center center/cover;
-  height: 80vh;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  height: 100vh;
   overflow: hidden;
-  background-attachment: fixed; /* Efecto Parallax */
 }
 
-/* Overlay oscuro para mejorar la legibilidad */
-.hero-section .overlay {
+.carousel-image {
+  height: 100vh;
+  width: 100%;
+  object-fit: cover;
+  filter: brightness(0.7); /* Oscurece la imagen para mejorar la legibilidad del texto */
+  transition: transform 10s ease-in-out; /* Efecto de zoom suave */
+}
+
+.carousel-item.active .carousel-image {
+  transform: scale(1.1); /* Zoom suave en la imagen activa */
+}
+
+.overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.4); /* Overlay más oscuro para mejor contraste */
+  z-index: 1; /* Asegura que el overlay esté sobre las imágenes */
 }
 
-/* Contenido del Hero */
 .hero-content {
-  position: relative;
-  z-index: 1;
-  animation: fadeSlideIn 1.2s ease-out forwards;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  z-index: 2; /* Asegura que el texto esté sobre el overlay */
+  text-align: center;
+  width: 90%; /* Asegura que el contenido no se salga de la pantalla en móviles */
+  padding: 0 20px; /* Espaciado lateral para móviles */
 }
 
-/* Título con iluminación al pasar el mouse */
 .hero-title {
-  font-size: 3.5rem;
+  font-size: 4rem;
   font-weight: bold;
-  text-transform: uppercase;
-  text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.5);
-  transition: text-shadow 0.3s ease;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6); /* Sombra para mejor legibilidad */
+  animation: popIn 1.5s ease-in-out; /* Animación solo al cargar la página */
 }
 
-.hero-title:hover {
-  text-shadow: 5px 5px 20px rgba(255, 255, 255, 0.8);
-}
-
-/* Subtítulo con animación de aparición */
 .hero-subtitle {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-  opacity: 0;
-  animation: fadeIn 1s ease-in-out forwards 0.5s;
+  font-size: 2rem;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6); /* Sombra para mejor legibilidad */
+  animation: fadeIn 2s ease-in-out; /* Animación solo al cargar la página */
 }
 
-/* Botón con efecto de escala e iluminación */
-.explore-button {
-  background-color: var(--secondary-color);
-  color: black;
-  font-weight: bold;
-  padding: 12px 30px;
-  border: none;
-  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.3);
-}
-
-.explore-button:hover {
-  background-color: white;
-  color: var(--primary-color);
-  transform: scale(1.1);
-  box-shadow: 0px 6px 15px rgba(255, 255, 255, 0.5);
-}
-
-/* ===== ANIMACIONES ===== */
-@keyframes fadeSlideIn {
-  from {
+/* Animaciones */
+@keyframes popIn {
+  0% {
     opacity: 0;
-    transform: translateY(30px);
+    transform: scale(0.5);
   }
-  to {
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-@keyframes fadeIn {
-  to {
-    opacity: 1;
+/* Media Queries para Responsividad */
+@media (max-width: 1200px) {
+  .hero-title {
+    font-size: 3.5rem; /* Tamaño de fuente más pequeño para pantallas grandes pero no desktops */
+  }
+
+  .hero-subtitle {
+    font-size: 1.8rem;
   }
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .hero-section {
-    height: 60vh;
+@media (max-width: 992px) {
+  .hero-title {
+    font-size: 3rem; /* Tamaño de fuente para tablets */
   }
 
+  .hero-subtitle {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 768px) {
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 2.5rem; /* Tamaño de fuente para tablets pequeñas */
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-title {
+    font-size: 2rem; /* Tamaño de fuente para móviles */
+    margin-bottom: 0.5rem;
   }
 
   .hero-subtitle {
     font-size: 1.2rem;
   }
+}
 
-  .explore-button {
-    padding: 10px 25px;
+@media (max-width: 400px) {
+  .hero-title {
+    font-size: 1.8rem; /* Tamaño de fuente para móviles muy pequeños */
+  }
+
+  .hero-subtitle {
     font-size: 1rem;
   }
 }

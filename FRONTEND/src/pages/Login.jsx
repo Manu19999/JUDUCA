@@ -8,7 +8,7 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <Link to="/inicio" className="back-to-home-button">
+      <Link to="/" className="back-to-home-button">
         <FaArrowCircleLeft /> Ir al inicio
       </Link>
       <div className="login-box">
