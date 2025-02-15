@@ -112,6 +112,7 @@ input[type="password"] {
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
+  background-color: #ffcc00;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
@@ -130,7 +131,7 @@ input[type="password"] {
 }
 
 .forgot-password:hover {
-  color: #ffd700;
+  color: #ffcc00;
   text-decoration: underline;
 }
 

@@ -6,16 +6,21 @@
 }
 
 /* Estilos para el carrusel */
-/* Estilos para el carrusel */
 .eventgrid {
   display: flex;
-  flex-direction: column; /* Cambia la dirección a columna */
-  align-items: center; /* Centra el contenido horizontalmente */
+  flex-direction: column; /* Por defecto en columna */
+  align-items: center;
   gap: 20px;
-  overflow-x: hidden; /* Oculta el desplazamiento horizontal */
+  overflow-x: hidden;
   position: relative;
   padding-bottom: 20px;
 }
+
+.eventgrid.two-events {
+  flex-direction: row; /* Se pone en fila si hay solo dos eventos */
+  justify-content: center;
+}
+
 
 .carousel-container {
   display: flex;

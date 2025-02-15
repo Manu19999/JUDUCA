@@ -1,6 +1,6 @@
 /* Estilos generales del Navbar */
 .navbar-custom {
-  background: linear-gradient(to right, #253a69, #054d91);
+  background: linear-gradient(to right, #253A69, #054d91);
   height: 65px;
   width: 100%;
   display: flex;
@@ -11,7 +11,10 @@
   left: 0;
   z-index: 1000;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(103, 123, 172, 0.5);
+  box-shadow: 0px 4px 6px rgba(103, 123, 172, 0.4);
 }
+
 
 /* Contenedor principal */
 .navbar-container {
@@ -94,6 +97,7 @@
   width: 100%; /* El subrayado crece hasta el 100% del ancho del enlace */
 }
 
+
 /* Botón Acceder */
 .btn-acceder {
   font-size: 17px;
@@ -104,7 +108,6 @@
   padding: 4px 8px;
   cursor: pointer;
   transition: all 0.3s;
-  margin-bottom: 15px;
   border-radius: 18px;
 }
 
@@ -135,7 +138,7 @@
     top: 65px;
     left: 0;
     width: 100%;
-    background: rgba(37, 58, 105, 0.95);
+    background: linear-gradient(to right, #253a69, #054d91);
     padding: 0px; /* Reducir el padding */
     display: none; /* Oculto en móviles por defecto */
     flex-direction: column;
@@ -147,6 +150,11 @@
 
   .custom-menu.show {
     display: flex; /* ✅ Se muestra cuando se activa */
+  }
+
+  .custom-menu a:last-child,
+  .custom-menu button:last-child {
+      margin-bottom: 15px; /* Ajusta el valor según necesites */
   }
 
   .nav-list {

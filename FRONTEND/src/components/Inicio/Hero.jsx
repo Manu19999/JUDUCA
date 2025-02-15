@@ -29,7 +29,7 @@ const Hero = () => {
       </Carousel>
 
       {/* Contenido fijo fuera del Carousel */}
-      <div className="overlay"></div>
+      <div className="oscurosobreimg"></div>
       <Container className="hero-content">
         <h1 className="hero-title">¡Bienvenidos a nuestros eventos!</h1>
         <p className="hero-subtitle">Descubre actividades únicas, arte, deportes y más</p>

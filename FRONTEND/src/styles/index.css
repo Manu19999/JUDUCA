@@ -1,5 +1,5 @@
 /* ===== Estilos globales ======= */
-
+@import "@fontsource/montserrat";
 * {
   margin: 0;
   padding: 0;
@@ -25,17 +25,3 @@ body {
   --transition-speed: 0.3s;
 }
 
-/* ===== Enlaces del Navbar ===== */
-.nav-link-custom {
-  color: white !important;
-  font-size: 1.1rem;
-  padding: 8px 15px;
-  text-decoration: none; /* Elimina subrayado */
-  transition: color 0.3s ease-in-out, transform 0.2s, background-color 0.3s ease;
-}
-
-.nav-link-custom:hover {
-  color: var(--secondary-color) !important; /* Usa la variable */
-  transform: translateY(-2px);
-  background-color: rgba(0, 0, 0, 0.1); /* Fondo suave */
-}

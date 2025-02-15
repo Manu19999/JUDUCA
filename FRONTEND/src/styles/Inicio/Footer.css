@@ -1,8 +1,7 @@
 /* ===== Footer ===== */
 .footer-custom {
-  background: linear-gradient(to right, #253a69, #054d91);
+  background: linear-gradient(to right, #253A69, #054d91);
   color: white;
-  padding: 20px 0;
   font-size: 0.9rem;
 }
 
