@@ -1,7 +1,7 @@
 /* Estilos para la sección Acerca de */
 .about-section {
     padding: 100px 20px;
-    background: #f9f9f9; /* Fondo sólido y limpio */
+    background: #ffffff; /* Fondo sólido y limpio */
     text-align: center;
     overflow: hidden;
   }
@@ -40,6 +40,7 @@
   .about-description {
     font-size: 1.1rem;
     color: #555;
+    text-align: justify;
     line-height: 1.8;
     animation: fadeInUp 1s ease-in-out;
     margin-top: 20px;
@@ -98,6 +99,15 @@
     }
   
     .about-description {
-      font-size: 0.95rem;
+      font-size: clamp(1rem, 2.5vw, 1.1rem);
+      color: #555;
+      text-align: justify;
+      line-height: 1.8;
+      animation: fadeInUp 1s ease-in-out;
+      max-width: 600px;
+      margin: 20px auto 0;
+      hyphens: auto; /* Permite dividir palabras para evitar huecos grandes */
+      word-spacing: -0.5px; /* Reduce espacios grandes entre palabras */
     }
+    
   }

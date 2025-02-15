@@ -1,16 +1,64 @@
 /* ===== EVENT LIST STYLES ===== */
-.event-list {
+.eventlist {
   text-align: center;
   padding: 80px 20px;
   background-color: #ffffff; /* Fondo blanco */
-  margin-top: 60px;
 }
 
-.event-list-title {
+/* Estilos para el carrusel */
+/* Estilos para el carrusel */
+.eventgrid {
+  display: flex;
+  flex-direction: column; /* Cambia la dirección a columna */
+  align-items: center; /* Centra el contenido horizontalmente */
+  gap: 20px;
+  overflow-x: hidden; /* Oculta el desplazamiento horizontal */
+  position: relative;
+  padding-bottom: 20px;
+}
+
+.carousel-container {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  justify-content: center; /* Centra las tarjetas dentro del contenedor */
+  margin-bottom: 15px; /* Espacio debajo del carrusel */
+}
+
+/* Estilos para los botones del carrusel */
+.carousel-buttons {
+  display: flex;
+  justify-content: center; /* Centra los botones horizontalmente */
+  gap: 20px; /* Espacio entre los botones */
+}
+
+.carousel-button {
+  background: white; /* Fondo blanco */
+  border: 1px solid #336699; /* Borde azul */
+  color: #336699; /* Color azul para el ícono */
+  font-size: 24px;
+  cursor: pointer;
+  width: 40px; /* Tamaño fijo */
+  height: 40px; /* Tamaño fijo */
+  border-radius: 50%; /* Forma perfectamente redonda */
+  z-index: 10;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-button:hover {
+  background: #e9eef4; /* Fondo gris claro al hacer hover */
+  border-color: #1D386E; /* Borde azul más oscuro al hacer hover */
+  color: #1D386E; /* Color azul más oscuro para el ícono al hacer hover */
+}
+
+.eventlisttitle {
   font-size: 2.5rem;
   font-weight: bold;
   color: #1D386E; /* Color principal de la UNAH */
-  margin-bottom: 20px;
+  margin-bottom: 40px; /* Más espacio debajo del título */
+  margin-top: 40px; /* Más espacio debajo del título */
   animation: fadeInUp 1s ease-in-out;
 }
 
@@ -26,106 +74,91 @@
 }
 
 /* Pestañas */
-.event-tabs {
+.eventtabs {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  flex-wrap: wrap; /* Permite que las pestañas se ajusten en pantallas pequeñas */
+  gap: 15px;
   margin-bottom: 40px;
 }
 
-.event-tab {
+.eventtab {
   font-size: 1.1rem;
   color: #336699; /* Color principal de la UNAH */
-  padding: 10px 20px;
-  border: none; /* Sin borde */
+  padding: 12px 24px;
+  border: 1px solid #d8e8f9;
   background: #f0f4f8; /* Fondo gris claro */
   cursor: pointer;
   transition: all 0.3s ease;
-  border-radius: 50px;
-  font-weight: 500; /* Texto un poco más grueso */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  border-radius: 30px;
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.event-tab:hover {
+.eventtab:hover {
   background: #e0e8f0; /* Fondo gris un poco más oscuro */
-  transform: translateY(-2px); /* Efecto de elevación */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+  border: 1px solid #add1f8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.event-tab.active {
+.eventtab.active {
   background: #336699; /* Fondo azul cuando está activo */
-  color: white; /* Texto blanco cuando está activo */
-  box-shadow: 0 4px 12px rgba(51, 102, 153, 0.3); /* Sombra con tono azul */
-}
-
-/* Carrusel */
-.carousel-container {
-  position: relative;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  overflow: hidden;
-}
-
-.carousel {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-}
-
-.carousel-item {
-  min-width: 100%;
-  box-sizing: border-box;
-  transition: opacity 0.5s ease-in-out;
-  opacity: 0;
-}
-
-.carousel-item.active {
-  opacity: 1;
-}
-
-.carousel-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(29, 56, 110, 0.8); /* Color principal de la UNAH con transparencia */
   color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 50%;
-  font-size: 1.5rem;
-  transition: background-color 0.3s ease;
-}
-
-.carousel-button:hover {
-  background-color: rgba(29, 56, 110, 1); /* Color principal de la UNAH sin transparencia */
-}
-
-.carousel-button.prev {
-  left: 10px;
-}
-
-.carousel-button.next {
-  right: 10px;
+  box-shadow: 0 4px 12px rgba(51, 102, 153, 0.3);
 }
 
 /* Ajuste de columnas para mejor visualización */
 @media (max-width: 768px) {
-  .event-list-title {
+  .eventlist {
+    padding: 60px 15px;
+    margin-top: 40px;
+  }
+
+  .eventlisttitle {
     font-size: 2rem;
+    margin-bottom: 30px;
   }
 
-  .event-tabs {
+  .eventtabs {
     gap: 10px;
+    margin-bottom: 30px;
   }
 
-  .event-tab {
+  .eventtab {
     font-size: 1rem;
+    padding: 10px 20px;
+  }
+
+  .eventgrid {
+    gap: 15px;
+    padding-bottom: 15px;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .eventlist {
+    padding: 40px 10px;
+  }
+
+  .eventlisttitle {
+    font-size: 1.75rem;
+    margin-bottom: 20px;
+  }
+
+  .eventtabs {
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .eventtab {
+    font-size: 0.9rem;
     padding: 8px 16px;
   }
 
-  .carousel-button {
-    font-size: 1.2rem;
-    padding: 8px;
+  .eventgrid {
+    gap: 10px;
+    padding-bottom: 10px;
   }
 }

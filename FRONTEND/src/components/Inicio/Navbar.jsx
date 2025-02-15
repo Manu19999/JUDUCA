@@ -1,48 +1,52 @@
-import React from "react";
-import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom"; // Importa useNavigate
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../styles/Inicio/Navbar.css";
-import logo from '../../assets/logo-unah-blanco.png'
-
+import logo from "../../assets/logo-unah-blanco.png";
 
 const CustomNavbar = () => {
-  const navigate = useNavigate(); // Hook para redirigir
+  const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLoginClick = () => {
-    navigate("/login"); // Redirige a la página de login
+    navigate("/login");
+    setMenuOpen(false); // Cierra el menú al navegar
   };
 
   return (
-    <Navbar expand="lg" className="navbar-custom" fixed="top">
-      <Container>
-        {/* Logo a la izquierda */}
-        <Navbar.Brand href="https://www.unah.edu.hn/" className="logo d-flex align-items-center" target="_blank" rel="noopener noreferrer">
-         <img src={logo} alt="Logo" className="logo-img" /> 
-        </Navbar.Brand>
+    <header className="navbar-custom">
+      <div className="navbar-container">
+        {/* Logo */}
+        <a
+          href="https://www.unah.edu.hn/"
+          className="logo"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src={logo} alt="Logo" className="logo-img" />
+        </a>
 
-        {/* Botón para abrir el menú en móviles */}
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        {/* Botón Toggle (solo en móviles) */}
+        <button
+          className={`custom-toggle ${menuOpen ? "open" : ""}`}
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? "✖" : "☰"}
+        </button>
 
-        {/* Menú de navegación */}
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mx-auto nav-links"> {/* mx-auto centra el menú */}
-            <Nav.Link href="#inicio" className="nav-link-custom">Inicio</Nav.Link>
-            <Nav.Link href="#events" className="nav-link-custom">Eventos</Nav.Link>
-            <Nav.Link href="#contact" className="nav-link-custom">Contacto</Nav.Link>
-            <Nav.Link href="#acercade" className="nav-link-custom">Acerca de</Nav.Link>
-          </Nav>
+        {/* Menú de Navegación */}
+        <nav className={`custom-menu ${menuOpen ? "show" : ""}`}>
+          <a href="#inicio" className="navlinkcustom" onClick={() => setMenuOpen(false)}>Inicio</a>
+          <a href="#events" className="navlinkcustom" onClick={() => setMenuOpen(false)}>Eventos</a>
+          <a href="#contact" className="navlinkcustom" onClick={() => setMenuOpen(false)}>Contacto</a>
+          <a href="#acercade" className="navlinkcustom" onClick={() => setMenuOpen(false)}>Acerca de</a>
+          {/* Botón Acceder en móviles */}
+          <button className="btn-acceder mobile-only" onClick={handleLoginClick}>Acceder</button>
+        </nav>
 
-          {/* Botón de acceso (esquina derecha en pantallas grandes) */}
-          <Button
-            variant="outline-light"
-            className="btn-acceder ms-lg-3"
-            onClick={handleLoginClick} // Manejador de clic
-          >
-            Acceder
-          </Button>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+        {/* Botón Acceder en escritorio */}
+        <button className="btn-acceder desktop-only" onClick={handleLoginClick}> Acceder </button>
+      </div>
+    </header>
   );
 };
 

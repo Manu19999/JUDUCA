@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { FaFacebook, FaTwitter, FaInstagram, FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import "../../styles/Inicio/Footer.css";
+
 const Footer = () => {
   return (
     <footer className="footer-custom">
@@ -30,9 +31,7 @@ const Footer = () => {
           <Col md={4} className="footer-section mb-4 mb-md-0">
             <h5 className="footer-title">Enlaces Rápidos</h5>
             <ul className="list-unstyled">
-              <li className="mb-2"><a href="#home" className="footer-link">Inicio</a></li>
               <li className="mb-2"><a href="#events" className="footer-link">Eventos</a></li>
-              <li className="mb-2"><a href="#contact" className="footer-link">Contacto</a></li>
               <li className="mb-2"><a href="https://www.unah.edu.hn/" className="footer-link">Sitio Oficial UNAH</a></li>
             </ul>
           </Col>
@@ -41,13 +40,13 @@ const Footer = () => {
           <Col md={4} className="footer-section">
             <h5 className="footer-title">Síguenos</h5>
             <div className="social-icons">
-              <a href="https://www.facebook.com/UNAHoficial" target="_blank" rel="noopener noreferrer" className="footer-link">
+              <a href="https://www.facebook.com/UNAHoficial" title="Facebook UNAH" target="_blank" rel="noopener noreferrer" className="footer-link">
                 <FaFacebook className="me-2" />
               </a>
-              <a href="https://twitter.com/UNAHoficial" target="_blank" rel="noopener noreferrer" className="footer-link">
+              <a href="https://twitter.com/UNAHoficial" title="Twitter UNAH" target="_blank" rel="noopener noreferrer" className="footer-link">
                 <FaTwitter className="me-2" />
               </a>
-              <a href="https://www.instagram.com/unahoficial/" target="_blank" rel="noopener noreferrer" className="footer-link">
+              <a href="https://www.instagram.com/unahoficial/" title="Instagram UNAH" target="_blank" rel="noopener noreferrer" className="footer-link">
                 <FaInstagram className="me-2" />
               </a>
             </div>

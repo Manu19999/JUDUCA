@@ -5,7 +5,7 @@ const Acercade = () => {
   return (
     <section id="acercade" className="about-section">
       <div className="about-container">
-        <h2 className="about-title">Acerca de la Plataforma</h2>
+        <h2 className="about-title">Acerca de la plataforma</h2>
         <p className="about-description">
           La Plataforma de Eventos VOAE es el espacio oficial de la UNAH para la organización, 
           promoción y participación en eventos universitarios. Aquí podrás encontrar información 

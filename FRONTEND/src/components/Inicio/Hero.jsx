@@ -4,9 +4,7 @@ import "../../styles/Inicio/Hero.css";
 
 // Importa las imágenes que quieras usar en el carrusel
 import imagen1 from "../../assets/CDUUNAH.jpg";
-import imagen2 from "../../assets/eventoCine.jpg";
-import imagen3 from "../../assets/eventoArte.jpg";
-
+import imagen2 from "../../assets/alm.jpg";
 
 const Hero = () => {
   return (
@@ -28,20 +26,13 @@ const Hero = () => {
           />
         </Carousel.Item>
 
-        <Carousel.Item>
-          <img
-            className="d-block w-100 carousel-image"
-            src={imagen3}
-            alt="Third slide"
-          />
-        </Carousel.Item>
       </Carousel>
 
       {/* Contenido fijo fuera del Carousel */}
       <div className="overlay"></div>
       <Container className="hero-content">
-        <h1 className="hero-title">JUDUCA 2025</h1>
-        <p className="hero-subtitle">Eventos VOAE</p>
+        <h1 className="hero-title">¡Bienvenidos a nuestros eventos!</h1>
+        <p className="hero-subtitle">Descubre actividades únicas, arte, deportes y más</p>
       </Container>
     </div>
   );
