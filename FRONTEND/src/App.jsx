@@ -23,8 +23,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="/crear-evento" element={<CreateEvent />} />
-        <Route path="/crear-credencial" element={<CreateCredencial />} />
-        <Route path="/Credencial" element={<ConfigCredencial />} />
+        <Route path="/crearCredencial" element={<CreateCredencial />} />
+        <Route path="/confCredencial" element={<ConfigCredencial />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/voucher" element={<Vouchers />} />
 

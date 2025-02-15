@@ -5,17 +5,21 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  font-family: Arial, sans-serif;
 }
 
 /* Estilos para la barra de navegación */
 .unah-navbar {
   background-color: #253A69; /* Color de fondo de la barra de navegación */
-  padding: 10px 0;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* Estilos para el logo de la UNAH */
 .unah-logo {
-  height: 40px; /* Ajusta el tamaño del logo según sea necesario */
+  height: 45px; /* Ajusta el tamaño del logo según sea necesario */
   margin-right: 10px;
 }
 
@@ -24,6 +28,7 @@ body {
   color: #fff !important; /* Color del texto de los enlaces */
   font-weight: bold;
   margin: 0 10px;
+  transition: color 0.3s ease;
 }
 
 .unah-navbar .nav-link:hover {
@@ -47,4 +52,61 @@ body {
 
 .unah-navbar .navbar-toggler-icon {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Estilos para el botón de menú lateral */
+.sidebar-toggle-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.sidebar-toggle-btn:hover {
+  color: #ffcc00;
+}
+
+/* Estilos para el Offcanvas (menú lateral) */
+.offcanvas {
+  background-color: #1f2e54; /* Color de fondo del menú lateral */
+  color: white;
+}
+
+.offcanvas .offcanvas-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffcc00;
+}
+
+.offcanvas .nav-link {
+  color: white !important;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.offcanvas .nav-link:hover {
+  background-color: #ffcc00;
+  color: #253A69 !important;
+}
+
+.offcanvas .dropdown-item {
+  color: #253A69;
+}
+
+.offcanvas .dropdown-item:hover {
+  background-color: #ffcc00;
+  color: #253A69;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .unah-navbar {
+    padding: 10px;
+  }
+
+  .sidebar-toggle-btn {
+    font-size: 20px;
+  }
 }

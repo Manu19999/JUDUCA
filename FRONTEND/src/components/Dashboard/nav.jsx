@@ -19,13 +19,13 @@ const navigate = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="#inicio">Inicio</Nav.Link>
-            <Nav.Link href="#eventos">Eventos </Nav.Link>
+            <Nav.Link href="/crear-evento">Eventos </Nav.Link>
             <Nav.Link href="#noticias">Noticias</Nav.Link>
             <Nav.Link href="#calendario">Calendario</Nav.Link>
             <Nav.Link href="#contacto">Contacto</Nav.Link>
             <NavDropdown title="Gestión" id="basic-na-dropdown">
-              <NavDropdown.Item href="/crear-credencial">Crear Credenciales</NavDropdown.Item>
-              <NavDropdown.Item href="/Credencial">Gestionar Credenciales</NavDropdown.Item>
+              <NavDropdown.Item href="/crearCredencial">Crear Credenciales</NavDropdown.Item>
+              <NavDropdown.Item href="/confCredencial">Gestionar Credenciales</NavDropdown.Item>
               <NavDropdown.Item href="#eventos">Eventos</NavDropdown.Item>
               <NavDropdown.Item href="#usuarios">Usuarios</NavDropdown.Item>
               <NavDropdown.Divider />

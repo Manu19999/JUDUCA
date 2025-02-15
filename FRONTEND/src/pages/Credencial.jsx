@@ -1,5 +1,5 @@
 import React from "react";
-import CredencialForm from "../components/Credencial/credencial"; // Asegúrate de que la ruta sea correcta
+import CredencialForm from "../components/Credencial/credencial"; 
 import Nav from '../components/Dashboard/nav';
 
 const CrearCredenciales = () => {
