@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, } from "react";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
+
 
 const ConfiguracionCredencial = () => {
   const [nombrePlantilla, setNombrePlantilla] = useState("");
@@ -11,6 +13,11 @@ const ConfiguracionCredencial = () => {
   const [estado, setEstado] = useState(false);
   const [plantillas, setPlantillas] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const navigate = useNavigate();
+const asignarCampos = (idPlantilla) => {
+  navigate(`/diseñadorCredencial/${idPlantilla}`);
+};
 
   const estiloCredencial = {
     backgroundImage: `url(${fondoCredencial})`,
@@ -132,8 +139,8 @@ const ConfiguracionCredencial = () => {
         <div className="col-md-5 d-flex justify-content-center align-items-center">
           <div style={{ width: "400px", height: "490px" }}>
             <div style={estiloCredencial}>
-              <strong>Nombre: Juan Pérez</strong>
-              <p>ID: 123456</p>
+              <strong>EJEMPLO DE PLANTILLA</strong>
+              <p>EJEMPLO DE PLANTILLA</p>
             </div>
           </div>
         </div>
@@ -201,8 +208,8 @@ const ConfiguracionCredencial = () => {
                             ></span>
                           </td>
                           <td>
-                            <button className="btn btn-warning btn-sm me-2">
-                              Editar
+                            <button className="btn btn-warning btn-sm me-2" onClick={() => asignarCampos(plantilla.id)}>
+                              Seleccionar
                             </button>
                             <button
                               className="btn btn-danger btn-sm"

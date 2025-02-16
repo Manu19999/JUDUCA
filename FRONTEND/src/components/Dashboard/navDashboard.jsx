@@ -57,8 +57,8 @@ const navigate = () => {
           {/* Menú desplegable para Eventos */}
           <NavDropdown title="Gestion" id="nav-dropdown" className="navlinkcustom">
             <NavDropdown.Item href="/crear-evento">Crear evento</NavDropdown.Item>
-            <NavDropdown.Item href="/crearCredencial">Crear credencial</NavDropdown.Item>
-            <NavDropdown.Item href="/confCredencial">Configuracion credenciall</NavDropdown.Item>
+            <NavDropdown.Item href="/crearCredencial">Asignar Credencial</NavDropdown.Item>
+            <NavDropdown.Item href="/confCredencial">Configuracion credencial</NavDropdown.Item>
           </NavDropdown>
           <NavDropdown title="Vouchers y tickets" id="nav-dropdown" className="navlinkcustom">
             <NavDropdown.Item href="/voucher">Gestion vouchers</NavDropdown.Item>

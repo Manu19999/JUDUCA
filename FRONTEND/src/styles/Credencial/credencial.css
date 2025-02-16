@@ -46,3 +46,6 @@
     cursor: pointer;
     transition: background 0.3s ease;
   }
+  .col-md-8 {
+    margin-top: 100px;
+  }
