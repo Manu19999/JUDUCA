@@ -117,11 +117,11 @@ const ConfiguracionCredencial = () => {
           </div>
 
           <div className="botones-container">
-            <button className="btn btn-primary" onClick={guardarPlantilla}>
+            <button className="btnAgg" onClick={guardarPlantilla}>
               Guardar Plantilla
             </button>
             <button
-              className="btn btn-info"
+              className="btnVer"
               onClick={() => setModalVisible(true)}
             >
               Ver Plantillas

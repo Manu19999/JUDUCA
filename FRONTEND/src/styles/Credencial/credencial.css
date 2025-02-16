@@ -147,3 +147,22 @@ body {
     padding: 20px; /* Agrega espacio dentro del modal */
   }
   
+  .btnAgg {
+    background-color: #253A69;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .btnVer {
+    background-color: #ffcc00;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
