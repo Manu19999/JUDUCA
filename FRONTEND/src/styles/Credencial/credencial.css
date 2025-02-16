@@ -130,3 +130,20 @@ body {
     flex: 1; /* Hace que los botones tengan el mismo tamaño */
     min-width: 150px; /* Ancho mínimo para que no se encojan demasiado */
   }
+
+  .container-fluid {
+    padding: 60px;
+  }
+
+  .modal-dialog {
+    border: 1px solid #1f2e54; /* Aumenta el grosor del borde */
+    border-radius: 10px; /* Bordes redondeados para un mejor diseño */
+  }
+  
+  .modal-content {
+    background: #fff;
+    border-radius: 10px; /* Consistencia con el modal-dialog */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Agrega una sombra para mejor estética */
+    padding: 20px; /* Agrega espacio dentro del modal */
+  }
+  

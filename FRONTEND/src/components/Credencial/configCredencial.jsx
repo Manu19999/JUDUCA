@@ -154,10 +154,8 @@ const ConfiguracionCredencial = () => {
                   onClick={() => setModalVisible(false)}
                 ></button>
               </div>
-              <div
-                className="modal-body"
-                style={{ maxHeight: "400px", overflowY: "auto" }}
-              >
+              <div style={{ overflowX: "auto", maxHeight: "350px" }}>
+
                 {plantillas.length === 0 ? (
                   <p className="text-center">No hay plantillas guardadas.</p>
                 ) : (
