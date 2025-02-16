@@ -49,3 +49,29 @@
   .col-md-8 {
     margin-top: 100px;
   }
+
+  .form-control-credencial {
+    width: 100%;
+    padding: 5px;
+    background-color: #fff; 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: black
+  }
+
+  .form-select-credencial {
+    width: 100%;
+    padding: 5px;
+    background-color: #fff; 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: black
+  }
+
+  .table-credencial  {
+    width: 100%;
+   background-color: #fff;
+   color: #253A69;
+   border-collapse: collapse;
+    border-radius: 10px;
+  }

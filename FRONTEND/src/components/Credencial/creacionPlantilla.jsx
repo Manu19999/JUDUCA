@@ -72,7 +72,7 @@ const asignarCampos = (idPlantilla) => {
             <label className="form-label">NOMBRE DE PLANTILLA</label>
             <input
               type="text"
-              className="form-control"
+              className="form-control-credencial"
               value={nombrePlantilla}
               onChange={(e) => setNombrePlantilla(e.target.value)}
               required
@@ -82,7 +82,7 @@ const asignarCampos = (idPlantilla) => {
           <div className="mb-3">
             <label className="form-label">FUENTE</label>
             <select
-              className="form-select"
+              className="form-select-credencial"
               value={tipoFuente}
               onChange={(e) => setTipoFuente(e.target.value)}
             >
@@ -97,7 +97,7 @@ const asignarCampos = (idPlantilla) => {
             <label className="form-label">TAMAÑO DE FUENTE</label>
             <input
               type="number"
-              className="form-control"
+              className="form-control-credencial"
               value={parseInt(tamañoFuente)}
               onChange={(e) => setTamañoFuente(`${e.target.value}px`)}
             />

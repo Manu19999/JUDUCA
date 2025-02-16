@@ -60,7 +60,7 @@ const CredencialForm = () => {
             <div className="mb-3">
               <label className="form-label">EVENTO</label>
               <select
-                className="form-select"
+                className="form-select-credencial"
                 name="idEvento"
                 value={credencial.idEvento}
                 onChange={handleChange}
@@ -77,7 +77,7 @@ const CredencialForm = () => {
             <div className="mb-3">
               <label className="form-label">PARTICIPANTE</label>
               <select
-                className="form-select"
+                className="form-select-credencial"
                 name="idRegistroParticipante"
                 value={credencial.idRegistroParticipante}
                 onChange={handleChange}
@@ -91,10 +91,10 @@ const CredencialForm = () => {
           </div>
 
           <div className="mb-3">
-            <label>Código QR</label>
+            <label>CODIGO QR</label>
             <input
               type="text"
-              className="form-control"
+              className="form-control-credencial"
               name="codigoQR"
               value={credencial.codigoQR}
               onChange={handleChange}
@@ -103,10 +103,10 @@ const CredencialForm = () => {
           </div>
 
           <div className="mb-3">
-            <label>Tipo de Acceso</label>
+            <label>TIPO DE ACCESO</label>
             <input
               type="text"
-              className="form-control"
+              className="form-control-credencial"
               name="tipoAcceso"
               value={credencial.tipoAcceso}
               onChange={handleChange}
@@ -115,10 +115,10 @@ const CredencialForm = () => {
           </div>
 
           <div className="mb-3">
-            <label>Fecha de Emisión</label>
+            <label>FECHA DE EMISION</label>
             <input
               type="datetime-local"
-              className="form-control"
+              className="form-control-credencial"
               name="fechaEmision"
               value={credencial.fechaEmision}
               onChange={handleChange}
@@ -127,10 +127,10 @@ const CredencialForm = () => {
           </div>
 
           <div className="mb-3">
-            <label>Fecha de Vencimiento</label>
+            <label>FECHA DE VENCIMIENTO</label>
             <input
               type="datetime-local"
-              className="form-control"
+              className="form-control-credencial"
               name="fechaVencimiento"
               value={credencial.fechaVencimiento}
               onChange={handleChange}
@@ -145,48 +145,52 @@ const CredencialForm = () => {
           </div>
         </div>
         <div className="col-md-8 d-flex flex-column align-items-center">
-        <div style={{ overflowX: "auto", maxHeight: "350px" }}>
-          {/* Tabla de Registros */}
-          {credenciales.length === 0 ? (
-                  <p className="text-center">No hay Credenciales asignadas.</p>
-                ) : (
-            <table className="table table-striped">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Evento</th>
-                  <th>Participante</th>
-                  <th>Código QR</th>
-                  <th>Tipo de Acceso</th>
-                  <th>Fecha Emisión</th>
-                  <th>Fecha Vencimiento</th>
-                  <th>Acciones</th>
-
-                </tr>
-              </thead>
-              <tbody>
-                {credenciales.map((cred, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{cred.idEvento}</td>
-                    <td>{cred.idRegistroParticipante}</td>
-                    <td>{cred.codigoQR}</td>
-                    <td>{cred.tipoAcceso}</td>
-                    <td>{cred.fechaEmision}</td>
-                    <td>{cred.fechaVencimiento}</td>
-                    <td><button className="btn btn-warning" >Editar</button><button className="btn btn-danger" >Eliminar</button></td>
-
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-      </div>
-      </div>
+  <div className="table-responsive" style={{ maxHeight: "350px", width: "100%" }}>
+    {/* Tabla de Registros */}
+    {credenciales.length === 0 ? (
+      <p className="text-center">No hay Credenciales asignadas.</p>
+    ) : (
+      <table className="table-credencial table-striped table-hover table-bordered text-center" style={{ fontSize: "13px", tableLayout: "fixed", width: "100%" }}>
+        <thead >
+          <tr>
+            <th style={{ width: "5%" }}>#</th>
+            <th style={{ width: "10%", whiteSpace: "nowrap" }}>EVENTO</th>
+            <th style={{ width: "15%", whiteSpace: "nowrap" }}>PARTICIPANTE</th>
+            <th style={{ width: "15%", whiteSpace: "nowrap" }}>CÓDIGO QR</th>
+            <th style={{ width: "15%", whiteSpace: "nowrap" }}>TIPO DE ACCESO</th>
+            <th style={{ width: "15%", whiteSpace: "nowrap" }}>FECHA EMISIÓN</th>
+            <th style={{ width: "20%", whiteSpace: "nowrap" }}>FECHA VENCIMIENTO</th>
+            <th style={{ width: "20%", whiteSpace: "nowrap" }}>ACCIONES</th>
+          </tr>
+        </thead>
+        <tbody>
+          {credenciales.map((cred, index) => (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td>{cred.idEvento}</td>
+              <td>{cred.idRegistroParticipante}</td>
+              <td className="text-truncate" style={{ maxWidth: "120px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {cred.codigoQR}
+              </td>
+              <td>{cred.tipoAcceso}</td>
+              <td>{cred.fechaEmision ? new Date(cred.fechaEmision).toLocaleString() : "Sin fecha"}</td>
+              <td>{cred.fechaVencimiento ? new Date(cred.fechaVencimiento).toLocaleString() : "Sin fecha"}</td>
+              <td>
+                <button className="btn btn-warning btn-sm me-1">Editar</button>
+                <button className="btn btn-danger btn-sm">Eliminar</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+  </div>
+</div>
 
      
     </div>
+    </div>
+
   );
 };
 
