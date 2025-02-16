@@ -137,7 +137,7 @@ const asignarCampos = (idPlantilla) => {
         </div>
 
         <div className="col-md-5 d-flex justify-content-center align-items-center">
-          <div style={{ width: "400px", height: "490px" }}>
+          <div style={{ width: "400px", height: "400px" }}>
             <div style={estiloCredencial}>
               <strong>EJEMPLO DE PLANTILLA</strong>
               <p>EJEMPLO DE PLANTILLA</p>
