@@ -34,9 +34,11 @@ const navigate = () => {
             <NavDropdown title="Vouchers y tickets" id="basic-na-dropdown">
               <NavDropdown.Item href="/voucher">Vouchers</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#voucher">Tickets </NavDropdown.Item>
+              <NavDropdown.Item href="/consumo">Consumo Vouchers</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#usuarios">Comedores</NavDropdown.Item>
+              <NavDropdown.Item href="/ticket">Tickets</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="/comedor">Comedores</NavDropdown.Item>
               <NavDropdown.Divider />
             </NavDropdown>
           </Nav>

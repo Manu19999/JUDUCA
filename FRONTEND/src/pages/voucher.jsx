@@ -5,7 +5,7 @@ const voucher = () => {
     <div  >
       <Nav />
       <div>
-      <h1>Gestión de Vouchers</h1>
+      <h1>GÉSTION DE VOUCHERS Y TICKETS</h1>
       <Vouchers />
     </div>
     </div>
