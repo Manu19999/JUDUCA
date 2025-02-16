@@ -1,5 +1,5 @@
 import Eventos from "../components/Eventos";
-import Nav from '../components/Dashboard/nav';
+import Nav from '../components/Dashboard/navDashboard';
 
 
 export default function Evento() {

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/Credencial/credencial.css";
 
-
 const CredencialForm = () => {
   const [credenciales, setCredenciales] = useState([]);
   const [credencial, setCredencial] = useState({
@@ -29,98 +28,169 @@ const CredencialForm = () => {
     e.preventDefault();
 
     // Evitar inserción si los campos están vacíos
-    if (!credencial.idEvento || !credencial.idRegistroParticipante || !credencial.codigoQR) {
+    if (
+      !credencial.idEvento ||
+      !credencial.idRegistroParticipante ||
+      !credencial.codigoQR
+    ) {
       alert("Por favor, completa todos los campos.");
       return;
     }
 
     setCredenciales([...credenciales, credencial]); // Agregar al array
 
-    setCredencial({  // Reiniciar el formulario
+    setCredencial({
+      // Reiniciar el formulario
       idEvento: "",
       idRegistroParticipante: "",
       codigoQR: "",
       tipoAcceso: "",
       fechaEmision: "",
       fechaVencimiento: "",
-      activo: false,
     });
   };
 
   return (
-    <div className="container mt-4">
-      <h2 className="text-center">Asignación de Credenciales</h2>
+    <div className="container-fluid ">
+      <div className="row">
+        <div className="col-md-4">
+          <h3 className="text-center my-3">Asignación de Credenciales</h3>
 
-      {/* Formulario */}
-      <form onSubmit={handleSubmit} className="mb-4">
-        <div className="row">
-          <div className="col-md-4">
-            <label>Nombre Evento</label>
-            <input type="number" className="form-control" name="idEvento" value={credencial.idEvento} onChange={handleChange} required />
+          <div className="mb-3">
+            <div className="mb-3">
+              <label className="form-label">EVENTO</label>
+              <select
+                className="form-select-credencial"
+                name="idEvento"
+                value={credencial.idEvento}
+                onChange={handleChange}
+              >
+                <option value="JUDUCA">JUDUCA</option>
+                <option value="SUCA">SUCA</option>
+                <option value="CUSUCA">CUSUCA</option>
+                <option value="OTRO">OTRO</option>
+              </select>
+            </div>
           </div>
 
-          <div className="col-md-4">
-            <label>Identidad Participante</label>
-            <input type="number" className="form-control" name="idRegistroParticipante" value={credencial.idRegistroParticipante} onChange={handleChange} required />
+          <div className="mb-3">
+            <div className="mb-3">
+              <label className="form-label">PARTICIPANTE</label>
+              <select
+                className="form-select-credencial"
+                name="idRegistroParticipante"
+                value={credencial.idRegistroParticipante}
+                onChange={handleChange}
+              >
+                <option value="MANUEL RODRIGUEZ">MANUEL RODRIGUEZ</option>
+                <option value="SANTIAGO RODRIGUEZ">SANTIAGO RODRIGUEZ</option>
+                <option value="MARIA RODRIGUEZ">MARIA RODRIGUEZ</option>
+                <option value="DIEGO RODRIGUEZ">DIEGO RODRIGUEZ</option>
+              </select>
+            </div>
           </div>
 
-          <div className="col-md-4">
-            <label>Código QR</label>
-            <input type="text" className="form-control" name="codigoQR" value={credencial.codigoQR} onChange={handleChange} required />
+          <div className="mb-3">
+            <label>CODIGO QR</label>
+            <input
+              type="text"
+              className="form-control-credencial"
+              name="codigoQR"
+              value={credencial.codigoQR}
+              onChange={handleChange}
+              required
+            />
           </div>
 
-          <div className="col-md-4 mt-3">
-            <label>Tipo de Acceso</label>
-            <input type="text" className="form-control" name="tipoAcceso" value={credencial.tipoAcceso} onChange={handleChange} required />
+          <div className="mb-3">
+            <label>TIPO DE ACCESO</label>
+            <input
+              type="text"
+              className="form-control-credencial"
+              name="tipoAcceso"
+              value={credencial.tipoAcceso}
+              onChange={handleChange}
+              required
+            />
           </div>
 
-          <div className="col-md-4 mt-3">
-            <label>Fecha de Emisión</label>
-            <input type="datetime-local" className="form-control" name="fechaEmision" value={credencial.fechaEmision} onChange={handleChange} required />
+          <div className="mb-3">
+            <label>FECHA DE EMISION</label>
+            <input
+              type="datetime-local"
+              className="form-control-credencial"
+              name="fechaEmision"
+              value={credencial.fechaEmision}
+              onChange={handleChange}
+              required
+            />
           </div>
 
-          <div className="col-md-4 mt-3">
-            <label>Fecha de Vencimiento</label>
-            <input type="datetime-local" className="form-control" name="fechaVencimiento" value={credencial.fechaVencimiento} onChange={handleChange} required />
+          <div className="mb-3">
+            <label>FECHA DE VENCIMIENTO</label>
+            <input
+              type="datetime-local"
+              className="form-control-credencial"
+              name="fechaVencimiento"
+              value={credencial.fechaVencimiento}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="botones-container">
+            <button className="btnAgg" onClick={handleSubmit}>
+              Guardar
+            </button>
           </div>
         </div>
+        <div className="col-md-8 d-flex flex-column align-items-center">
+  <div className="table-responsive" style={{ maxHeight: "350px", width: "100%" }}>
+    {/* Tabla de Registros */}
+    {credenciales.length === 0 ? (
+      <p className="text-center">No hay Credenciales asignadas.</p>
+    ) : (
+      <table className="table-credencial table-striped table-hover table-bordered text-center" style={{ fontSize: "13px", tableLayout: "fixed", width: "100%" }}>
+        <thead >
+          <tr>
+            <th style={{ width: "5%" }}>#</th>
+            <th style={{ width: "10%", whiteSpace: "nowrap" }}>EVENTO</th>
+            <th style={{ width: "15%", whiteSpace: "nowrap" }}>PARTICIPANTE</th>
+            <th style={{ width: "15%", whiteSpace: "nowrap" }}>CÓDIGO QR</th>
+            <th style={{ width: "15%", whiteSpace: "nowrap" }}>TIPO DE ACCESO</th>
+            <th style={{ width: "15%", whiteSpace: "nowrap" }}>FECHA EMISIÓN</th>
+            <th style={{ width: "20%", whiteSpace: "nowrap" }}>FECHA VENCIMIENTO</th>
+            <th style={{ width: "20%", whiteSpace: "nowrap" }}>ACCIONES</th>
+          </tr>
+        </thead>
+        <tbody>
+          {credenciales.map((cred, index) => (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td>{cred.idEvento}</td>
+              <td>{cred.idRegistroParticipante}</td>
+              <td className="text-truncate" style={{ maxWidth: "120px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {cred.codigoQR}
+              </td>
+              <td>{cred.tipoAcceso}</td>
+              <td>{cred.fechaEmision ? new Date(cred.fechaEmision).toLocaleString() : "Sin fecha"}</td>
+              <td>{cred.fechaVencimiento ? new Date(cred.fechaVencimiento).toLocaleString() : "Sin fecha"}</td>
+              <td>
+                <button className="btn btn-warning btn-sm me-1">Editar</button>
+                <button className="btn btn-danger btn-sm">Eliminar</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+  </div>
+</div>
 
-        <button type="submit" className="btn btn-primary mt-3 w-100">Asignar</button>
-      </form>
-
-      {/* Tabla de Registros */}
-      {credenciales.length > 0 && (
-        <div>
-          <h3 className="text-center">Credenciales Registradas</h3>
-          <table className="table table-striped">
-            <thead >
-              <tr>
-                <th>#</th>
-                <th>Evento</th>
-                <th>Participante</th>
-                <th>Código QR</th>
-                <th>Tipo de Acceso</th>
-                <th>Fecha Emisión</th>
-                <th>Fecha Vencimiento</th>
-              </tr>
-            </thead>
-            <tbody>
-              {credenciales.map((cred, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{cred.idEvento}</td>
-                  <td>{cred.idRegistroParticipante}</td>
-                  <td>{cred.codigoQR}</td>
-                  <td>{cred.tipoAcceso}</td>
-                  <td>{cred.fechaEmision}</td>
-                  <td>{cred.fechaVencimiento}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+     
     </div>
+    </div>
+
   );
 };
 

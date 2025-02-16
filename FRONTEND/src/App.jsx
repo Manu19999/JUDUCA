@@ -8,8 +8,8 @@ import Dashboard from "./pages/Dashboard"; // Importa la nueva página de inicio
 
 import CreateEvent from "./pages/Evento";
 import CreateCredencial from "./pages/credencial";
-import ConfigCredencial from "./pages/ConfCredencial"; // Importa la nueva página de inicio
-
+import ConfigCredencial from "./pages/PlantillaCredencial"; // Importa la nueva página de inicio
+import DiseñadorCredencial from "./pages/DiseñoCredencial";
 
 //vouchers y tickets
 import Vouchers from "./pages/voucher"; 
@@ -28,6 +28,8 @@ function App() {
         <Route path="/crear-evento" element={<CreateEvent />} />
         <Route path="/crearCredencial" element={<CreateCredencial />} />
         <Route path="/confCredencial" element={<ConfigCredencial />} />
+        <Route path= "/diseñadorCredencial/:idPlantilla" element={<DiseñadorCredencial />} />
+
         <Route path="/dashboard" element={<Dashboard />} />
 
 

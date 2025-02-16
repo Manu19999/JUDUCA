@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, } from "react";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
+
 
 const ConfiguracionCredencial = () => {
   const [nombrePlantilla, setNombrePlantilla] = useState("");
@@ -11,6 +13,11 @@ const ConfiguracionCredencial = () => {
   const [estado, setEstado] = useState(false);
   const [plantillas, setPlantillas] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const navigate = useNavigate();
+const asignarCampos = (idPlantilla) => {
+  navigate(`/diseñadorCredencial/${idPlantilla}`);
+};
 
   const estiloCredencial = {
     backgroundImage: `url(${fondoCredencial})`,
@@ -65,7 +72,7 @@ const ConfiguracionCredencial = () => {
             <label className="form-label">NOMBRE DE PLANTILLA</label>
             <input
               type="text"
-              className="form-control"
+              className="form-control-credencial"
               value={nombrePlantilla}
               onChange={(e) => setNombrePlantilla(e.target.value)}
               required
@@ -75,7 +82,7 @@ const ConfiguracionCredencial = () => {
           <div className="mb-3">
             <label className="form-label">FUENTE</label>
             <select
-              className="form-select"
+              className="form-select-credencial"
               value={tipoFuente}
               onChange={(e) => setTipoFuente(e.target.value)}
             >
@@ -90,7 +97,7 @@ const ConfiguracionCredencial = () => {
             <label className="form-label">TAMAÑO DE FUENTE</label>
             <input
               type="number"
-              className="form-control"
+              className="form-control-credencial"
               value={parseInt(tamañoFuente)}
               onChange={(e) => setTamañoFuente(`${e.target.value}px`)}
             />
@@ -117,11 +124,11 @@ const ConfiguracionCredencial = () => {
           </div>
 
           <div className="botones-container">
-            <button className="btn btn-primary" onClick={guardarPlantilla}>
+            <button className="btnAgg" onClick={guardarPlantilla}>
               Guardar Plantilla
             </button>
             <button
-              className="btn btn-info"
+              className="btnVer"
               onClick={() => setModalVisible(true)}
             >
               Ver Plantillas
@@ -130,10 +137,10 @@ const ConfiguracionCredencial = () => {
         </div>
 
         <div className="col-md-5 d-flex justify-content-center align-items-center">
-          <div style={{ width: "400px", height: "490px" }}>
+          <div style={{ width: "400px", height: "400px" }}>
             <div style={estiloCredencial}>
-              <strong>Nombre: Juan Pérez</strong>
-              <p>ID: 123456</p>
+              <strong>EJEMPLO DE PLANTILLA</strong>
+              <p>EJEMPLO DE PLANTILLA</p>
             </div>
           </div>
         </div>
@@ -154,23 +161,21 @@ const ConfiguracionCredencial = () => {
                   onClick={() => setModalVisible(false)}
                 ></button>
               </div>
-              <div
-                className="modal-body"
-                style={{ maxHeight: "400px", overflowY: "auto" }}
-              >
+              <div style={{ overflowX: "auto", maxHeight: "350px" }}>
+
                 {plantillas.length === 0 ? (
                   <p className="text-center">No hay plantillas guardadas.</p>
                 ) : (
-                  <table className="table table-hover table-striped">
+                  <table className="table-credencial table-striped table-hover table-bordered text-center" style={{ fontSize: "13px",  tableLayout: "fixed", width: "100%" }}>
                     <thead>
                       <tr>
-                        <th>#</th>
-                        <th>Nombre</th>
-                        <th>Fuente</th>
-                        <th>Tamaño</th>
-                        <th>Color Texto</th>
-                        <th>Color Fondo</th>
-                        <th>Acciones</th>
+                      <th style={{ width: "5%", whiteSpace: "nowrap" }}>#</th>
+                      <th style={{ width: "10%", whiteSpace: "nowrap" }}>Nombre</th>
+                      <th style={{ width: "10%", whiteSpace: "nowrap" }}>Fuente</th>
+                      <th style={{ width: "5%", whiteSpace: "nowrap" }}>Tamaño</th>
+                      <th style={{ width: "5%", whiteSpace: "nowrap" }}>Color Texto</th>
+                      <th style={{ width: "5%", whiteSpace: "nowrap" }}>Color Fondo</th>
+                      <th style={{ width: "10%", whiteSpace: "nowrap" }}>Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -203,8 +208,8 @@ const ConfiguracionCredencial = () => {
                             ></span>
                           </td>
                           <td>
-                            <button className="btn btn-warning btn-sm me-2">
-                              Editar
+                            <button className="btn btn-warning btn-sm me-2" onClick={() => asignarCampos(plantilla.id)}>
+                              Seleccionar
                             </button>
                             <button
                               className="btn btn-danger btn-sm"
