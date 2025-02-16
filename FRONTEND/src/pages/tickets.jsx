@@ -1,4 +1,4 @@
-import Nav from '../components/Dashboard/nav';
+import Nav from '../components/Dashboard/navDashboard';
 import TicketCom from '../components/Vouchers/ticket'; // Cambio el nombre de la importación
 
 const Tickets = () => { 

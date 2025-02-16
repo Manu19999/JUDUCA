@@ -1,4 +1,4 @@
-import Nav from '../components/Dashboard/nav';
+import Nav from '../components/Dashboard/navDashboard';
 import ComedoresComponent from '../components/Vouchers/Comedor'; // Cambio el nombre de la importación
 
 const comedores = () => { 

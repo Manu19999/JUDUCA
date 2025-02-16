@@ -1,5 +1,5 @@
 import { FaVolumeUp } from 'react-icons/fa';
-import Nav from '../components/Dashboard/nav';
+import Nav from '../components/Dashboard/navDashboard';
 import VouchersConsumo from '../components/Vouchers/ConsumoVouchers';
 const ConsumoVoucher = () => {
   return (
