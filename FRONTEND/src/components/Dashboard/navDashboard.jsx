@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { MdLogout } from "react-icons/md";
 import "../../styles/Inicio/Navbar.css";
 import logo from "../../assets/logo-unah-blanco.png";
 
@@ -38,11 +39,12 @@ const navigate = () => {
         </button>
 
         {/* Menú de Navegación */}
+
         <nav className={`custom-menu ${menuOpen ? "show" : ""}`}>
           <a href="#inicio" className="navlinkcustom" onClick={() => setMenuOpen(false)}>
             Inicio
           </a>
-          <a href="#Eventos" className="navlinkcustom" onClick={() => setMenuOpen(false)}>
+       {/*   <a href="#Eventos" className="navlinkcustom" onClick={() => setMenuOpen(false)}>
             Eventos
           </a>
           <a href="#Noticias" className="navlinkcustom" onClick={() => setMenuOpen(false)}>
@@ -53,29 +55,49 @@ const navigate = () => {
           </a>
           <a href="#contacto" className="navlinkcustom" onClick={() => setMenuOpen(false)}>
             Contacto
-          </a>
+          </a>*/}
+
           {/* Menú desplegable para Eventos */}
-          <NavDropdown title="Gestion" id="nav-dropdown" className="navlinkcustom">
+
+          <NavDropdown title="Seguridad" id="nav-dropdown" className="navlinkcustom">
+            <NavDropdown.Item href="#">Usuarios</NavDropdown.Item>
+            <NavDropdown.Item href="#">Bitacora</NavDropdown.Item>
+            <NavDropdown.Item href="#">Permisos</NavDropdown.Item>
+          </NavDropdown>
+
+          <NavDropdown title="Fichas" id="nav-dropdown" className="navlinkcustom">
             <NavDropdown.Item href="/crear-evento">Crear evento</NavDropdown.Item>
+          </NavDropdown>
+
+          <NavDropdown title="Credenciales" id="nav-dropdown" className="navlinkcustom">
             <NavDropdown.Item href="/crearCredencial">Asignar Credencial</NavDropdown.Item>
             <NavDropdown.Item href="/confCredencial">Configuracion credencial</NavDropdown.Item>
           </NavDropdown>
+
           <NavDropdown title="Vouchers y tickets" id="nav-dropdown" className="navlinkcustom">
-            <NavDropdown.Item href="/voucher">Gestion vouchers</NavDropdown.Item>
-            <NavDropdown.Item href="#Gestion">Gestion tickets</NavDropdown.Item>
-            <NavDropdown.Item href="#Gestion">Gestion</NavDropdown.Item>
+         <NavDropdown.Item href="/voucher">Vouchers</NavDropdown.Item>
+                     <NavDropdown.Divider />
+                     <NavDropdown.Item href="/consumo">Consumo Vouchers</NavDropdown.Item>
+                     <NavDropdown.Divider />
+                     <NavDropdown.Item href="/ticket">Tickets</NavDropdown.Item>
+                     <NavDropdown.Divider />
+                     <NavDropdown.Item href="/comedor">Comedores</NavDropdown.Item>
+                     <NavDropdown.Divider />
           </NavDropdown>
 
 
           {/* Botón Cerrar sesión en móviles */}
           <button className="btn-acceder mobile-only" onClick={handleLogoutClick}>
-            Cerrar sesión
+          Cerrar sesión  <MdLogout size={22} /> 
+
+
           </button>
         </nav>
 
         {/* Botón Cerrar sesión en escritorio */}
         <button className="btn-acceder desktop-only" onClick={handleLogoutClick}>
-          Cerrar sesión
+          Cerrar sesión  <MdLogout size={22} /> 
+
         </button>
       </div>
     </header>

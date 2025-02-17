@@ -166,16 +166,16 @@ const asignarCampos = (idPlantilla) => {
                 {plantillas.length === 0 ? (
                   <p className="text-center">No hay plantillas guardadas.</p>
                 ) : (
-                  <table className="table table-hover table-striped">
+                  <table className="table-credencial table-striped table-hover table-bordered text-center" style={{ fontSize: "13px",  tableLayout: "fixed", width: "100%" }}>
                     <thead>
                       <tr>
-                        <th>#</th>
-                        <th>Nombre</th>
-                        <th>Fuente</th>
-                        <th>Tamaño</th>
-                        <th>Color Texto</th>
-                        <th>Color Fondo</th>
-                        <th>Acciones</th>
+                      <th style={{ width: "5%", whiteSpace: "nowrap" }}>#</th>
+                      <th style={{ width: "10%", whiteSpace: "nowrap" }}>Nombre</th>
+                      <th style={{ width: "10%", whiteSpace: "nowrap" }}>Fuente</th>
+                      <th style={{ width: "5%", whiteSpace: "nowrap" }}>Tamaño</th>
+                      <th style={{ width: "5%", whiteSpace: "nowrap" }}>Color Texto</th>
+                      <th style={{ width: "5%", whiteSpace: "nowrap" }}>Color Fondo</th>
+                      <th style={{ width: "10%", whiteSpace: "nowrap" }}>Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
