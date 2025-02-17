@@ -16,6 +16,7 @@ import Vouchers from "./pages/voucher";
 import ConsumosVouchers from "./pages/ConsumoVoucher";
 import Comedores from "./pages/Comedores";
 import Tickets from "./pages/tickets";
+import Usuarios from "./pages/Usuarios";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="" element={<Home />} />
         <Route path="/login" element={<Login />}/>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/usuarios" element={<Usuarios />} />
 
         <Route path="/crear-evento" element={<CreateEvent />} />
         <Route path="/crearCredencial" element={<CreateCredencial />} />

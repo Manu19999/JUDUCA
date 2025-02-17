@@ -1,0 +1,147 @@
+.tabla-container {
+    font-size: 0.83rem;
+    margin: auto;
+    width: 90%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff; /* Fondo blanco */
+    padding: 20px;
+    border-bottom-left-radius: 10px; /* Borde redondeado solo en la esquina inferior izquierda */
+    border-bottom-right-radius: 10px; /* Borde redondeado solo en la esquina inferior derecha */
+    overflow-y: auto;
+    justify-content: flex-start;
+    box-shadow: 0 0 5px rgba(58, 54, 54, 0.4); /* Sombra más pronunciada */
+  }
+  
+  .filtros {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .filtros select,
+  .filtros input {
+    padding: 7px;
+    font-size: 14px;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .filtros select {
+    width: 60px;
+    background-color: white;
+    color: #346397; /* Azul UNAH */
+  }
+  
+  .filtros input {
+    width: 260px;
+    background-color: white;
+    color: #346397; 
+  }
+  
+  .filtros select:focus,
+  .filtros input:focus {
+    border-color: #346397; 
+    box-shadow: 0 0 5px rgba(0, 51, 102, 0.5); /* Sombra al enfocar */
+  }
+  
+  /* Contenedor con scroll */
+.tabla-wrapper {
+    max-height: 380px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto; /* Habilita el desplazamiento vertical */
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Color en Firefox */
+  }
+  
+  
+  .tabla-wrapper::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3); /* Color sutil del thumb */
+    border-radius: 10px; /* Bordes redondeados */
+  }
+  
+  .tabla-wrapper::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.5); /* Se oscurece un poco al pasar el mouse */
+  }
+  
+  .tabla-wrapper::-webkit-scrollbar-track {
+    background: transparent; /* Hace que el track sea invisible */
+  }
+  
+  
+  .tabla {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    table-layout: fixed; /* Mantiene el ancho de las columnas constante */
+}
+
+  
+.tabla th, .tabla td {
+    padding: 7px;
+    text-align: left;
+    border-bottom: 1px solid #dddddd; /* Borde inferior */
+    color: #333333; /* Texto oscuro */
+    border-right: 1px solid #dddddd; /* Borde vertical derecho */
+  }
+  
+  .tabla th {
+    background-color:#346397; /* Azul UNAH */
+    color: white; /* Texto blanco */
+    font-weight: normal;
+    position: sticky;
+    top: 0;
+  }
+  
+  /* Si quieres quitar el borde derecho de la última columna para evitar doble borde */
+  .tabla th:last-child, .tabla td:last-child {
+    border-right: none;
+  }
+  
+  .tabla tr:hover {
+    background-color: #f5f5f5; /* Hover más suave */
+  }
+  
+  
+  .paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .paginacion button {
+    padding: 6.5px 12px;
+    font-size: 13px;
+    border: 1px solid #346397;
+    border-radius: 6px;
+    background-color: white;
+    color: #346397;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .paginacion button:hover {
+    background-color: #346397;
+    color: white;
+    transform: scale(1.1);
+  }
+  
+  .paginacion button.activo {
+    background-color: #346397;
+    color: white;
+    font-weight: bold;
+    border-color: #001a33;
+    transform: scale(1.1);
+    pointer-events: none; /* Evita que se vuelva a hacer clic en la página actual */
+  }
+  
+  
+  .paginacion span {
+    font-size: 14px;
+    color: #666666;
+  }
