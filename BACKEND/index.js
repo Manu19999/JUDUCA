@@ -33,16 +33,16 @@ app.use(cors({
 }));
 
 /*PRUEBA*/
-async function testConexion() {
-    try {
-      const pool = await conexionbd();
-      const result = await pool.request().query("SELECT 1");
-      console.log("✅ Datos obtenidos:", result.recordset);
-    } catch (err) {
-      console.error("❌ Error ejecutando la consulta:", err);
-    }
+app.get("/", async (req, res) => {
+  try {
+    const pool = await conexionbd();
+    const result = await pool.request().query("SELECT * FROM TBL_SECCIONES");
+    res.json(result.recordset); // Enviar los datos como JSON al cliente
+  } catch (err) {
+    console.error("❌ Error ejecutando la consulta:", err);
+    res.status(500).json({ error: "Error al obtener los datos" });
   }
-  testConexion();
+});
 
 const PORT = 4000;
 
