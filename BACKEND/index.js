@@ -33,17 +33,16 @@ app.use(cors({
 }));
 
 /*PRUEBA*/
-app.get('/', async (req, res) => {
-    const query = 'SELECT * FROM TBL_ROLES';
-  
+async function testConexion() {
     try {
-        const [results] = await connection.query(query); 
-        res.json(results); 
+      const pool = await conexionbd();
+      const result = await pool.request().query("SELECT 1");
+      console.log("✅ Datos obtenidos:", result.recordset);
     } catch (err) {
-        console.error('Error ejecutando la consulta:', err);
-        res.status(500).send('Error en la consulta');
+      console.error("❌ Error ejecutando la consulta:", err);
     }
-});
+  }
+  testConexion();
 
 const PORT = 4000;
 
