@@ -1,51 +1,61 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import Tabla from "../Crud/Tabla"; // Asumimos que tienes este componente
+import Nav from "../Dashboard/navDashboard";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";  // Iconos para editar y eliminar
 
 const Comedor = () => {
   const comedores = [
-    { id: 1, id_ubicacion: 101, numero: 5, capacidad: 100, activo: "Sí" },
-    { id: 2, id_ubicacion: 102, numero: 10, capacidad: 200, activo: "No" },
-    { id: 3, id_ubicacion: 103, numero: 15, capacidad: 150, activo: "Sí" },
+    { id: 1, id_ubicacion: "POLIDEPORTIVO", numero: 5, capacidad: 100, activo: "Sí" },
+    { id: 2, id_ubicacion: "CANCHA DE BALONCESTO", numero: 10, capacidad: 200, activo: "No" },
+    { id: 3, id_ubicacion: "POLIDEPORTIVO", numero: 15, capacidad: 150, activo: "Sí" },
   ];
 
+  const columnas = [
+    { nombre: "N", campo: "id", ancho: "10%" },
+    { nombre: "Ubicación", campo: "id_ubicacion", ancho: "20%" },
+    { nombre: "Número", campo: "numero", ancho: "15%" },
+    { nombre: "Capacidad", campo: "capacidad", ancho: "20%" },
+    { nombre: "Activo", campo: "activo", ancho: "15%" },
+    { nombre: "Acción", campo: "accion", ancho: "20%" },
+  ];
+
+  const handleEdit = (id) => {
+    console.log("Editar comedor con id:", id);
+    // Lógica de edición
+  };
+
+  const handleDelete = (id) => {
+    console.log("Eliminar comedor con id:", id);
+    // Lógica de eliminación
+  };
+
+  const customActions = (id) => (
+    <div>
+      <button 
+        onClick={() => handleEdit(id)} 
+        className="btn btn-outline-warning mx-1"
+      >
+        <FaEdit />
+      </button>
+      <button 
+        onClick={() => handleDelete(id)} 
+        className="btn btn-outline-danger mx-1"
+      >
+        <FaTrashAlt />
+      </button>
+    </div>
+  );
+
+  const comedoresConAccion = comedores.map((comedor) => ({
+    ...comedor,
+    accion: customActions(comedor.id),
+  }));
+
   return (
-    <div className="container mt-4">
-      <header className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="text-primary">Lista de Comedores</h2>
-        <div>
-          <button className="btn btn-primary me-2">Nuevo</button>
-          <button className="btn btn-secondary">Generar Reporte</button>
-        </div>
-      </header>
-      <div className="table-responsive">
-        <table className="table table-bordered text-center">
-          <thead className="table-primary">
-            <tr>
-              <th>ID</th>
-              <th>ID Ubicación</th>
-              <th>Número</th>
-              <th>Capacidad</th>
-              <th>Activo</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            {comedores.map((comedor) => (
-              <tr key={comedor.id}>
-                <td>{comedor.id}</td>
-                <td>{comedor.id_ubicacion}</td>
-                <td>{comedor.numero}</td>
-                <td>{comedor.capacidad}</td>
-                <td>{comedor.activo}</td>
-                <td>
-                  <button className="btn btn-warning btn-sm me-2">Editar</button>
-                  <button className="btn btn-danger btn-sm">Eliminar</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div className="App">
+      <Nav />
+      <h2>Gestión de Comedores</h2>
+      <Tabla columnas={columnas} datos={comedoresConAccion} />
     </div>
   );
 };
