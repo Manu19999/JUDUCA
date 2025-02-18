@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Tabla from "../Crud/Tabla";
 import Nav from "../Dashboard/navDashboard";
-import { FaUser, FaEdit, FaTrashAlt } from "react-icons/fa";  // Importamos los iconos
+import { FaUser, FaEdit, FaTrashAlt,FaReceipt } from "react-icons/fa";  // Importamos los iconos
 
 
-const Vouchers = () => {
-  const vouchers = [
+const voucher = () => {
+  const voucher = [
     { id: 1, valor: "00.00", fecha_emision: "2025-02-14", fecha_expiracion: "2025-02-14", fecha_inicio: "2025-02-14 08:00:00", fecha_fin: "2025-02-14 11:59:00", activo: "Expirado"  },
     { id: 2, valor: "00.00", fecha_emision: "2025-02-14", fecha_expiracion: "2025-02-14", fecha_inicio: "2025-02-14 12:00:00", fecha_fin: "2025-02-14 15:00:00", activo: "Activo"},
     { id: 3, valor: "00.00", fecha_emision: "2025-02-14", fecha_expiracion: "2025-02-14", fecha_inicio: "2025-02-14 18:00:00", fecha_fin: "2025-02-14 22:00:00", activo: "Activo" },
@@ -60,20 +60,20 @@ const Vouchers = () => {
     </div>
   );
 
-  const vouchersConAccion = vouchers.map((voucher) => ({
+  const voucherConAccion = voucher.map((voucher) => ({
     ...voucher,
     accion: customActions(voucher.id),
   }));
 
   return (
-    <div className="App">
+    <div className="crud">
       <Nav />
       <h2>
-        <FaUser className="icono-titulo" /> Gestión de Vouchers
+        <FaReceipt className="icono-titulo" /> Gestión de voucher
       </h2>
-      <Tabla columnas={columnas} datos={vouchersConAccion} />
+      <Tabla columnas={columnas} datos={voucherConAccion} />
     </div>
   );
 };
 
-export default Vouchers;
+export default voucher;
