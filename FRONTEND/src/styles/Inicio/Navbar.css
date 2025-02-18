@@ -25,13 +25,35 @@
   justify-content: space-between;
   height: 100%;
 }
+/* Contenedor para el logo y el texto */
+.logo-container {
+  display: flex;
+  align-items: center; /* Alinea el texto y el logo en una sola línea */
+  text-decoration: none;
+  gap: 10px; /* Espacio entre el texto y el logo */
+  margin-left: -50px;
+}
 
 /* Logo */
 .logo-img {
-  height: 60px;
-  object-fit: contain;
-  margin-right: auto;/* Empuja el logo a la izquierda */
+  height: 50px; /* Ajusta el tamaño del logo según sea necesario */
+  width: auto;
 }
+
+/* Texto "Plataforma de eventos" */
+.platform-text {
+  font-size: 14px;
+  color: white;
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+}
+
+
+/* Asegura que la barra de navegación no se desajuste */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
 
 /* Botón de menú toggle */
 .custom-toggle {

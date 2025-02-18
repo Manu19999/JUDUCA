@@ -16,14 +16,17 @@ const CustomNavbar = () => {
     <header className="navbar-custom">
       <div className="navbar-container">
         {/* Logo */}
-        <a
-          href="https://www.unah.edu.hn/"
-          className="logo"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src={logo} alt="Logo" className="logo-img" />
-        </a>
+        <div className="navbar-brand">
+  <a
+    href="https://www.unah.edu.hn/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="logo-container"
+  >
+    <img src={logo} alt="Logo" className="logo-img" />
+    <span className="platform-text">Plataforma de eventos</span>
+  </a>
+</div>
 
         {/* Botón Toggle (solo en móviles) */}
         <button
@@ -40,11 +43,11 @@ const CustomNavbar = () => {
           <a href="#contact" className="navlinkcustom" onClick={() => setMenuOpen(false)}>Contacto</a>
           <a href="#acercade" className="navlinkcustom" onClick={() => setMenuOpen(false)}>Acerca de</a>
           {/* Botón Acceder en móviles */}
-          <button className="btn-acceder mobile-only" onClick={handleLoginClick}>Acceder</button>
+          <button className="btn-acceder mobile-only" onClick={handleLoginClick}> Iniciar sesión </button>
         </nav>
 
         {/* Botón Acceder en escritorio */}
-        <button className="btn-acceder desktop-only" onClick={handleLoginClick}> Acceder </button>
+        <button className="btn-acceder desktop-only" onClick={handleLoginClick}> Iniciar sesión </button>
       </div>
     </header>
   );

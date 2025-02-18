@@ -19,10 +19,6 @@ const EventList = () => {
     { id: 6, title: "Taller de Programación", date: "15 de Agosto, 2022", image: EventImage2, description: "Aprende a programar desde cero con expertos en el área." },
   ];
 
-  const featuredEvents = [
-    { id: 7, title: "Evento Destacado: Hackathon UNAH", date: "30 de Noviembre, 2023", image: EventImage2, description: "Participa en el hackathon más grande de la universidad." },
-  ];
-
   const [activeTab, setActiveTab] = useState("upcoming");
   const [carouselIndex, setCarouselIndex] = useState(0);
 
@@ -37,7 +33,7 @@ const EventList = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide();
-    }, 5000);
+    }, 7000);
     return () => clearInterval(interval);
   }, [carouselIndex]);
 
@@ -48,9 +44,8 @@ const EventList = () => {
       <Container>
         <h2 className="eventlisttitle">Eventos</h2>
         <div className="eventtabs">
-          <button className={`eventtab ${activeTab === "upcoming" ? "active" : ""}`} onClick={() => setActiveTab("upcoming")}>Próximos</button>
           <button className={`eventtab ${activeTab === "past" ? "active" : ""}`} onClick={() => setActiveTab("past")}>Pasados</button>
-          <button className={`eventtab ${activeTab === "featured" ? "active" : ""}`} onClick={() => setActiveTab("featured")}>Destacados</button>
+          <button className={`eventtab ${activeTab === "upcoming" ? "active" : ""}`} onClick={() => setActiveTab("upcoming")}>Próximos</button>
         </div>
 
         {activeTab === "upcoming" && (
@@ -70,12 +65,6 @@ const EventList = () => {
                 <button className="carousel-button next" onClick={nextSlide}>&#10095;</button>
               </div>
             )}
-          </div>
-        )}
-
-        {activeTab === "featured" && (
-          <div className={`eventgrid ${featuredEvents.length === 2 ? "two-events" : ""}`}>
-            {featuredEvents.map((event) => <EventCard key={event.id} event={event} />)}
           </div>
         )}
       </Container>
