@@ -1,55 +1,63 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import Tabla from "../Crud/Tabla"; // Asumimos que tienes este componente
+import Nav from "../Dashboard/navDashboard";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";  // Importamos los iconos
 
 const Ticket = () => {
   const tickets = [
-    { id: 1, id_evento: 201, id_juego_actividad: 301, cantidad: 2, activo: 1, fecha_hora_inicio: "2025-02-14 10:00:00", fecha_hora_fin: "2025-02-14 12:00:00" },
-    { id: 2, id_evento: 202, id_juego_actividad: 302, cantidad: 4, activo: 0, fecha_hora_inicio: "2025-02-14 14:00:00", fecha_hora_fin: "2025-02-14 16:00:00" },
-    { id: 3, id_evento: 203, id_juego_actividad: 303, cantidad: 1, activo: 1, fecha_hora_inicio: "2025-02-14 18:00:00", fecha_hora_fin: "2025-02-14 20:00:00" },
+    { id: 1, id_evento: "JUDUCA", id_juego_actividad: "FUTBOLL", cantidad: 2, activo: 1, fecha_hora_inicio: "2025-02-14 10:00:00", fecha_hora_fin: "2025-02-14 12:00:00" },
+    { id: 2, id_evento: "JUDUCA", id_juego_actividad: "BALONCESTO", cantidad: 4, activo: 0, fecha_hora_inicio: "2025-02-14 14:00:00", fecha_hora_fin: "2025-02-14 16:00:00" },
+    { id: 3, id_evento: "JUDUCA", id_juego_actividad: "KARATE", cantidad: 1, activo: 1, fecha_hora_inicio: "2025-02-14 18:00:00", fecha_hora_fin: "2025-02-14 20:00:00" },
   ];
 
+  const columnas = [
+    { nombre: "N", campo: "id", ancho: "5%" },
+    { nombre: "Evento", campo: "id_evento", ancho: "15%" },
+    { nombre: "Juego/Actividad", campo: "id_juego_actividad", ancho: "15%" },
+    { nombre: "Cantidad", campo: "cantidad", ancho: "10%" },
+    { nombre: "Activo", campo: "activo", ancho: "10%" },
+    { nombre: "Fecha/Hora Inicio", campo: "fecha_hora_inicio", ancho: "15%" },
+    { nombre: "Fecha/Hora Fin", campo: "fecha_hora_fin", ancho: "15%" },
+    { nombre: "Acción", campo: "accion", ancho: "15%" },
+  ];
+
+  const handleEdit = (id) => {
+    console.log("Editar ticket con id:", id);
+    // Aquí puedes agregar la lógica de edición
+  };
+
+  const handleDelete = (id) => {
+    console.log("Eliminar ticket con id:", id);
+    // Aquí puedes agregar la lógica de eliminación
+  };
+
+  const customActions = (id) => (
+    <div>
+      <button 
+        onClick={() => handleEdit(id)} 
+        className="btn btn-outline-warning mx-1"
+      >
+        <FaEdit />
+      </button>
+      <button 
+        onClick={() => handleDelete(id)} 
+        className="btn btn-outline-danger mx-1"
+      >
+        <FaTrashAlt />
+      </button>
+    </div>
+  );
+
+  const ticketsConAccion = tickets.map((ticket) => ({
+    ...ticket,
+    accion: customActions(ticket.id),
+  }));
+
   return (
-    <div className="container mt-4">
-      <header className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="text-primary">Lista de Tickets</h2>
-        <div>
-          <button className="btn btn-primary me-2">Nuevo</button>
-          <button className="btn btn-secondary">Generar Reporte</button>
-        </div>
-      </header>
-      <div className="table-responsive">
-        <table className="table table-bordered text-center">
-          <thead className="table-primary">
-            <tr>
-              <th>ID</th>
-              <th>ID Evento</th>
-              <th>ID Juego/Actividad</th>
-              <th>Cantidad</th>
-              <th>Activo</th>
-              <th>Fecha/Hora Inicio</th>
-              <th>Fecha/Hora Fin</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tickets.map((ticket) => (
-              <tr key={ticket.id}>
-                <td>{ticket.id}</td>
-                <td>{ticket.id_evento}</td>
-                <td>{ticket.id_juego_actividad}</td>
-                <td>{ticket.cantidad}</td>
-                <td>{ticket.activo ? "Sí" : "No"}</td>
-                <td>{ticket.fecha_hora_inicio}</td>
-                <td>{ticket.fecha_hora_fin}</td>
-                <td>
-                  <button className="btn btn-warning btn-sm me-2">Editar</button>
-                  <button className="btn btn-danger btn-sm">Eliminar</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div className="App">
+      <Nav />
+      <h2>Gestión de Tickets</h2>
+      <Tabla columnas={columnas} datos={ticketsConAccion} />
     </div>
   );
 };
