@@ -100,7 +100,7 @@ const Login = () => {
                 Recuperar Contraseña
               </button>
               <a href="#back-to-login" className="forgot-password" onClick={handleForgotPasswordClick}>
-                Volver al inicio de sesión
+                Volver a iniciar sesión
               </a>
             </>
           )}

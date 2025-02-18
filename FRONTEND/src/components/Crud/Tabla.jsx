@@ -8,13 +8,13 @@ const Tabla = ({ columnas, datos }) => {
   const [datosFiltrados, setDatosFiltrados] = useState(datos);
 
   useEffect(() => {
-    setDatosFiltrados(
-      datos.filter((fila) =>
-        Object.values(fila).some((valor) =>
-          valor.toString().toLowerCase().includes(busqueda.toLowerCase())
-        )
+    const datosFiltrados = datos.filter((fila) =>
+      Object.values(fila).some((valor) =>
+        valor.toString().toLowerCase().includes(busqueda.toLowerCase())
       )
     );
+    setDatosFiltrados(datosFiltrados);
+    setPaginaActual(1); // Reinicia la página a 1 cuando se realiza una búsqueda
   }, [busqueda, datos]);
 
   const indiceUltimoRegistro = paginaActual * registrosPorPagina;

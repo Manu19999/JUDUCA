@@ -198,3 +198,19 @@
     display: block; /* Muestra el botón acceder solo en móviles */
   }
 }
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .logo-img {
+    height: 50px; /* Reduce tamaño en pantallas pequeñas */
+    margin-left: 40px;
+  }
+
+  .platform-text {
+    font-size: 12px; /* Reduce el tamaño del texto en móviles */
+  }
+
+  .logo-container {
+    gap: 5px; /* Reduce espacio entre el logo y el texto */
+  }
+}

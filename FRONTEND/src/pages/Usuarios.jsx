@@ -26,16 +26,16 @@ const datos = [
 ];
 
 const columnas = [
-  { nombre: 'ID', campo: 'id', ancho: '5%' },
+  { nombre: '#', campo: 'id', ancho: '5%' },
   { nombre: 'Nombre', campo: 'nombre', ancho: '30%' },
   { nombre: 'Edad', campo: 'edad', ancho: '20%' },
   { nombre: 'Ciudad', campo: 'ciudad', ancho: '40%' },
   { nombre: 'Acción', campo: 'accion', ancho: '20%' }
 ];
 
-function App() {
+function Usuarios() {
   return (
-    <div className="App">
+    <div className="crud">
       <Nav />
       <h2><FaUser className="icono-titulo" /> Gestión de usuarios </h2>
       <Tabla columnas={columnas} datos={datos} />
@@ -43,4 +43,4 @@ function App() {
   );
 }
 
-export default App;
+export default Usuarios;
