@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
+
 
 const DiseñoCredencial = () => {
   const [ubicaciones] = useState([
@@ -44,51 +46,65 @@ const DiseñoCredencial = () => {
   };
 
   return (
-    <div className="container">
-      <h3 className="text-center">Diseño de Credencial</h3>
+    <div className="container-fluid">
+         <button className="btnAgg" onClick={() => navigate(/confCredencial/)}>
+            Regresar
+          </button>
 
-      {/* FORMULARIO PARA INGRESAR DATOS */}
-      <div className="form-group">
-        <label>Ubicación:</label>
-        <select
-          className="form-control"
-          value={ubicacionSeleccionada}
-          onChange={(e) => setUbicacionSeleccionada(e.target.value)}
-        >
-          <option value="">Seleccione ubicación</option>
-          {ubicaciones.map((ubicacion) => (
-            <option key={ubicacion.id} value={ubicacion.id}>
-              {ubicacion.descripcion}
-            </option>
-          ))}
-        </select>
-      </div>
+      <div className="row">
+        <div className="col-md-4">
+          <h3 className="text-center my-3">Configuración de Credencial </h3>
 
-      <div className="form-group mt-2">
-        <label>Descripción:</label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Escribir descripción..."
-          value={nuevaDescripcion}
-          onChange={(e) => setNuevaDescripcion(e.target.value)}
-        />
-      </div>
+          {/* FORMULARIO PARA INGRESAR DATOS */}
+          <div className="mb-3">
+            <label className="form-label">Ubicación:</label>
+            <select
+              className="form-control-credencial"
+              value={ubicacionSeleccionada}
+              onChange={(e) => setUbicacionSeleccionada(e.target.value)}
+            >
+              <option value="">Seleccione ubicación</option>
+              {ubicaciones.map((ubicacion) => (
+                <option key={ubicacion.id} value={ubicacion.id}>
+                  {ubicacion.descripcion}
+                </option>
+              ))}
+            </select>
 
-      <button className="btn btn-primary mt-3" onClick={handleGuardar}>
-        Guardar
-      </button>
+            <div className="mb-3">
+              <label className="form-label">Descripción:</label>
+              <input
+                type="text"
+                className="form-control-credencial"
+                placeholder="Escribir descripción"
+                value={nuevaDescripcion}
+                onChange={(e) => setNuevaDescripcion(e.target.value)}
+              />
+            </div>
+
+            <div className="botones-container">
+              <button className="btnAgg" onClick={handleGuardar}>
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-md-5 d-flex justify-content-center align-items-center">
 
       {/* VISTA PREVIA */}
-      <h4 className="text-center mt-4">Vista previa de la plantilla</h4>
       <div
         style={{
+              backgroundImage: `url(${fondoCredencial})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
           display: "grid",
+          width: "400px",
+          height: "250px",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: "5px",
-          maxWidth: "450px",
           margin: "auto",
-          border: "2px solid black",
+          border: "3px solid black",
           padding: "10px",
           backgroundColor: configPlantilla.colorFondo,
           fontFamily: configPlantilla.tipoFuente,
@@ -114,6 +130,10 @@ const DiseñoCredencial = () => {
           </div>
         ))}
       </div>
+        </div>
+
+      </div>
+
     </div>
   );
 };
