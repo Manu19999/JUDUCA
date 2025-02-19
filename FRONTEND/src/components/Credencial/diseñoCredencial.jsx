@@ -13,6 +13,14 @@ const DiseñoCredencial = () => {
     { id: 9, descripcion: "Derecha Inferior" },
   ]);
 
+  // Cargar configuraciones de la plantilla desde localStorage
+  const [configPlantilla, setConfigPlantilla] = useState(() => {
+    const savedConfig = localStorage.getItem("configPlantilla");
+    return savedConfig
+      ? JSON.parse(savedConfig)
+      : { colorFondo: "#00000", tipoFuente: "Arial" };
+  });
+
   const [nuevaDescripcion, setNuevaDescripcion] = useState("");
   const [ubicacionSeleccionada, setUbicacionSeleccionada] = useState("");
   const [asignaciones, setAsignaciones] = useState(() => {
@@ -82,7 +90,8 @@ const DiseñoCredencial = () => {
           margin: "auto",
           border: "2px solid black",
           padding: "10px",
-          backgroundColor: "#ffffff",
+          backgroundColor: configPlantilla.colorFondo,
+          fontFamily: configPlantilla.tipoFuente,
           borderRadius: "10px",
         }}
       >
@@ -96,6 +105,7 @@ const DiseñoCredencial = () => {
               padding: "5px",
               backgroundColor: "#e9ecef",
               borderRadius: "5px",
+              fontFamily: configPlantilla.tipoFuente,
             }}
           >
             <strong>
