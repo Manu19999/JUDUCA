@@ -1,6 +1,6 @@
 import React, { useState, } from "react";
 import { useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
+import "../../styles/Credencial/credencial.css";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 
 

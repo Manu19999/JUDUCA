@@ -19,14 +19,17 @@ const NavDashboard = () => {
     <header className="navbar-custom">
       <div className="navbar-container">
         {/* Logo */}
-        <a
-          href="https://www.unah.edu.hn/"
-          className="logo"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src={logo} alt="Logo" className="logo-img" />
-        </a>
+       <div className="navbar-brand">
+         <a
+           href="https://www.unah.edu.hn/"
+           target="_blank"
+           rel="noopener noreferrer"
+           className="logo-container"
+         >
+           <img src={logo} alt="Logo" className="logo-img" />
+           <span className="platform-text">Plataforma de eventos</span>
+         </a>
+       </div>
 
         {/* Botón Toggle (solo en móviles) */}
         <button
