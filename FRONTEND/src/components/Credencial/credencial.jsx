@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../../styles/Credencial/credencial.css";
+import '../Crud/Tabla.css';
 
 const CredencialForm = () => {
   const [credenciales, setCredenciales] = useState([]);

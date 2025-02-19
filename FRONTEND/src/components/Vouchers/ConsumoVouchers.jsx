@@ -3,6 +3,7 @@ import Tabla from "../Crud/Tabla";  // Asegúrate de que el componente Tabla est
 import Nav from "../Dashboard/navDashboard";
 import { FaUser, FaEdit, FaTrashAlt } from "react-icons/fa";  // Importamos los iconos
 
+
 const ConsumosVouchers = () => {
   const consumos = [
     { id: 1, id_voucher_comida: 101, id_credencial: "JUAN LOPES", id_comedor: "VOAE", id_tipo_comida: "DESAYUNO", id_usuario: "ADMIN", fecha_consumo: "2025-02-14 08:30:00", cantidad_utilizada: 1 },
