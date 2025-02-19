@@ -54,7 +54,14 @@ const asignarCampos = (idPlantilla) => {
       colorFondo,
     };
 
-    setPlantillas([...plantillas, nuevaPlantilla]);
+    const plantillasActualizadas = [...plantillas, nuevaPlantilla];
+
+    // Guardar en estado
+    setPlantillas(plantillasActualizadas);
+  
+    // Guardar en localStorage
+    localStorage.setItem("plantillas", JSON.stringify(plantillasActualizadas));
+  
     setNombrePlantilla("");
   };
 
