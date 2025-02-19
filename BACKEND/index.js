@@ -1,10 +1,10 @@
-/*                     IMPORTS O REQUIRES                                   */
+/*                     IMPORTS                                   */
 
 import conexionbd from './src/config/db.js';
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors'; 
-
+import CredencialRoutes from './src/routes/CredencialRoutes.js';
 /*                     CONFIGURACIONES BACKEND                                  */
 
 const app = express();
@@ -32,29 +32,24 @@ app.use(cors({
     credentials: true, // Para permitir cookies en las solicitudes
 }));
 
-/*PRUEBA*/
-app.get("/", async (req, res) => {
-  try {
-    const pool = await conexionbd();
-    const result = await pool.request().query("SELECT * FROM tblUbicacionesCampos");
-    res.json(result.recordset); // Enviar los datos como JSON al cliente
-  } catch (err) {
-    console.error("❌ Error ejecutando la consulta:", err);
-    res.status(500).json({ error: "Error al obtener los datos" });
-  }
-});
 
-app.get("/home", async (req, res) => {
-  try {
-    const pool = await conexionbd();
-    const result = await pool.request().query("SELECT * FROM TBL_SECCIONES");
-    res.json(result.recordset); // Enviar los datos como JSON al cliente
-  } catch (err) {
-    console.error("❌ Error ejecutando la consulta:", err);
-    res.status(500).json({ error: "Error al obtener los datos" });
-  }
-});
+/*                     RUTAS                                  */
 
+app.use('/api/credencial', CredencialRoutes);
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*                     INICIALIZACION DEL SERVIDOR                                  */
 const PORT = 4000;
 
 app.listen(PORT, () => {
