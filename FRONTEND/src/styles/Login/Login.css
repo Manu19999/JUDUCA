@@ -3,46 +3,52 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(20deg, rgba(240, 248, 255, 0.8), rgba(225, 235, 245, 0.5));
+  min-height: 738px;
+  background: linear-gradient(135deg, #021a32, #0d2848, #064b61);
+
   padding: 20px;
+}
+
+/* Contenedor principal para el logo y el login-box */
+.login-wrapper {
+  position: relative; /* Necesario para posicionar el logo de manera absoluta */
+  width: 100%;
+  max-width: 500px; /* Ancho máximo del contenedor */
 }
 
 /* Sombra suave en el login con efecto de vidrio esmerilado */
 .login-box {
-  background: white; /* Fondo blanco */
+  background: rgba(255, 255, 255, 0.1);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 1px 5px 50px rgba(0, 0, 0, 0.3); /* Sombra suave */
-  width: 500px; /* Ancho fijo */
-  height: auto;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(10px); /* Efecto de vidrio esmerilado */
-  border: 1px solid rgba(255, 255, 255, 0.3); /* Borde sutil */
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .login-title {
-  font-size: 1.6rem;
-  color: #003366;
+  font-size: 1.5rem;
+  color: #e0e1e1;
   font-weight: bold; /* Mayor peso de fuente */
-  
 }
-
 
 .login-subtitle {
-  font-size: 1rem;
-  color: #003366;
-  margin-bottom: 2.5rem;
+  font-size: 0.9rem;
+  color: #e0e1e1;
+  margin-bottom: 3rem;
 }
+
 /* ===== Estilos del formulario ===== */
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
   width: 100%; /* Ocupa todo el ancho disponible */
 }
 
@@ -50,20 +56,19 @@
   position: relative;
   display: flex;
   align-items: center;
-  background: white;
-  border-radius: 8px;
-  padding: 0.2rem;
-  border: 1px solid rgba(185, 188, 190, 0.5);
+  background: transparent;
+  border-bottom: 1.6px solid rgba(230, 230, 230, 0.4); /* Solo borde inferior */
   transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-  width: 100%; /* Ocupa todo el ancho disponible */
+  width: 90% !important;
+  margin: 0 auto; /* Centra el input */
 }
 
 .input-group:hover {
-  border-color: #003366;
+  border-color: #dddddd;
 }
 
 .input-group:focus-within {
-  border-color: #003366;
+  border-color: #dddddd;
 }
 
 /* Icono dentro del input */
@@ -72,20 +77,19 @@
   left: 0.5rem; /* Posición a la izquierda */
   top: 50%; /* Centrado verticalmente */
   transform: translateY(-50%); /* Ajuste fino para centrar */
-  color: #003366;
+  color: rgb(29, 152, 176);
   font-size: 1.2rem;
   pointer-events: none; /* Evita que el icono interfiera con el input */
 }
 
 .input-group input {
-  width: 100%;
-  height: 45px;
-  font-size: 1rem;
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
+  width: 90%;
+  height: 50px;
+  font-size: 0.9rem;
+  padding: 0.75rem 0.8rem 0.25rem 2.5rem;
   border: none;
   background: transparent;
-  color: #333;
+  color: #f0f0f0; /* Color del texto */
   outline: none;
 }
 
@@ -94,8 +98,8 @@
   left: 2.5rem; /* Ajuste para el ícono */
   top: 50%; /* Centrado vertical dentro del input */
   transform: translateY(-50%); /* Ajuste fino para centrar */
-  color: #888;
-  font-size: 1rem;
+  color: rgba(230, 230, 230, 0.4);
+  font-size: 0.9rem;
   pointer-events: none;
   transition: all 0.3s ease;
 }
@@ -107,7 +111,7 @@
   transform: translateX(-50%); /* Ajuste fino para centrar */
   font-size: 0.8rem; /* Reduce el tamaño del texto */
   color: #003366; /* Cambia el color */
-  background: rgba(255, 255, 255, 0.8); /* Fondo para que no se superponga */
+   /* Fondo para que no se superponga */
   padding: 0 0.5rem; /* Espaciado interno */
   z-index: 1; /* Asegura que el texto esté por encima del input */
 }
@@ -116,8 +120,7 @@
   top: 1;
   left: 2rem;
   font-size: 0.8rem;
-  color: #003366;
-  background: white;
+  color: #cecece; /* Fondo no blanco */
   padding: 0 0.2rem;
   transform: translateY(0);
 }
@@ -129,38 +132,49 @@
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  color: #003366; /* Color azul */
+  color: rgb(29, 152, 176); /* Color azul */
   font-size: 1.2rem;
   transition: color 0.3s ease;
+  z-index: 2;
 }
 
 .eye-icon:hover {
-  color: #ffcc00; /* Cambia de color al pasar el mouse */
+  color: rgb(42, 202, 233); /* Cambia de color al pasar el mouse */
 }
 
+/* Oculta el ícono de ojo predeterminado en Edge */
+input[type="password"]::-ms-reveal {
+  display: none !important;
+}
+
+/* Asegúrate de que el input de tipo password no muestre el ícono de ojo */
+input[type="password"] {
+  -webkit-text-security: disc; /* Para navegadores basados en WebKit (Chrome, Edge, etc.) */
+}
 /* ===== Botón de iniciar sesión ===== */
 .login-button {
-  color: #FFFFFF;
+  color: #000000;
   border: none;
   padding: 0.75rem;
   border-radius: 12px;
   font-size: 1rem;
   cursor: pointer;
   font-weight: 500;
-  background-color: #E8A713;
+  background: #059cba;
+  box-shadow: 0 4px 15px rgba(232, 167, 19, 0);
   transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   width: 100%; /* Ocupa todo el ancho disponible */
 }
 
 .login-button:hover {
-  background-color: #c78c0e;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  background: #12abca;
+  box-shadow: 0 4px 20px rgba(19, 147, 232, 0.3);
+  
 }
-
 
 /* ===== Enlace de "Olvidé mi contraseña" ===== */
 .forgot-password {
-  color: #003366;
+  color: #cecece;
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.3s ease, transform 0.3s ease;
@@ -169,55 +183,64 @@
 }
 
 .forgot-password:hover {
-  color: #E8A713;
+  color: #06accd;
   text-decoration: underline;
   transform: translateX(5px); /* Desplazamiento horizontal al pasar el mouse */
 }
 
+/* ===== Estilos del botón Back to Home ===== */
 .back-to-home-button { 
-  position: absolute; /* Posición relativa dentro del contenedor */
-  top: 20px; 
-  left: 20px;
-  background-color: #003366;
-  color: white;
+  position: absolute; 
+  top: 50px; 
+  right: 250px; /* Más flexible en pantallas grandes */
+  background-color: transparent;
+  border: 1px solid white;
+  color: #cecece;
   padding: 10px 20px;
   text-decoration: none;
   text-align: center;
-  border-radius: 5px;
-  font-size: 1rem;
-  z-index: 10; /* Por encima de la tarjeta */
+  border-radius: 18px;
+  font-size: 0.8rem;
+  z-index: 10;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-/* Hover */
 .back-to-home-button:hover {
-  background-color: #0055a5;
+  background: #ffffff;
+  color: #253a69;
+  border-color: #253a69;
   transform: translateY(-2px);
 }
 
-/* RESPONSIVE: Ajuste en pantallas pequeñas */
-@media (max-width: 768px) {
-  .back-to-home-button {
-      top: 10px;
-      left: 10px;
-      padding: 8px 16px;
-      font-size: 0.9rem;
-  }
+/* Logo */
+.login-image-container {
+  position: absolute;
+  top: -103px; /* Mueve el logo hacia arriba */
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 1;
 }
 
-@media (max-width: 480px) {
-  .back-to-home-button {
-      position: fixed; /* Lo mantiene siempre visible */
-      bottom: 20px; /* Lo mueve abajo */
-      left: 50%;
-      transform: translateX(-50%); /* Centrado */
-      width: auto;
-      font-size: 0.8rem;
-  }
+.login-image {
+  width: 180px;
+  height: auto;
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+  filter: brightness(0.9) contrast(1.2);
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
 
-  /* Transición suave para el cambio de formularios */
+.login-image:hover {
+  transform: scale(1.05) translateX(-2px);
+  filter: contrast(1.3) brightness(1) drop-shadow(-3px 0px 9px rgba(255, 0, 0, 0.7)) 
+    drop-shadow(3px 0px 5px rgba(0, 255, 255, 0.7));
+}
+/* Transición suave para el cambio de formularios */
 .login-form {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
@@ -241,4 +264,82 @@
 .login-form.fade-exit-active {
   opacity: 0;
   transform: translateY(-10px);
+}
+
+/* RESPONSIVE: Ajuste en pantallas medianas */
+@media (max-width: 1024px) {
+  .back-to-home-button {
+    top: 50px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 1000px) {
+  .back-to-home-button {
+    right: 50px;
+    top: 50px;
+    font-size: 0.8rem;
+  }
+}
+
+/* RESPONSIVE: Ajuste en pantallas pequeñas */
+@media (max-width: 780px) {
+  
+  
+  .login-title {
+    font-size: 1.3rem;
+  }
+  
+  .login-subtitle {
+    font-size: 0.8rem;
+  }
+  
+  .login-button {
+    font-size: 0.9rem;
+  }
+
+  .back-to-home-button {
+    height: 40px;
+    top: 50px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 485px) {
+
+  .login-title {
+    font-size: 1.2rem;
+  }
+  
+  .login-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .login-button {
+    font-size: 0.85rem;
+  }
+  
+  .floating-label{
+    font-size: 0.8rem;
+  }
+
+  .login-container {
+    min-height: 110vh;
+  }
+  .back-to-home-button {
+    height: 40px;
+    left: 65%;
+    font-size: 0.7rem;
+  }
+
+}
+
+@media (max-width: 390px) {
+  .back-to-home-button {
+    height: 30px;
+    top: 25px;
+    left: 55%;
+    font-size: 0.6rem;
+  }
+
 }
