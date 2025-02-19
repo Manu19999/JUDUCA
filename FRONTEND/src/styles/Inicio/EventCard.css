@@ -111,3 +111,22 @@
     font-size: 0.6rem; /* Tamaño de fuente reducido en móviles */
   }
 }
+
+/*Diseño de los iconos de los eventos */
+.eventicons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.eventicon {
+  margin-left: 8px;
+  cursor: pointer;
+  color: #555;
+  font-size: 24px; /* Ajusta el tamaño del icono */
+  transition: color 0.2s;
+}
+
+.eventicon:hover {
+  color: #000;
+}
