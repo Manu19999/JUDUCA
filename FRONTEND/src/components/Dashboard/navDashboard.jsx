@@ -41,29 +41,54 @@ const NavDashboard = () => {
 
         {/* Menú de Navegación */}
         <nav className={`custom-menu ${menuOpen ? "show" : ""}`}>
-          <a href="#inicio" className="navlinkcustom" onClick={() => setMenuOpen(false)}>
+          <a
+            href="#inicio"
+            className="navlinkcustom"
+            onClick={() => setMenuOpen(false)}
+          >
             Inicio
           </a>
 
-          <NavDropdown title="Seguridad" id="nav-dropdown" className="navlinkcustom">
+          <NavDropdown
+            title="Seguridad"
+            id="nav-dropdown"
+            className="navlinkcustom"
+          >
             <NavDropdown.Item href="/usuarios">Usuarios</NavDropdown.Item>
             <NavDropdown.Item href="#">Bitácora</NavDropdown.Item>
             <NavDropdown.Item href="#">Permisos</NavDropdown.Item>
           </NavDropdown>
+          <a
+            className="navlinkcustom"
+            onClick={() => navigate("/lista-eventos")}
+            href="#inicio"
+          >
+            Eventos
+          </a>
 
-          <NavDropdown title="Fichas" id="nav-dropdown" className="navlinkcustom">
-            <NavDropdown.Item href="/crear-evento">Crear evento</NavDropdown.Item>
+          <NavDropdown
+            title="Credenciales"
+            id="nav-dropdown"
+            className="navlinkcustom"
+          >
+            <NavDropdown.Item href="/crearCredencial">
+              Asignar Credencial
+            </NavDropdown.Item>
+            <NavDropdown.Item href="/confCredencial">
+              Configuración credencial
+            </NavDropdown.Item>
           </NavDropdown>
 
-          <NavDropdown title="Credenciales" id="nav-dropdown" className="navlinkcustom">
-            <NavDropdown.Item href="/crearCredencial">Asignar Credencial</NavDropdown.Item>
-            <NavDropdown.Item href="/confCredencial">Configuración credencial</NavDropdown.Item>
-          </NavDropdown>
-
-          <NavDropdown title="Vouchers y tickets" id="nav-dropdown" className="navlinkcustom">
+          <NavDropdown
+            title="Vouchers y tickets"
+            id="nav-dropdown"
+            className="navlinkcustom"
+          >
             <NavDropdown.Item href="/voucher">Vouchers</NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item href="/consumo">Consumo Vouchers</NavDropdown.Item>
+            <NavDropdown.Item href="/consumo">
+              Consumo Vouchers
+            </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="/ticket">Tickets</NavDropdown.Item>
             <NavDropdown.Divider />
@@ -72,13 +97,19 @@ const NavDashboard = () => {
           </NavDropdown>
 
           {/* Botón Cerrar sesión en móviles */}
-          <button className="btn-acceder mobile-only" onClick={handleLogoutClick}>
+          <button
+            className="btn-acceder mobile-only"
+            onClick={handleLogoutClick}
+          >
             Cerrar sesión <MdLogout size={22} />
           </button>
         </nav>
 
         {/* Botón Cerrar sesión en escritorio */}
-        <button className="btn-acceder desktop-only" onClick={handleLogoutClick}>
+        <button
+          className="btn-acceder desktop-only"
+          onClick={handleLogoutClick}
+        >
           Cerrar sesión <MdLogout size={22} />
         </button>
       </div>
@@ -86,4 +117,4 @@ const NavDashboard = () => {
   );
 };
 
-export default NavDashboard; 
+export default NavDashboard;
