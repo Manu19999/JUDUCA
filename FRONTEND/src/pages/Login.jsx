@@ -26,17 +26,14 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <Link to="/" className="back-to-home-button">
-        <FaArrowCircleLeft />  Ir al inicio 
-      </Link>
 
       {/* Contenedor principal para el logo y el login-box */}
       <div className="login-wrapper">
-        {/* Logo */}
-        <div className="login-image-container">
+        {/* Logo que actúa como botón para ir a inicio */}
+        <Link to="/" className="login-image-container">
           <img src={logo} alt="Logo" className="login-image" />
-        </div>
-
+        </Link>
+        
         {/* Tarjeta del formulario */}
         <div className="login-box">
           <h1 className="login-title">

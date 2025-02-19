@@ -188,29 +188,6 @@ input[type="password"] {
   transform: translateX(5px); /* Desplazamiento horizontal al pasar el mouse */
 }
 
-/* ===== Estilos del botón Back to Home ===== */
-.back-to-home-button { 
-  position: absolute; 
-  top: 50px; 
-  right: 250px; /* Más flexible en pantallas grandes */
-  background-color: transparent;
-  border: 1px solid white;
-  color: #cecece;
-  padding: 10px 20px;
-  text-decoration: none;
-  text-align: center;
-  border-radius: 18px;
-  font-size: 0.8rem;
-  z-index: 10;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.back-to-home-button:hover {
-  background: #ffffff;
-  color: #253a69;
-  border-color: #253a69;
-  transform: translateY(-2px);
-}
 
 /* Logo */
 .login-image-container {

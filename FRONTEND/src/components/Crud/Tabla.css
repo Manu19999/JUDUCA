@@ -1,147 +1,273 @@
+/* Estilos base para .tabla-container y sus elementos */
 .tabla-container {
-    font-size: 0.83rem;
-    margin: auto;
-    width: 90%;
-    max-width: 1100px;
-    display: flex;
-    flex-direction: column;
-    background-color: #ffffff; /* Fondo blanco */
-    padding: 20px;
-    border-bottom-left-radius: 10px; /* Borde redondeado solo en la esquina inferior izquierda */
-    border-bottom-right-radius: 10px; /* Borde redondeado solo en la esquina inferior derecha */
-    overflow-y: auto;
-    justify-content: flex-start;
-    box-shadow: 0 0 5px rgba(58, 54, 54, 0.4); /* Sombra más pronunciada */
-  }
-  
-  .filtros {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 15px;
-  }
-  
-  .filtros select,
-  .filtros input {
-    padding: 7px;
-    font-size: 14px;
-    border: 1px solid #cccccc;
-    border-radius: 6px;
-    outline: none;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .filtros select {
-    width: 60px;
-    background-color: white;
-    color: #346397; /* Azul UNAH */
-  }
-  
-  .filtros input {
-    width: 260px;
-    background-color: white;
-    color: #346397; 
-  }
-  
-  .filtros select:focus,
-  .filtros input:focus {
-    border-color: #346397; 
-    box-shadow: 0 0 5px rgba(0, 51, 102, 0.5); /* Sombra al enfocar */
-  }
-  
-  /* Contenedor con scroll */
-.tabla-wrapper {
-    max-height: 380px; /* Ajusta la altura según sea necesario */
-    overflow-y: auto; /* Habilita el desplazamiento vertical */
-    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Color en Firefox */
-  }
-  
-  
-  .tabla-wrapper::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.3); /* Color sutil del thumb */
-    border-radius: 10px; /* Bordes redondeados */
-  }
-  
-  .tabla-wrapper::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.5); /* Se oscurece un poco al pasar el mouse */
-  }
-  
-  .tabla-wrapper::-webkit-scrollbar-track {
-    background: transparent; /* Hace que el track sea invisible */
-  }
-  
-  
-  .tabla {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    table-layout: fixed; /* Mantiene el ancho de las columnas constante */
+  font-size: 0.83rem;
+  margin: auto;
+  width: 90%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  overflow-y: auto;
+  justify-content: flex-start;
+  box-shadow: 0 0 5px rgba(58, 54, 54, 0.4);
 }
 
+.filtros {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* Permite que los elementos se ajusten mejor en pantallas pequeñas */
+  gap: 10px;
+  margin-bottom: 15px;
   
-.tabla th, .tabla td {
-    padding: 7px;
-    text-align: left;
-    border-bottom: 1px solid #dddddd; /* Borde inferior */
-    color: #333333; /* Texto oscuro */
-    border-right: 1px solid #dddddd; /* Borde vertical derecho */
+}
+
+.filtros select,
+.filtros input {
+  padding: 5px;
+  font-size: 12px;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  flex: 1;
+  max-width: 150px;
+}
+
+.filtros select {
+  width: 60px;
+  background-color: white;
+  color: #346397;
+}
+
+.filtros input {
+  width: 260px;
+  background-color: white;
+  color: #346397;
+}
+
+.filtros select:focus,
+.filtros input:focus {
+  border-color: #346397;
+  box-shadow: 0 0 5px rgba(0, 51, 102, 0.5);
+}
+
+.tabla-wrapper {
+  max-height: 380px;
+  overflow-y: auto;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  table-layout: fixed;
+}
+
+.tabla th,
+.tabla td {
+  padding: 7px;
+  text-align: left;
+  border-bottom: 1px solid #dddddd;
+  color: #333333;
+  border-right: 1px solid #dddddd;
+}
+
+.tabla th {
+  background-color: #346397;
+  color: white;
+  font-weight: normal;
+  position: sticky;
+  top: 0;
+}
+
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.paginacion button {
+  padding: 6.5px 12px;
+  font-size: 13px;
+  border: 1px solid #346397;
+  border-radius: 6px;
+  background-color: white;
+  color: #346397;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.paginacion button:hover {
+  background-color: #346397;
+  color: white;
+  transform: scale(1.1);
+}
+
+.paginacion button.activo {
+  background-color: #346397;
+  color: white;
+  font-weight: bold;
+  border-color: #001a33;
+  transform: scale(1.1);
+  pointer-events: none;
+}
+
+/* --- Media Queries para Responsive Design --- */
+
+/* Tablets (768px - 1024px) */
+@media (max-width: 1024px) {
+  .tabla-container {
+    width: 95%;
+    padding: 15px;
   }
-  
-  .tabla th {
-    background-color:#346397; /* Azul UNAH */
-    color: white; /* Texto blanco */
-    font-weight: normal;
-    position: sticky;
-    top: 0;
+
+  .filtros {
+    flex-direction: column;
+    align-items: stretch; /* Asegura que los elementos ocupen todo el ancho */
   }
-  
-  /* Si quieres quitar el borde derecho de la última columna para evitar doble borde */
-  .tabla th:last-child, .tabla td:last-child {
-    border-right: none;
+
+  .filtros select,
+  .filtros input {
+    width: 100%;
+    max-width: none;
   }
-  
-  .tabla tr:hover {
-    background-color: #f5f5f5; /* Hover más suave */
+
+  .tabla-wrapper {
+    max-height: 300px;
   }
-  
-  
+
   .paginacion {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 20px;
+    flex-wrap: wrap;
   }
-  
+}
+
+/* Móviles (menos de 768px) */
+@media (max-width: 768px) {
+  .tabla-container {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.75rem;
+  }
+
+  .filtros {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .filtros select,
+  .filtros input {
+    font-size: 11px;
+    padding: 4px;
+    max-width: none;
+  }
+
+  .tabla-wrapper {
+    max-height: 250px;
+  }
+
+  .tabla th,
+  .tabla td {
+    padding: 5px;
+  }
+
   .paginacion button {
-    padding: 6.5px 12px;
-    font-size: 13px;
-    border: 1px solid #346397;
-    border-radius: 6px;
-    background-color: white;
-    color: #346397;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    padding: 5px 10px;
+    font-size: 12px;
   }
-  
-  .paginacion button:hover {
-    background-color: #346397;
-    color: white;
-    transform: scale(1.1);
+}
+
+@media (max-width: 480px) {
+  .tabla-container {
+      padding: 15px;
+      font-size: 0.7rem;
   }
-  
-  .paginacion button.activo {
-    background-color: #346397;
-    color: white;
-    font-weight: bold;
-    border-color: #001a33;
-    transform: scale(1.1);
-    pointer-events: none; /* Evita que se vuelva a hacer clic en la página actual */
+
+  .filtros {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 5px;
+      flex-wrap: wrap; /* Permitir ajuste en pantallas más pequeñas */
+      width: 100%;
   }
-  
-  
+
+  /* Contenedor para agrupar los elementos y alinearlos en una fila */
+  .grupo-filtros {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex: 1; /* Permitir que se ajusten al espacio disponible */
+  }
+
+  .filtros select,
+  .filtros input {
+      padding: 3px;
+      font-size: 10px;
+      width: auto;
+      flex: 1;
+      min-width: 60px;
+      max-width: 100px;
+  }
+
+  .tabla-wrapper {
+      max-height: 200px;
+  }
+
+  .tabla th,
+  .tabla td {
+      padding: 4px;
+  }
+
+  .paginacion button {
+      padding: 4px 8px;
+      font-size: 11px;
+  }
+
   .paginacion span {
-    font-size: 14px;
-    color: #666666;
+      font-size: 11px;
   }
+}
+
+
+  /* Estilo para el botón de actualizar */
+.btn-actualizar {
+  background-color: white;
+  color: rgb(48, 48, 48);
+  border: 1px solid #bbbbbb;  /* Recuadro gris */
+  padding: 5px 10px;        /* Tamaño pequeño */
+  border-radius: 4px;
+  font-size: 14px;          /* Tamaño pequeño */
+  transition: all 0.3s ease; /* Efecto suave */
+}
+
+/* Efecto al pasar el mouse sobre el botón de actualizar */
+.btn-actualizar:hover {
+  background-color: #dcdcdc; /* Fondo gris claro al pasar el mouse */
+  color: black;               /* Mantiene el color del icono */
+  border: 1px solid #959494       /* Borde más oscuro */
+}
+
+/* Estilo para el botón de eliminar */
+.btn-eliminar {
+  background-color: white;
+  color: #d9534f;  /* Rojo para eliminar */
+  border: 1px solid #d3706d; /* Recuadro rojo */
+  padding: 5px 10px;        /* Tamaño pequeño */
+  border-radius: 4px;
+  font-size: 14px;          /* Tamaño pequeño */
+  transition: all 0.3s ease; /* Efecto suave */
+}
+
+/* Efecto al pasar el mouse sobre el botón de eliminar */
+.btn-eliminar:hover {
+  background-color: #fcd1d5; /* Fondo rojo claro al pasar el mouse */
+  color: #dd4a45;             /* Mantiene el color del icono */
+  border-color: #cc3e3a;      /* Borde más oscuro */
+}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Tabla.css';
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
 
 const Tabla = ({ columnas, datos }) => {
   const [paginaActual, setPaginaActual] = useState(1);
@@ -64,7 +65,18 @@ const Tabla = ({ columnas, datos }) => {
             {registrosActuales.map((fila, index) => (
               <tr key={index}>
                 {columnas.map((col, i) => (
-                  <td key={i}>{fila[col.campo]}</td>
+                   <td key={i}>
+                   {col.campo === "accion" ? ( // 👈 Si la columna es "accion", mostramos botones
+                     <>
+                     <div className="d-flex flex-wrap gap-2 justify-content-center">
+                        <button onClick={() => handleEdit(fila.id)} className="btn-actualizar btn-sm"><FaEdit /></button>
+                        <button onClick={() => handleDelete(fila.id)} className="btn-eliminar btn-sm"><FaTrashAlt /></button>
+                      </div>
+                     </>
+                   ) : (
+                     fila[col.campo]
+                   )}
+                 </td>
                 ))}
               </tr>
             ))}
