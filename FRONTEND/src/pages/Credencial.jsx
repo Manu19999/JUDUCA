@@ -5,6 +5,11 @@ import Nav from '../components/Dashboard/navDashboard';
 import { FaIdBadge } from 'react-icons/fa';
 
 const datos = [
+ 
+  { id: 1, valor: "00.00", fecha_emision: "2025-02-14", fecha_expiracion: "2025-02-14", fecha_inicio: "2025-02-14 08:00:00", fecha_fin: "2025-02-14 11:59:00", activo: "Expirado"  },
+  { id: 2, valor: "00.00", fecha_emision: "2025-02-14", fecha_expiracion: "2025-02-14", fecha_inicio: "2025-02-14 08:00:00", fecha_fin: "2025-02-14 11:59:00", activo: "Expirado"  },
+  { id: 3, valor: "00.00", fecha_emision: "2025-02-14", fecha_expiracion: "2025-02-14", fecha_inicio: "2025-02-14 08:00:00", fecha_fin: "2025-02-14 11:59:00", activo: "Expirado"  },
+
 
 ];
 
