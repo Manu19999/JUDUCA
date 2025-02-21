@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import './Tabla.css';
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import BotonesAccion from "./BotonesAccion"; // Importa el componente de boton nuevo y generar reporte
+import BotonesAccionFila from "./BotonesAccionFila";// importa el componente de boton actualizar, eliminar
+import Paginacion from './Paginacion';
+import Filtros from './Filtros';
 
-const Tabla = ({ columnas, datos }) => {
+const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarReporte, onEdit, onDelete }) => {
   const [paginaActual, setPaginaActual] = useState(1);
-  const [registrosPorPagina, setRegistrosPorPagina] = useState(5);
+  const [registrosPorPagina, setRegistrosPorPagina] = useState(8);
   const [busqueda, setBusqueda] = useState('');
   const [datosFiltrados, setDatosFiltrados] = useState(datos);
 
@@ -20,7 +23,7 @@ const Tabla = ({ columnas, datos }) => {
 
   const indiceUltimoRegistro = paginaActual * registrosPorPagina;
   const indicePrimerRegistro = indiceUltimoRegistro - registrosPorPagina;
-  const registrosActuales = datosFiltrados.slice(indicePrimerRegistro, indiceUltimoRegistro); // Esto es lo que se debe mostrar
+  const registrosActuales = datosFiltrados.slice(indicePrimerRegistro, indiceUltimoRegistro);
   const totalPaginas = Math.ceil(datosFiltrados.length / registrosPorPagina);
 
   const cambiarPagina = (numeroPagina) => setPaginaActual(numeroPagina);
@@ -30,80 +33,63 @@ const Tabla = ({ columnas, datos }) => {
   };
 
   return (
-    <div className="tabla-container">
-      <div className="filtros">
-        <label>
-          Mostrar{" "}
-          <select value={registrosPorPagina} onChange={cambiarRegistrosPorPagina}>
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-          </select>{" "}
-          registros
-        </label>
-        <input
-          type="text"
-          placeholder="Buscar..."
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
+    <>
+      {/* Título y botones de acción */}
+      <div className="titulo-contenedor">
+        <h2 className="titulo-tabla">{icono} {titulo}</h2>
+        <BotonesAccion
+          onNuevoRegistro={onNuevoRegistro}
+          onGenerarReporte={onGenerarReporte}
         />
       </div>
 
-      <div className="tabla-wrapper">
-        <table className="tabla">
-          <thead>
-            <tr>
-              {columnas.map((col, index) => (
-                <th key={index} style={{ width: col.ancho }}>
-                  {col.nombre}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {/* Aquí se usa registrosActuales en vez de datos */}
-            {registrosActuales.map((fila, index) => (
-              <tr key={index}>
-                {columnas.map((col, i) => (
-                   <td key={i}>
-                   {col.campo === "accion" ? ( // 👈 Si la columna es "accion", mostramos botones
-                     <>
-                     <div className="d-flex flex-wrap gap-2 justify-content-center">
-                        <button onClick={() => handleEdit(fila.id)} className="btn-actualizar btn-sm"><FaEdit /></button>
-                        <button onClick={() => handleDelete(fila.id)} className="btn-eliminar btn-sm"><FaTrashAlt /></button>
-                      </div>
-                     </>
-                   ) : (
-                     fila[col.campo]
-                   )}
-                 </td>
+      {/* Contenedor de la tabla */}
+      <div className="tabla-container">
+        <Filtros
+          registrosPorPagina={registrosPorPagina}
+          cambiarRegistrosPorPagina={cambiarRegistrosPorPagina}
+          busqueda={busqueda}
+          setBusqueda={setBusqueda}
+        />
+        <div className="tabla-wrapper">
+          <table className="tabla">
+            <thead>
+              <tr>
+                {columnas.map((col, index) => (
+                  <th key={index} style={{ width: col.ancho }}>
+                    {col.nombre}
+                  </th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {registrosActuales.map((fila, index) => (
+                <tr key={index}>
+                  {columnas.map((col, i) => (
+                    <td key={i}>
+                      {col.campo === "accion" ? ( // 👈 Si la columna es "accion", mostramos botones
+                        <BotonesAccionFila
+                        id={fila.id}
+                        onEdit={onEdit}
+                        onDelete={onDelete}
+                      />
+                      ) : (
+                        fila[col.campo]
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Paginacion
+          paginaActual={paginaActual}
+          totalPaginas={totalPaginas}
+          cambiarPagina={cambiarPagina}
+        />
       </div>
-
-      <div className="paginacion">
-        <button onClick={() => cambiarPagina(paginaActual - 1)} disabled={paginaActual === 1}>
-          Anterior
-        </button>
-
-        {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((numero) => (
-          <button
-            key={numero}
-            onClick={() => cambiarPagina(numero)}
-            className={paginaActual === numero ? "activo" : ""}
-          >
-            {numero}
-          </button>
-        ))}
-
-        <button onClick={() => cambiarPagina(paginaActual + 1)} disabled={paginaActual === totalPaginas}>
-          Siguiente
-        </button>
-      </div>
-    </div>
+    </>
   );
 };
 

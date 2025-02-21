@@ -1,6 +1,6 @@
 /* Estilos base para .tabla-container y sus elementos */
 .tabla-container {
-  font-size: 0.83rem;
+  font-size: 0.8rem;
   margin: auto;
   width: 90%;
   max-width: 1100px;
@@ -8,11 +8,12 @@
   flex-direction: column;
   background-color: #ffffff;
   padding: 20px;
-  border-radius: 10px;
-  overflow-y: auto;
+  overflow-y: auto; /* Permite el scroll si el contenido excede el alto */
   justify-content: flex-start;
   box-shadow: 0 0 5px rgba(58, 54, 54, 0.4);
+  max-height: 800px; /* Alternativamente, un máximo */
 }
+
 
 .filtros {
   display: flex;
@@ -33,7 +34,7 @@
   outline: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   flex: 1;
-  max-width: 150px;
+  max-width: 180px;
 }
 
 .filtros select {
@@ -55,7 +56,7 @@
 }
 
 .tabla-wrapper {
-  max-height: 380px;
+  max-height: 550px;
   overflow-y: auto;
   scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 }
@@ -77,12 +78,13 @@
 }
 
 .tabla th {
-  background-color: #346397;
+  background-color: #426a99;
   color: white;
   font-weight: normal;
   position: sticky;
   top: 0;
 }
+
 
 .paginacion {
   display: flex;
@@ -93,49 +95,116 @@
 }
 
 .paginacion button {
-  padding: 6.5px 12px;
+  padding: 6px 12px;
   font-size: 13px;
-  border: 1px solid #346397;
+  border: 1px solid #426A99;
   border-radius: 6px;
   background-color: white;
-  color: #346397;
+  color: #1a4271;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .paginacion button:hover {
-  background-color: #346397;
+  background-color: #426a99;
   color: white;
-  transform: scale(1.1);
 }
 
 .paginacion button.activo {
-  background-color: #346397;
+  background-color: #426A99;
   color: white;
-  font-weight: bold;
-  border-color: #001a33;
-  transform: scale(1.1);
+  border-color: #0d3f6d;
   pointer-events: none;
 }
+
+/* --- titulo y botones  --- */
+
+/* Contenedor del título y botones */
+.titulo-contenedor {
+  display: flex;
+  justify-content: space-between; /* Pega los elementos a los extremos */
+  align-items: center; /* Centra verticalmente los elementos */
+  width: 90%; /* Mismo ancho que el contenedor de la tabla */
+  max-width: 1100px; /* Mismo ancho máximo que el contenedor de la tabla */
+  margin: 0 auto 15px; /* Centra horizontalmente y añade margen inferior */
+  padding: 0px; /* Añade un padding horizontal si es necesario */
+  padding-left: 5px;
+}
+
+/* Estilos para el título */
+.titulo-tabla {
+  color: #5b5b5b; /* Color del texto */
+  margin: 0; /* Elimina el margen por defecto del h2 */
+  font-size: 1.5rem; /* Tamaño de fuente ajustado */
+  display: flex;
+  align-items: center; /* Alinea el ícono y el texto verticalmente */
+}
+
+/* Estilos para el ícono del título */
+.icono-titulo {
+  font-size: 1.2rem; /* Tamaño del ícono */
+  color: #545252; /* Color del ícono */
+  margin-right: 6px; /* Espacio entre el ícono y el texto */
+}
+
+/* Estilos para los botones de acción */
+.botones-accion {
+  display: flex;
+  gap: 10px; /* Espacio entre los botones */
+}
+
+.btn-nuevo-registro,
+.btn-generar-reporte {
+  padding: 8px 8px;
+  font-size: 13px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center; /* Centra el texto verticalmente dentro del botón */
+  justify-content: center; /* Centra el texto horizontalmente dentro del botón */
+  gap: 3px; /* Espacio entre el ícono y el texto */
+}
+
+.btn-nuevo-registro {
+  background-color: #426a99;
+  color: white;
+}
+
+.btn-generar-reporte {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-nuevo-registro:hover {
+  background-color: #2a4f7a;
+}
+
+.btn-generar-reporte:hover {
+  background-color: #218838;
+}
+
+
 
 /* --- Media Queries para Responsive Design --- */
 
 /* Tablets (768px - 1024px) */
 @media (max-width: 1024px) {
-  .tabla-container {
-    width: 95%;
-    padding: 15px;
+ 
+  .tabla-wrapper {
+    max-height: 500px !important; /* Ajusta la altura máxima según lo necesites */
+    height: auto;       /* Permite que el contenido se ajuste automáticamente */
   }
 
-  .filtros {
-    flex-direction: column;
-    align-items: stretch; /* Asegura que los elementos ocupen todo el ancho */
+  .filtros { /* Permite que los elementos se ajusten mejor en pantallas pequeñas */
+    gap: 10px;
+    margin-bottom: 15px;
   }
 
   .filtros select,
   .filtros input {
-    width: 100%;
-    max-width: none;
+    max-width: 180px;
   }
 
   .tabla-wrapper {
@@ -149,23 +218,24 @@
 
 /* Móviles (menos de 768px) */
 @media (max-width: 768px) {
+  .tabla-wrapper {
+    max-height: 500px !important; /* Ajusta la altura máxima según lo necesites */
+    height: auto;       /* Permite que el contenido se ajuste automáticamente */
+  }
   .tabla-container {
-    width: 100%;
+    width: 90%;
     padding: 10px;
     font-size: 0.75rem;
   }
 
-  .filtros {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
+  .filtros { /* Permite que los elementos se ajusten mejor en pantallas pequeñas */
+    gap: 10px;
+    margin-bottom: 15px;
   }
 
   .filtros select,
   .filtros input {
-    font-size: 11px;
-    padding: 4px;
-    max-width: none;
+    max-width: 180px;
   }
 
   .tabla-wrapper {
@@ -183,20 +253,121 @@
   }
 }
 
-@media (max-width: 480px) {
-  .tabla-container {
-      padding: 15px;
-      font-size: 0.7rem;
+
+@media (max-width: 646px) {
+  .tabla-wrapper {
+    max-height: 500px !important; /* Ajusta la altura máxima según lo necesites */
+    height: auto;       /* Permite que el contenido se ajuste automáticamente */
+  }
+  /* Ajuste del título */
+.titulo-tabla {
+  font-size: 1.2rem; /* Reducido de 1.5rem a 1rem */
+}
+
+/* Ajuste del tamaño de los botones */
+.btn-nuevo-registro,
+.btn-generar-reporte {
+  font-size: 12.5px; /* Reducido */
+  padding: 6px 8px; /* Botones más pequeños */
+}
+
+/* Ajuste del tamaño de la fuente de la tabla */
+.tabla {
+  font-size: 0.68rem; /* Fuente más pequeña */
+}
+
+.tabla th, .tabla td {
+  padding: 5px; /* Ajuste del espaciado */
+}
+
+/* Ajuste del tamaño de los botones de la paginación */
+.paginacion button {
+  font-size: 11px;
+  padding: 5px 10px;
+}
+
+/* Ajuste del tamaño de los botones de actualizar/eliminar */
+.btn-actualizar, .btn-eliminar {
+  width: 30px;  /* Más pequeños */
+  height: 30px;
+  font-size: 12px;
+  padding: 4px;
+}
+
+.filtros { /* Permite que los elementos se ajusten mejor en pantallas pequeñas */
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.filtros select,
+.filtros input {
+  max-width: 160px;
+  padding: 4px;
+  font-size: 10px;
+}
+
+.filtros select {
+  width: 50px;
+  background-color: white;
+  color: #346397;
+}
+
+}
+
+@media (max-width: 590px) {
+  .tabla-wrapper {
+    max-height: 500px !important; /* Ajusta la altura máxima según lo necesites */
+    height: auto;       /* Permite que el contenido se ajuste automáticamente */
+  }
+  /* Ajuste del tamaño de la fuente de la tabla */
+  .tabla {
+    font-size: 0.65rem; /* Fuente más pequeña */
+    min-width: 600px; /* Ancho mínimo para forzar el scroll horizontal */
   }
 
-  .filtros {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 5px;
-      flex-wrap: wrap; /* Permitir ajuste en pantallas más pequeñas */
-      width: 100%;
+  /* Habilitar scroll horizontal en el contenedor de la tabla */
+  .tabla-wrapper {
+    overflow-x: auto; /* Scroll horizontal */
+    max-height: 380px; /* Mantener el scroll vertical */
+    scrollbar-width: thin; /* Estilo del scroll para Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Color del scroll */
   }
+
+  /* Estilo del scroll horizontal para navegadores WebKit (Chrome, Safari, Edge) */
+  .tabla-wrapper::-webkit-scrollbar {
+    height: 8px; /* Altura del scroll horizontal */
+  }
+
+  .tabla-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color de fondo de la pista del scroll */
+    border-radius: 4px; /* Bordes redondeados */
+  }
+
+  .tabla-wrapper::-webkit-scrollbar-thumb {
+    background: #888; /* Color del thumb (la barra que se mueve) */
+    border-radius: 4px; /* Bordes redondeados */
+  }
+
+  .tabla-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color del thumb al pasar el mouse */
+  }
+}
+
+@media (max-width: 540px) {
+  .tabla-wrapper {
+    max-height: 500px !important; /* Ajusta la altura máxima según lo necesites */
+    height: auto;       /* Permite que el contenido se ajuste automáticamente */
+  }
+.titulo-tabla{
+  font-size: 1.1rem;
+}
+
+.btn-nuevo-registro,
+.btn-generar-reporte{
+  font-size: 12px;
+  padding: 5px 6px;
+}
+ 
 
   /* Contenedor para agrupar los elementos y alinearlos en una fila */
   .grupo-filtros {
@@ -208,66 +379,109 @@
 
   .filtros select,
   .filtros input {
-      padding: 3px;
-      font-size: 10px;
-      width: auto;
-      flex: 1;
-      min-width: 60px;
-      max-width: 100px;
+    padding: 3px;
+    max-width: 120px;
   }
 
+  .filtros select{
+    width: 50px;
+  }
   .tabla-wrapper {
-      max-height: 200px;
+     max-height: 200px;
   }
 
   .tabla th,
   .tabla td {
-      padding: 4px;
+    padding: 4px;
   }
 
   .paginacion button {
-      padding: 4px 8px;
-      font-size: 11px;
-  }
-
-  .paginacion span {
-      font-size: 11px;
+    padding: 3px 7px;
+    font-size: 10px;
   }
 }
+
+@media (max-width: 490px) {
+  .tabla-wrapper {
+    max-height: 500px !important; /* Ajusta la altura máxima según lo necesites */
+    height: auto;       /* Permite que el contenido se ajuste automáticamente */
+  }
+  .titulo-tabla{
+    font-size: 0.9rem;
+  }
+  
+  .btn-nuevo-registro,
+  .btn-generar-reporte{
+    font-size: 11px;
+    padding: 4px 5px;
+  }
+  .titulo-contenedor {
+    flex-direction: column; /* Apila los elementos en columna */
+    align-items: center; /* Alinea el título a la izquierda */
+    gap: 10px; /* Espacio entre el título y los botones */
+  }
+
+  .botones-accion {
+    width: 100%; /* Ocupar todo el ancho disponible */
+    justify-content: center; /* Alinear botones a la izquierda */
+  }
+}
+  
 
 
   /* Estilo para el botón de actualizar */
+/* Estilo general de los botones */
+.btn-actualizar, .btn-eliminar {
+  background-color: white;
+  padding: 5px 10px; /* Tamaño base */
+  border-radius: 4px;
+  font-size: 14px; /* Tamaño base */
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px; /* Espaciado entre ícono y texto */
+  width: 34px;  /* Tamaño fijo del botón */
+  height: 34px; /* Tamaño fijo del botón */
+}
+
+/* Estilos específicos */
 .btn-actualizar {
-  background-color: white;
   color: rgb(48, 48, 48);
-  border: 1px solid #bbbbbb;  /* Recuadro gris */
-  padding: 5px 10px;        /* Tamaño pequeño */
-  border-radius: 4px;
-  font-size: 14px;          /* Tamaño pequeño */
-  transition: all 0.3s ease; /* Efecto suave */
+  border: 1px solid #bbbbbb;
 }
 
-/* Efecto al pasar el mouse sobre el botón de actualizar */
 .btn-actualizar:hover {
-  background-color: #dcdcdc; /* Fondo gris claro al pasar el mouse */
-  color: black;               /* Mantiene el color del icono */
-  border: 1px solid #959494       /* Borde más oscuro */
+  background-color: #dcdcdc;
+  color: black;
+  border: 1px solid #959494;
 }
 
-/* Estilo para el botón de eliminar */
 .btn-eliminar {
-  background-color: white;
-  color: #d9534f;  /* Rojo para eliminar */
-  border: 1px solid #d3706d; /* Recuadro rojo */
-  padding: 5px 10px;        /* Tamaño pequeño */
-  border-radius: 4px;
-  font-size: 14px;          /* Tamaño pequeño */
-  transition: all 0.3s ease; /* Efecto suave */
+  color: #e1344e;
+  border: 1px solid #d3706d;
 }
 
-/* Efecto al pasar el mouse sobre el botón de eliminar */
 .btn-eliminar:hover {
-  background-color: #fcd1d5; /* Fondo rojo claro al pasar el mouse */
-  color: #dd4a45;             /* Mantiene el color del icono */
-  border-color: #cc3e3a;      /* Borde más oscuro */
+  background-color: #fcd1d5;
+  color: #e51c3a;
+  border-color: #cc3e3a;
+}
+
+/* Ajustar el tamaño en pantallas menores a 647px */
+@media (max-width: 647px) {
+  .btn-actualizar, .btn-eliminar {
+    padding: 3px 6px;  /* Reducir padding */
+    font-size: 12px;  /* Reducir tamaño de fuente */
+    width: 28px;  /* Reducir ancho */
+    height: 28px; /* Reducir altura */
+  }
+
+  /* Ajustar el tamaño del icono dentro del botón */
+  .btn-actualizar svg, 
+  .btn-eliminar svg {
+    font-size: 12px;
+    width: 12px;
+    height: 12px;
+  }
 }
