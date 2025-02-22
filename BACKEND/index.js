@@ -5,6 +5,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors'; 
 import CredencialRoutes from './src/routes/CredencialRoutes.js';
+import VoucherComidaRoutes   from './src/routes/VoucherComidaRoutes.js';
 /*                     CONFIGURACIONES BACKEND                                  */
 
 const app = express();
@@ -35,18 +36,11 @@ app.use(cors({
 
 /*                     RUTAS                                  */
 
+// Usar el router de Credencial
 app.use('/api/credencial', CredencialRoutes);
 
-
-
-
-
-
-
-
-
-
-
+// Usar el router de VoucherComida
+app.use('/api/voucherComida', VoucherComidaRoutes);  // Usar el router correctamente
 
 
 /*                     INICIALIZACION DEL SERVIDOR                                  */
