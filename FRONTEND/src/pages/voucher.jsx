@@ -2,11 +2,18 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Tabla from "../components/Crud/Tabla";
 import Nav from '../components/Dashboard/navDashboard';
+import NuevoVoucherModal from "../components/Vouchers/NuevoVoucherModal"; // Importa el modal
+import BotonesAccion from '../components/Crud/BotonesAccion';
+
 import { FaEdit, FaTrashAlt, FaReceipt, FaPlus } from "react-icons/fa"; // Importamos el icono para el botón Nuevo
 
 const Voucher = () => {
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const onNuevoRegistro = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
   const fetchVouchers = async () => {
     try {
@@ -44,7 +51,12 @@ const Voucher = () => {
     { nombre: "Fecha Fin", campo: "fechaFinal", ancho: "19%" },
     { nombre: "Activo", campo: "activo", ancho: "15%" },
     { nombre: "Acción", campo: "accion", ancho: "15%" },
+  
   ];
+<BotonesAccion
+  onNuevoRegistro={onNuevoRegistro}  // Esto pasa la función al botón
+ 
+/>
 
   const customActions = (id) => (
     <div>
@@ -73,7 +85,10 @@ const Voucher = () => {
     fechaFinal: formatDate(voucher.fechaFinal),
     activo: formatActiveStatus(voucher.activo),
   }));
-
+  // Define refreshVouchers
+  const refreshVouchers = () => {
+    fetchVouchers(); // Llama a fetchVouchers para actualizar la lista
+  };
   const handleAddNewVoucher = () => {
     // Lógica para manejar la creación de un nuevo voucher
     console.log("Añadir nuevo voucher");
@@ -86,38 +101,43 @@ const Voucher = () => {
      
       
       {/* Botón para añadir un nuevo voucher */}
+      <div className="crud">
+      <Nav />
       <div style={{ maxWidth: '1160px', margin: '0 auto', padding: '0 15px', right: '0' }}>
-  <div style={{ 
-    display: 'flex', 
-    flexDirection: window.innerWidth < 768 ? 'column' : 'row', 
-    alignItems: 'center', 
-    justifyContent: 'space-between', 
-    marginBottom: '1rem' 
-  }}>
-    <h2 style={{ margin: 0, marginBottom: window.innerWidth < 768 ? '10px' : '0' }}>
-      <FaReceipt className="icono-titulo" /> Gestión de voucher
-    </h2>
-    <button 
-      onClick={handleAddNewVoucher} 
-      className="btn btn-outline-success"
-    >
-      <FaPlus /> Nuevo Voucher
-    </button>
-  </div>
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: window.innerWidth < 768 ? 'column' : 'row', 
+          alignItems: 'center', 
+          justifyContent: 'space-between', 
+          marginBottom: '1rem' 
+        }}>
+          <h2 style={{ margin: 0, marginBottom: window.innerWidth < 768 ? '10px' : '0' }}>
+            <FaReceipt className="icono-titulo" /> Gestión de voucher
+          </h2>
+        </div>
 
-  {/* Aquí va la tabla */}
-  {loading ? (
-    <p>Cargando...</p>
-  ) : (
-    vouchers.length > 0 ? (
-      <Tabla columnas={columnas} datos={voucherConAccion} />
-    ) : (
-      <p>No se encontraron vouchers.</p>
-    )
-  )}
-</div> 
+        {loading ? (
+          <p>Cargando...</p>
+        ) : (
+          vouchers.length > 0 ? (
+            <Tabla 
+              columnas={columnas} 
+              datos={voucherConAccion} 
+              onNuevoRegistro={onNuevoRegistro} // Pasa la función aquí
+            />
+          ) : (
+            <p>No se encontraron vouchers.</p>
+          )
+        )}
+      </div>
+      <NuevoVoucherModal isOpen={isModalOpen} onClose={handleCloseModal}  refreshVouchers={refreshVouchers} />
     </div>
+
+
+    </div>
+    
   );
+  
 };
 
 export default Voucher;
