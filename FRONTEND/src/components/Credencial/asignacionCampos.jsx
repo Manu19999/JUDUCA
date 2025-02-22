@@ -4,7 +4,7 @@ import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 import { FaArrowLeft } from "react-icons/fa";
 
 
-const DiseñoCredencial = () => {
+const AsignacionCampos = () => {
   const [ubicaciones] = useState([
     { id: 1, descripcion: "Izquierda Superior" },
     { id: 2, descripcion: "Medio Superior" },
@@ -142,4 +142,4 @@ const DiseñoCredencial = () => {
   );
 };
 
-export default DiseñoCredencial;
+export default AsignacionCampos ;
