@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import EventCard from "../Inicio/EventCard";
-import EventImage from "../../assets/eventoConcierto.jpg";
-import EventImage2 from "../../assets/eventoCine.jpg";
+import EventImage from "../../assets/FichaInscripcion.jpg";
+import EventImage2 from "../../assets/FichaMedica.jpg";
 import EventImage3 from "../../assets/eventoArte.jpg";
 import "../../styles/Inicio/EventList.css";
 import "../../styles/Evento/Eventos.css";
 
-const EventosActivos = () => {
+const CrearFichas = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [event, setEvent] = useState({
@@ -32,18 +32,15 @@ const EventosActivos = () => {
   const upcomingEvents = [
     {
       id: 1,
-      title: "JUDUCA",
-      date: "15 de Julio, 2025",
+      title: "Ficha de Inscripciones",
       image: EventImage,
-      description: "Juegos Deportivos Universitarios Centroamericanos.",
+      description: "Ficha para inscribir a los participantes al evento.",
     },
     {
       id: 2,
-      title: "Festival de Cine",
-      date: "20 de Noviembre, 2023",
+      title: "Ficha de Salud",
       image: EventImage2,
-      description:
-        "Proyecciones de cine independiente y conversatorios con directores.",
+      description: "Ficha para registrar datos médicos de los participantes.",
     },
   ];
 
@@ -118,26 +115,29 @@ const EventosActivos = () => {
 
   const handleImageClick = (id) => {
     if (id === 1) {
-      navigate("/gestion-evento");
+      navigate("/Formulario-fichas");
+    }
+    if (id === 2) {
+      navigate("/Formulario-fichas");
     }
   };
 
   return (
     <section id="events" className="eventlist">
       <Container>
-        <h2 className="eventlisttitle">Eventos</h2>
+        <h2 className="eventlisttitle">Fichas de Registro</h2>
         <div className="eventtabs">
           <button
             className={`eventtab ${activeTab === "past" ? "active" : ""}`}
             onClick={() => setActiveTab("past")}
           >
-            Pasados
+            Inactivos
           </button>
           <button
             className={`eventtab ${activeTab === "upcoming" ? "active" : ""}`}
             onClick={() => setActiveTab("upcoming")}
           >
-            Próximos
+            Activos
           </button>
           <button className="eventtab" onClick={() => setIsModalOpen(true)}>
             Nuevo
@@ -202,8 +202,8 @@ const EventosActivos = () => {
               X
             </button>
             <form onSubmit={handleSubmit} className="event-form">
-              <h2 className="event-title">Nuevo Evento</h2>
-              <label>Nombre del Evento</label>
+              <h2 className="event-title">Nueva Ficha</h2>
+              <label>Nombre de la ficha</label>
               <input
                 type="text"
                 name="name"
@@ -211,31 +211,15 @@ const EventosActivos = () => {
                 onChange={handleChange}
                 required
               />
-              <label>Ubicación</label>
+              <label>Foto de registro</label>
               <input
-                type="text"
-                name="location"
-                value={event.location}
-                onChange={handleChange}
-                required
-              />
-              <label>Fecha de Inicio</label>
-              <input
-                type="date"
-                name="startDate"
+             
+        
                 value={event.startDate}
                 onChange={handleChange}
                 required
               />
-              <label>Fecha de Fin</label>
-              <input
-                type="date"
-                name="endDate"
-                value={event.endDate}
-                onChange={handleChange}
-                required
-              />
-              <label>Descripción</label>
+              <label>Comentario</label>
               <textarea
                 name="description"
                 value={event.description}
@@ -251,4 +235,4 @@ const EventosActivos = () => {
   );
 };
 
-export default EventosActivos;
+export default CrearFichas;

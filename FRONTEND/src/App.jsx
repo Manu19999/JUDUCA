@@ -9,7 +9,7 @@ import CreateEvent from "./pages/Evento";
 import CreateCredencial from "./pages/credencial";
 import ConfigCredencial from "./pages/PlantillaCredencial"; // Importa la nueva página de inicio
 import AsignarCampos from "./pages/AsignacionCampos";
-import DiseñadorCredencial  from "./pages/DiseñadorCredencial";
+import DiseñadorCredencial from "./pages/DiseñadorCredencial";
 
 //vouchers y tickets
 import Vouchers from "./pages/voucher";
@@ -21,10 +21,15 @@ import Usuarios from "./pages/Usuarios";
 //Rutas de los Eventos
 import Eventos from "./pages/GestionEvento";
 import ListaEventos from "./pages/ListaEventos";
+import ListaFichas from "./pages/CrearFicha";
+import Formularios_Fichas from "./pages/FormularioFicha";
+import RegistroParticipante from "./pages/RegistroParticipante";
+
 
 function App() {
   return (
-    <Router>DiseñadorCredencial
+    <Router>
+      DiseñadorCredencial
       <Routes>
         <Route path="" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -34,9 +39,11 @@ function App() {
         <Route path="/crear-evento" element={<CreateEvent />} />
         <Route path="/crearCredencial" element={<CreateCredencial />} />
         <Route path="/confCredencial" element={<ConfigCredencial />} />
-        <Route path="/AsignacionCampos/:idPlantilla" element={<AsignarCampos />} />
+        <Route
+          path="/AsignacionCampos/:idPlantilla"
+          element={<AsignarCampos />}
+        />
         <Route path="/DiseñadorCredencial" element={<DiseñadorCredencial />} />
-
 
         <Route path="/dashboard" element={<Dashboard />} />
 
@@ -47,6 +54,9 @@ function App() {
 
         <Route path="/gestion-evento" element={<Eventos />} />
         <Route path="/lista-eventos" element={<ListaEventos />} />
+        <Route path="/lista-fichas" element={<ListaFichas />} />
+        <Route path="/Formulario-fichas" element={<Formularios_Fichas />} />
+        <Route path="/ficha-participantes" element={<RegistroParticipante />} />
       </Routes>
     </Router>
   );

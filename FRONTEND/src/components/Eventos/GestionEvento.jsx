@@ -3,7 +3,9 @@ import { Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import EventoCaracteristica from "./EventoCaracteristica";
 import EventImage from "../../assets/eventoConcierto.jpg";
-import EventImage2 from "../../assets/eventoCine.jpg";
+import EventImage2 from "../../assets/CrearFicha.jpg";
+import EventImage3 from "../../assets/FichaInscripcion.jpg";
+import EventImage4 from "../../assets/FichaMedica.jpg";
 import "../../styles/Inicio/EventList.css";
 
 const GestionEvento = () => {
@@ -13,14 +15,12 @@ const GestionEvento = () => {
     {
       id: 1,
       title: "JUDUCA",
-      date: "15 de Julio, 2025",
       image: EventImage,
       description: "Juegos Deportivos Universitarios Centroamericanos.",
     },
     {
       id: 2,
       title: "Crear ficha",
-      date: "20 de Noviembre, 2023",
       image: EventImage2,
       description: "Creación de fichas dinámicas para los eventos.",
     },
@@ -28,15 +28,23 @@ const GestionEvento = () => {
       id: 3,
       title: "Inscripciones",
       date: "1 de Mayo, 2025",
-      image: EventImage2,
+      image: EventImage3,
       description: "Inscripciones de los atletas.",
     },
-
+    {
+      id: 4,
+      title: "Ficha de Salud",
+      image: EventImage4,
+      description: "Inscripciones de los atletas.",
+    },
   ];
 
   const handleImageClick = (id) => {
-    if (id === 1) {
-      navigate("/gestion-evento");
+    if (id === 2) {
+      navigate("/lista-fichas");
+    }
+    if (id === 3) {
+      navigate("/ficha-participantes");
     }
   };
 
@@ -57,7 +65,7 @@ const GestionEvento = () => {
 
         <div
           className={`eventgrid ${
-            upcomingEvents.length === 3 ? "two-events" : ""
+            upcomingEvents.length === 4 ? "two-events" : ""
           }`}
         >
           {upcomingEvents.map((event) => (
