@@ -15,6 +15,12 @@
     padding: 60px;
   }
 
+  .container-fluid2 {
+    padding: 70px;
+  }
+
+
+
   .modal-dialog {
     border: 1px solid #1f2e54; /* Aumenta el grosor del borde */
     border-radius: 10px; /* Bordes redondeados para un mejor diseño */

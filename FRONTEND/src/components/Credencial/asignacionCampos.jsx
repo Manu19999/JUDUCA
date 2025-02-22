@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
+import { FaArrowLeft } from "react-icons/fa";
 
 
-const DiseñoCredencial = () => {
+const AsignacionCampos = () => {
   const [ubicaciones] = useState([
     { id: 1, descripcion: "Izquierda Superior" },
     { id: 2, descripcion: "Medio Superior" },
@@ -14,6 +16,7 @@ const DiseñoCredencial = () => {
     { id: 8, descripcion: "Medio Inferior" },
     { id: 9, descripcion: "Derecha Inferior" },
   ]);
+  const navigate = useNavigate();
 
   // Cargar configuraciones de la plantilla desde localStorage
   const [configPlantilla, setConfigPlantilla] = useState(() => {
@@ -46,9 +49,10 @@ const DiseñoCredencial = () => {
   };
 
   return (
-    <div className="container-fluid">
-         <button className="btnAgg" onClick={() => navigate(/confCredencial/)}>
-            Regresar
+    <div className="container-fluid2">
+         <button className="btnAgg" onClick={() => navigate("/confCredencial")}
+          style={{ marginBottom: "10px" }}>
+         <FaArrowLeft size={20} />  Regresar
           </button>
 
       <div className="row">
@@ -138,4 +142,4 @@ const DiseñoCredencial = () => {
   );
 };
 
-export default DiseñoCredencial;
+export default AsignacionCampos ;

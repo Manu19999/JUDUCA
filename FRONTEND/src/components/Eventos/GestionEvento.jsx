@@ -31,6 +31,7 @@ const GestionEvento = () => {
       image: EventImage2,
       description: "Inscripciones de los atletas.",
     },
+
   ];
 
   const handleImageClick = (id) => {

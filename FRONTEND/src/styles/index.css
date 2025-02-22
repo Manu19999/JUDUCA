@@ -28,23 +28,10 @@ body {
 /* ===== espacio, centrado e ícono de titulo de la tabla para crud===== */
 .crud {
   text-align: center;
-  padding-top: 120px; /* Mueve el título un poco más abajo */
+  padding-top: 110px; /* Mueve el título un poco más abajo */
 }
 
 
-.crud h2 {
-  color: #5b5b5b; /* Color del texto */
-  margin: 6; /* Elimina el margen por defecto del h2 */
-  text-align: left; /* Alinea el texto a la izquierda */
-  font-size: 1.5rem; /* Tamaño de fuente ajustado */
-  padding-bottom: 10px;
-  margin-left: 220px;
-}
-
-.icono-titulo {
-  font-size: 1.2rem; /* Ajusta el tamaño del ícono */
-  color: #545252; /* Cambia el color del ícono si es necesario */
-  margin-right: 6px; /* Espacio entre el ícono y el texto */
-}
 
 /* ===== ===== */
+

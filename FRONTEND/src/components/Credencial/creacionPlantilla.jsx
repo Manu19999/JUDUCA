@@ -16,7 +16,7 @@ const ConfiguracionCredencial = () => {
 
   const navigate = useNavigate();
 const asignarCampos = (idPlantilla) => {
-  navigate(`/diseñadorCredencial/${idPlantilla}`);
+  navigate(`/AsignacionCampos/${idPlantilla}`);
 };
 
   const estiloCredencial = {
@@ -143,8 +143,8 @@ const asignarCampos = (idPlantilla) => {
           </div>
         </div>
 
-        <div className="col-md-5 d-flex justify-content-center align-items-center">
-          <div style={{ width: "400px", height: "400px" }}>
+        <div className="col-md-6 d-flex justify-content-center align-items-center">
+          <div style={{ width: "400px", height: "250px" }}>
             <div style={estiloCredencial}>
               <strong>EJEMPLO DE PLANTILLA</strong>
               <p>EJEMPLO DE PLANTILLA</p>
