@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState , useEffect } from "react";
 import Tabla from "../components/Crud/Tabla.jsx";
 import Nav from '../components/Dashboard/navDashboard.jsx';
 import { FaIdBadge } from 'react-icons/fa';
@@ -7,7 +7,8 @@ import ModalEditar from "../components/Crud/Modal/ModalEditar.jsx";
 import ModalDetalles from "../components/Crud/Modal/ModalDetalles.jsx";
 import ModalConfirmacion from "../components/Crud/Modal/ModalConfirmacion.jsx";
 import { mostrarMensajeExito } from "../components/Crud/MensajeExito.jsx";
-import { Input, Select, Form, Card,Row, Col, DatePicker,Tabs } from 'antd';
+import { Input, Select, Form,Row, Col, DatePicker,Tabs } from 'antd';
+
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -18,87 +19,69 @@ const datos = [
     "id": 1,
     "evento": "JUDUCA",
     "participante": "08012003210",
-    "tipAcceso": "Atleta",
+    "tipAcceso": "ATLETA",
     "fechaEmision": "2025-01-20",
     "fechaVencimiento": "2025-02-20",
-    "estado": true
-  },  
-  {
-    id: 2,
-    nombre: 'Ana Gómez',
-    usuario: 'ana_gomez',
-    correo: 'ana.gomez@yahoo.com',
-    rol: 'Profesor',
-    estado: 'Inactivo',
-    genero: 'Femenino',
-    universidad: 'Instituto Politécnico Nacional',
-    contraseña: '********',
-    telefono: '+52 55 2345 6789',
-    tipoSangre: 'A-',
-    contactoEmergencia: 'Carlos Gómez (Padre) - +52 55 7654 3210',
-    fechaNacimiento: '1985-08-22',
-    foto: 'https://ejemplo.com/fotos/ana_gomez.jpg'
+    "estado": "ACTIVO"
   },
   {
-    id: 3,
-    nombre: 'Luis Martínez',
-    usuario: 'luis_martinez',
-    correo: 'luis.martinez@hotmail.com',
-    rol: 'Administrador',
-    estado: 'Activo',
-    genero: 'Masculino',
-    universidad: 'Universidad de Guadalajara',
-    contraseña: '********',
-    telefono: '+52 33 3456 7890',
-    tipoSangre: 'B+',
-    contactoEmergencia: 'Laura Martínez (Esposa) - +52 33 6543 2109',
-    fechaNacimiento: '1980-11-30',
-    foto: 'https://ejemplo.com/fotos/luis_martinez.jpg'
+    "id": 2,
+    "evento": "JUDUCA",
+    "participante": "08012003211",
+    "tipAcceso": "ENTRENADOR",
+    "fechaEmision": "2025-01-18",
+    "fechaVencimiento": "2025-02-18",
+    "estado": "ACTIVO"
   },
   {
-    id: 4,
-    nombre: 'María López',
-    usuario: 'maria_lopez',
-    correo: 'maria.lopez@gmail.com',
-    rol: 'Estudiante',
-    estado: 'Activo',
-    genero: 'Femenino',
-    universidad: 'Universidad Autónoma de Nuevo León',
-    contraseña: '********',
-    telefono: '+52 81 4567 8901',
-    tipoSangre: 'AB+',
-    contactoEmergencia: 'Juan López (Hermano) - +52 81 5432 1098',
-    fechaNacimiento: '1995-03-10',
-    foto: 'https://ejemplo.com/fotos/maria_lopez.jpg'
+    "id": 3,
+    "evento": "JUDUCA",
+    "participante": "08012003212",
+    "tipAcceso": "ATLETA",
+    "fechaEmision": "2025-01-15",
+    "fechaVencimiento": "2025-02-15",
+    "estado": "INACTIVO"
   },
   {
-    id: 5,
-    nombre: 'Carlos García',
-    usuario: 'carlos_garcia',
-    correo: 'carlos.garcia@outlook.com',
-    rol: 'Profesor',
-    estado: 'Activo',
-    genero: 'Masculino',
-    universidad: 'Universidad Veracruzana',
-    contraseña: '********',
-    telefono: '+52 22 5678 9012',
-    tipoSangre: 'O-',
-    contactoEmergencia: 'Ana García (Madre) - +52 22 4321 0987',
-    fechaNacimiento: '1975-07-18',
-    foto: 'https://ejemplo.com/fotos/carlos_garcia.jpg'
+    "id": 4,
+    "evento": "JUDUCA",
+    "participante": "08012003213",
+    "tipAcceso": "VOLUNTARIO",
+    "fechaEmision": "2025-01-22",
+    "fechaVencimiento": "2025-02-22",
+    "estado": "ACTIVO"
+  },
+  {
+    "id": 5,
+    "evento": "JUDUCA",
+    "participante": "08012003214",
+    "tipAcceso": "PRENSA",
+    "fechaEmision": "2025-01-19",
+    "fechaVencimiento": "2025-02-19",
+    "estado": "ACTIVO"
+  },
+  {
+    "id": 6,
+    "evento": "JUDUCA",
+    "participante": "08012003215",
+    "tipAcceso": "ORGANIZADOR",
+    "fechaEmision": "2025-01-17",
+    "fechaVencimiento": "2025-02-17",
+    "estado": "INACTIVO"
   }
 ];
+
 
 // Columnas de la tabla de usuarios
 const columnas = [
   { nombre: '#', campo: 'id', ancho: '5%' },
-  { nombre: 'Evento', campo: 'Evento', ancho: '20%' },
-  { nombre: 'Participante', campo: 'Participante', ancho: '40%' },
-  { nombre: 'Tipo de acceso', campo: 'Tipo de acceso', ancho: '25%' },
-  { nombre: 'Fecha emision', campo: 'Fecha emision', ancho: '15%' },
-  { nombre: 'Fecha vencimiento', campo: 'Fecha vencimiento', ancho: '20%' },
+  { nombre: 'Evento', campo: 'evento', ancho: '15%' },
+  { nombre: 'Participante', campo: 'participante', ancho: '30%' },
+  { nombre: 'Tipo de acceso', campo: 'tipAcceso', ancho: '25%' },
+  { nombre: 'Fecha emision', campo: 'fechaEmision', ancho: '20%' },
+  { nombre: 'Fecha vencimiento', campo: 'fechaVencimiento', ancho: '20%' },
+  { nombre: 'Estado', campo: 'estado', ancho: '15%' },
   { nombre: 'Acción', campo: 'accion', ancho: '20%' }
-
 ];
 
 function CrearCredenciales() {
@@ -122,12 +105,18 @@ function CrearCredenciales() {
 
   // Abrir modal de edición
   const handleEdit = (id) => {
-    const registro = datos.find((d) => d.id === id); // Busca el usuario por su ID
-    console.log("Registro seleccionado:", registro); // Depuración
-    setRegistroSeleccionado(registro); // Actualizar el registro seleccionado
-    setShowEditModal(true); // Abre el modal de edición
-  };
+    const registro = datos.find((d) => d.id === id); // Busca el usuario por ID
   
+    if (registro) {
+      console.log("Registro seleccionado:", registro); // Verificar si encuentra el usuario
+  
+      setRegistroSeleccionado(registro); // Guarda el registro seleccionado
+      formEditar.setFieldsValue(registro); // Carga los datos en el formulario
+      setShowEditModal(true); // Abre el modal de edición
+    } else {
+      console.error("No se encontró el registro con ID:", id);
+    }
+  };
   // Cerrar el modal de edición y reiniciar el formulario
   const handleCerrarEditModal = () => {
     setShowEditModal(false);
@@ -216,8 +205,8 @@ function CrearCredenciales() {
           <Tabs defaultActiveKey="1">
             {/* Pestaña: Datos Personales */}
             <TabPane tab="Ingresar informacion" key="1">
-              <Row gutter={16}>
-              <Col span={12}>
+              <Row gutter={15}>
+              <Col span={8}>
                   <Form.Item
                     label="Evento"
                     name="Evento"
@@ -225,7 +214,7 @@ function CrearCredenciales() {
                   >
                     <Select placeholder="Selecciona un evento">
                       <Option value="JUDUCA">JUDUCA</Option>
-                      <Option value="CSUCA">CSUCA</Option>
+                      <Option value="SUCA">SUCA</Option>
                       <Option value="Otro">Otro</Option>
                     </Select>
                   </Form.Item>
@@ -240,47 +229,40 @@ function CrearCredenciales() {
                   </Form.Item>
                 </Col>
               </Row>
-              <Row gutter={30}>
-              <Col span={8}>
+              <Row gutter={15}>
+              <Col span={9}>
                   <Form.Item
                     label="Tipo de acceso"
                     name="tipAcceso"
                     rules={[{ required: true, message: "El acceso es obligatorio" }]}
                   >
                     <Select placeholder="Selecciona un tipo de acceso">
-                      <Option value="Atleta">Atleta</Option>
-                      <Option value="Entrenador">Entrenador</Option>
-                      <Option value="Autoridades">Autoridades</Option>
-                      <Option value="Organizador">Organizador</Option>
-                      <Option value="Voluntario">Voluntario</Option>
-                      <Option value="Prensa">Prensa</Option>
+                     <Option value="ATLETA">ATLETA</Option>
+                      <Option value="ENTRENADOR">ENTRENADOR</Option>
+                      <Option value="AUTORIDAD">AUTORIDAD</Option>
+                      <Option value="ORGANIZADOR">ORGANIZADOR</Option>
+                      <Option value="VOLUNTARIO">VOLUNTARIO</Option>
+                      <Option value="PRENSA">PRENSA</Option>
                     </Select>
                   </Form.Item>
                 </Col>
-                <Col span={7}>
+                <Col span={6}>
                   <Form.Item
                     label="Fecha de emision"
                     name="fechaEmision"
-                    rules={[{ required: true, message: "La fecha de emision es obligatoria" }]}
-                  >
-                    <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item>
-                </Col>    
-                <Col span={8}>
+                    rules={[{ required: true, message: "La fecha de emision es obligatoria" }]}>
+                  <Input type="date" />
+                 </Form.Item>
+                  </Col> 
+                <Col span={6}>
                   <Form.Item
                     label="Fecha de vencimiento"
                     name="fechaVencimiento"
-                    rules={[{ required: true, message: "La fecha de vencimiento es obligatoria" }]}
-                  >
-                    <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item>
-                </Col>      
+                    rules={[{ required: true, message: "La fecha de vencimiento es obligatoria" }]}>
+                    <Input type="date" />
+                   </Form.Item>
+                    </Col>     
               </Row>
-  
-            </TabPane>
-
-            {/* Pestaña: Mas datos */}
-            <TabPane tab="Mas datos" key="2">
               <Row gutter={16}>
                 <Col span={7}>
                   <Form.Item
@@ -315,16 +297,16 @@ function CrearCredenciales() {
           <Tabs defaultActiveKey="1">
             {/* Pestaña: Datos Personales */}
             <TabPane tab="Editar informacion" key="1">
-              <Row gutter={16}>
-              <Col span={12}>
+            <Row gutter={15}>
+            <Col span={8}>
                   <Form.Item
                     label="Evento"
-                    name="Evento"
+                    name="evento"
                     rules={[{ required: true, message: "El evento es obligatorio" }]}
                   >
                     <Select placeholder="Selecciona un evento">
                       <Option value="JUDUCA">JUDUCA</Option>
-                      <Option value="CSUCA">CSUCA</Option>
+                      <Option value="SUCA">SUCA</Option>
                       <Option value="Otro">Otro</Option>
                     </Select>
                   </Form.Item>
@@ -339,52 +321,47 @@ function CrearCredenciales() {
                   </Form.Item>
                 </Col>
               </Row>
-              <Row gutter={30}>
-              <Col span={8}>
+              <Row gutter={15}>
+              <Col span={9}>
                   <Form.Item
                     label="Tipo de acceso"
                     name="tipAcceso"
                     rules={[{ required: true, message: "El acceso es obligatorio" }]}
                   >
                     <Select placeholder="Selecciona un tipo de acceso">
-                      <Option value="Atleta">Atleta</Option>
-                      <Option value="Entrenador">Entrenador</Option>
-                      <Option value="Autoridades">Autoridades</Option>
-                      <Option value="Organizador">Organizador</Option>
-                      <Option value="Voluntario">Voluntario</Option>
-                      <Option value="Prensa">Prensa</Option>
+                      <Option value="ATLETA">ATLETA</Option>
+                      <Option value="ENTRENADOR">ENTRENADOR</Option>
+                      <Option value="AUTORIDAD">AUTORIDAD</Option>
+                      <Option value="ORGANIZADOR">ORGANIZADOR</Option>
+                      <Option value="VOLUNTARIO">VOLUNTARIO</Option>
+                      <Option value="PRENSA">PRENSA</Option>
                     </Select>
                   </Form.Item>
                 </Col>
 
-                <Col span={7}>
+                <Col span={6}>
                   <Form.Item
                     label="Fecha de emision"
                     name="fechaEmision"
-                    rules={[{ required: true, message: "La fecha de emision es obligatoria" }]}
-                  >
-                    <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item>
-                </Col>    
-                <Col span={8}>
-                  <Form.Item
+                    rules={[{ required: true, message: "La fecha de emision es obligatoria" }]}>
+                    <Input type="date" />
+                   </Form.Item>
+                    </Col> 
+                    <Col span={6}>
+                    <Form.Item
                     label="Fecha de vencimiento"
                     name="fechaVencimiento"
-                    rules={[{ required: true, message: "La fecha de vencimiento es obligatoria" }]}
-                  >
-                    <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item>
-                </Col>   
-              </Row>
-            </TabPane>
+                    rules={[{ required: true, message: "La fecha de vencimiento es obligatoria" }]}>
+                    <Input type="date" />
+                   </Form.Item>
+                    </Col> 
 
-            {/* Pestaña: Datos de Usuario */}
-            <TabPane tab="Mas datos" key="2">
+              </Row>
               <Row gutter={16}>
               <Col span={7}>
                   <Form.Item
                     label="Estado"
-                    name="Estado"
+                    name="estado"
                     rules={[{ required: true, message: "El estado es obligatorio" }]}
                   >
                     <Select placeholder="Selecciona un estado">
@@ -404,16 +381,16 @@ function CrearCredenciales() {
         show={showDeleteModal} // Controla la visibilidad del modal
         onHide={() => setShowDeleteModal(false)} // Función para cerrar el modal
         onConfirmar={handleConfirmarDelete} // Función para confirmar la eliminación
-        mensaje={`¿Estás seguro de que deseas eliminar a ${registroSeleccionado?.usuario}?`} // Mensaje de confirmación
+        mensaje={`¿Estás seguro de que deseas eliminar la credencial ${registroSeleccionado?.participante}?`} // Mensaje de confirmación
       />
 
        {/* Modal para detalles */}
       <ModalDetalles
         show={showDetailsModal} // Controla la visibilidad del modal
         onHide={() => setShowDetailsModal(false)} // Función para cerrar el modal
-        titulo="Detalles del Usuario" // Título del modal
+        titulo="Detalles de la credencial" // Título del modal
         detalles={registroSeleccionado || {}} // Detalles del usuario seleccionado
-        width={600} // Ancho personalizado
+        width={500} // Ancho personalizado
       />
     </div>
   );
