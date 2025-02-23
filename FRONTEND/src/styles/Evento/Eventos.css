@@ -165,84 +165,123 @@ input[type="date"]::-moz-calendar-picker-indicator {
   cursor: pointer;
 }
 
-/* ***********   Formulario  de fichas de los Eventos    ************* */
-.ficha-form {
-  width: 80%;
-  margin: auto;
+/* ***********   Estilos actualizados para el Formulario de Fichas   ************* */
+
+.contenedor-fichas {
+  display: flex;
+  gap: 20px;
   padding: 20px;
-  border: 1px solid #ddd;
+}
+
+.ficha-izquierda, .ficha-derecha {
+  flex: 1;
+  background: #fff;
+  padding: 20px;
   border-radius: 10px;
-  background: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
   text-align: center;
-  margin-bottom: 20px;
+  color: black;
 }
 
 .seccion {
-  margin-top: 20px;
-  padding: 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #fff;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #f8f9fa;
 }
 
-h3 {
-  margin-bottom: 10px;
-  color: #007bff;
+.seccion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ddd;
+}
+
+.seccion-header input {
+  width: 70%;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: black;
+}
+
+.eliminar-btn {
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+}
+
+.nueva-seccion, .nuevo-campo {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.nueva-seccion input, .nuevo-campo input, .nuevo-campo select {
+  flex: 1;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #fff;
+  color: black;
+}
+
+.nueva-seccion button, .nuevo-campo button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.guardar-btn {
+  width: 100%;
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
 }
 
 .campo {
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+  padding: 5px;
 }
 
-.campo label {
-  font-weight: bold;
-}
-
-.campo input,
-.campo select {
+.campo input, .campo select {
   padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ddd;
   border-radius: 5px;
-  border: 1px solid #ccc;
+  background: #f8f9fa;
+  color: black;
 }
 
-.nuevo-campo {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.nuevo-campo input,
-.nuevo-campo select {
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  background: #007bff;
-  color: white;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  background: #0056b3;
-}
-
-.guardar-btn {
-  display: block;
-  margin-top: 15px;
-  width: 100%;
-  background: green;
-}
 
 /* ***********   Ficha de Registro de participantes ************** */
 .registro-form {

@@ -28,7 +28,8 @@ const RegistroParticipantes = () => {
     <div className="registro-form">
       <h2>Registro de Participantes</h2>
       <form onSubmit={handleSubmit}>
-        <label>Nombre:</label>
+        <label>Datos Personales:</label>
+        <label>Nombre completo:</label>
         <input
           type="text"
           name="nombre"
@@ -37,7 +38,7 @@ const RegistroParticipantes = () => {
           required
         />
 
-        <label>Apellido:</label>
+        <label>DNI:</label>
         <input
           type="text"
           name="apellido"
@@ -45,6 +46,28 @@ const RegistroParticipantes = () => {
           onChange={handleChange}
           required
         />
+        <label>Edad:</label>
+        <input
+          type="number"
+          name="edad"
+          value={participante.edad}
+          onChange={handleChange}
+          required
+        />
+        <label>Género:</label>
+        <select
+          name="genero"
+          value={participante.genero}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Seleccionar</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Femenino">Femenino</option>
+          <option value="Otro">Otro</option>
+        </select>
+
+        <label>Contactos:</label>
 
         <label>Email:</label>
         <input
@@ -64,28 +87,6 @@ const RegistroParticipantes = () => {
           required
         />
 
-        <label>Edad:</label>
-        <input
-          type="number"
-          name="edad"
-          value={participante.edad}
-          onChange={handleChange}
-          required
-        />
-
-        <label>Género:</label>
-        <select
-          name="genero"
-          value={participante.genero}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Seleccionar</option>
-          <option value="Masculino">Masculino</option>
-          <option value="Femenino">Femenino</option>
-          <option value="Otro">Otro</option>
-        </select>
-
         <button type="submit" className="btn-register">
           Registrar Participante
         </button>
@@ -93,5 +94,5 @@ const RegistroParticipantes = () => {
     </div>
   );
 };
- 
+
 export default RegistroParticipantes;
