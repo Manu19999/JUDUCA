@@ -3,7 +3,7 @@ import { FaEdit, FaTrashAlt, FaEye } from "react-icons/fa";
 
 const BotonesAccionFila = ({ id, onEdit, onDelete, onDetails }) => {
   return (
-    <div className="d-flex flex-wrap gap-2 justify-content-center">
+    <div className="d-flex flex-wrap gap-2 contenedor-botones">
       {/* Botón de Editar */}
       <button onClick={() => onEdit(id)} className="btn-actualizar">
         <FaEdit />

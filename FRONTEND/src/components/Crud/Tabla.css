@@ -243,6 +243,22 @@
   }
 }
 
+@media (max-width: 967px) {
+  .contenedor-botones {
+    display: flex;
+    flex-direction: row; /* Acomoda los botones en columna */
+    align-items: center; /* Centra los botones horizontalmente en la columna */
+    gap: 5px; /* Espacio entre los botones */
+  }
+
+  .btn-actualizar, .btn-eliminar, .btn-detalles {
+    width: auto; /* Ajusta el ancho al contenido */
+    text-align: center;
+  }
+}
+
+
+
 /* Móviles (menos de 768px) */
 @media (max-width: 768px) {
   .tabla-wrapper {
