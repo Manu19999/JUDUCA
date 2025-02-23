@@ -16,7 +16,8 @@ import Vouchers from "./pages/voucher";
 import ConsumosVouchers from "./pages/ConsumoVoucher";
 import Comedores from "./pages/Comedores";
 import Tickets from "./pages/tickets";
-import Usuarios from "./pages/Usuarios";
+import Usuarios from "./pages/Seguridad/Usuarios";
+import Roles from "./pages/Seguridad/Roles";
 
 //Rutas de los Eventos
 import Eventos from "./pages/GestionEvento";
@@ -24,12 +25,12 @@ import ListaEventos from "./pages/ListaEventos";
 
 function App() {
   return (
-    <Router>DiseñadorCredencial
+    <Router>
       <Routes>
         <Route path="" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/usuarios" element={<Usuarios />} />
+        <Route path="/roles" element={<Roles />} />
 
         <Route path="/crear-evento" element={<CreateEvent />} />
         <Route path="/crearCredencial" element={<CreateCredencial />} />

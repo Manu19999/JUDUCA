@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import './Tabla.css';
 import BotonesAccion from "./BotonesAccion"; // Importa el componente de boton nuevo y generar reporte
-import BotonesAccionFila from "./BotonesAccionFila";// importa el componente de boton actualizar, eliminar
+import BotonesAccionFila from "./BotonesAccionFila"; // Importa el componente de boton actualizar, eliminar
 import Paginacion from './Paginacion';
 import Filtros from './Filtros';
 
-const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarReporte, onEdit, onDelete }) => {
+const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarReporte, onEdit, onDelete, onDetails }) => {
   const [paginaActual, setPaginaActual] = useState(1);
   const [registrosPorPagina, setRegistrosPorPagina] = useState(8);
   const [busqueda, setBusqueda] = useState('');
@@ -69,10 +69,11 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
                     <td key={i}>
                       {col.campo === "accion" ? ( // 👈 Si la columna es "accion", mostramos botones
                         <BotonesAccionFila
-                        id={fila.id}
-                        onEdit={onEdit}
-                        onDelete={onDelete}
-                      />
+                          id={fila.id}
+                          onEdit={onEdit}
+                          onDelete={onDelete}
+                          onDetails={onDetails} // 👈 Pasamos onDetails solo si está definido
+                        />
                       ) : (
                         fila[col.campo]
                       )}

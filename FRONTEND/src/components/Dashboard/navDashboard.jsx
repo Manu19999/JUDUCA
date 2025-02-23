@@ -55,6 +55,7 @@ const NavDashboard = () => {
             className="navlinkcustom"
           >
             <NavDropdown.Item href="/usuarios">Usuarios</NavDropdown.Item>
+            <NavDropdown.Item href="/roles">Roles</NavDropdown.Item>
             <NavDropdown.Item href="#">Bitácora</NavDropdown.Item>
             <NavDropdown.Item href="#">Permisos</NavDropdown.Item>
           </NavDropdown>

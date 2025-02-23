@@ -216,6 +216,33 @@
   }
 }
 
+/* Ajustes para pantallas menores a 990px */
+@media (max-width: 990px) {
+  /* Contenedor de los botones de acción */
+  .d-flex.flex-wrap.gap-2.justify-content-center {
+    flex-wrap: nowrap; /* Evita que los botones se envuelvan */
+    gap: 5px; /* Reduce el espacio entre los botones */
+    justify-content: flex-start; /* Alinea los botones a la izquierda */
+  }
+
+  /* Ajustar el tamaño de los botones */
+  .btn-actualizar, .btn-eliminar, .btn-detalles {
+    width: 30px;  /* Reducir ancho */
+    height: 30px; /* Reducir altura */
+    padding: 3px 6px; /* Reducir padding */
+    font-size: 12px; /* Reducir tamaño de fuente */
+  }
+
+  /* Ajustar el tamaño del ícono dentro del botón */
+  .btn-actualizar svg, 
+  .btn-eliminar svg,
+  .btn-detalles svg {
+    font-size: 12px;
+    width: 12px;
+    height: 12px;
+  }
+}
+
 /* Móviles (menos de 768px) */
 @media (max-width: 768px) {
   .tabla-wrapper {
@@ -311,8 +338,8 @@
   background-color: white;
   color: #346397;
 }
-
 }
+
 
 @media (max-width: 590px) {
   .tabla-wrapper {
@@ -428,10 +455,8 @@
 }
   
 
-
-  /* Estilo para el botón de actualizar */
-/* Estilo general de los botones */
-.btn-actualizar, .btn-eliminar {
+/* Estilos generales para los botones de acción */
+.btn-actualizar, .btn-eliminar, .btn-detalles {
   background-color: white;
   padding: 5px 10px; /* Tamaño base */
   border-radius: 4px;
@@ -445,9 +470,9 @@
   height: 34px; /* Tamaño fijo del botón */
 }
 
-/* Estilos específicos */
+/* Estilos específicos para cada botón */
 .btn-actualizar {
-  color: rgb(48, 48, 48);
+  color: #3c3c3c;
   border: 1px solid #bbbbbb;
 }
 
@@ -464,24 +489,37 @@
 
 .btn-eliminar:hover {
   background-color: #fcd1d5;
-  color: #e51c3a;
+  color: #cf102d;
   border-color: #cc3e3a;
 }
 
+.btn-detalles {
+  color: #998342; /* Color dorado */
+  border: 1px solid #998342;
+}
+
+.btn-detalles:hover {
+  background-color: #f9f0d6; /* Fondo dorado claro */
+  color: #816717; /* Color dorado más oscuro */
+  border-color: #9c780e;
+}
+
+
+
 /* Ajustar el tamaño en pantallas menores a 647px */
 @media (max-width: 647px) {
-  .btn-actualizar, .btn-eliminar {
-    padding: 3px 6px;  /* Reducir padding */
-    font-size: 12px;  /* Reducir tamaño de fuente */
+  .btn-actualizar, .btn-eliminar, .btn-detalles {
     width: 28px;  /* Reducir ancho */
     height: 28px; /* Reducir altura */
+    padding: 2px 4px; /* Reducir padding */
+    font-size: 11px; /* Reducir tamaño de fuente */
   }
 
-  /* Ajustar el tamaño del icono dentro del botón */
   .btn-actualizar svg, 
-  .btn-eliminar svg {
-    font-size: 12px;
-    width: 12px;
-    height: 12px;
+  .btn-eliminar svg,
+  .btn-detalles svg {
+    font-size: 11px;
+    width: 11px;
+    height: 11px;
   }
 }
