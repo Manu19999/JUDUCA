@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import "../../styles/Evento/Eventos.css";
 
 const FormularioFichas = () => {
@@ -10,6 +11,7 @@ const FormularioFichas = () => {
   });
   const [nuevaSeccion, setNuevaSeccion] = useState("");
   const [editando, setEditando] = useState({ seccionId: null, campoId: null });
+  const [valorEditando, setValorEditando] = useState("");
 
   const agregarSeccion = () => {
     if (nuevaSeccion.trim() === "") return;
@@ -64,6 +66,34 @@ const FormularioFichas = () => {
     );
   };
 
+  const eliminarCampo = (seccionId, campoId) => {
+    setSecciones((prev) =>
+      prev.map((sec) =>
+        sec.id === seccionId
+          ? {
+              ...sec,
+              campos: sec.campos.filter((campo) => campo.id !== campoId),
+            }
+          : sec
+      )
+    );
+  };
+
+  const abrirEdicion = (seccionId, campoId, valor) => {
+    setEditando({ seccionId, campoId });
+    setValorEditando(valor);
+  };
+
+  const guardarEdicion = () => {
+    if (editando.campoId === null) {
+      editarSeccion(editando.seccionId, valorEditando);
+    } else {
+      editarCampo(editando.seccionId, editando.campoId, valorEditando);
+    }
+    setEditando({ seccionId: null, campoId: null });
+    setValorEditando("");
+  };
+
   const guardarFicha = async () => {
     const fichaData = {
       nombreFicha: "Ficha de Registro",
@@ -80,59 +110,42 @@ const FormularioFichas = () => {
         {secciones.map((seccion) => (
           <div key={seccion.id} className="seccion">
             <div className="seccion-header">
-              {editando.seccionId === seccion.id &&
-              editando.campoId === null ? (
-                <input
-                  type="text"
-                  value={seccion.nombre}
-                  onChange={(e) => editarSeccion(seccion.id, e.target.value)}
-                  onBlur={() => setEditando({ seccionId: null, campoId: null })}
-                  autoFocus
-                />
-              ) : (
-                <span
-                  onDoubleClick={() =>
-                    setEditando({ seccionId: seccion.id, campoId: null })
-                  }
+              <span>{seccion.nombre}</span>
+              <div className="botones-editar-eliminar">
+                <button
+                  className="editar-btn"
+                  onClick={() => abrirEdicion(seccion.id, null, seccion.nombre)}
                 >
-                  {seccion.nombre}
-                </span>
-              )}
-              <button
-                className="eliminar-btn"
-                onClick={() => eliminarSeccion(seccion.id)}
-              >
-                ❌
-              </button>
+                  <FaEdit />
+                </button>
+                <button
+                  className="eliminar-btn"
+                  onClick={() => eliminarSeccion(seccion.id)}
+                >
+                  <FaTrash />
+                </button>
+              </div>
             </div>
             {seccion.campos.map((campo) => (
               <div key={campo.id} className="campo">
                 <label>
-                  {editando.seccionId === seccion.id &&
-                  editando.campoId === campo.id ? (
-                    <input
-                      type="text"
-                      value={campo.nombre}
-                      onChange={(e) =>
-                        editarCampo(seccion.id, campo.id, e.target.value)
-                      }
-                      onBlur={() =>
-                        setEditando({ seccionId: null, campoId: null })
-                      }
-                      autoFocus
-                    />
-                  ) : (
-                    <span
-                      onDoubleClick={() =>
-                        setEditando({
-                          seccionId: seccion.id,
-                          campoId: campo.id,
-                        })
+                  <span>{campo.nombre}</span>
+                  <div className="botones-editar-eliminar">
+                    <button
+                      className="editar-btn"
+                      onClick={() =>
+                        abrirEdicion(seccion.id, campo.id, campo.nombre)
                       }
                     >
-                      {campo.nombre}
-                    </span>
-                  )}
+                      <FaEdit />
+                    </button>
+                    <button
+                      className="eliminar-btn"
+                      onClick={() => eliminarCampo(seccion.id, campo.id)}
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
                 </label>
                 {campo.tipo === "text" && <input type="text" disabled />}
                 {campo.tipo === "number" && <input type="number" disabled />}
@@ -201,7 +214,7 @@ const FormularioFichas = () => {
       </div>
 
       <div className="ficha-derecha">
-        <h2>Vista Previa del Formulario</h2>
+        <h2>Vista Previa de la Ficha</h2>
         {secciones.map((seccion) => (
           <div key={seccion.id} className="seccion">
             <h3>{seccion.nombre}</h3>
@@ -212,8 +225,7 @@ const FormularioFichas = () => {
                 {campo.tipo === "number" && <input type="number" disabled />}
                 {campo.tipo === "select" && (
                   <select disabled>
-                    <option>Opción 1</option>
-                    <option>Opción 2</option>
+                    <option>Seleccionar</option>
                   </select>
                 )}
               </div>
@@ -221,6 +233,17 @@ const FormularioFichas = () => {
           </div>
         ))}
       </div>
+
+      {editando.seccionId !== null && (
+        <div className="edit-dialog">
+          <input
+            type="text"
+            value={valorEditando}
+            onChange={(e) => setValorEditando(e.target.value)}
+          />
+          <button onClick={guardarEdicion}>Guardar</button>
+        </div>
+      )}
     </div>
   );
 };

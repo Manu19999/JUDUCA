@@ -166,7 +166,6 @@ input[type="date"]::-moz-calendar-picker-indicator {
 }
 
 /* ***********   Estilos actualizados para el Formulario de Fichas   ************* */
-
 .contenedor-fichas {
   display: flex;
   gap: 20px;
@@ -211,19 +210,33 @@ h2 {
   color: black;
 }
 
+.editar-btn,
+.eliminar-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.editar-btn {
+  color: black;
+}
+
 .eliminar-btn {
   background: red;
   color: white;
-  border: none;
   padding: 5px;
   border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
+}
+
+.botones-editar-eliminar {
+  display: flex;
+  gap: 10px;
 }
 
 .nueva-seccion, .nuevo-campo {
@@ -273,6 +286,12 @@ h2 {
   padding: 5px;
 }
 
+.campo label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .campo input, .campo select {
   padding: 8px;
   font-size: 14px;
@@ -281,6 +300,39 @@ h2 {
   background: #f8f9fa;
   color: black;
 }
+
+.edit-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-dialog input {
+  padding: 8px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.edit-dialog button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
 
 
 /* ***********   Ficha de Registro de participantes ************** */

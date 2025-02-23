@@ -61,7 +61,6 @@ const NavDashboard = () => {
           <a
             className="navlinkcustom"
             onClick={() => navigate("/lista-eventos")}
-            href="#inicio"
           >
             Eventos
           </a>
