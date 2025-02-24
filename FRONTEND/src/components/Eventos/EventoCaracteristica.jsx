@@ -8,6 +8,7 @@ const EventoCaracteristica = ({
   onImageClick,
   onEditClick,
   onManageClick,
+  showIcons, // Añadir esta prop
 }) => {
   return (
     <div className="eventcard">
@@ -23,16 +24,20 @@ const EventoCaracteristica = ({
         <p className="eventdate">{event.date}</p>
         <p className="eventdescription">{event.description}</p>
         <div className="eventicons">
-          <FontAwesomeIcon
-            icon={faEdit}
-            onClick={onEditClick}
-            className="eventicon"
-          />
-          <FontAwesomeIcon
-            icon={faCog}
-            onClick={onManageClick}
-            className="eventicon"
-          />
+          {showIcons && (
+            <>
+              <FontAwesomeIcon
+                icon={faEdit}
+                onClick={onEditClick}
+                className="eventicon edit-btn"
+              />
+              <FontAwesomeIcon
+                icon={faCog}
+                onClick={onManageClick}
+                className="eventicon manage-btn"
+              />
+            </>
+          )}
         </div>
       </div>
     </div>

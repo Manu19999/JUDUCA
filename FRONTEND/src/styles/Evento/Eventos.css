@@ -165,7 +165,7 @@ input[type="date"]::-moz-calendar-picker-indicator {
   cursor: pointer;
 }
 
-/* ***********   Estilos actualizados para el Formulario de Fichas   ************* */
+/* ***********   Estilos para el Formulario de Fichas   ************* */
 .contenedor-fichas {
   display: flex;
   gap: 20px;
@@ -208,6 +208,7 @@ h2 {
   border: 1px solid #ccc;
   border-radius: 5px;
   color: black;
+  background: white;
 }
 
 .editar-btn,
@@ -216,6 +217,9 @@ h2 {
   border: none;
   cursor: pointer;
   font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .editar-btn {
@@ -227,9 +231,6 @@ h2 {
   color: white;
   padding: 5px;
   border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 20px;
   height: 20px;
 }
@@ -284,6 +285,9 @@ h2 {
   flex-direction: column;
   margin-bottom: 10px;
   padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #f8f9fa;
 }
 
 .campo label {
@@ -297,8 +301,33 @@ h2 {
   font-size: 14px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  background: #f8f9fa;
+  background: #fff;
   color: black;
+}
+
+.campo .botones-editar-eliminar {
+  display: flex;
+  gap: 10px;
+}
+
+.campo .editar-btn,
+.campo .eliminar-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.campo .eliminar-btn {
+  background: red;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  width: 20px;
+  height: 20px;
 }
 
 .edit-dialog {
@@ -336,52 +365,177 @@ h2 {
 
 
 /* ***********   Ficha de Registro de participantes ************** */
+/* Contenedor principal del formulario */
 .registro-form {
-  width: 50%;
-  margin: auto;
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0px 0px 10px rgba(110, 101, 101, 0.1);
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
 }
 
 .registro-form h2 {
   text-align: center;
-  color: #333;
+  color: #222;
+  margin-bottom: 20px;
 }
 
+/* Fieldsets y leyendas */
+.registro-form fieldset {
+  border: none;
+  margin-bottom: 20px;
+  padding: 0;
+}
+
+.registro-form legend {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #007bff;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 5px;
+}
+
+/* Etiquetas e inputs */
 .registro-form label {
   display: block;
   margin: 10px 0 5px;
   font-weight: bold;
+  color: #333;
 }
 
 .registro-form input,
-.registro-form select {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background: #e0e0e0; 
-  color: #000; 
-}
-
-.caracteristica {
-  margin-bottom: 10px;
-}
-
-.btn-register {
+.registro-form textarea {
   width: 100%;
   padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #f9f9f9;
+  color: #333;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.registro-form input:focus,
+.registro-form textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+  outline: none;
+}
+
+/* Agrupación de opciones en línea */
+.opciones-linea {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+/* Para checkbox múltiples en bloque */
+.opciones-multiples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+/* Botón de enviar */
+.btn-register {
+  width: 100%;
+  padding: 12px;
   background: #007bff;
-  color: white;
+  color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
+  transition: background 0.3s ease;
 }
 
 .btn-register:hover {
   background: #0056b3;
 }
+
+/* ----------------- */
+/* Estilos de Check/Radio con un cuadro y check verde */
+/* ----------------- */
+.custom-check {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.custom-check input[type="checkbox"],
+.custom-check input[type="radio"] {
+  -webkit-appearance: none; 
+  -moz-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  margin-right: 8px;
+  border: 2px solid #000;  /* Borde del cuadro */
+  border-radius: 4px;      /* Ligero redondeo para un look más moderno */
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.custom-check input[type="checkbox"]:hover,
+.custom-check input[type="radio"]:hover {
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+/* Muestra un check verde al estar seleccionado */
+.custom-check input[type="checkbox"]:checked::after,
+.custom-check input[type="radio"]:checked::after {
+  content: "✔";
+  color: green;
+  font-size: 16px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Estilo de la etiqueta asociada */
+.custom-check label {
+  cursor: pointer;
+  color: #333;
+  font-weight: normal;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .registro-form {
+    width: 90%;
+    padding: 20px;
+  }
+}
+
+
+
+/* **** Iconos de editar para la Gestión de eventos  ******* */
+.eventicons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.eventicon {
+  cursor: pointer;
+  color: gray;/
+}
+
+.edit-btn {
+  color: gray; 
+}
+
+.manage-btn {
+  color: gray; 
+}
+

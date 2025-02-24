@@ -24,6 +24,9 @@ import ListaEventos from "./pages/ListaEventos";
 import ListaFichas from "./pages/CrearFicha";
 import Formularios_Fichas from "./pages/FormularioFicha";
 import RegistroParticipante from "./pages/RegistroParticipante";
+import RegistroSalud from "./pages/RegistroSalud";
+import EventoMantenimiento from "./pages/EventoMantenimiento";
+
 
 
 function App() {
@@ -57,6 +60,8 @@ function App() {
         <Route path="/lista-fichas" element={<ListaFichas />} />
         <Route path="/Formulario-fichas" element={<Formularios_Fichas />} />
         <Route path="/ficha-participantes" element={<RegistroParticipante />} />
+        <Route path="/ficha-salud" element={<RegistroSalud />} />
+        <Route path="/mantenimiento-evento" element={<EventoMantenimiento />} />
       </Routes>
     </Router>
   );
