@@ -122,12 +122,13 @@ const InscripcionJUDUCA = () => {
             required
           />
 
-          <label>Categoría:</label>
+          <label style={{ color: "black" }}>Categoría:</label>
           <select
             name="categoria"
             value={inscripcion.categoria}
             onChange={handleChange}
             required
+            style={{ color: "white" }}
           >
             <option value="">Seleccionar</option>
             <option value="Docente">Docente</option>
@@ -203,12 +204,15 @@ const InscripcionJUDUCA = () => {
             required
           />
 
-          <label>Eje temático de la conferencia:</label>
+          <label style={{ color: "black" }}>
+            Eje temático de la conferencia:
+          </label>
           <select
             name="ejeTematico"
             value={inscripcion.ejeTematico}
             onChange={handleChange}
             required
+            style={{ color: "white" }}
           >
             <option value="">Seleccionar</option>
             <option value="Educación Física en el área Docente">
@@ -225,23 +229,18 @@ const InscripcionJUDUCA = () => {
             </option>
           </select>
 
-          <label>Tipo de conferencia:</label>
+          <label style={{ color: "white" }}>Tipo de conferencia:</label>
           <select
             name="tipoConferencia"
             value={inscripcion.tipoConferencia}
             onChange={handleChange}
             required
+            style={{ color: "white" }}
           >
             <option value="">Seleccionar</option>
-            <option value="Investigación">
-              Investigación
-            </option>
-            <option value="Buena práctica">
-              Buena práctica 
-            </option>
-            <option value="Experiencia">
-              Experiencia 
-            </option>
+            <option value="Investigación">Investigación</option>
+            <option value="Buena práctica">Buena práctica</option>
+            <option value="Experiencia">Experiencia</option>
           </select>
 
           <label>

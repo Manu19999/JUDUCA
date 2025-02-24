@@ -1,7 +1,48 @@
 /************  Estilos de los modales  **********/
+/* Modal Overlay centrado sin cubrir toda la pantalla */
+.modal-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 600px;
+  background: transparent;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal Content: se ajusta al tamaño del overlay y tiene bordes redondeados */
+.modal-content {
+  background: linear-gradient(to bottom, #04488b, #032950);
+  padding: 20px;
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 40vw;
+  max-height: 100vh;
+  overflow-y: auto;
+  position: relative;
+  z-index: 10001;
+}
+
+/* Cerrar modal: la "X" ahora es blanca */
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: white; /* Color blanco para la X */
+}
+
+/* Resto de estilos para el formulario dentro del modal */
 .event-form {
   display: grid;
-  grid-template-columns: 1fr; /* Todo en una sola columna */
+  grid-template-columns: 1fr;
   gap: 15px;
   width: 80%;
   max-width: 500px;
@@ -9,30 +50,25 @@
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-  color: #000; /* Cambia el color de la letra a negro */
-  position: relative;
-  align-items: start; /* Asegura que los ítems comiencen desde arriba */
-  justify-content: start; /* Asegura que los ítems comiencen desde la izquierda */
-  margin-top: 0; /* Quita el margen superior */
-  gap: 6px; /* Reduce el espacio entre los elementos */
+  color: #000;
+  align-items: start;
+  justify-content: start;
   text-align: left;
 }
 
 .event-form h2 {
-  margin-top: 0; /* Quita el margen superior del título */
+  margin-top: 0;
 }
 
-/* Estilo del título */
 .event-title {
   text-align: center;
   font-size: 24px;
   font-weight: bold;
   color: #facc15;
   margin-bottom: 20px;
-  margin-top: 150px; /* Pequeño ajuste para que no esté muy arriba */
+  margin-top: 150px;
 }
 
-/* Labels alineados correctamente */
 .event-form label {
   font-weight: bold;
   color: #facc15;
@@ -40,29 +76,22 @@
   margin-bottom: 5px;
 }
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.modal-content {
-  background: linear-gradient(to bottom, #04488b, #032950);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: relative;
-  width: 40vw; /* Aumenta el ancho del modal */
-  max-height: 100vh; /* Limita la altura máxima del modal */
-  overflow-y: auto; /* Habilita el desplazamiento vertical */
+.event-form input,
+.event-form textarea {
+  width: 95%;
+  padding: 2px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  color: black;
+  margin-top: 5px;
 }
 
-/* Botón ocupa el ancho completo */
+.event-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
 .event-form button {
   width: 100%;
   background-color: #facc15;
@@ -80,63 +109,22 @@
   background-color: #ffeb3b;
 }
 
-/* Inputs y textarea alineados debajo del label */
-.event-form input,
-.event-form textarea {
-  width: 95%; /* Menos ancho (ajustado de 100% a 90%) */
-  padding: 2px; /* Padding reducido para que estén más pegados al label */
-  border-radius: 6px;
-  border: 1px solid #ccc; /* Borde sutil para mejor visibilidad */
-  font-size: 16px;
-  color: black;
-  margin-top: 5px; /* Espacio entre el label y el input/textarea */
-}
-
-/* Ajuste especial para textarea */
-.event-form textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-/* Responsivo: Mantiene alineación en pantallas pequeñas */
-@media (max-width: 768px) {
-  .event-form {
-    max-width: 100%;
-  }
-
-  .event-form input,
-  .event-form textarea {
-    width: 95%; /* Un poco más ancho en pantallas pequeñas */
-  }
-}
-
-/* Estilos para los inputs y textarea dentro del modal */
+/* Inputs dentro del modal */
 .modal-content input,
 .modal-content textarea {
-  background-color: white; /* Fondo blanco para los cuadros */
-  border: 1px solid black; /* Bordes negros para los cuadros */
-  color: black; /* Texto negro dentro de los cuadros */
+  background-color: white;
+  border: 1px solid black;
+  color: black;
   padding: 10px;
   border-radius: 5px;
 }
 
 .modal-content label {
-  color: black; /* Texto negro para las etiquetas */
+  color: black;
 }
 
-.modal-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-/* Estilizar el input de fecha para el calendario */
+/* Estilos para el calendario */
 input[type="date"] {
-  position: relative;
   background-color: #fff;
   border: 1px solid #007bff;
   border-radius: 5px;
@@ -145,25 +133,18 @@ input[type="date"] {
   color: black;
   cursor: pointer;
 }
-/* Aumentar el tamaño del icono del calendario */
-input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(100%); /* Convierte el icono a blanco */
-  width: 24px; /* Aumenta el tamaño del icono */
-  height: 24px;
-  cursor: pointer;
-}
 
-/* Cambiar el color del ícono del calendario en navegadores que lo permiten */
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(30%) sepia(100%) saturate(500%) hue-rotate(190deg);
   cursor: pointer;
 }
 
-/* Para Firefox */
 input[type="date"]::-moz-calendar-picker-indicator {
   filter: invert(30%) sepia(100%) saturate(500%) hue-rotate(190deg);
   cursor: pointer;
 }
+
+
 
 /* ***********   Estilos para el Formulario de Fichas   ************* */
 .contenedor-fichas {

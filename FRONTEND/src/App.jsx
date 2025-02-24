@@ -16,7 +16,8 @@ import Vouchers from "./pages/voucher";
 import ConsumosVouchers from "./pages/ConsumoVoucher";
 import Comedores from "./pages/Comedores";
 import Tickets from "./pages/tickets";
-import Usuarios from "./pages/Usuarios";
+//import Usuarios from "./pages/Usuarios";
+import Usuarios from "./pages/Seguridad/Usuarios";
 
 //Rutas de los Eventos
 import Eventos from "./pages/GestionEvento";
