@@ -126,6 +126,7 @@ const Voucher = () => {
               onNuevoRegistro={onNuevoRegistro} // Pasa la función aquí
             />
           ) : (
+            
             <p>No se encontraron vouchers.</p>
           )
         )}

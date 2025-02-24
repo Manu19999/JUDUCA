@@ -76,3 +76,50 @@ export const insertVoucherComida = async (req, res) => {
         res.status(500).json({ error: 'Error al insertar el voucher', details: error.message });
     }
 };
+
+
+
+
+//------------------------------------------------------------------------------------------------------------------------------
+
+// Actualizar un voucher existente
+export const updateVoucherComida = async (req, res) => {
+    const {
+        idVoucher,
+        idEvento,
+        idUniversidad,
+        idDisenioCredencial,
+        fechaEmision,
+        fechaExpiracion,
+        cantidadDisponible,
+        fechaInicio,
+        fechaFinal,
+        activo,
+    } = req.body;
+
+    try {
+        const pool = await conexionbd();  // Obtener el pool de conexiones
+        const request = pool.request();
+
+        // Parámetros del procedimiento almacenado
+        request.input('idVoucher', sql.Int, idVoucher);
+        request.input('idEvento', sql.Int, idEvento);
+        request.input('idUniversidad', sql.Int, idUniversidad);
+        request.input('idDisenioCredencial', sql.Int, idDisenioCredencial);
+        request.input('fechaEmision', sql.Date, fechaEmision);
+        request.input('fechaExpiracion', sql.Date, fechaExpiracion);
+        request.input('cantidadDisponible', sql.Int, cantidadDisponible);
+        request.input('fechaInicio', sql.Date, fechaInicio);
+        request.input('fechaFinal', sql.Date, fechaFinal);
+        request.input('activo', sql.Bit, activo);
+
+        // Ejecutar el procedimiento almacenado
+        await request.execute('ActualizarVoucher');
+
+        // Respuesta exitosa
+        res.status(200).json({ message: 'Voucher actualizado correctamente' });
+    } catch (error) {
+        console.error('Error al actualizar el voucher:', error);
+        res.status(500).json({ error: 'Error al actualizar el voucher', details: error.message });
+    }
+};
