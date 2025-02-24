@@ -17,16 +17,16 @@ const CustomNavbar = () => {
       <div className="navbar-container">
         {/* Logo */}
         <div className="navbar-brand">
-        <a
-          href="https://www.unah.edu.hn/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="logo-container"
-        >
-          <img src={logo} alt="Logo" className="logo-img" />
-          <span className="platform-text">Plataforma de eventos</span>
-        </a>
-      </div>
+  <a
+    href="https://www.unah.edu.hn/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="logo-container"
+  >
+    <img src={logo} alt="Logo" className="logo-img" />
+    <span className="platform-text">Plataforma de eventos</span>
+  </a>
+</div>
 
         {/* Botón Toggle (solo en móviles) */}
         <button

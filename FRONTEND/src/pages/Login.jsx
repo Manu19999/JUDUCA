@@ -1,21 +1,13 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Tooltip } from "antd";
+import { FaUser, FaLock, FaEye, FaEyeSlash, FaArrowCircleLeft } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import "../styles/Login/Login.css";
 import logo from '../assets/mascota.png';
-import LoginForm from "../components/Login/LoginForm";
-import TwoFA from "../components/Login/TwoFA";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState({ email: false, password: false });
   const [showForgotPassword, setShowForgotPassword] = useState(false);
-  const [show2FAPopup, setShow2FAPopup] = useState(false);
-  const [twoFACode, setTwoFACode] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const navigate = useNavigate();
 
   const handleFocus = (field) => {
     setIsFocused((prev) => ({ ...prev, [field]: true }));
@@ -32,33 +24,17 @@ const Login = () => {
     setShowForgotPassword(!showForgotPassword);
   };
 
-  const handleLoginSubmit = (e) => {
-    e.preventDefault();
-    console.log("Inicio de sesión exitoso");
-    setShow2FAPopup(true);
-  };
-
-  const handle2FASubmit = (code) => {
-    if (code === "123456") {
-      console.log("Código 2FA válido. Acceso concedido.");
-      setShow2FAPopup(false);
-      navigate("/dashboard");
-    } else {
-      console.log("Código 2FA inválido. Inténtalo de nuevo.");
-    }
-  };
-
   return (
     <div className="login-container">
+
+      {/* Contenedor principal para el logo y el login-box */}
       <div className="login-wrapper">
-        <Tooltip
-          title={<span style={{ fontSize: "12px" }}>Vuelve al inicio haciendo clic en el logo</span>}
-          placement="rightTop"
-        >
-          <Link to="/" className="login-image-container">
-            <img src={logo} alt="Logo" className="login-image" />
-          </Link>
-        </Tooltip>
+        {/* Logo que actúa como botón para ir a inicio */}
+        <Link to="/" className="login-image-container">
+          <img src={logo} alt="Logo" className="login-image" />
+        </Link>
+        
+        {/* Tarjeta del formulario */}
         <div className="login-box">
           <h1 className="login-title">
             {showForgotPassword ? "Recuperar Contraseña" : "Iniciar Sesión"}
@@ -68,24 +44,77 @@ const Login = () => {
               ? "Ingresa tu correo electrónico para recuperar tu contraseña"
               : "Ingresa tus datos para acceder a la plataforma"}
           </h6>
-          <LoginForm
-            showForgotPassword={showForgotPassword}
-            handleForgotPasswordClick={handleForgotPasswordClick}
-            handleLoginSubmit={handleLoginSubmit}
-            handleFocus={handleFocus}
-            handleBlur={handleBlur}
-            isFocused={isFocused}
-            email={email}
-            setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
-            showPassword={showPassword}
-            setShowPassword={setShowPassword}
-          />
+          <form className="login-form">
+            {!showForgotPassword ? (
+              <>
+                <div className="input-group">
+                  <FaUser className="input-icon" />
+                  <input
+                    type="text"
+                    required
+                    onFocus={() => handleFocus("email")}
+                    onBlur={(e) => handleBlur("email", e)}
+                    className={isFocused.email ? "input-focused" : ""}
+                  />
+                  <label className={`floating-label ${isFocused.email ? "active" : ""}`}>
+                    Correo electrónico o usuario
+                  </label>
+                </div>
+
+                <div className="input-group">
+                  <FaLock className="input-icon" />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    required
+                    onFocus={() => handleFocus("password")}
+                    onBlur={(e) => handleBlur("password", e)}
+                    className={isFocused.password ? "input-focused" : ""}
+                    autoComplete="new-password"
+                  />
+                  <label className={`floating-label ${isFocused.password ? "active" : ""}`}>
+                    Contraseña
+                  </label>
+                  <span
+                    className="eye-icon"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                </div>
+                <a href="#forgot-password" className="forgot-password" onClick={handleForgotPasswordClick}>
+                  ¿Olvidaste tu contraseña?
+                </a>
+                <button type="submit" className="login-button">
+                  Iniciar Sesión
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="input-group">
+                  <FaUser className="input-icon" />
+                  <input
+                    type="email"
+                    required
+                    onFocus={() => handleFocus("email")}
+                    onBlur={(e) => handleBlur("email", e)}
+                    className={isFocused.email ? "input-focused" : ""}
+                  />
+                  <label className={`floating-label ${isFocused.email ? "active" : ""}`}>
+                    Correo electrónico
+                  </label>
+                </div>
+                <button type="submit" className="login-button">
+                  Recuperar Contraseña
+                </button>
+                <a href="#back-to-login" className="forgot-password" onClick={handleForgotPasswordClick}>
+                  Volver a iniciar sesión
+                </a>
+              </>
+            )}
+          </form>
         </div>
       </div>
-
-      {show2FAPopup && <TwoFA onClose={() => setShow2FAPopup(false)} onSubmit={handle2FASubmit} />}
     </div>
   );
 };

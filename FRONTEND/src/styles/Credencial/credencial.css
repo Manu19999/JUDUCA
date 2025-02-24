@@ -81,33 +81,3 @@
    border-collapse: collapse;
     border-radius: 10px;
   }
-  .credencial {
-    width: 300px;
-    height: 200px;
-    border: 1px solid #ccc;
-    position: relative;
-  }
-  .grid-3x3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    height: 100%;
-    width: 100%;
-  }
-  
-  .grid-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #eee;
-  }
-  
-  .arriba-izquierda { grid-area: 1 / 1; }
-  .arriba-centro { grid-area: 1 / 2; }
-  .arriba-derecha { grid-area: 1 / 3; }
-  .medio-izquierda { grid-area: 2 / 1; }
-  .centro-exacto { grid-area: 2 / 2; }
-  .medio-derecha { grid-area: 2 / 3; }
-  .abajo-izquierda { grid-area: 3 / 1; }
-  .abajo-centro { grid-area: 3 / 2; }
-  .abajo-derecha { grid-area: 3 / 3; }

@@ -3,8 +3,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 780px;
+  min-height: 738px;
   background: linear-gradient(135deg, #021a32, #0d2848, #064b61);
+
   padding: 20px;
 }
 
@@ -243,12 +244,6 @@ input[type="password"] {
 }
 
 /* RESPONSIVE: Ajuste en pantallas medianas */
-
-@media (max-width: 1450px) {
-  .login-container {
-    min-height: 100vh; /* Reduce el mínimo de altura en pantallas más pequeñas */
-  }
-}
 @media (max-width: 1024px) {
   .back-to-home-button {
     top: 50px;
@@ -257,9 +252,6 @@ input[type="password"] {
 }
 
 @media (max-width: 1000px) {
-  .login-container {
-    min-height: 100vh; /* Reduce el mínimo de altura en pantallas más pequeñas */
-  }
   .back-to-home-button {
     right: 50px;
     top: 50px;
@@ -269,9 +261,7 @@ input[type="password"] {
 
 /* RESPONSIVE: Ajuste en pantallas pequeñas */
 @media (max-width: 780px) {
-  .login-container {
-    min-height: 100vh; /* Reduce el mínimo de altura en pantallas más pequeñas */
-  }
+  
   
   .login-title {
     font-size: 1.3rem;
@@ -330,189 +320,3 @@ input[type="password"] {
   }
 
 }
-
-/* ===== Estilos para el popup de autenticación de doble factor ===== */
-.popup-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro semi-transparente */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000; /* Asegura que esté por encima de todo */
-}
-
-.popup-container {
-  background: rgba(255, 255, 255, 0.15); /* Fondo con efecto de vidrio esmerilado */
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-  width: 90%;
-  max-width: 450px; /* Ancho máximo del popup */
-  text-align: center;
-  backdrop-filter: blur(30px); /* Efecto de desenfoque */
-  border: 1px solid rgba(255, 255, 255, 0.2); /* Borde sutil */
-}
-
-.popup-container h2 {
-  font-size: 1.5rem;
-  color: #e0e1e1; /* Color del texto */
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
-.popup-container p {
-  font-size: 0.9rem;
-  color: #e0e1e1; /* Color del texto */
-  margin-bottom: 2rem;
-}
-
-.popup-container .input-group {
-  position: relative;
-  display: flex;
-  align-items: center;
-  background: transparent;
-  border-bottom: 1.6px solid rgba(230, 230, 230, 0.4); /* Borde inferior */
-  transition: border-color 0.3s ease;
-  width: 100%;
-  margin: 0 auto 2rem; /* Centra el input y añade margen inferior */
-}
-
-.popup-container .input-group:hover {
-  border-color: #dddddd; /* Cambia el color del borde al pasar el mouse */
-}
-
-.popup-container .input-group input {
-  width: 100%;
-  height: 50px;
-  font-size: 0.9rem;
-  padding: 0.75rem 0.8rem 0.25rem 1rem; /* Ajuste de padding */
-  border: none;
-  background: transparent;
-  color: #f0f0f0; /* Color del texto */
-  outline: none;
-}
-
-.popup-container .input-group input::placeholder {
-  color: rgba(230, 230, 230, 0.4); /* Color del placeholder */
-}
-
-.popup-container .login-button {
-  color: #000000;
-  border: none;
-  padding: 0.75rem;
-  border-radius: 12px;
-  font-size: 1rem;
-  cursor: pointer;
-  font-weight: 500;
-  background: #059cba; /* Color de fondo del botón */
-  box-shadow: 0 4px 15px rgba(232, 167, 19, 0);
-  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-  width: 100%; /* Ocupa todo el ancho disponible */
-}
-
-.popup-container .login-button:hover {
-  background: #12abca; /* Cambia el color de fondo al pasar el mouse */
-  box-shadow: 0 4px 20px rgba(19, 147, 232, 0.3); /* Sombra al pasar el mouse */
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 780px) {
-  .popup-container {
-    padding: 1.5rem;
-  }
-
-  .popup-container h2 {
-    font-size: 1.3rem;
-  }
-
-  .popup-container p {
-    font-size: 0.8rem;
-  }
-
-  .popup-container .login-button {
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 485px) {
-  
-  .popup-container {
-    padding: 1rem;
-  }
-
-  .popup-container h2 {
-    font-size: 1.2rem;
-  }
-
-  .popup-container p {
-    font-size: 0.75rem;
-  }
-
-  .popup-container .login-button {
-    font-size: 0.85rem;
-  }
-}
-
-/* ===== Estilos generales ===== */
-@media (max-width: 400px) {
-  .login-container {
-    min-height: 100vh; /* Ajusta la altura mínima */
-    padding: 13px; /* Reduce el padding */
-  }
-
-  .login-wrapper {
-    width: 100%;
-    max-width: 350px; /* Reducir el ancho máximo */
-  }
-
-  .login-box {
-    padding: 1.5rem; /* Reduce el padding */
-    width: 100%;
-  }
-
-  .login-title {
-    font-size: 1.2rem; /* Reduce el tamaño de la fuente */
-  }
-
-  .login-subtitle {
-    font-size: 0.7rem; /* Reduce el tamaño de la fuente */
-    margin-bottom: 2rem; /* Reduce el margen inferior */
-  }
-
-  .login-form {
-    gap: 2rem; /* Reduce el espacio entre los inputs */
-  }
-
-  .input-group input {
-    height: 40px; /* Reduce la altura del input */
-    font-size: 0.8rem; /* Reduce el tamaño de la fuente */
-    padding: 0.75rem 0.5rem 0.25rem 2rem; /* Ajuste en padding */
-  }
-
-  .floating-label {
-    font-size: 0.7rem; /* Reduce el tamaño de la fuente */
-  }
-
-  .login-button {
-    font-size: 0.8rem; /* Reduce el tamaño de la fuente */
-    padding: 0.5rem; /* Reduce el padding */
-  }
-
-  .forgot-password {
-    font-size: 0.8rem; /* Reduce el tamaño de la fuente */
-  }
-
-  
-
-  .back-to-home-button {
-    font-size: 0.6rem; /* Reduce el tamaño de la fuente */
-    height: 30px; /* Reduce la altura */
-    top: 20px; /* Ajusta la posición */
-  }
-}
-
-
