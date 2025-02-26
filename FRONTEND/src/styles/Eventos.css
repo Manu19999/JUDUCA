@@ -1,0 +1,299 @@
+/********** PLATAFORMA DE EVENTOS UNAH ************/
+
+/*** Estilos de las vista  **********/
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+  }
+  
+  /* Contenedor principal */
+  .event-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  /* Encabezado */
+  .event-header {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #04305e;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .event-header h2 {
+    margin: 0;
+  }
+  
+  /* Botones */
+  .event-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .new-btn,
+  .report-btn,
+  .edit-btn,
+  .delete-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .new-btn {
+    background: #28a745;
+    color: white;
+  }
+  
+  .report-btn {
+    background: #17a2b8;
+    color: white;
+  }
+  
+  .edit-btn {
+    background: #ffc107;
+    color: black;
+  }
+  
+  .delete-btn {
+    background: #dc3545;
+    color: white;
+  }
+  
+  /****** Barra de búsqueda ****** */
+  .event-controls {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+  }
+  
+  .event-controls input {
+    width: 50%;
+    max-width: 200px;
+    padding: 4px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: white;
+    color: #000;
+    outline: none;
+  }
+  
+  /***** Tabla ******/
+  .event-table {
+    width: 100%;
+    max-width: 1200px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: black;
+    text-align: left;
+  }
+  
+  .event-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .event-table th,
+  .event-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .event-table th {
+    background: #04305e;
+    color: white;
+  }
+  
+  .event-table tbody tr:nth-child(even) {
+    background: #f8f9fa;
+  }
+  
+  /******** Estilos responsivos **********/
+  @media (max-width: 768px) {
+    .event-header {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .event-actions {
+      margin-top: 10px;
+      flex-direction: column;
+      width: 100%;
+    }
+  
+    .event-actions button {
+      width: 100%;
+    }
+  
+    .event-controls {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .event-table th,
+    .event-table td {
+      padding: 8px;
+      font-size: 14px;
+    }
+  
+    .event-table th:nth-child(3),
+    .event-table td:nth-child(3),
+    .event-table th:nth-child(6),
+    .event-table td:nth-child(6) {
+      display: none; /* Ocultar descripción y ubicación en pantallas pequeñas */
+    }
+  }
+  
+  /************  Estilos de los modales  **********/
+  .event-form {
+    display: grid;
+    grid-template-columns: 1fr; /* Todo en una sola columna */
+    gap: 15px;
+    width: 80%;
+    max-width: 500px;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    color: #000; /* Cambia el color de la letra a negro */
+    position: relative;
+    align-items: start; /* Asegura que los ítems comiencen desde arriba */
+    justify-content: start; /* Asegura que los ítems comiencen desde la izquierda */
+    margin-top: 0; /* Quita el margen superior */
+  }
+  
+  .event-form h2 {
+    margin-top: 0; /* Quita el margen superior del título */
+  }
+  
+  /* Estilo del título */
+  .event-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #facc15;
+    margin-bottom: 20px;
+    margin-top: 150px; /* Pequeño ajuste para que no esté muy arriba */
+  }
+  
+  /* Labels alineados correctamente */
+  .event-form label {
+    font-weight: bold;
+    color: #facc15;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-content {
+    background: linear-gradient(to bottom, #04488b, #032950);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: 40vw; /* Aumenta el ancho del modal */
+    max-height: 100vh; /* Limita la altura máxima del modal */
+    overflow-y: auto; /* Habilita el desplazamiento vertical */
+  }
+  
+  /* Botón ocupa el ancho completo */
+  .event-form button {
+    width: 100%;
+    background-color: #facc15;
+    color: #001f3f;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    border: none;
+  }
+  
+  .event-form button:hover {
+    background-color: #ffeb3b;
+  }
+  
+  /* Inputs y textarea alineados debajo del label */
+  .event-form input,
+  .event-form textarea {
+    width: 95%; /* Menos ancho (ajustado de 100% a 90%) */
+    padding: 2px; /* Padding reducido para que estén más pegados al label */
+    border-radius: 6px;
+    border: 1px solid #ccc; /* Borde sutil para mejor visibilidad */
+    font-size: 16px;
+    color: black;
+    margin-top: 5px; /* Espacio entre el label y el input/textarea */
+  }
+  
+  /* Ajuste especial para textarea */
+  .event-form textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  /* Responsivo: Mantiene alineación en pantallas pequeñas */
+  @media (max-width: 768px) {
+    .event-form {
+      max-width: 100%;
+    }
+  
+    .event-form input,
+    .event-form textarea {
+      width: 95%; /* Un poco más ancho en pantallas pequeñas */
+    }
+  }
+  
+  /* Estilos para los inputs y textarea dentro del modal */
+  .modal-content input,
+  .modal-content textarea {
+    background-color: white; /* Fondo blanco para los cuadros */
+    border: 1px solid black; /* Bordes negros para los cuadros */
+    color: black; /* Texto negro dentro de los cuadros */
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .modal-content label {
+    color: black; /* Texto negro para las etiquetas */
+  }
+  
+  .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }

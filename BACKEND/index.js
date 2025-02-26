@@ -1,10 +1,11 @@
-/*                     IMPORTS O REQUIRES                                   */
+/*                     IMPORTS                                   */
 
 import conexionbd from './src/config/db.js';
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors'; 
-
+import CredencialRoutes from './src/routes/CredencialRoutes.js';
+import VoucherComidaRoutes   from './src/routes/VoucherComidaRoutes.js';
 /*                     CONFIGURACIONES BACKEND                                  */
 
 const app = express();
@@ -32,19 +33,17 @@ app.use(cors({
     credentials: true, // Para permitir cookies en las solicitudes
 }));
 
-/*PRUEBA*/
-app.get('/', async (req, res) => {
-    const query = 'SELECT * FROM TBL_ROLES';
-  
-    try {
-        const [results] = await connection.query(query); 
-        res.json(results); 
-    } catch (err) {
-        console.error('Error ejecutando la consulta:', err);
-        res.status(500).send('Error en la consulta');
-    }
-});
 
+/*                     RUTAS                                  */
+
+// Usar el router de Credencial
+app.use('/api/credencial', CredencialRoutes);
+
+// Usar el router de VoucherComida
+app.use('/api/voucherComida', VoucherComidaRoutes);  // Usar el router correctamente
+
+
+/*                     INICIALIZACION DEL SERVIDOR                                  */
 const PORT = 4000;
 
 app.listen(PORT, () => {

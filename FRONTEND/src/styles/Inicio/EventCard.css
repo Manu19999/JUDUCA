@@ -1,0 +1,132 @@
+/* ===== EVENT CARD STYLES ===== */
+.eventcard {
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff; /* Fondo blanco */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 300px; /* Ancho reducido de la tarjeta */
+  height: auto; /* Altura automática para adaptarse al contenido */
+  margin: 10px; /* Margen para separar las tarjetas */
+}
+
+.eventcard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.30);
+}
+
+.eventimage {
+  width: 100%;
+  height: 150px; /* Altura fija para la imagen */
+  object-fit: cover;
+  margin-bottom: 0; /* Eliminar margen inferior de la imagen */
+}
+
+.eventcontent {
+  padding: 10px 15px; /* Padding reducido (10px arriba/abajo, 15px izquierda/derecha) */
+  background-color: #ffffff; /* Fondo blanco */
+  color: #1d386e; /* Color de texto principal */
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.eventtitle {
+  text-align: center;
+  font-size: 1.3rem; /* Tamaño de fuente reducido */
+  font-weight: bold;
+  margin: 0; /* Eliminar márgenes superior e inferior */
+  color: #facc15; /* Color del título */
+  margin-bottom: 7px;
+}
+
+.eventdate {
+  font-size: 0.9rem; /* Tamaño de fuente reducido */
+  margin: 6px 0; /* Margen reducido */
+  color: #666; /* Color de la fecha */
+  text-align: center;
+}
+
+.eventdescription {
+  font-size: 0.8rem; /* Tamaño de fuente reducido */
+  line-height: 1.4; /* Altura de línea reducida */
+  margin: 0 0 10px 0; /* Margen inferior reducido */
+  color: #444; /* Color de la descripción */
+  text-align: center;
+}
+
+/* Ajuste de columnas para mejor visualización */
+@media (max-width: 768px) {
+  .eventcard {
+    width: calc(50% - 20px); /* Dos columnas en tablets */
+    max-width: none; /* Eliminar el máximo ancho */
+  }
+
+  .eventimage {
+    height: 120px; /* Altura reducida en tablets */
+  }
+
+  .eventcontent {
+    padding: 8px 12px; /* Padding reducido en tablets */
+  }
+
+  .eventtitle {
+    font-size: 1.1rem; /* Tamaño de fuente reducido en tablets */
+  }
+
+  .eventdate {
+    font-size: 0.85rem; /* Tamaño de fuente reducido en tablets */
+  }
+
+  .eventdescription {
+    font-size: 0.8rem; /* Tamaño de fuente reducido en tablets */
+  }
+}
+
+@media (max-width: 480px) {
+  .eventcard {
+    width: 100%; /* Una columna en móviles */
+    max-width: 280px; /* Máximo ancho para mantener consistencia */
+  }
+
+  .eventimage {
+    height: 100px; /* Altura reducida en móviles */
+  }
+
+  .eventcontent {
+    padding: 8px 12px; /* Padding reducido en móviles */
+  }
+
+  .eventtitle {
+    font-size: 0.8rem; /* Tamaño de fuente reducido en móviles */
+  }
+
+  .eventdate {
+    font-size: 0.7rem; /* Tamaño de fuente reducido en móviles */
+  }
+
+  .eventdescription {
+    font-size: 0.6rem; /* Tamaño de fuente reducido en móviles */
+  }
+}
+
+/*Diseño de los iconos de los eventos */
+.eventicons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.eventicon {
+  margin-left: 8px;
+  cursor: pointer;
+  color: #555;
+  font-size: 24px; /* Ajusta el tamaño del icono */
+  transition: color 0.2s;
+}
+
+.eventicon:hover {
+  color: #000;
+}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../styles/global.css";
+import "../styles/Eventos.css";
 import { Link } from "react-router-dom";
 
 const Eventos = () => {

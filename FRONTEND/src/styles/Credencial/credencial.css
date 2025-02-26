@@ -1,0 +1,83 @@
+  
+  .botones-container {
+    display: flex;
+    gap: 10px; /* Espacio entre los botones */
+    justify-content: center; /* Centra los botones */
+    margin-top: 15px; /* Espaciado superior */
+  }
+  
+  .botones-container button {
+    flex: 1; /* Hace que los botones tengan el mismo tamaño */
+    min-width: 150px; /* Ancho mínimo para que no se encojan demasiado */
+  }
+
+  .container-fluid {
+    padding: 60px;
+  }
+
+  .container-fluid2 {
+    padding: 70px;
+  }
+
+
+
+  .modal-dialog {
+    border: 1px solid #1f2e54; /* Aumenta el grosor del borde */
+    border-radius: 10px; /* Bordes redondeados para un mejor diseño */
+  }
+  
+  .modal-content {
+    background: #fff;
+    border-radius: 10px; /* Consistencia con el modal-dialog */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Agrega una sombra para mejor estética */
+    padding: 20px; /* Agrega espacio dentro del modal */
+  }
+  
+  .btnAgg {
+    background-color: #253A69;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .btnVer {
+    background-color: #ffcc00;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .col-md-8 {
+    margin-top: 100px;
+  }
+
+  .form-control-credencial {
+    width: 100%;
+    padding: 5px;
+    background-color: #fff; 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: black
+  }
+
+  .form-select-credencial {
+    width: 100%;
+    padding: 5px;
+    background-color: #fff; 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: black
+  }
+
+  .table-credencial  {
+    width: 100%;
+   background-color: #fff;
+   color: #253A69;
+   border-collapse: collapse;
+    border-radius: 10px;
+  }
