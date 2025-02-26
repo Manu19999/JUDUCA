@@ -76,7 +76,7 @@ function Roles() {
     formNuevo
       .validateFields()
       .then((values) => {
-        console.log("Nuevo registro:", values);
+        console.log("Nuevo registros:", values);
         setShowNuevoModal(false);
         formNuevo.resetFields(); // Limpiar el formulario de nuevo registro
         mostrarMensajeExito("El rol se ha registrado correctamente."); // Mensaje de éxito
