@@ -5,6 +5,24 @@
   padding: 20px;
 }
 
+/* En tu archivo EventList.css */
+.slick-slide {
+  padding: 0 10px; /* Espacio entre las tarjetas */
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: #facc15; /* Color de las flechas de navegación */
+}
+
+.slick-dots li button:before {
+  color: #facc15; /* Color de los puntos de navegación */
+}
+
+.slick-dots li.slick-active button:before {
+  color: #facc15; /* Color del punto activo */
+}
+
 /* ===== EVENT GRID STYLES ===== */
 .eventgrid {
   display: flex;
