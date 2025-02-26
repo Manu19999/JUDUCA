@@ -1,8 +1,7 @@
-import React, { useState, } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/Credencial/credencial.css";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
-
 
 const ConfiguracionCredencial = () => {
   const [nombrePlantilla, setNombrePlantilla] = useState("");
@@ -10,14 +9,21 @@ const ConfiguracionCredencial = () => {
   const [tamañoFuente, setTamañoFuente] = useState("14px");
   const [colorTexto, setColorTexto] = useState("#000000");
   const [colorFondo, setColorFondo] = useState("#ffffff");
-  const [estado, setEstado] = useState(false);
   const [plantillas, setPlantillas] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
   const navigate = useNavigate();
-const asignarCampos = (idPlantilla) => {
-  navigate(`/AsignacionCampos/${idPlantilla}`);
-};
+
+  useEffect(() => {
+    // Cargar plantillas guardadas desde localStorage
+    const savedPlantillas =
+      JSON.parse(localStorage.getItem("plantillas")) || [];
+    setPlantillas(savedPlantillas);
+  }, []);
+
+  const asignarCampos = () => {
+    navigate("/AsignacionCampos");
+  };
 
   const estiloCredencial = {
     backgroundImage: `url(${fondoCredencial})`,
@@ -40,7 +46,7 @@ const asignarCampos = (idPlantilla) => {
   };
 
   const guardarPlantilla = () => {
-    if (nombrePlantilla.trim() === "") {
+    if (!nombrePlantilla.trim()) {
       alert("El nombre de la plantilla no puede estar vacío.");
       return;
     }
@@ -56,38 +62,39 @@ const asignarCampos = (idPlantilla) => {
 
     const plantillasActualizadas = [...plantillas, nuevaPlantilla];
 
-    // Guardar en estado
     setPlantillas(plantillasActualizadas);
-  
-    // Guardar en localStorage
     localStorage.setItem("plantillas", JSON.stringify(plantillasActualizadas));
-  
+
     setNombrePlantilla("");
   };
 
   const eliminarPlantilla = (id) => {
-    setPlantillas(plantillas.filter((plantilla) => plantilla.id !== id));
+    const nuevasPlantillas = plantillas.filter(
+      (plantilla) => plantilla.id !== id
+    );
+    setPlantillas(nuevasPlantillas);
+    localStorage.setItem("plantillas", JSON.stringify(nuevasPlantillas));
   };
 
   return (
     <div className="container-fluid">
       <div className="row">
+        {/* Configuración de Credencial */}
         <div className="col-md-4">
-          <h3 className="text-center my-3">Configuración de Credencial </h3>
+          <h3 className="text-center my-3">Configuración de Credencial</h3>
 
           <div className="mb-3">
-            <label className="form-label">NOMBRE DE PLANTILLA</label>
+            <label className="form-label">Nombre de Plantilla</label>
             <input
               type="text"
               className="form-control-credencial"
               value={nombrePlantilla}
               onChange={(e) => setNombrePlantilla(e.target.value)}
-              required
             />
           </div>
 
           <div className="mb-3">
-            <label className="form-label">FUENTE</label>
+            <label className="form-label">Fuente</label>
             <select
               className="form-select-credencial"
               value={tipoFuente}
@@ -101,7 +108,7 @@ const asignarCampos = (idPlantilla) => {
           </div>
 
           <div className="mb-3">
-            <label className="form-label">TAMAÑO DE FUENTE</label>
+            <label className="form-label">Tamaño de Fuente</label>
             <input
               type="number"
               className="form-control-credencial"
@@ -111,7 +118,7 @@ const asignarCampos = (idPlantilla) => {
           </div>
 
           <div className="mb-3">
-            <label className="form-label">COLOR DE TEXTO</label>
+            <label className="form-label">Color de Texto</label>
             <input
               type="color"
               className="form-control form-control-color"
@@ -121,7 +128,7 @@ const asignarCampos = (idPlantilla) => {
           </div>
 
           <div className="mb-3">
-            <label className="form-label">COLOR DE FONDO</label>
+            <label className="form-label">Color de Fondo</label>
             <input
               type="color"
               className="form-control form-control-color"
@@ -134,15 +141,13 @@ const asignarCampos = (idPlantilla) => {
             <button className="btnAgg" onClick={guardarPlantilla}>
               Guardar Plantilla
             </button>
-            <button
-              className="btnVer"
-              onClick={() => setModalVisible(true)}
-            >
+            <button className="btnVer" onClick={() => setModalVisible(true)}>
               Ver Plantillas
             </button>
           </div>
         </div>
 
+        {/* Vista previa */}
         <div className="col-md-6 d-flex justify-content-center align-items-center">
           <div style={{ width: "400px", height: "250px" }}>
             <div style={estiloCredencial}>
@@ -153,12 +158,10 @@ const asignarCampos = (idPlantilla) => {
         </div>
       </div>
 
-      {/* Modal para ver las plantillas guardadas */}
+      {/* Modal de plantillas guardadas */}
       {modalVisible && (
-        <div className="modal fade show d-block" tabIndex="-1">
-          <div className="modal-dialog modal-xl">
-            {" "}
-            {/* Modal más grande */}
+        <div className="modal fade show d-block">
+          <div className="modal-dialog modal-lg">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Plantillas Guardadas</h5>
@@ -168,21 +171,20 @@ const asignarCampos = (idPlantilla) => {
                   onClick={() => setModalVisible(false)}
                 ></button>
               </div>
-              <div style={{ overflowX: "auto", maxHeight: "350px" }}>
-
+              <div className="modal-body">
                 {plantillas.length === 0 ? (
                   <p className="text-center">No hay plantillas guardadas.</p>
                 ) : (
-                  <table className="table-credencial table-striped table-hover table-bordered text-center" style={{ fontSize: "13px",  tableLayout: "fixed", width: "100%" }}>
+                  <table className="table table-bordered text-center">
                     <thead>
                       <tr>
-                      <th style={{ width: "5%", whiteSpace: "nowrap" }}>#</th>
-                      <th style={{ width: "10%", whiteSpace: "nowrap" }}>Nombre</th>
-                      <th style={{ width: "10%", whiteSpace: "nowrap" }}>Fuente</th>
-                      <th style={{ width: "5%", whiteSpace: "nowrap" }}>Tamaño</th>
-                      <th style={{ width: "5%", whiteSpace: "nowrap" }}>Color Texto</th>
-                      <th style={{ width: "5%", whiteSpace: "nowrap" }}>Color Fondo</th>
-                      <th style={{ width: "10%", whiteSpace: "nowrap" }}>Acciones</th>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Fuente</th>
+                        <th>Tamaño</th>
+                        <th>Color Texto</th>
+                        <th>Color Fondo</th>
+                        <th>Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -194,28 +196,21 @@ const asignarCampos = (idPlantilla) => {
                           <td>{plantilla.tamañoFuente}</td>
                           <td>
                             <span
-                              style={{
-                                display: "inline-block",
-                                width: "20px",
-                                height: "20px",
-                                backgroundColor: plantilla.colorTexto,
-                                border: "1px solid #000",
-                              }}
+                              className="color-box"
+                              style={{ backgroundColor: plantilla.colorTexto }}
                             ></span>
                           </td>
                           <td>
                             <span
-                              style={{
-                                display: "inline-block",
-                                width: "20px",
-                                height: "20px",
-                                backgroundColor: plantilla.colorFondo,
-                                border: "1px solid #000",
-                              }}
+                              className="color-box"
+                              style={{ backgroundColor: plantilla.colorFondo }}
                             ></span>
                           </td>
                           <td>
-                            <button className="btn btn-warning btn-sm me-2" onClick={() => asignarCampos(plantilla.id)}>
+                            <button
+                              className="btn btn-warning btn-sm me-2"
+                              onClick={asignarCampos}
+                            >
                               Seleccionar
                             </button>
                             <button
@@ -233,7 +228,6 @@ const asignarCampos = (idPlantilla) => {
               </div>
               <div className="modal-footer">
                 <button
-                  type="button"
                   className="btn btn-secondary"
                   onClick={() => setModalVisible(false)}
                 >
@@ -247,4 +241,5 @@ const asignarCampos = (idPlantilla) => {
     </div>
   );
 };
+
 export default ConfiguracionCredencial;
