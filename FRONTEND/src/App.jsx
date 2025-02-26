@@ -45,10 +45,7 @@ function App() {
         <Route path="/crear-evento" element={<CreateEvent />} />
         <Route path="/crearCredencial" element={<CreateCredencial />} />
         <Route path="/confCredencial" element={<ConfigCredencial />} />
-        <Route
-          path="/AsignacionCampos/:idPlantilla"
-          element={<AsignarCampos />}
-        />
+        <Route path="/AsignacionCampos" element={<AsignarCampos />} />
         <Route path="/DiseñadorCredencial" element={<DiseñadorCredencial />} />
 
         <Route path="/dashboard" element={<Dashboard />} />
