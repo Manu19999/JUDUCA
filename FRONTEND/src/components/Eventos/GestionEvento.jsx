@@ -32,6 +32,13 @@ const GestionEvento = () => {
       description: "Inscripciones de los atletas.",
     },
     {
+      id: 4,
+      title: "Ficha de Salud",
+      image: EventImage4,
+      description: "Inscripciones de los atletas.",
+    },
+  
+    {
       id: 5,
       title: "Crear Equipo",
       image: EventImage5,

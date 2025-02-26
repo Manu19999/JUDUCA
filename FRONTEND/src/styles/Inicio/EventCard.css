@@ -7,8 +7,10 @@
   background-color: #ffffff; /* Fondo blanco */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   width: 300px; /* Ancho reducido de la tarjeta */
-  height: auto; /* Altura automática para adaptarse al contenido */
-  margin: 10px; /* Margen para separar las tarjetas */
+  height: 100; /* Altura automática para adaptarse al contenido */
+}
+.container {
+  flex-wrap: wrap; /* Para que los elementos se acomoden si no hay espacio */
 }
 
 .eventcard:hover {
@@ -18,7 +20,7 @@
 
 .eventimage {
   width: 100%;
-  height: 150px; /* Altura fija para la imagen */
+  height: 100px; /* Altura fija para la imagen */
   object-fit: cover;
   margin-bottom: 0; /* Eliminar margen inferior de la imagen */
 }

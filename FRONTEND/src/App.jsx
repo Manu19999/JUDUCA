@@ -62,7 +62,7 @@ function App() {
         <Route path="/ficha-participantes" element={<RegistroParticipante />} />
         <Route path="/ficha-salud" element={<RegistroSalud />} />
         <Route path="/mantenimiento-evento" element={<EventoMantenimiento />} />
-      </Routes>
+fsdf      </Routes>
     </Router>
   );
 }
