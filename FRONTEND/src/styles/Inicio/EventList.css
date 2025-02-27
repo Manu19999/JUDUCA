@@ -5,6 +5,13 @@
   background-color: #ffffff; /* Fondo blanco */
 }
 
+/* En tu archivo EventList.css */
+.slick-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Estilos para el carrusel */
 .eventgrid {
   display: flex;
@@ -166,4 +173,5 @@
     gap: 10px;
     padding-bottom: 10px;
   }
+  
 }
