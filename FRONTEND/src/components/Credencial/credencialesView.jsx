@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import TargetaCredencial from "../Credencial/targetaCredencial";
 import EventImage6 from "../../assets/Credencial.jpg";
 import "../../styles/Credencial/credencial.css";
+import { FaArrowLeft } from "react-icons/fa";
+
 
 const GestionCredenciales = () => {
   const navigate = useNavigate();
@@ -89,6 +91,15 @@ const GestionCredenciales = () => {
   return (
     <section id="credenciales" className="eventlist">
       <Container>
+      <Button
+  variant="outline-dark"
+  onClick={() => navigate("/gestion-evento")}
+  className="d-flex align-items-center gap-2"
+  style={{  marginTop: '25x' }}
+>
+  <FaArrowLeft size={20} /> Regresar
+</Button>
+
         <h2 className="eventlisttitle">Asignación de Credenciales</h2>
         <Row>
           {credencialesOptions.map((persona) => (

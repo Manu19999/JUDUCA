@@ -64,7 +64,7 @@ const GestionEvento = () => {
       navigate("/ficha-salud");
     }
     if (id === 4) {
-      navigate("/crearCredencial");
+      navigate("/credencialView");
     }
   };
 
