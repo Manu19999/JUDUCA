@@ -520,3 +520,188 @@ h2 {
   color: gray; 
 }
 
+
+
+/* *********************  Nueva Ficha de Registro ******************************* */
+/* Estilos generales del contenedor */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+}
+
+/* Botones */
+.btn {
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease-in-out;
+}
+.add-btn {
+  background-color: #007bff;
+  color: white;
+  width: 200px;
+  height: 40px;
+}
+.add-btn:hover {
+  background-color: #0056b3;
+}
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+  font-size: 12px; /* Reduce el tamaño de la fuente */
+  padding: 5px 10px; /* Ajusta el tamaño del botón */
+}
+.delete-btn:hover {
+  background-color: #a71d2a;
+}
+.submit-btn {
+  background-color: #28a745;
+  color: white;
+  display: block;
+  margin: 20px auto; /* Centrando el botón */
+  width: 30%;
+  text-align: center; /* Asegurando que el texto esté centrado */
+}
+
+.submit-btn:hover {
+  background-color: #1e7e34;
+}
+
+
+/* Estilos para las tarjetas (Card) */
+.card {
+  background-color: #e0e0e0; /* Fondo gris más oscuro */
+  color: black; /* Texto negro */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  border-left: 4px solid #007bff;
+}
+
+.section-card {
+  padding: 20px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 5px;
+}
+
+.section-divider {
+  border: none;
+  height: 2px;
+  background-color: #007bff;
+  margin-bottom: 10px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* Estilos para los campos dentro de las tarjetas */
+.field-card {
+  background-color: #e0e0e0; /* Fondo gris más oscuro */
+  color: black; /* Texto negro */
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Inputs */
+.input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+.input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Checkbox */
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 16px;
+}
+
+.checkbox input {
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border: 1px solid #000; /* Borde negro para mejor visibilidad */
+  -webkit-appearance: none; /* Elimina el estilo predeterminado */
+  appearance: none; /* Elimina el estilo predeterminado */
+  position: relative;
+}
+
+/* Marca de verificación */
+.checkbox input:checked::before {
+  content: '✔';
+  color: white; /* Color de la marca de verificación */
+  font-size: 16px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Fondo negro cuando está seleccionado */
+.checkbox input:checked {
+  background-color: black;
+  border: 1px solid black; /* Ajuste para que el borde coincida */
+}
+
+
+/* Select */
+select.input {
+  cursor: pointer;
+}
+
+/* Estilos para los campos de entrada */
+.input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+  background-color: #f0f0f0; /* Fondo gris */
+  color: #333; /* Color del texto */
+  font-size: 14px;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.input:focus {
+  border-color: #007bff; /* Color del borde al enfocar */
+  outline: none;
+  background-color: #e0e0e0; /* Fondo gris más oscuro al enfocar */
+}
+
+/* Estilos para el contenedor del campo */
+.field-container {
+  margin-bottom: 15px;
+}
+
+.field-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #007bff; /* Color del texto de la etiqueta */
+}

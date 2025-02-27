@@ -17,7 +17,6 @@ import ConsumosVouchers from "./pages/ConsumoVoucher";
 import Comedores from "./pages/Comedores";
 import Tickets from "./pages/tickets";
 
-
 //seguridad
 import Usuarios from "./pages/Seguridad/Usuarios";
 import Roles from "./pages/Seguridad/Roles";
@@ -30,8 +29,6 @@ import Formularios_Fichas from "./pages/FormularioFicha";
 import RegistroParticipante from "./pages/RegistroParticipante";
 import RegistroSalud from "./pages/RegistroSalud";
 import EventoMantenimiento from "./pages/EventoMantenimiento";
-
-
 
 function App() {
   return (
