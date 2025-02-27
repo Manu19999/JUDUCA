@@ -81,3 +81,19 @@
    border-collapse: collapse;
     border-radius: 10px;
   }
+
+  /* styles/Inicio/EventList.css */
+.eventlist {
+  padding: 20px 0;
+}
+
+.eventlisttitle {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Ajustar el espaciado entre tarjetas */
+.row {
+  gap: 15px; /* Espacio entre tarjetas */
+  justify-content: center; /* Centrar las tarjetas */
+}

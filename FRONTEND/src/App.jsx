@@ -10,6 +10,8 @@ import CreateCredencial from "./pages/credencial";
 import ConfigCredencial from "./pages/PlantillaCredencial"; // Importa la nueva página de inicio
 import AsignarCampos from "./pages/AsignacionCampos";
 import DiseñadorCredencial from "./pages/DiseñadorCredencial";
+import CredencialView from "./pages/credencialView";
+
 
 //vouchers y tickets
 import Vouchers from "./pages/voucher";
@@ -47,6 +49,7 @@ function App() {
         <Route path="/confCredencial" element={<ConfigCredencial />} />
         <Route path="/AsignacionCampos" element={<AsignarCampos />} />
         <Route path="/DiseñadorCredencial" element={<DiseñadorCredencial />} />
+        <Route path="/credencialView" element={<CredencialView />} />
 
         <Route path="/dashboard" element={<Dashboard />} />
 
