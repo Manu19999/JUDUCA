@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
-import ModalNuevo from "../Crud/Modales"; // Importa el componente ModalNuevo
+import ModalNuevo from "../Crud/Modal/ModalNuevo"; // Importa el componente ModalNuevo
 
 
 const NuevoVoucherModal = ({ isOpen, onClose, refreshVouchers, modoEdicion, registroSeleccionado }) => {
