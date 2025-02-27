@@ -4,6 +4,9 @@ import React, { useEffect, useState } from "react";
 import Home from "./pages/Home"; // Importa la nueva página de inicio
 import Login from "./pages/Login"; //página para iniciar sesión
 import Dashboard from "./pages/Dashboard"; // Importa la nueva página de inicio
+import CajaSeguridad from "./pages/CajaSeguridad"; // Asegúrate de la ruta correcta
+
+
 
 import CreateEvent from "./pages/Evento";
 import CreateCredencial from "./pages/credencial";
@@ -41,6 +44,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/usuarios" element={<Usuarios />} />
         <Route path="/roles" element={<Roles />} />
+        <Route path="/seguridad" element={<CajaSeguridad />} />
+
 
         <Route path="/crear-evento" element={<CreateEvent />} />
         <Route path="/crearCredencial" element={<CreateCredencial />} />
