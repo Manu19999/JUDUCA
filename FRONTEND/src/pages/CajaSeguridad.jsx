@@ -68,7 +68,7 @@ const CajaSeguridad = () => {
       {/* Botón para añadir un nuevo voucher */}
       <div className="crud">
       <Nav />
-        <h2 className="caja-seguridad-title">Géstion de seguridad</h2>
+        <h2 className="eventlisttitle">Géstion de seguridad</h2>
         <div className="caja-seguridad-grid">
             
           {items.map((item) => (
@@ -80,7 +80,7 @@ const CajaSeguridad = () => {
                 onClick={() => handleImageClick(item.route)}
               />
               <h3>{item.title}</h3>
-              <p className="caja-seguridad-description">{item.description}</p>
+              <p className="eventdescription">{item.description}</p>
             </div>
           ))}
         </div>

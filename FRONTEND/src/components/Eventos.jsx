@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Eventos.css";
 import { Link } from "react-router-dom";
-
+import Nav from '../components/Dashboard/navDashboard';
 const Eventos = () => {
   const [events, setEvents] = useState([]);
   const [search, setSearch] = useState("");
@@ -70,6 +70,13 @@ const Eventos = () => {
   );
 
   return (
+    <div className="crud">
+    <Nav />
+   
+    
+    {/* Botón para añadir un nuevo voucher */}
+    <div className="crud">
+    <Nav />
     <div className="event-container">
       <header className="event-header">
         <h2>Listado de Eventos</h2>
@@ -173,6 +180,8 @@ const Eventos = () => {
           </div>
         </div>
       )}
+    </div>
+    </div>
     </div>
   );
 };
