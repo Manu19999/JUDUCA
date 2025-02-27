@@ -5,8 +5,8 @@ import EventCard from "../Inicio/EventCard";
 import EventImage from "../../assets/eventoConcierto.jpg";
 import EventImage2 from "../../assets/eventoCine.jpg";
 import EventImage3 from "../../assets/eventoArte.jpg";
-import "../../styles/Inicio/EventList.css";
-import "../../styles/Evento/Eventos.css";
+//import "../../styles/Inicio/EventList.css";
+//import "../../styles/Evento/Eventos.css";
 
 const EventosActivos = () => {
   const navigate = useNavigate();

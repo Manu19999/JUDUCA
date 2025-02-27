@@ -7,8 +7,8 @@ import EventImage2 from "../../assets/CrearFicha.jpg";
 import EventImage3 from "../../assets/universidades.jpg";
 import EventImage4 from "../../assets/Instalaciones.jpg";
 import EventImage5 from "../../assets/DisciplinasActividades.jpg";
-
-import "../../styles/Inicio/EventList.css";
+//import "../../styles/Inicio/EventList.css";
+//import "../../styles/Evento/Eventos.css";
 
 const MantenimientoEvento = () => {
   const navigate = useNavigate();
@@ -39,12 +39,7 @@ const MantenimientoEvento = () => {
       description:
         "Registras las disciplinas ó actividades.",
     },
-    {
-      id: 5,
-      title: "Reglas",
-      image: EventImage,
-      description: "Reglas para las actividades y disciplinas.",
-    },
+
   ];
 
   const handleImageClick = (id) => {
@@ -70,7 +65,7 @@ const MantenimientoEvento = () => {
 
         <div
           className={`eventgrid ${
-            upcomingEvents.length === 5 ? "two-events" : ""
+            upcomingEvents.length === 4 ? "two-events" : ""
           }`}
         >
           {upcomingEvents.map((event) => (
