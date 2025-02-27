@@ -76,7 +76,7 @@ const GestionCredenciales = () => {
   ];
 
   const handleImageClick = (id) => {
-    navigate(`/asignar-credencial/${id}`);
+    navigate(`/asignarcredencial/${id}`);
   };
 
   const handleVerInfo = (persona) => {
@@ -95,7 +95,7 @@ const GestionCredenciales = () => {
   variant="outline-dark"
   onClick={() => navigate("/gestion-evento")}
   className="d-flex align-items-center gap-2"
-  style={{  marginTop: '25x' }}
+  style={{  marginTop: '30px' }}
 >
   <FaArrowLeft size={20} /> Regresar
 </Button>

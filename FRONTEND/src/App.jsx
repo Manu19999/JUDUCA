@@ -11,6 +11,7 @@ import ConfigCredencial from "./pages/PlantillaCredencial"; // Importa la nueva 
 import AsignarCampos from "./pages/AsignacionCampos";
 import DiseñadorCredencial from "./pages/DiseñadorCredencial";
 import CredencialView from "./pages/credencialView";
+import AsignacionCredencial from "./pages/AsignacionCredencial";
 
 
 //vouchers y tickets
@@ -50,6 +51,8 @@ function App() {
         <Route path="/AsignacionCampos" element={<AsignarCampos />} />
         <Route path="/DiseñadorCredencial" element={<DiseñadorCredencial />} />
         <Route path="/credencialView" element={<CredencialView />} />
+        <Route path="/asignarcredencial/:id" element={<AsignacionCredencial />} />
+
 
         <Route path="/dashboard" element={<Dashboard />} />
 
