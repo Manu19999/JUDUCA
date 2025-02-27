@@ -8,7 +8,7 @@ const TargetaCredencial = ({
   event,
   onImageClick,
   handleVerInfo,
-  onManageClick,
+  handleConfigurarCredencial,
   showIcons, // Añadir esta prop
 }) => {
   return (
@@ -34,7 +34,7 @@ const TargetaCredencial = ({
               />
               <FontAwesomeIcon
                 icon={faCog }
-                onClick={onManageClick}
+                onClick={handleConfigurarCredencial}
                 className="eventicon manage-btn"
               />
             </>

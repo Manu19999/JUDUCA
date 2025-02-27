@@ -73,6 +73,66 @@ const GestionCredenciales = () => {
       telefono: "+57 316 777 8888",
       direccion: "Calle 90, Bucaramanga, Colombia",
     },
+    {
+      id: 6,
+      title: "Sofía Herrera",
+      image: EventImage6,
+      description: "Estudiante de Psicología",
+      edad: 22,
+      email: "sofia.herrera@email.com",
+      telefono: "+57 316 777 8888",
+      direccion: "Calle 90, Bucaramanga, Colombia",
+    },
+    {
+      id: 6,
+      title: "Sofía Herrera",
+      image: EventImage6,
+      description: "Estudiante de Psicología",
+      edad: 22,
+      email: "sofia.herrera@email.com",
+      telefono: "+57 316 777 8888",
+      direccion: "Calle 90, Bucaramanga, Colombia",
+    },
+    {
+      id: 6,
+      title: "Sofía Herrera",
+      image: EventImage6,
+      description: "Estudiante de Psicología",
+      edad: 22,
+      email: "sofia.herrera@email.com",
+      telefono: "+57 316 777 8888",
+      direccion: "Calle 90, Bucaramanga, Colombia",
+    },
+    {
+      id: 6,
+      title: "Sofía Herrera",
+      image: EventImage6,
+      description: "Estudiante de Psicología",
+      edad: 22,
+      email: "sofia.herrera@email.com",
+      telefono: "+57 316 777 8888",
+      direccion: "Calle 90, Bucaramanga, Colombia",
+    },
+    {
+      id: 6,
+      title: "Sofía Herrera",
+      image: EventImage6,
+      description: "Estudiante de Psicología",
+      edad: 22,
+      email: "sofia.herrera@email.com",
+      telefono: "+57 316 777 8888",
+      direccion: "Calle 90, Bucaramanga, Colombia",
+    },
+    {
+      id: 6,
+      title: "Sofía Herrera",
+      image: EventImage6,
+      description: "Estudiante de Psicología",
+      edad: 22,
+      email: "sofia.herrera@email.com",
+      telefono: "+57 316 777 8888",
+      direccion: "Calle 90, Bucaramanga, Colombia",
+    },
   ];
 
   const handleImageClick = (id) => {
@@ -84,8 +144,8 @@ const GestionCredenciales = () => {
     setShowModal(true);
   };
 
-  const handleManageClick = (id) => {
-    console.log(`Gestionar credencial de la persona con id ${id}`);
+  const handleConfigurarCredencial = (id) => {
+    navigate(`/asignacionCampos`);
   };
 
   return (
@@ -108,7 +168,7 @@ const GestionCredenciales = () => {
                 event={persona}
                 onImageClick={() => handleImageClick(persona.id)}
                 handleVerInfo={() => handleVerInfo(persona)} // Pasamos el objeto completo
-                onManageClick={() => handleManageClick(persona.id)}
+                handleConfigurarCredencial={() => handleConfigurarCredencial(persona.id)}
                 showIcons={true}
               />
             </Col>
