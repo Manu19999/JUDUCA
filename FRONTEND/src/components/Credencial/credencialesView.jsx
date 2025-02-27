@@ -95,7 +95,7 @@ const GestionCredenciales = () => {
   variant="outline-dark"
   onClick={() => navigate("/gestion-evento")}
   className="d-flex align-items-center gap-2"
-  style={{  marginTop: '25x' }}
+  style={{  marginTop: '30Px' }}
 >
   <FaArrowLeft size={20} /> Regresar
 </Button>
