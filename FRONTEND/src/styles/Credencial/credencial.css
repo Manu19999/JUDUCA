@@ -20,18 +20,72 @@
   }
 
 
+/* Estilos generales del modal */
+.modal-dialog {
+  border: 2px solid #1f2e54; /* Borde más grueso para destacar */
+  border-radius: 12px; /* Bordes más suaves */
+}
 
-  .modal-dialog {
-    border: 1px solid #1f2e54; /* Aumenta el grosor del borde */
-    border-radius: 10px; /* Bordes redondeados para un mejor diseño */
-  }
-  
-  .modal-content {
-    background: #fff;
-    border-radius: 10px; /* Consistencia con el modal-dialog */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Agrega una sombra para mejor estética */
-    padding: 20px; /* Agrega espacio dentro del modal */
-  }
+/* Contenido del modal */
+.modal-content {
+  background-color: #ffffff; /* Mantiene el fondo limpio */
+  border-radius: 12px; /* Consistencia con modal-dialog */
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3); /* Sombra más elegante */
+  padding: 25px; /* Más espacio interno */
+  transition: all 0.3s ease-in-out; /* Efecto suave al abrir */
+}
+
+/* Título del modal */
+.modal-title {
+  font-size: 1.5rem; /* Tamaño más grande para mejor jerarquía */
+  font-weight: bold;
+  color: #1f2e54; /* Mismo color del borde */
+}
+
+/* Botón de cerrar */
+.modal-header .btn-close {
+  filter: invert(40%); /* Hace el botón de cerrar más visible */
+  transition: transform 0.2s ease-in-out;
+}
+
+.modal-header .btn-close:hover {
+  transform: scale(1.1); /* Efecto de zoom al pasar el mouse */
+}
+
+/* Pie del modal */
+.modal-footer {
+  border-top: 1px solid #ddd; /* Línea sutil para separar contenido */
+  padding-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Botones dentro del modal */
+.modal-footer .btn {
+  border-radius: 8px;
+  padding: 8px 15px;
+  font-weight: 600;
+  transition: background 0.3s ease-in-out;
+}
+
+.modal-footer .btn-secondary {
+  background: #d1d1d1;
+  color: #333;
+}
+
+.modal-footer .btn-secondary:hover {
+  background: #b5b5b5;
+}
+
+.modal-footer .btn-primary {
+  background: #1f2e54;
+  color: #fff;
+}
+
+.modal-footer .btn-primary:hover {
+  background: #142040;
+}
+
   
   .btnAgg {
     background-color: #253A69;
@@ -83,6 +137,7 @@
   }
 
   /* styles/Inicio/EventList.css */
+/* styles/Inicio/EventList.css */
 .eventlist {
   padding: 20px 0;
 }
@@ -94,6 +149,6 @@
 
 /* Ajustar el espaciado entre tarjetas */
 .row {
-  gap: 15px; /* Espacio entre tarjetas */
+  gap: 95px; /* Espacio entre tarjetas */
   justify-content: center; /* Centrar las tarjetas */
 }

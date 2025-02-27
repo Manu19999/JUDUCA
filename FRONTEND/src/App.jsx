@@ -6,7 +6,7 @@ import Login from "./pages/Login"; //página para iniciar sesión
 import Dashboard from "./pages/Dashboard"; // Importa la nueva página de inicio
 
 import CreateEvent from "./pages/Evento";
-import CreateCredencial from "./pages/credencial";
+import CreateCredencial from "./pages/Credencial";
 import ConfigCredencial from "./pages/PlantillaCredencial"; // Importa la nueva página de inicio
 import AsignarCampos from "./pages/AsignacionCampos";
 import DiseñadorCredencial from "./pages/DiseñadorCredencial";
