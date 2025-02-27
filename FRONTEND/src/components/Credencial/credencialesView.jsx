@@ -1,10 +1,9 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import TargetaCredencial from "../Credencial/targetaCredencial";
 import EventImage6 from "../../assets/Credencial.jpg";
 import "../../styles/Credencial/credencial.css";
-
 
 const GestionCredenciales = () => {
   const navigate = useNavigate();
@@ -68,14 +67,13 @@ const GestionCredenciales = () => {
       size: "small",
     },
   ];
-  
 
   const handleImageClick = (id) => {
     // Navegar a la página de asignación de credenciales para la persona seleccionada
     navigate(`/asignar-credencial/${id}`);
   };
 
-  const handleVerInfo= (persona) => {
+  const handleVerInfo = (persona) => {
     setSelectedPersona(persona); // Guardar la persona seleccionada
     setShowModal(true); // Mostrar el modal
   };
@@ -102,25 +100,60 @@ const GestionCredenciales = () => {
           ))}
         </Row>
 
+        <Modal
+  show={showModal}
+  onHide={() => setShowModal(false)}
+  centered
+>
+  <div
+    style={{
+      backgroundColor: "#e3f2fd", // Azul claro
+      borderRadius: "10px",
+      padding: "20px",
+    }}
+  >
+    <Modal.Header closeButton style={{ borderBottom: "none" }}>
+      <Modal.Title>Detalles del Participante</Modal.Title>
+    </Modal.Header>
+    <Modal.Body
+      className="text-center"
+      style={{
+        backgroundColor: "#e3f2fd", // Azul claro
+        padding: "20px",
+      }}
+    >
+      {selectedPersona && (
+        <>
+          <img
+            src={selectedPersona.image}
+            alt={selectedPersona.title}
+            className="shadow-sm"
+            style={{
+              width: "150px",
+              height: "150px",
+              objectFit: "cover",
+              borderRadius: "50%",
+              border: "4px solid #007bff",
+              padding: "5px",
+            }}
+          />
+          <h3 style={{ color: "#1f2e54", fontWeight: "bold", marginTop: "15px" }}>
+            {selectedPersona.title}
+          </h3>
+          <p style={{ color: "#6c757d", fontSize: "1rem", textAlign: "center", maxWidth: "300px" }}>
+            {selectedPersona.description}
+          </p>
+        </>
+      )}
+    </Modal.Body>
+    <Modal.Footer style={{ borderTop: "none", display: "flex", justifyContent: "center" }}>
+      <Button variant="outline-secondary" onClick={() => setShowModal(false)}>
+        Cerrar
+      </Button>
+    </Modal.Footer>
+  </div>
+</Modal>
 
-        {/* Modal para mostrar detalles */}
-        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-          <Modal.Header closeButton>
-            <Modal.Title>Detalles del Participante</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {selectedPersona && (
-              <>
-                <img src={selectedPersona.image} alt={selectedPersona.title} className="img-fluid" />
-                <h3>{selectedPersona.title}</h3>
-                <p>{selectedPersona.description}</p>
-              </>
-            )}
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowModal(false)}>Cerrar</Button>
-          </Modal.Footer>
-        </Modal>
       </Container>
     </section>
   );
