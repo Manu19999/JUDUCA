@@ -40,27 +40,27 @@ const EventList = () => {
   const visibleEvents = pastEvents.slice(carouselIndex * 3, carouselIndex * 3 + 3);
 
   return (
-    <section id="events" className="eventlist">
+    <section id="eventosinicio" className="listevent">
       <Container>
-        <h2 className="eventlisttitle">Eventos</h2>
-        <div className="eventtabs">
-          <button className={`eventtab ${activeTab === "past" ? "active" : ""}`} onClick={() => setActiveTab("past")}>Pasados</button>
-          <button className={`eventtab ${activeTab === "upcoming" ? "active" : ""}`} onClick={() => setActiveTab("upcoming")}>Próximos</button>
+        <h2 className="titlelistevent">Eventos</h2>
+        <div className="optionsevent">
+          <button className={`optionevent ${activeTab === "past" ? "active" : ""}`} onClick={() => setActiveTab("past")}>Pasados</button>
+          <button className={`optionevent ${activeTab === "upcoming" ? "active" : ""}`} onClick={() => setActiveTab("upcoming")}>Próximos</button>
         </div>
 
         {activeTab === "upcoming" && (
-          <div className={`eventgrid ${upcomingEvents.length === 2 ? "two-events" : ""}`}>
+          <div className={`gridevent ${upcomingEvents.length === 2 ? "two-events" : ""}`}>
             {upcomingEvents.map((event) => <EventCard key={event.id} event={event} />)}
           </div>
         )}
 
         {activeTab === "past" && (
-          <div className="eventgrid">
-            <div className="carousel-container">
+          <div className="gridevent">
+            <div className="contcarrusel">
               {visibleEvents.map((event) => <EventCard key={event.id} event={event} />)}
             </div>
             {pastEvents.length > 3 && (
-              <div className="carousel-buttons">
+              <div className="buttcarrusel">
                 <button className="carousel-button prev" onClick={prevSlide}>&#10094;</button>
                 <button className="carousel-button next" onClick={nextSlide}>&#10095;</button>
               </div>

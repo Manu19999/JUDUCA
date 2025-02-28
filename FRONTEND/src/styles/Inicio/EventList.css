@@ -1,12 +1,12 @@
 /* ===== EVENT LIST STYLES ===== */
-.eventlist {
+.listevent {
   text-align: center;
   padding: 80px 20px;
   background-color: #ffffff; /* Fondo blanco */
 }
 
 /* Estilos para el carrusel */
-.eventgrid {
+.gridevent {
   display: flex;
   flex-direction: column; /* Por defecto en columna */
   align-items: center;
@@ -16,13 +16,13 @@
   padding-bottom: 20px;
 }
 
-.eventgrid.two-events {
+.gridevent.two-events {
   flex-direction: row; /* Se pone en fila si hay solo dos eventos */
   justify-content: center;
 }
 
 
-.carousel-container {
+.contcarrusel {
   display: flex;
   transition: transform 0.5s ease-in-out;
   justify-content: center; /* Centra las tarjetas dentro del contenedor */
@@ -30,7 +30,7 @@
 }
 
 /* Estilos para los botones del carrusel */
-.carousel-buttons {
+.buttcarrusel {
   display: flex;
   justify-content: center; /* Centra los botones horizontalmente */
   gap: 20px; /* Espacio entre los botones */
@@ -58,7 +58,7 @@
   color: #1D386E; /* Color azul más oscuro para el ícono al hacer hover */
 }
 
-.eventlisttitle {
+.titlelistevent {
   font-size: 2.5rem;
   font-weight: bold;
   color: #1D386E; /* Color principal de la UNAH */
@@ -79,7 +79,7 @@
 }
 
 /* Pestañas */
-.eventtabs {
+.optionsevent {
   display: flex;
   justify-content: center;
   flex-wrap: wrap; /* Permite que las pestañas se ajusten en pantallas pequeñas */
@@ -87,7 +87,7 @@
   margin-bottom: 40px;
 }
 
-.eventtab {
+.optionevent {
   font-size: 1.1rem;
   color: #336699; /* Color principal de la UNAH */
   padding: 12px 24px;
@@ -100,14 +100,14 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.eventtab:hover {
+.optionevent:hover {
   background: #e0e8f0; /* Fondo gris un poco más oscuro */
   border: 1px solid #add1f8;
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.eventtab.active {
+.optionevent.active {
   background: #336699; /* Fondo azul cuando está activo */
   color: white;
   box-shadow: 0 4px 12px rgba(51, 102, 153, 0.3);
@@ -115,27 +115,27 @@
 
 /* Ajuste de columnas para mejor visualización */
 @media (max-width: 768px) {
-  .eventlist {
+  .listevent {
     padding: 60px 15px;
     margin-top: 40px;
   }
 
-  .eventlisttitle {
+  .titlelistevent {
     font-size: 2rem;
     margin-bottom: 30px;
   }
 
-  .eventtabs {
+  .optionsevent {
     gap: 10px;
     margin-bottom: 30px;
   }
 
-  .eventtab {
+  .optionevent {
     font-size: 1rem;
     padding: 10px 20px;
   }
 
-  .eventgrid {
+  .gridevent {
     gap: 15px;
     padding-bottom: 15px;
   }
@@ -143,26 +143,26 @@
 }
 
 @media (max-width: 480px) {
-  .eventlist {
+  .listevent {
     padding: 40px 10px;
   }
 
-  .eventlisttitle {
+  .titlelistevent {
     font-size: 1.75rem;
     margin-bottom: 20px;
   }
 
-  .eventtabs {
+  .optionsevent {
     gap: 8px;
     margin-bottom: 20px;
   }
 
-  .eventtab {
+  .optionevent {
     font-size: 0.9rem;
     padding: 8px 16px;
   }
 
-  .eventgrid {
+  .gridevent {
     gap: 10px;
     padding-bottom: 10px;
   }
