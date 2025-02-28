@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import targetaMantenimiento from "../Dashboard/TargetaMantenimientos";
+import TargetaMantenimiento from "../Dashboard/TargetaMantenimientos";
 import pruebaImagen from "../../assets/Credencial.jpg";
 import "../../styles/Credencial/credencial.css";
 import { FaArrowLeft } from "react-icons/fa";
@@ -23,6 +23,30 @@ const GestionMantenimiento = () => {
       title: "Mantenimiento de Red",
       image: pruebaImagen,
       description: "Optimización y monitoreo de la red",
+    },
+    {
+      id: 3,
+      title: "Mantenimiento de Software",
+      image: pruebaImagen,
+      description: "Actualización y depuración de sistemas",
+    },
+    {
+      id: 3,
+      title: "Mantenimiento de Software",
+      image: pruebaImagen,
+      description: "Actualización y depuración de sistemas",
+    },
+    {
+      id: 3,
+      title: "Mantenimiento de Software",
+      image: pruebaImagen,
+      description: "Actualización y depuración de sistemas",
+    },
+    {
+      id: 3,
+      title: "Mantenimiento de Software",
+      image: pruebaImagen,
+      description: "Actualización y depuración de sistemas",
     },
     {
       id: 3,
@@ -57,10 +81,9 @@ const GestionMantenimiento = () => {
         <Row>
           {mantenimientosOptions.map((mantenimiento) => (
             <Col key={mantenimiento.id} xs={4} sm={3} md={2} lg={2} xl={2}>
-              <targetaMantenimiento
+              <TargetaMantenimiento
                 mantenimiento={mantenimiento}
-                onImageClick={() => handleImageClick(mantenimiento.id)}
-                handleVerInfo={() => handleVerInfo(mantenimiento)}
+
                 showIcons={true}
               />
             </Col>
