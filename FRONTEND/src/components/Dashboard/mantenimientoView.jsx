@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import targetaMantenimiento from "../Dashboard/TargetaMantenimientos";
+import pruebaImagen from "../../assets/Credencial.jpg";
+import "../../styles/Credencial/credencial.css";
 import { FaArrowLeft } from "react-icons/fa";
 
 const GestionMantenimiento = () => {
@@ -13,19 +15,19 @@ const GestionMantenimiento = () => {
     {
       id: 1,
       title: "Mantenimiento de Servidores",
-      image: MantenimientoImage,
+      image: pruebaImagen,
       description: "Revisión y actualización de hardware",
     },
     {
       id: 2,
       title: "Mantenimiento de Red",
-      image: MantenimientoImage,
+      image: pruebaImagen,
       description: "Optimización y monitoreo de la red",
     },
     {
       id: 3,
       title: "Mantenimiento de Software",
-      image: MantenimientoImage,
+      image: pruebaImagen,
       description: "Actualización y depuración de sistemas",
     }
   ];
