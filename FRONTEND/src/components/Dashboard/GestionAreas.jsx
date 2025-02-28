@@ -34,7 +34,7 @@ const GestionAreas = () => {
       title: "Mantenimientos",
       image: MantenimientosImage,
       description: "Mantenimiento de catálogos y configuración del sistema.",
-      route: "/mantenimientos", // Ruta a la que redirige
+      route: "/mantenimientoView", // Ruta a la que redirige
     },
   ];
 

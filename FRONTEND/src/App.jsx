@@ -7,12 +7,16 @@ import Dashboard from "./pages/Dashboard"; // Importa la nueva página de inicio
 import CajaSeguridad from "./pages/CajaSeguridad"; // Asegúrate de la ruta correcta
 
 
-
 import CreateEvent from "./pages/Evento";
-import CreateCredencial from "./pages/credencial";
+import CreateCredencial from "./pages/Credencial";
 import ConfigCredencial from "./pages/PlantillaCredencial"; // Importa la nueva página de inicio
 import AsignarCampos from "./pages/AsignacionCampos";
 import DiseñadorCredencial from "./pages/DiseñadorCredencial";
+import CredencialView from "./pages/credencialView";
+import MantenimientoView from "./pages/mantenimientoView";
+
+import AsignacionCredencial from "./pages/AsignacionCredencial";
+
 
 //vouchers y tickets
 import Vouchers from "./pages/voucher";
@@ -50,11 +54,12 @@ function App() {
         <Route path="/crear-evento" element={<CreateEvent />} />
         <Route path="/crearCredencial" element={<CreateCredencial />} />
         <Route path="/confCredencial" element={<ConfigCredencial />} />
-        <Route
-          path="/AsignacionCampos/:idPlantilla"
-          element={<AsignarCampos />}
-        />
+        <Route path="/AsignacionCampos" element={<AsignarCampos />} />
         <Route path="/DiseñadorCredencial" element={<DiseñadorCredencial />} />
+        <Route path="/credencialView" element={<CredencialView />} />
+        <Route path="/mantenimientoView" element={<MantenimientoView />} />
+        <Route path="/asignarcredencial/:id" element={<AsignacionCredencial />} />
+
 
         <Route path="/dashboard" element={<Dashboard />} />
 

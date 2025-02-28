@@ -1,113 +1,135 @@
-import { useState, useEffect } from "react";
+import React, { useReducer } from "react";
 import { useNavigate } from "react-router-dom";
-import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 import { FaArrowLeft } from "react-icons/fa";
+import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 
-const DiseñoCredencial = () => {
+const credencialReducer = (state, action) => {
+  switch (action.type) {
+    case "SET_EVENTO":
+      return { ...state, eventoSeleccionado: action.payload, fichaSeleccionada: null };
+    case "SET_FICHA":
+      return { ...state, fichaSeleccionada: action.payload };
+    case "SET_CAMPO_UBICACION":
+      return {
+        ...state,
+        camposUbicaciones: {
+          ...state.camposUbicaciones,
+          [action.payload.ubicacion]: action.payload.campo,
+        },
+      };
+    default:
+      return state;
+  }
+};
+
+const VistaPreviaCredencial = ({ camposUbicaciones, persona, handleDrop, handleDragOver }) => {
+  return (
+    <div
+      className="credencial"
+      style={{
+        backgroundImage: `url(${fondoCredencial})`,
+        backgroundSize: "cover",
+        width: "400px",
+        height: "250px",
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gap: "5px",
+        padding: "10px",
+        border: "3px solid black",
+        borderRadius: "10px",
+      }}
+    >
+      {[...Array(9)].map((_, index) => (
+        <div
+          key={index}
+          className="grid-item"
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, index)}
+          style={{
+            border: "1px solid gray",
+            textAlign: "center",
+            padding: "5px",
+            backgroundColor: "#e9ecef",
+            borderRadius: "5px",
+            minHeight: "50px",
+          }}
+        >
+          {camposUbicaciones[index] ? (
+            <strong>{camposUbicaciones[index].nombre}:</strong>
+          ) : (
+            "Arrastra aquí"
+          )}
+          <br />
+          {persona && camposUbicaciones[index]
+            ? persona[camposUbicaciones[index].nombre.toLowerCase()] || "Vacío"
+            : "Vacío"}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const DisenoCredencial = () => {
+  const [state, dispatch] = useReducer(credencialReducer, {
+    eventoSeleccionado: null,
+    fichaSeleccionada: null,
+    camposUbicaciones: {},
+  });
   const navigate = useNavigate();
-  
-  // Cargar datos del participante
-  const [participante, setParticipante] = useState(() => {
-    const savedData = localStorage.getItem("participanteSeleccionado");
-    return savedData ? JSON.parse(savedData) : {};
-  });
 
-  // Cargar campos credencial y sus ubicaciones
-  const [campos, setCampos] = useState(() => {
-    const savedCampos = localStorage.getItem("camposCredencial");
-    return savedCampos ? JSON.parse(savedCampos) : [];
-  });
-
-  // Estados para checkboxes
-  const [camposSeleccionados, setCamposSeleccionados] = useState({});
-
-  const handleCheckboxChange = (campoId) => {
-    setCamposSeleccionados((prev) => ({
-      ...prev,
-      [campoId]: !prev[campoId],
-    }));
+  const handleDragStart = (e, campo) => {
+    e.dataTransfer.setData("campo", JSON.stringify(campo));
   };
 
-  return (
-    <div className="container mt-4">
-      <button className="btn btn-primary mb-3" onClick={() => navigate("/confCredencial")}>
-        <FaArrowLeft size={20} /> Regresar
-      </button>
-      
-      <div className="row g-4">
-        {/* Datos del participante */}
-        <div className="col-md-4">
-          <div className="card shadow-sm p-3">
-            <h4 className="text-center">Datos del Participante</h4>
-            <hr />
-            {Object.entries(participante).map(([key, value]) => (
-              <p key={key} className="mb-1"><strong>{key}:</strong> {value}</p>
-            ))}
-          </div>
-        </div>
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
 
-        {/* Checkboxes para seleccionar campos */}
+  const handleDrop = (e, ubicacion) => {
+    e.preventDefault();
+    const campo = JSON.parse(e.dataTransfer.getData("campo"));
+    dispatch({ type: "SET_CAMPO_UBICACION", payload: { ubicacion, campo } });
+  };
+
+  const eventos = [
+    { id: 1, nombre: "JUDUCA" },
+    { id: 2, nombre: "SUCA" },
+  ];
+
+  const camposDisponibles = [
+    { id: 1, nombre: "Nombre" },
+    { id: 2, nombre: "Apellido" },
+    { id: 3, nombre: "DNI" },
+    { id: 4, nombre: "Cargo" },
+    { id: 5, nombre: "Empresa" },
+  ];
+
+  return (
+    <div className="container-fluid">
+      <button className="btnAgg" onClick={() => navigate("/asignacionCampos")}> <FaArrowLeft size={20} /> Regresar </button>
+      <div className="row">
         <div className="col-md-4">
-          <div className="card shadow-sm p-3">
-            <h4 className="text-center">Seleccionar Campos</h4>
-            <hr />
-            {campos.map((campo) => (
-              <div key={campo.id} className="form-check">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  checked={!!camposSeleccionados[campo.id]}
-                  onChange={() => handleCheckboxChange(campo.id)}
-                />
-                <label className="form-check-label">{campo.nombre}</label>
+          <h3>Configuración de Credencial</h3>
+          <label>Campos Disponibles:</label>
+          <div>
+            {camposDisponibles.map((campo) => (
+              <div
+                key={campo.id}
+                draggable
+                onDragStart={(e) => handleDragStart(e, campo)}
+                style={{ padding: "10px", border: "1px solid #ccc", cursor: "grab" }}
+              >
+                {campo.nombre}
               </div>
             ))}
           </div>
         </div>
-
-        {/* Vista previa de credencial */}
-        <div className="col-md-4">
-          <div className="card shadow-sm p-3 text-center">
-            <h4>Vista Previa</h4>
-            <hr />
-            <div
-              style={{
-                backgroundImage: `url(${fondoCredencial})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                display: "grid",
-                width: "350px",
-                height: "220px",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: "5px",
-                border: "3px solid black",
-                padding: "10px",
-                borderRadius: "10px",
-                margin: "auto"
-              }}
-            >
-              {campos.map((campo) => (
-                <div
-                  key={campo.id}
-                  style={{
-                    border: "1px solid gray",
-                    minHeight: "50px",
-                    textAlign: "center",
-                    padding: "5px",
-                    backgroundColor: camposSeleccionados[campo.id] ? "#d1ecf1" : "#fff",
-                    fontWeight: camposSeleccionados[campo.id] ? "bold" : "normal",
-                    color: camposSeleccionados[campo.id] ? "#0c5460" : "black"
-                  }}
-                >
-                  {camposSeleccionados[campo.id] ? campo.nombre : ""}
-                </div>
-              ))}
-            </div>
-          </div>
+        <div className="col-md-6">
+          <VistaPreviaCredencial camposUbicaciones={state.camposUbicaciones} handleDrop={handleDrop} handleDragOver={handleDragOver} />
         </div>
       </div>
     </div>
   );
 };
 
-export default DiseñoCredencial;
+export default DisenoCredencial;
