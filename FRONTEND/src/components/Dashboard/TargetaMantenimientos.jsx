@@ -15,7 +15,7 @@ const TargetaMantenimiento = ({ mantenimiento, onImageClick }) => {
         style={{ cursor: "pointer" }}
       />
       <div className="eventcontent">
-        <h3 className="eventtitle">{mantenimiento.title}</h3>
+        <h3 className="titleCredencial">{mantenimiento.title}</h3>
         <p className="eventdescription">{mantenimiento.description}</p>
       </div>
     </div>

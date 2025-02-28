@@ -28,49 +28,41 @@ const GestionMantenimiento = () => {
       id: 1,
       title: "Mantenimiento de Paises",
       image: paises,
-      description: "Gestión y actualización de países.",
     },
     {
       id: 2,
       title: "Mantenimiento de Ciudades",
       image: ciudades,
-      description: "Administración y actualización de ciudades registradas.",
     },
     {
       id: 3,
       title: "Mantenimiento de Instalaciones",
       image: instalaciones,
-      description: "Supervisión y mantenimiento de infraestructura.",
     },
     {
       id: 4,
       title: "Mantenimiento de Competencias",
       image: competencias,
-      description: "Gestión de eventos deportivos.",
     },
     {
       id: 5,
       title: "Mantenimiento de Disciplinas",
       image: disciplinas,
-      description: "Actualización de disciplinas",
     },
     {
       id: 6,
       title: "Mantenimiento de Reglas",
       image: reglas,
-      description: "Administración de reglas oficiales.",
     },
     {
       id: 7,
       title: "Mantenimiento de Comedores",
       image: comedores,
-      description: "Gestion y actualizacion de comedores.",
     },
     {
       id: 8,
       title: "Mantenimiento de Generos",
       image: generos,
-      description: "Administración de categorías de género",
     },
  
   ];
@@ -95,7 +87,7 @@ const GestionMantenimiento = () => {
           style={{ marginTop: '55px' }}
         >
           <FaArrowLeft size={20} /> Regresar
-        </Button>  <h2 className="eventlisttitle">MANTENIMIENTOS</h2>
+        </Button>  <h2 className="credenciallisttitle">MANTENIMIENTOS</h2>
         <Row>
           {mantenimientosOptions.map((mantenimiento) => (
             <Col key={mantenimiento.id} xs={12} sm={6} md={4} lg={3} xl={2}>

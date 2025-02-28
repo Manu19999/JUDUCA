@@ -137,15 +137,16 @@ function CrearCredenciales() {
 
   return (
     <div className="crud">
+      <Nav />
+
       <Button
-        variant="outline-warning"
+        variant="outlined"
         onClick={() => navigate("/credencialView")}
         className="d-flex align-items-center gap-2"
         style={{ marginBottom: "55px" }}
       >
         <FaArrowLeft size={20} /> Regresar
       </Button>
-      <Nav />
       {/* componente de navegación del  navdashboard */}
       <Tabla
         columnas={columnas} // Columnas de la tabla

@@ -101,7 +101,7 @@ const GestionCredenciales = () => {
 >
   <FaArrowLeft size={20} /> Regresar
 </Button>
-        <h1 className="eventlisttitle">Asignación de Credenciales</h1>
+        <h1 className="credenciallisttitle">Asignación de Credenciales</h1>
         <Row>
           {credencialesOptions.map((persona) => (
             <Col key={persona.id} xs={12} sm={6} md={4} lg={3} xl={2}>
