@@ -152,15 +152,14 @@ const GestionCredenciales = () => {
     <section id="credenciales" className="eventlist">
       <Container>
       <Button
-  variant="outline-dark"
+  variant="outline-warning"
   onClick={() => navigate("/gestion-evento")}
   className="d-flex align-items-center gap-2"
   style={{  marginTop: '30px' }}
 >
   <FaArrowLeft size={20} /> Regresar
 </Button>
-
-        <h2 className="eventlisttitle">Asignación de Credenciales</h2>
+        <h1 className="eventlisttitle">Asignación de Credenciales</h1>
         <Row>
           {credencialesOptions.map((persona) => (
             <Col key={persona.id} xs={4} sm={3} md={2} lg={2} xl={2}>
@@ -181,7 +180,6 @@ const GestionCredenciales = () => {
             style={{
               backgroundColor: "#e3f2fd",
               borderRadius: "10px",
-              padding: "20px",
             }}
           >
             <Modal.Header closeButton>

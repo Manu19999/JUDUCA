@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import EventoCaracteristica from "./EventoCaracteristica";
-import EventImage from "../../assets/Reglas.jpg";
 import EventImage2 from "../../assets/CrearFicha.jpg";
 import EventImage3 from "../../assets/universidades.jpg";
 import EventImage4 from "../../assets/Instalaciones.jpg";
@@ -39,12 +38,7 @@ const MantenimientoEvento = () => {
       description:
         "Registras las disciplinas ó actividades.",
     },
-    {
-      id: 5,
-      title: "Reglas",
-      image: EventImage,
-      description: "Reglas para las actividades y disciplinas.",
-    },
+
   ];
 
   const handleImageClick = (id) => {

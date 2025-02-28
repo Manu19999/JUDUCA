@@ -138,10 +138,10 @@ function CrearCredenciales() {
   return (
     <div className="crud">
       <Button
-        variant="outline-dark"
+        variant="outline-warning"
         onClick={() => navigate("/credencialView")}
         className="d-flex align-items-center gap-2"
-        style={{ marginBottom: "25px" }}
+        style={{ marginBottom: "55px" }}
       >
         <FaArrowLeft size={20} /> Regresar
       </Button>
