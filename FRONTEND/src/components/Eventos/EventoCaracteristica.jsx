@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faCog } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/Inicio/EventCard.css";
 
+
 const EventoCaracteristica = ({
   event,
   onImageClick,

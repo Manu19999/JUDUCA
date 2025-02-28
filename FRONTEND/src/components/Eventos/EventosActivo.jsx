@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container } from "react-bootstrap";
+import { Container, Modal, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import EventCard from "../Inicio/EventCard";
 import EventImage from "../../assets/eventoConcierto.jpg";
@@ -8,6 +8,7 @@ import EventImage3 from "../../assets/eventoArte.jpg";
 import "../../styles/Inicio/EventList.css";
 import "../../styles/Evento/Eventos.css";
 
+/* ************  Componete que nos permite visualizar los eventos activos e inactivos y crear un nuevo evento ************* */
 const EventosActivos = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -63,25 +64,11 @@ const EventosActivos = () => {
       image: EventImage,
       description: "Evento pasado sobre innovación y emprendimiento.",
     },
-    {
-      id: 5,
-      title: "Taller de Programación",
-      date: "15 de Agosto, 2022",
-      image: EventImage2,
-      description: "Aprende a programar desde cero con expertos en el área.",
-    },
-    {
-      id: 6,
-      title: "Taller de Programación",
-      date: "15 de Agosto, 2022",
-      image: EventImage2,
-      description: "Aprende a programar desde cero con expertos en el área.",
-    },
   ];
 
   const featuredEvents = [
     {
-      id: 7,
+      id: 5,
       title: "Evento Destacado: Hackathon UNAH",
       date: "30 de Noviembre, 2023",
       image: EventImage2,
@@ -89,32 +76,33 @@ const EventosActivos = () => {
     },
   ];
 
-  const [activeTab, setActiveTab] = useState("upcoming");
-  const [carouselIndex, setCarouselIndex] = useState(0);
+    const [activeTab, setActiveTab] = useState("upcoming");
+    const [carouselIndex, setCarouselIndex] = useState(0);
 
-  const nextSlide = () => {
-    setCarouselIndex((prevIndex) =>
-      prevIndex < Math.ceil(pastEvents.length / 3) - 1 ? prevIndex + 1 : 0
+    const nextSlide = () => {
+      setCarouselIndex((prevIndex) =>
+        prevIndex < Math.ceil(pastEvents.length / 3) - 1 ? prevIndex + 1 : 0
+      );
+    };
+
+    const prevSlide = () => {
+      setCarouselIndex((prevIndex) =>
+        prevIndex > 0 ? prevIndex - 1 : Math.ceil(pastEvents.length / 3) - 1
+      );
+    };
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        nextSlide();
+      }, 5000);
+      return () => clearInterval(interval);
+    }, [carouselIndex]);
+
+    const visibleEvents = pastEvents.slice(
+      carouselIndex * 3,
+      carouselIndex * 3 + 3
     );
-  };
 
-  const prevSlide = () => {
-    setCarouselIndex((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : Math.ceil(pastEvents.length / 3) - 1
-    );
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [carouselIndex]);
-
-  const visibleEvents = pastEvents.slice(
-    carouselIndex * 3,
-    carouselIndex * 3 + 3
-  );
 
   const handleImageClick = (id) => {
     if (id === 1) {
@@ -192,61 +180,85 @@ const EventosActivos = () => {
           </div>
         )}
       </Container>
-      {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button
-              className="modal-close"
-              onClick={() => setIsModalOpen(false)}
-            >
-              X
-            </button>
-            <form onSubmit={handleSubmit} className="event-form">
-              <h2 className="event-title">Nuevo Evento</h2>
-              <label>Nombre del Evento</label>
-              <input
-                type="text"
-                name="name"
-                value={event.name}
-                onChange={handleChange}
-                required
-              />
-              <label>Ubicación</label>
-              <input
-                type="text"
-                name="location"
-                value={event.location}
-                onChange={handleChange}
-                required
-              />
-              <label>Fecha de Inicio</label>
-              <input
-                type="date"
-                name="startDate"
-                value={event.startDate}
-                onChange={handleChange}
-                required
-              />
-              <label>Fecha de Fin</label>
-              <input
-                type="date"
-                name="endDate"
-                value={event.endDate}
-                onChange={handleChange}
-                required
-              />
-              <label>Descripción</label>
-              <textarea
-                name="description"
-                value={event.description}
-                onChange={handleChange}
-                required
-              />
-              <button type="submit">Crear</button>
-            </form>
-          </div>
+
+      <Modal show={isModalOpen} onHide={() => setIsModalOpen(false)} centered>
+        <div
+          style={{
+            backgroundColor: "#e3f2fd",
+            borderRadius: "10px",
+            padding: "20px",
+          }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Crear Evento</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={handleSubmit}>
+              <Form.Group controlId="eventName">
+                <Form.Label>Nombre del evento</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="name"
+                  value={event.name}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="eventLocation">
+                <Form.Label>Ubicación</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="location"
+                  value={event.location}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="eventStartDate">
+                <Form.Label>Fecha de inicio</Form.Label>
+                <Form.Control
+                  type="date"
+                  name="startDate"
+                  value={event.startDate}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="eventEndDate">
+                <Form.Label>Fecha de fin</Form.Label>
+                <Form.Control
+                  type="date"
+                  name="endDate"
+                  value={event.endDate}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="eventDescription">
+                <Form.Label>Descripción</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  name="description"
+                  value={event.description}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+              <Modal.Footer>
+                <Button
+                  variant="secondary"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Cerrar
+                </Button>
+                <Button variant="primary" type="submit">
+                  Guardar
+                </Button>
+              </Modal.Footer>
+            </Form>
+          </Modal.Body>
         </div>
-      )}
+      </Modal>
     </section>
   );
 };

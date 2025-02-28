@@ -3,8 +3,8 @@ import { Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import EventoCaracteristica from "./EventoCaracteristica";
-import EventImage from "../../assets/eventoConcierto.jpg";
-import EventImage3 from "../../assets/FichaInscripcion.jpg";
+import EventImage from "../../assets/Ficha.jpg";
+import EventImage3 from "../../assets/Registro.jpg";
 import EventImage4 from "../../assets/FichaMedica.jpg";
 import EventImage5 from "../../assets/CrearEquipo.jpg";
 import EventImage6 from "../../assets/Credencial.jpg";
@@ -12,29 +12,31 @@ import "../../styles/Inicio/EventList.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+/* *********************** Componetne que gestiona un evento permitiendo solo visualizar la información segun el rol ingresado ************ */
+
 const GestionEvento = () => {
   const navigate = useNavigate();
 
   const upcomingEvents = [
     {
       id: 1,
-      title: "JUDUCA",
+      title: "Fichas",
       image: EventImage,
-      description: "Juegos Deportivos Universitarios Centroamericanos.",
+      description: "Creación y gestión de fichas para el evento.",
       size: "medium", // Asigna un tamaño
     },
     {
       id: 2,
-      title: "Ficha de Inscripciones",
+      title: "Registro",
       image: EventImage3,
-      description: "Inscripciones de los atletas.",
+      description: "Fichas de registro e inscriciones al evento.",
       size: "small", // Asigna un tamaño
     },
     {
       id: 3,
-      title: "Ficha de Salud",
+      title: "Vauchers",
       image: EventImage4,
-      description: "Inscripciones de los atletas.",
+      description: "Creación de vauchers al evento.",
       size: "medium", // Asigna un tamaño
     },
     {
@@ -46,19 +48,19 @@ const GestionEvento = () => {
     },
     {
       id: 5,
-      title: "Crear Equipo",
+      title: "Equipos",
       image: EventImage5,
-      description: "Creación de los equipos a las disciplinas y actividades.",
+      description: "Creación de equpos a disciplina e actividades.",
       size: "medium", // Asigna un tamaño
     },
   ];
 
   const handleImageClick = (id) => {
     if (id === 1) {
-      navigate("/mantenimiento-evento");
+      navigate("/lista-fichas");
     }
     if (id === 2) {
-      navigate("/ficha-participantes");
+      navigate("/fichas-registro");
     }
     if (id === 3) {
       navigate("/ficha-salud");
@@ -113,7 +115,6 @@ const GestionEvento = () => {
                 onImageClick={() => handleImageClick(event.id)}
                 onEditClick={() => handleEditClick(event.id)}
                 onManageClick={() => handleManageClick(event.id)}
-                showIcons={event.id === 1}
               />
             </div>
           ))}

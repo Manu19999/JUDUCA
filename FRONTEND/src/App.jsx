@@ -34,7 +34,7 @@ import ListaFichas from "./pages/CrearFicha";
 import Formularios_Fichas from "./pages/FormularioFicha";
 import RegistroParticipante from "./pages/RegistroParticipante";
 import RegistroSalud from "./pages/RegistroSalud";
-import EventoMantenimiento from "./pages/EventoMantenimiento";
+import FichasRegistros from "./pages/FichasRegistro";
 
 
 
@@ -46,7 +46,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/usuarios" element={<Usuarios />} />
         <Route path="/roles" element={<Roles />} />
-
         <Route path="/crear-evento" element={<CreateEvent />} />
         <Route path="/crearCredencial" element={<CreateCredencial />} />
         <Route path="/confCredencial" element={<ConfigCredencial />} />
@@ -54,24 +53,24 @@ function App() {
         <Route path="/DiseñadorCredencial" element={<DiseñadorCredencial />} />
         <Route path="/credencialView" element={<CredencialView />} />
         <Route path="/mantenimientoView" element={<MantenimientoView />} />
-        <Route path="/asignarcredencial/:id" element={<AsignacionCredencial />} />
-
-
+        <Route
+          path="/asignarcredencial/:id"
+          element={<AsignacionCredencial />}
+        />
         <Route path="/dashboard" element={<Dashboard />} />
-
         <Route path="/voucher" element={<Vouchers />} />
         <Route path="/consumo" element={<ConsumosVouchers />} />
         <Route path="/comedor" element={<Comedores />} />
         <Route path="/Ticket" element={<Tickets />} />
-
         <Route path="/gestion-evento" element={<Eventos />} />
         <Route path="/lista-eventos" element={<ListaEventos />} />
         <Route path="/lista-fichas" element={<ListaFichas />} />
         <Route path="/Formulario-fichas" element={<Formularios_Fichas />} />
         <Route path="/ficha-participantes" element={<RegistroParticipante />} />
         <Route path="/ficha-salud" element={<RegistroSalud />} />
-        <Route path="/mantenimiento-evento" element={<EventoMantenimiento />} />
-fsdf      </Routes>
+        <Route path="/fichas-registro" element={<FichasRegistros />} />
+        fsdf{" "}
+      </Routes>
     </Router>
   );
 }
