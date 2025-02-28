@@ -8,5 +8,6 @@ export default function Evento() {
             <Nav />
       <Eventos />
     </div>
+    
   );
 }
