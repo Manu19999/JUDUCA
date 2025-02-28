@@ -98,7 +98,7 @@ const GestionMantenimiento = () => {
         </Button>  <h2 className="eventlisttitle">MANTENIMIENTOS</h2>
         <Row>
           {mantenimientosOptions.map((mantenimiento) => (
-            <Col key={mantenimiento.id} xs={4} sm={3} md={2} lg={2} xl={2}>
+            <Col key={mantenimiento.id} xs={12} sm={6} md={4} lg={3} xl={2}>
               <TargetaMantenimiento
                 mantenimiento={mantenimiento}
 

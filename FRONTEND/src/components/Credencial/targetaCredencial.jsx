@@ -30,12 +30,12 @@ const TargetaCredencial = ({
               <FontAwesomeIcon
                 icon={faEye}
                 onClick={handleVerInfo}
-                className="eventicon manage-btn"
+                className="eventicon manage-btn-credencial"
               />
               <FontAwesomeIcon
                 icon={faCog }
                 onClick={handleConfigurarCredencial}
-                className="eventicon manage-btn"
+                className="eventicon manage-btn-credencial"
               />
             </>
           )}

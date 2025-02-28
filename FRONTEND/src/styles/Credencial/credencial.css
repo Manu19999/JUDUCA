@@ -247,3 +247,7 @@
   font-size: 12px;
   cursor: pointer;
 }
+
+.manage-btn-credencial:hover {
+  color: #ffc107; /* Color al pasar el mouse */
+}
