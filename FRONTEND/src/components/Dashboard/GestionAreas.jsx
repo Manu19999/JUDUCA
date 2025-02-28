@@ -51,15 +51,16 @@ const GestionAreas = () => {
   return (
     <section id="areas" className="eventlist">
       <Container>
+        
         {/* Encabezado con la ubicación actual */}
         <h2 className="eventlisttitle">Áreas de Gestión</h2>
         <div className="mb-4">
           <p className="text-muted">Estás en: {location.pathname}</p>
         </div>
 
-        {/* Botón de regresar a la par de las cajas */}
+     {/* Botón de regresar a la par de las cajas */}
         <div className="d-flex align-items-start">
-          <button
+        {/*  <button
             onClick={handleGoBack}
             style={{
               background: "none",
@@ -73,7 +74,7 @@ const GestionAreas = () => {
               alt="Regresar"
               style={{ width: "100px", height: "100px",marginTop:"500" }} // Ajusta el tamaño del ícono
             />
-          </button>
+          </button>*/}
 
           <div className="eventgrid">
             {areas.map((area) => (

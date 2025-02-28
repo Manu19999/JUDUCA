@@ -8,6 +8,8 @@ import instalaciones from "../../assets/Mantenimientos/instalaciones.jpg";
 import competencias from "../../assets/Mantenimientos/competencias.jpg";
 import disciplinas from "../../assets/Mantenimientos/disciplinas.jpg";
 import reglas from "../../assets/Mantenimientos/reglas.jpg";
+import comedores from "../../assets/Mantenimientos/comedores.jpg";
+import generos from "../../assets/Mantenimientos/generos.jpg";
 
 import "../../styles/Inicio/GestionAreas.css"; // Estilos de las cajas
 
@@ -26,7 +28,7 @@ const GestionMantenimiento = () => {
       id: 1,
       title: "Mantenimiento de Paises",
       image: paises,
-      description: "Gestión y actualización de países en la base de datos.",
+      description: "Gestión y actualización de países.",
     },
     {
       id: 2,
@@ -44,25 +46,31 @@ const GestionMantenimiento = () => {
       id: 4,
       title: "Mantenimiento de Competencias",
       image: competencias,
-      description: "Gestión de eventos y competiciones deportivas.",
+      description: "Gestión de eventos deportivos.",
     },
     {
       id: 5,
       title: "Mantenimiento de Disciplinas",
       image: disciplinas,
-      description: "Actualización y depuración de sistemas",
+      description: "Actualización de disciplinas",
     },
     {
       id: 6,
       title: "Mantenimiento de Reglas",
       image: reglas,
-      description: "Administración y modificación de reglas oficiales.",
+      description: "Administración de reglas oficiales.",
     },
     {
       id: 7,
       title: "Mantenimiento de Comedores",
-      image: disciplinas,
-      description: "Actualización y depuración de sistemas",
+      image: comedores,
+      description: "Gestion y actualizacion de comedores.",
+    },
+    {
+      id: 8,
+      title: "Mantenimiento de Generos",
+      image: generos,
+      description: "Administración de categorías de género",
     },
  
   ];
@@ -84,7 +92,7 @@ const GestionMantenimiento = () => {
           variant="outline-warning"
           onClick={() => navigate("/dashboard")}
           className="d-flex align-items-center gap-2"
-          style={{ marginTop: '45px' }}
+          style={{ marginTop: '55px' }}
         >
           <FaArrowLeft size={20} /> Regresar
         </Button>  <h2 className="eventlisttitle">MANTENIMIENTOS</h2>
