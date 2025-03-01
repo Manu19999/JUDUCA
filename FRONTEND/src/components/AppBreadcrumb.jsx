@@ -51,6 +51,13 @@ const AppBreadcrumb = () => {
   const navigate = useNavigate();//permite navegar programáticamente a otras rutas
   const hierarchy = getHierarchy(location.pathname); //llama a "getHierarchy" para obtener la jerarquía de rutas basada en la ruta actual
 
+  // Definir rutas donde NO se debe mostrar el breadcrumb
+  const rutasExcluidas = ["", "/login"];
+
+  if (rutasExcluidas.includes(location.pathname)) {
+    return null; // No renderiza nada si la ruta está en la lista
+  }
+
   // Función para manejar el clic en "Seguridad"
   const handleSeguridadClick = () => {
     navigate("/seguridad"); // Rnavega a la ruta seguridad cuando se hace clic en el item "Seguridad"
