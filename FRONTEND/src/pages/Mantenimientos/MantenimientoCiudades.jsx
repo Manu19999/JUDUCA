@@ -194,7 +194,7 @@ function MantenimientoCiudades() {
                     },
                   ]}
                 >
-                  <Input placeholder="Ingresa el nombre de la ciudad" />
+                  <Input placeholder="Ingresa el nombre de la ciudad"/>
                 </Form.Item>
               </Col>
               <Col span={15}>
@@ -205,7 +205,7 @@ function MantenimientoCiudades() {
                     { required: true, message: "El acceso es obligatorio" },
                   ]}
                 >
-                  <Select placeholder="Selecciona un tipo de acceso">
+                  <Select placeholder="Selecciona pais">
                     <Option value="ALEMANIA">ALEMANIA</Option>
                     <Option value="JAPON">JAPON</Option>
                     <Option value="CHINA">CHINA</Option>
@@ -227,7 +227,6 @@ function MantenimientoCiudades() {
         onGuardar={handleGuardarEdit} // Función para guardar los cambios
         form={formEditar} // Formulario del modal
         registroSeleccionado={registroSeleccionado} // Usuario seleccionado
-        width={400} // Ancho del modal
       >
         <Form
           layout="vertical"
