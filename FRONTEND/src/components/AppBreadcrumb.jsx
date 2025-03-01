@@ -11,6 +11,7 @@ const routeNames = {
   roles: "Roles",
   "lista-eventos": "Lista-Eventos",
   mantenimientoView: "Mantenimientos",
+  MantenimientoPaises: "Países"
 };
 
 // Función para obtener la jerarquía basada en la ruta actual
@@ -38,6 +39,9 @@ const getHierarchy = (pathname) => {
   if (pathnames.includes("mantenimientoView")) {
     return ["dashboard", "mantenimientoView"];
   }
+  if (pathnames.includes("MantenimientoPaises")) {
+    return ["dashboard", "mantenimientoView","MantenimientoPaises"];
+  }
   return pathnames;
 };
 
@@ -50,6 +54,10 @@ const AppBreadcrumb = () => {
   // Función para manejar el clic en "Seguridad"
   const handleSeguridadClick = () => {
     navigate("/seguridad"); // Rnavega a la ruta seguridad cuando se hace clic en el item "Seguridad"
+  };
+
+  const handleMantenimientoClick = () => {
+    navigate("/mantenimientoView"); // Rnavega a la ruta seguridad cuando se hace clic en el item "Seguridad"
   };
 
   return (
@@ -66,6 +74,18 @@ const AppBreadcrumb = () => {
               <Breadcrumb.Item key={name}>
                 <span
                   onClick={handleSeguridadClick}
+                  className="breadcrumb-item clickable"
+                >
+                  {displayName}
+                </span>
+              </Breadcrumb.Item>
+            );
+          }
+          if (name === "mantenimientoView") {
+            return (
+              <Breadcrumb.Item key={name}>
+                <span
+                  onClick={handleMantenimientoClick}
                   className="breadcrumb-item clickable"
                 >
                   {displayName}
