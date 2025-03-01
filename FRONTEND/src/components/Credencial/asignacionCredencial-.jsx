@@ -8,7 +8,10 @@ import ModalEditar from "../../components/Crud/Modal/ModalEditar.jsx";
 import ModalDetalles from "../../components/Crud/Modal/ModalDetalles.jsx";
 import ModalConfirmacion from "../../components/Crud/Modal/ModalConfirmacion.jsx";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito.jsx";
-import { Input, Select, Form, Row, Col, Tabs, Button } from "antd";
+import { Input, Select, Form, Row, Col, Tabs } from "antd";
+import { Button } from "react-bootstrap";
+import "../../styles/Credencial/credencial.css";
+
 import { FaArrowLeft } from "react-icons/fa";
 
 const { Option } = Select;
@@ -140,11 +143,11 @@ function CrearCredenciales() {
       <Nav />
 
       <Button
-        variant="outlined"
+        variant="outline-warning"
         onClick={() => navigate("/credencialView")}
         className="d-flex align-items-center gap-2"
-        style={{ marginBottom: "55px" }}
-      >
+        style={{ marginBottom: '55px', marginLeft: '55px' }}
+        >
         <FaArrowLeft size={20} /> Regresar
       </Button>
       {/* componente de navegación del  navdashboard */}

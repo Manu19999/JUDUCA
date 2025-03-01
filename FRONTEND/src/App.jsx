@@ -14,10 +14,11 @@ import AsignarCampos from "./pages/AsignacionCampos";
 import DiseñadorCredencial from "./pages/DiseñadorCredencial";
 import CredencialView from "./pages/credencialView";
 import MantenimientoView from "./pages/mantenimientoView";
+import MantenimientoPaises from "./pages/MantenimientoPaises";
 
 import AsignacionCredencial from "./pages/AsignacionCredencial";
 
-
+MantenimientoPaises
 //vouchers y tickets
 import Vouchers from "./pages/voucher";
 import ConsumosVouchers from "./pages/ConsumoVoucher";
@@ -58,6 +59,8 @@ function App() {
         <Route path="/DiseñadorCredencial" element={<DiseñadorCredencial />} />
         <Route path="/credencialView" element={<CredencialView />} />
         <Route path="/mantenimientoView" element={<MantenimientoView />} />
+        <Route path="/MantenimientoPaises" element={<MantenimientoPaises />} />
+
         <Route path="/asignarcredencial/:id" element={<AsignacionCredencial />} />
 
 

@@ -28,6 +28,7 @@ const GestionMantenimiento = () => {
       id: 1,
       title: "Mantenimiento de Paises",
       image: paises,
+      url: "/MantenimientoPaises"
     },
     {
       id: 2,
