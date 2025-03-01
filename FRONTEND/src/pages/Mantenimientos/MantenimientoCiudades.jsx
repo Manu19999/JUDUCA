@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Tabla from "../components/Crud/Tabla.jsx";
-import Nav from "../components/Dashboard/navDashboard.jsx";
-import ModalNuevo from "../components/Crud/Modal/ModalNuevo.jsx";
-import ModalEditar from "../components/Crud/Modal/ModalEditar.jsx";
-import ModalDetalles from "../components/Crud/Modal/ModalDetalles.jsx";
-import ModalConfirmacion from "../components/Crud/Modal/ModalConfirmacion.jsx";
-import { mostrarMensajeExito } from "../components/Crud/MensajeExito.jsx";
-import { Input, Select, Form, Row, Col, Tabs  } from "antd";
+import Tabla from "../../components/Crud/Tabla.jsx";
+import Nav from "../../components/Dashboard/navDashboard.jsx";
+import ModalNuevo from "../../components/Crud/Modal/ModalNuevo.jsx";
+import ModalEditar from "../../components/Crud/Modal/ModalEditar.jsx";
+import ModalDetalles from "../../components/Crud/Modal/ModalDetalles.jsx";
+import ModalConfirmacion from "../../components/Crud/Modal/ModalConfirmacion.jsx";
+import { mostrarMensajeExito } from "../../components/Crud/MensajeExito.jsx";
+import { Input, Select, Form, Row, Col, Tabs } from "antd";
 import { Button } from "react-bootstrap";
-import "../styles/Credencial/credencial.css";
+import "../../styles/Credencial/credencial.css";
 
-import { FaGlobe } from "react-icons/fa";
-import { FaArrowLeft  } from "react-icons/fa";
+import { FaCity } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -21,32 +21,37 @@ const { TabPane } = Tabs;
 const datos = [
   {
     id: 1,
-    nombre: "ARGENTINA",
+    nombre: "NEW YORK",
+    pais: "ESTADOS UNIDOS",
   },
   {
     id: 2,
-    nombre: "PERU",
+    nombre: "BUENOS AIRES",
+    pais: "ARGENTINA",
   },
   {
     id: 3,
-    nombre: "HONDURAS",
+    nombre: "LIMA",
+    pais: "PERU",
   },
   {
     id: 4,
-    nombre: "MEXICO",
+    nombre: "HONDURAS",
+    pais: "TEGUCIGALPA",
   },
 ];
 
 // Columnas de la tabla de usuarios
 const columnas = [
   { nombre: "#", campo: "id", ancho: "5%" },
-  { nombre: "Nombre", campo: "nombre", ancho: "30%" },
+  { nombre: "Ciudad", campo: "nombre", ancho: "20%" },
+  { nombre: "Pais", campo: "pais", ancho: "20%" },
   { nombre: "Acción", campo: "accion", ancho: "10%" },
 ];
 
-function MantenimientoPaises() {
-      const navigate = useNavigate();
-    
+function MantenimientoCiudades() {
+  const navigate = useNavigate();
+
   // Estados para controlar la visibilidad de los modales
   const [showNuevoModal, setShowNuevoModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -107,7 +112,7 @@ function MantenimientoPaises() {
         console.log("Nuevo registro:", values);
         setShowNuevoModal(false); // Cierra el modal
         formNuevo.resetFields(); // Limpiar el formulario de nuevo registro
-        mostrarMensajeExito("El pais se ha registrado correctamente."); // Mensaje de éxito
+        mostrarMensajeExito("La ciudad se ha registrado correctamente."); // Mensaje de éxito
       })
       .catch((error) => {
         console.error("Error al validar el formulario:", error); // Manejo de errores
@@ -123,7 +128,7 @@ function MantenimientoPaises() {
         setShowEditModal(false); // Cierra el modal
         setRegistroSeleccionado(null); // Limpia el registro seleccionado
         formEditar.resetFields(); // Limpia el formulario
-        mostrarMensajeExito("El pais se ha actualizado correctamente."); // Mensaje de éxito
+        mostrarMensajeExito("La ciudad se ha actualizado correctamente."); // Mensaje de éxito
       })
       .catch((error) => {
         console.error("Error al validar el formulario:", error); // Manejo de errores
@@ -137,27 +142,27 @@ function MantenimientoPaises() {
       registroSeleccionado?.id
     );
     setShowDeleteModal(false);
-    mostrarMensajeExito("El pais se ha eliminado correctamente.");
+    mostrarMensajeExito("La ciudad se ha eliminado correctamente.");
   };
 
   return (
     <div className="crud">
       <Nav />
-
       <Button
-          variant="outline-warning"
-          onClick={() => navigate("/mantenimientoView")}
-          className="d-flex align-items-center gap-2"
-          style={{ marginBottom: '55px', marginLeft: '55px' }}
-        >
-          <FaArrowLeft size={20} /> Regresar
-        </Button>
+        variant="outline-warning"
+        onClick={() => navigate("/mantenimientoView")}
+        className="d-flex align-items-center gap-2"
+        style={{ marginBottom: "55px", marginLeft: "55px" }}
+      >
+        <FaArrowLeft size={20} /> Regresar
+      </Button>
       {/* componente de navegación del  navdashboard */}
       <Tabla
         columnas={columnas} // Columnas de la tabla
         datos={datos} // Datos de la tabla
-        titulo="Gestión de Paises" // Título de la tabla
-        icono={<FaGlobe className="icono-titulo" />} // Ícono del título
+        titulo="Gestión de Ciudades" // Título de la tabla
+        icono={<      FaCity
+          className="icono-titulo" />} // Ícono del título
         onNuevoRegistro={handleNuevoRegistro} // Función para abrir el modal de nuevo registro
         onGenerarReporte={() => console.log("Generar reporte en PDF")} // Función para generar reporte
         onEdit={handleEdit} // Función para abrir el modal de edición
@@ -169,30 +174,47 @@ function MantenimientoPaises() {
       <ModalNuevo
         show={showNuevoModal} // Controla la visibilidad del modal
         onHide={() => setShowNuevoModal(false)} // Función para cerrar el modal
-        titulo="Nuevo Pais" // Título del modal
+        titulo="Nueva Ciudad" // Título del modal
         onGuardar={handleGuardarNuevo} // Función para guardar el nuevo registro
         form={formNuevo} // Pasar el formulario al modal
-        width={400} // Ancho del modal
+        width={600} // Ancho del modal
       >
         <Form layout="vertical" form={formNuevo}>
           <Tabs defaultActiveKey="1">
             {/* Pestaña: Datos Personales */}
-              <Row gutter={12}>
-                <Col span={18}>
-                  <Form.Item
-                    label="Nombre"
-                    name="nombre"
-                    rules={[
-                      {
-                        required: true,
-                        message: "El nombre del pais es obligatorio",
-                      },
-                    ]}
-                  >
-                    <Input placeholder="Ingresa el nombre del pais" />
-                  </Form.Item>
-                </Col>
-              </Row>
+            <Row gutter={12}>
+              <Col span={15}>
+                <Form.Item
+                  label="Nombre"
+                  name="nombre"
+                  rules={[
+                    {
+                      required: true,
+                      message: "El nombre de la ciudad es obligatorio",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Ingresa el nombre de la ciudad" />
+                </Form.Item>
+              </Col>
+              <Col span={15}>
+                <Form.Item
+                  label="Pais"
+                  name="pais"
+                  rules={[
+                    { required: true, message: "El acceso es obligatorio" },
+                  ]}
+                >
+                  <Select placeholder="Selecciona un tipo de acceso">
+                    <Option value="ALEMANIA">ALEMANIA</Option>
+                    <Option value="JAPON">JAPON</Option>
+                    <Option value="CHINA">CHINA</Option>
+                    <Option value="COREA DEL NORTE">COREA DEL NORTE</Option>
+                    <Option value="URUGUAY">URUGUAY</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
           </Tabs>
         </Form>
       </ModalNuevo>
@@ -215,21 +237,40 @@ function MantenimientoPaises() {
           <Tabs defaultActiveKey="1">
             {/* Pestaña: Datos Personales */}
             <Row gutter={12}>
-            <Col span={18}>
-                  <Form.Item
-                    label="Nombre"
-                    name="nombre"
-                    rules={[
-                      {
-                        required: true,
-                        message: "El nombre del pais es obligatorio",
-                      },
-                    ]}
-                  >
-                    <Input placeholder="Ingresa el nombre del pais" />
-                  </Form.Item>
-                </Col>
-              </Row>
+              <Col span={18}>
+                <Form.Item
+                  label="Nombre"
+                  name="nombre"
+                  rules={[
+                    {
+                      required: true,
+                      message: "El nombre de la ciudad es obligatorio",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Ingresa el nombre de la ciudad" />
+                </Form.Item>
+              </Col>
+
+              <Col span={15}>
+                <Form.Item
+                  label="Paises"
+                  name="pais"
+                  rules={[
+                    { required: true, message: "El nombre del pais es obligatorio" },
+                  ]}
+                >
+                  <Select placeholder="Selecciona un pais">
+                    <Option value="ATLETA">ATLETA</Option>
+                    <Option value="ENTRENADOR">ENTRENADOR</Option>
+                    <Option value="AUTORIDAD">AUTORIDAD</Option>
+                    <Option value="ORGANIZADOR">ORGANIZADOR</Option>
+                    <Option value="VOLUNTARIO">VOLUNTARIO</Option>
+                    <Option value="PRENSA">PRENSA</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
           </Tabs>
         </Form>
       </ModalEditar>
@@ -254,4 +295,4 @@ function MantenimientoPaises() {
   );
 }
 
-export default MantenimientoPaises;
+export default MantenimientoCiudades;
