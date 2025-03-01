@@ -49,6 +49,12 @@
   color: #333;
 }
 
+.eventlist-title {
+  text-align: center;
+  margin-top: 70px;
+  margin-bottom: 60px;
+}
+
 .eventdescription {
   text-align: center;
   padding: 0 1rem 1rem;

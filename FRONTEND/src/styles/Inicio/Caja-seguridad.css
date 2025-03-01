@@ -23,9 +23,9 @@ html, body {
 
   
   .caja-seguridad-title {
+    margin-top: -45px;
     font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 60px;
   }
   
   .caja-seguridad-grid {
