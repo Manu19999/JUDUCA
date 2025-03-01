@@ -49,16 +49,43 @@
 
 .footer-divider {
   border-color: rgba(255, 255, 255, 0.1);
-  margin: 20px 0;
+  margin: 40px 0;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
+  .footer-title {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
   .footer-section {
-    text-align: center;
+    margin-bottom: 10px;
   }
+ 
+}
 
-  .social-icons {
-    justify-content: center;
+@media (max-width: 480px) {
+  .footer-title {
+    font-size: 1rem;
   }
+  .footer-section {
+    margin-bottom: 5px;
+  }
+}
+
+@media (max-width: 337px) {
+  .footer-title {
+    font-size: 0.9rem;
+  }
+  .footer-section {
+    margin-bottom: 10px;
+  }
+  .footer-divider {
+    margin: 5px 0;
+  }
+}
+
+.footer-row {
+  gap: 0 !important; /* Evita que el gap global afecte */
+  justify-content: start !important; /* O el valor que necesites */
 }

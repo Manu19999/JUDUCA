@@ -1,14 +1,12 @@
 import React from "react";
 import "../../styles/Inicio/EventCard.css";
-
-const EventCard = ({ event, onImageClick }) => {
+const EventCard = ({ event, onClick }) => {
   return (
-    <div className="cardevent">
+    <div className="cardevent" onClick={() => onClick(event)}>
       <img
         src={event.image}
         alt={event.title}
         className="imagenevent"
-        onClick={onImageClick}
         style={{ cursor: "pointer" }} // Cambia el cursor para indicar que es clicable
       />
       <div className="conteevent">
