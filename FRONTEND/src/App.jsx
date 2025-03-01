@@ -19,7 +19,7 @@ import MantenimientoCiudades from "./pages/Mantenimientos/MantenimientoCiudades"
 
 import AsignacionCredencial from "./pages/AsignacionCredencial";
 
-MantenimientoPaises
+
 //vouchers y tickets
 import Vouchers from "./pages/voucher";
 import ConsumosVouchers from "./pages/ConsumoVoucher";
@@ -40,11 +40,14 @@ import RegistroParticipante from "./pages/RegistroParticipante";
 import RegistroSalud from "./pages/RegistroSalud";
 import EventoMantenimiento from "./pages/EventoMantenimiento";
 
-
+// Importa el componente Breadcrumb
+import AppBreadcrumb from "./components/AppBreadcrumb";
 
 function App() {
   return (
     <Router>
+      {/* Breadcrumb */}
+      <AppBreadcrumb />
       <Routes>
         <Route path="" element={<Home />} />
         <Route path="/login" element={<Login />} />

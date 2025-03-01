@@ -53,10 +53,8 @@ const GestionAreas = () => {
       <Container>
         
         {/* Encabezado con la ubicación actual */}
-        <h2 className="eventlisttitle">Áreas de Gestión</h2>
-        <div className="mb-4">
-          <p className="text-muted">Estás en: {location.pathname}</p>
-        </div>
+        <h2 className="eventlist-title">Áreas de Gestión</h2>
+        
 
      {/* Botón de regresar a la par de las cajas */}
         <div className="d-flex align-items-start">
