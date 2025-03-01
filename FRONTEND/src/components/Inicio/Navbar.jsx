@@ -40,8 +40,8 @@ const CustomNavbar = () => {
         <nav className={`custom-menu ${menuOpen ? "show" : ""}`}>
           <a href="#inicio" className="navlinkcustom" onClick={() => setMenuOpen(false)}>Inicio</a>
           <a href="#eventosinicio" className="navlinkcustom" onClick={() => setMenuOpen(false)}>Eventos</a>
-          <a href="#contact" className="navlinkcustom" onClick={() => setMenuOpen(false)}>Contacto</a>
           <a href="#acercade" className="navlinkcustom" onClick={() => setMenuOpen(false)}>Acerca de</a>
+          <a href="#contact" className="navlinkcustom" onClick={() => setMenuOpen(false)}>Contacto</a>
           {/* Botón Acceder en móviles */}
           <button className="btn-acceder mobile-only" onClick={handleLoginClick}> Iniciar sesión </button>
         </nav>
