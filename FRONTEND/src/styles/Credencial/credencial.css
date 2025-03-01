@@ -247,3 +247,23 @@
   font-size: 12px;
   cursor: pointer;
 }
+
+.manage-btn-credencial:hover {
+  color: #ffc107; /* Color al pasar el mouse */
+}
+
+.titleCredencial {
+  text-align: center;
+  font-size: 1.3rem; /* Tamaño de fuente reducido */
+  font-weight: bold;
+  margin: 0; /* Eliminar márgenes superior e inferior */
+  color: #facc15; /* Color del título */
+  margin-top: 7px;
+}
+.credenciallisttitle{
+  font-weight: bold;
+  color: #facc15;
+
+
+
+}

@@ -8,6 +8,8 @@ import instalaciones from "../../assets/Mantenimientos/instalaciones.jpg";
 import competencias from "../../assets/Mantenimientos/competencias.jpg";
 import disciplinas from "../../assets/Mantenimientos/disciplinas.jpg";
 import reglas from "../../assets/Mantenimientos/reglas.jpg";
+import comedores from "../../assets/Mantenimientos/comedores.jpg";
+import generos from "../../assets/Mantenimientos/generos.jpg";
 
 import "../../styles/Inicio/GestionAreas.css"; // Estilos de las cajas
 
@@ -26,43 +28,41 @@ const GestionMantenimiento = () => {
       id: 1,
       title: "Mantenimiento de Paises",
       image: paises,
-      description: "Gestión y actualización de países en la base de datos.",
     },
     {
       id: 2,
       title: "Mantenimiento de Ciudades",
       image: ciudades,
-      description: "Administración y actualización de ciudades registradas.",
     },
     {
       id: 3,
       title: "Mantenimiento de Instalaciones",
       image: instalaciones,
-      description: "Supervisión y mantenimiento de infraestructura.",
     },
     {
       id: 4,
       title: "Mantenimiento de Competencias",
       image: competencias,
-      description: "Gestión de eventos y competiciones deportivas.",
     },
     {
       id: 5,
       title: "Mantenimiento de Disciplinas",
       image: disciplinas,
-      description: "Actualización y depuración de sistemas",
     },
     {
       id: 6,
       title: "Mantenimiento de Reglas",
       image: reglas,
-      description: "Administración y modificación de reglas oficiales.",
     },
     {
       id: 7,
       title: "Mantenimiento de Comedores",
-      image: disciplinas,
-      description: "Actualización y depuración de sistemas",
+      image: comedores,
+    },
+    {
+      id: 8,
+      title: "Mantenimiento de Generos",
+      image: generos,
     },
  
   ];
@@ -84,13 +84,13 @@ const GestionMantenimiento = () => {
           variant="outline-warning"
           onClick={() => navigate("/dashboard")}
           className="d-flex align-items-center gap-2"
-          style={{ marginTop: '45px' }}
+          style={{ marginTop: '55px' }}
         >
           <FaArrowLeft size={20} /> Regresar
-        </Button>  <h2 className="eventlisttitle">MANTENIMIENTOS</h2>
+        </Button>  <h2 className="credenciallisttitle">MANTENIMIENTOS</h2>
         <Row>
           {mantenimientosOptions.map((mantenimiento) => (
-            <Col key={mantenimiento.id} xs={4} sm={3} md={2} lg={2} xl={2}>
+            <Col key={mantenimiento.id} xs={12} sm={6} md={4} lg={3} xl={2}>
               <TargetaMantenimiento
                 mantenimiento={mantenimiento}
 

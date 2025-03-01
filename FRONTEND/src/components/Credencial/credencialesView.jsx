@@ -73,66 +73,8 @@ const GestionCredenciales = () => {
       telefono: "+57 316 777 8888",
       direccion: "Calle 90, Bucaramanga, Colombia",
     },
-    {
-      id: 6,
-      title: "Sofía Herrera",
-      image: EventImage6,
-      description: "Estudiante de Psicología",
-      edad: 22,
-      email: "sofia.herrera@email.com",
-      telefono: "+57 316 777 8888",
-      direccion: "Calle 90, Bucaramanga, Colombia",
-    },
-    {
-      id: 6,
-      title: "Sofía Herrera",
-      image: EventImage6,
-      description: "Estudiante de Psicología",
-      edad: 22,
-      email: "sofia.herrera@email.com",
-      telefono: "+57 316 777 8888",
-      direccion: "Calle 90, Bucaramanga, Colombia",
-    },
-    {
-      id: 6,
-      title: "Sofía Herrera",
-      image: EventImage6,
-      description: "Estudiante de Psicología",
-      edad: 22,
-      email: "sofia.herrera@email.com",
-      telefono: "+57 316 777 8888",
-      direccion: "Calle 90, Bucaramanga, Colombia",
-    },
-    {
-      id: 6,
-      title: "Sofía Herrera",
-      image: EventImage6,
-      description: "Estudiante de Psicología",
-      edad: 22,
-      email: "sofia.herrera@email.com",
-      telefono: "+57 316 777 8888",
-      direccion: "Calle 90, Bucaramanga, Colombia",
-    },
-    {
-      id: 6,
-      title: "Sofía Herrera",
-      image: EventImage6,
-      description: "Estudiante de Psicología",
-      edad: 22,
-      email: "sofia.herrera@email.com",
-      telefono: "+57 316 777 8888",
-      direccion: "Calle 90, Bucaramanga, Colombia",
-    },
-    {
-      id: 6,
-      title: "Sofía Herrera",
-      image: EventImage6,
-      description: "Estudiante de Psicología",
-      edad: 22,
-      email: "sofia.herrera@email.com",
-      telefono: "+57 316 777 8888",
-      direccion: "Calle 90, Bucaramanga, Colombia",
-    },
+ 
+
   ];
 
   const handleImageClick = (id) => {
@@ -159,10 +101,10 @@ const GestionCredenciales = () => {
 >
   <FaArrowLeft size={20} /> Regresar
 </Button>
-        <h1 className="eventlisttitle">Asignación de Credenciales</h1>
+        <h1 className="credenciallisttitle">Asignación de Credenciales</h1>
         <Row>
           {credencialesOptions.map((persona) => (
-            <Col key={persona.id} xs={4} sm={3} md={2} lg={2} xl={2}>
+            <Col key={persona.id} xs={12} sm={6} md={4} lg={3} xl={2}>
               <TargetaCredencial
                 event={persona}
                 onImageClick={() => handleImageClick(persona.id)}

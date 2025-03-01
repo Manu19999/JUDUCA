@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Container  } from "react-bootstrap";
+import { Container, Button  } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import EventCard from "../Inicio/EventCard";
 import EventImage from "../../assets/eventoConcierto.jpg";
 import EventImage2 from "../../assets/eventoCine.jpg";
 import EventImage3 from "../../assets/eventoArte.jpg";
+
+import "../../styles/Credencial/credencial.css";
+import { FaArrowLeft } from "react-icons/fa";
+
 import "../../styles/Inicio/EventList.css";
 import "../../styles/Evento/Eventos.css";
 
@@ -125,6 +129,14 @@ const EventosActivos = () => {
   return (
     <section id="events" className="eventlist">
       <Container>
+      <Button
+          variant="outline-warning"
+          onClick={() => navigate("/dashboard")}
+          className="d-flex align-items-center gap-2"
+          style={{ marginTop: '55px' }}
+        >
+          <FaArrowLeft size={20} /> Regresar
+        </Button>  
         <h2 className="eventlisttitle">Eventos</h2>
         <div className="eventtabs">
           <button
