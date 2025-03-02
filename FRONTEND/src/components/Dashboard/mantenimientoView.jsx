@@ -34,11 +34,15 @@ const GestionMantenimiento = () => {
       id: 2,
       title: "Mantenimiento de Ciudades",
       image: ciudades,
+      url: "/MantenimientoCiudades"
+
     },
     {
       id: 3,
       title: "Mantenimiento de Instalaciones",
       image: instalaciones,
+      url: "/MantenimientoInstalaciones"
+
     },
     {
       id: 4,

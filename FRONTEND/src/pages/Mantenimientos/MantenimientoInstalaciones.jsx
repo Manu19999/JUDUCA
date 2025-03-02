@@ -10,8 +10,8 @@ import { mostrarMensajeExito } from "../../components/Crud/MensajeExito.jsx";
 import { Input, Select, Form, Row, Col, Tabs } from "antd";
 import { Button } from "react-bootstrap";
 import "../../styles/Credencial/credencial.css";
-
-import { FaCity } from "react-icons/fa";
+import { FaCheck, FaTimes } from "react-icons/fa";
+import { MdMapsHomeWork } from "react-icons/md";
 import { FaArrowLeft } from "react-icons/fa";
 
 const { Option } = Select;
@@ -21,35 +21,40 @@ const { TabPane } = Tabs;
 const datos = [
   {
     id: 1,
-    nombre: "NEW YORK",
-    pais: "ESTADOS UNIDOS",
+    nombre: "POLIDEPORTIVO",
+    capacidad: "100",
+    activo: true,
   },
   {
     id: 2,
-    nombre: "BUENOS AIRES",
-    pais: "ARGENTINA",
+    nombre: "POLIDEPORTIVO",
+    capacidad: "110",
+    activo: true,
   },
   {
     id: 3,
-    nombre: "LIMA",
-    pais: "PERU",
+    nombre: "POLIDEPORTIVO",
+    capacidad: "120",
+    activo: true,
   },
   {
     id: 4,
-    nombre: "HONDURAS",
-    pais: "TEGUCIGALPA",
+    nombre: "POLIDEPORTIVO",
+    capacidad: "130",
+    activo: false,
   },
 ];
 
 // Columnas de la tabla de usuarios
 const columnas = [
   { nombre: "#", campo: "id", ancho: "5%" },
-  { nombre: "Ciudad", campo: "nombre", ancho: "20%" },
-  { nombre: "Pais", campo: "pais", ancho: "20%" },
+  { nombre: "Nombre", campo: "nombre", ancho: "20%" },
+  { nombre: "Capacidad", campo: "capacidad", ancho: "20%" },
+  { nombre: "Estado", campo: "activo", ancho: "20%" },
   { nombre: "Acción", campo: "accion", ancho: "10%" },
 ];
 
-function MantenimientoCiudades() {
+function MantenimientoInstalaciones() {
   const navigate = useNavigate();
 
   // Estados para controlar la visibilidad de los modales
@@ -112,7 +117,7 @@ function MantenimientoCiudades() {
         console.log("Nuevo registro:", values);
         setShowNuevoModal(false); // Cierra el modal
         formNuevo.resetFields(); // Limpiar el formulario de nuevo registro
-        mostrarMensajeExito("La ciudad se ha registrado correctamente."); // Mensaje de éxito
+        mostrarMensajeExito("La Instalacion se ha registrado correctamente."); // Mensaje de éxito
       })
       .catch((error) => {
         console.error("Error al validar el formulario:", error); // Manejo de errores
@@ -128,7 +133,7 @@ function MantenimientoCiudades() {
         setShowEditModal(false); // Cierra el modal
         setRegistroSeleccionado(null); // Limpia el registro seleccionado
         formEditar.resetFields(); // Limpia el formulario
-        mostrarMensajeExito("La ciudad se ha actualizado correctamente."); // Mensaje de éxito
+        mostrarMensajeExito("La Instalacion se ha actualizado correctamente."); // Mensaje de éxito
       })
       .catch((error) => {
         console.error("Error al validar el formulario:", error); // Manejo de errores
@@ -142,7 +147,7 @@ function MantenimientoCiudades() {
       registroSeleccionado?.id
     );
     setShowDeleteModal(false);
-    mostrarMensajeExito("La ciudad se ha eliminado correctamente.");
+    mostrarMensajeExito("La Instalacion se ha eliminado correctamente.");
   };
 
   return (
@@ -160,9 +165,8 @@ function MantenimientoCiudades() {
       <Tabla
         columnas={columnas} // Columnas de la tabla
         datos={datos} // Datos de la tabla
-        titulo="Gestión de Ciudades" // Título de la tabla
-        icono={<      FaCity
-          className="icono-titulo" />} // Ícono del título
+        titulo="Gestión de Instalaciones" // Título de la tabla
+        icono={<MdMapsHomeWork className="icono-titulo" />} // Ícono del título
         onNuevoRegistro={handleNuevoRegistro} // Función para abrir el modal de nuevo registro
         onGenerarReporte={() => console.log("Generar reporte en PDF")} // Función para generar reporte
         onEdit={handleEdit} // Función para abrir el modal de edición
@@ -174,15 +178,15 @@ function MantenimientoCiudades() {
       <ModalNuevo
         show={showNuevoModal} // Controla la visibilidad del modal
         onHide={() => setShowNuevoModal(false)} // Función para cerrar el modal
-        titulo="Nueva Ciudad" // Título del modal
+        titulo="Nueva Instalacion" // Título del modal
         onGuardar={handleGuardarNuevo} // Función para guardar el nuevo registro
         form={formNuevo} // Pasar el formulario al modal
-        width={600} // Ancho del modal
+        width={450} // Ancho del modal
       >
         <Form layout="vertical" form={formNuevo}>
           <Tabs defaultActiveKey="1">
             {/* Pestaña: Datos Personales */}
-            <Row gutter={12}>
+            <Row gutter={20}>
               <Col span={15}>
                 <Form.Item
                   label="Nombre"
@@ -190,27 +194,45 @@ function MantenimientoCiudades() {
                   rules={[
                     {
                       required: true,
-                      message: "El nombre de la ciudad es obligatorio",
+                      message: "El nombre de la instalacion es obligatorio",
                     },
                   ]}
                 >
-                  <Input placeholder="Ingresa el nombre de la ciudad"/>
+                  <Input placeholder="Ingresa el nombre de la instalacion" />
                 </Form.Item>
               </Col>
               <Col span={15}>
                 <Form.Item
-                  label="Pais"
-                  name="pais"
+                  label="Capacidad"
+                  name="capacidad"
                   rules={[
-                    { required: true, message: "El pais es obligatorio" },
+                    {
+                      required: true,
+                      message: "La capacidad del complejo es obligatoria",
+                    },
                   ]}
                 >
-                  <Select placeholder="Selecciona pais">
-                    <Option value="ALEMANIA">ALEMANIA</Option>
-                    <Option value="JAPON">JAPON</Option>
-                    <Option value="CHINA">CHINA</Option>
-                    <Option value="COREA DEL NORTE">COREA DEL NORTE</Option>
-                    <Option value="URUGUAY">URUGUAY</Option>
+                  <Input placeholder="Ingresa la capacidad" />
+                </Form.Item>
+              </Col>
+              </Row>
+              <Row gutter={20}>
+              <Col span={15}>
+                <Form.Item
+                
+                  label="Estado"
+                  name="activo"
+                  rules={[
+                    { required: true, message: "El estado es obligatorio" },
+                  ]}
+                >
+                  <Select placeholder="Selecciona un estado">
+                    <Option value="ACTIVO">
+                      <FaCheck style={{ color: "green" }} /> ACTIVO
+                    </Option>
+                    <Option value="INACTIVO">
+                      <FaTimes style={{ color: "red" }} /> INACTIVO
+                    </Option>
                   </Select>
                 </Form.Item>
               </Col>
@@ -223,10 +245,12 @@ function MantenimientoCiudades() {
       <ModalEditar
         show={showEditModal} // Controla la visibilidad del modal
         onHide={handleCerrarEditModal} // Función para cerrar el modal
-        titulo="Editar Ciudad" // Título del modal
+        titulo="Editar Instalacion" // Título del modal
         onGuardar={handleGuardarEdit} // Función para guardar los cambios
         form={formEditar} // Formulario del modal
         registroSeleccionado={registroSeleccionado} // Usuario seleccionado
+        width={450} // Ancho del modal
+
       >
         <Form
           layout="vertical"
@@ -235,36 +259,53 @@ function MantenimientoCiudades() {
         >
           <Tabs defaultActiveKey="1">
             {/* Pestaña: Datos Personales */}
-            <Row gutter={12}>
-              <Col span={18}>
+            <Row gutter={20}>
+              <Col span={15}>
                 <Form.Item
                   label="Nombre"
                   name="nombre"
                   rules={[
                     {
                       required: true,
-                      message: "El nombre de la ciudad es obligatorio",
+                      message: "El nombre de la instalacion es obligatorio",
                     },
                   ]}
                 >
-                  <Input placeholder="Ingresa el nombre de la ciudad" />
+                  <Input placeholder="Ingresa el nombre de la instalacion" />
                 </Form.Item>
               </Col>
-
               <Col span={15}>
                 <Form.Item
-                  label="Paises"
-                  name="pais"
+                  label="Capacidad"
+                  name="capacidad"
                   rules={[
-                    { required: true, message: "El nombre del pais es obligatorio" },
+                    {
+                      required: true,
+                      message: "La capacidad del complejo es obligatoria",
+                    },
                   ]}
                 >
-                  <Select placeholder="Selecciona pais">
-                    <Option value="ALEMANIA">ALEMANIA</Option>
-                    <Option value="JAPON">JAPON</Option>
-                    <Option value="CHINA">CHINA</Option>
-                    <Option value="COREA DEL NORTE">COREA DEL NORTE</Option>
-                    <Option value="URUGUAY">URUGUAY</Option>
+                  <Input placeholder="Ingresa la capacidad" />
+                </Form.Item>
+              </Col>
+              </Row>
+              <Row gutter={20}>
+              <Col span={15}>
+                <Form.Item
+                
+                  label="Estado"
+                  name="activo"
+                  rules={[
+                    { required: true, message: "El estado es obligatorio" },
+                  ]}
+                >
+                  <Select placeholder="Selecciona un estado">
+                    <Option value="ACTIVO">
+                      <FaCheck style={{ color: "green" }} /> ACTIVO
+                    </Option>
+                    <Option value="INACTIVO">
+                      <FaTimes style={{ color: "red" }} /> INACTIVO
+                    </Option>
                   </Select>
                 </Form.Item>
               </Col>
@@ -278,14 +319,14 @@ function MantenimientoCiudades() {
         show={showDeleteModal} // Controla la visibilidad del modal
         onHide={() => setShowDeleteModal(false)} // Función para cerrar el modal
         onConfirmar={handleConfirmarDelete} // Función para confirmar la eliminación
-        mensaje={`¿Estás seguro de que deseas eliminar la ciudad ${registroSeleccionado?.nombre}?`} // Mensaje de confirmación
+        mensaje={`¿Estás seguro de que deseas eliminar la Instalacion ${registroSeleccionado?.nombre}?`} // Mensaje de confirmación
       />
 
       {/* Modal para detalles */}
       <ModalDetalles
         show={showDetailsModal} // Controla la visibilidad del modal
         onHide={() => setShowDetailsModal(false)} // Función para cerrar el modal
-        titulo="Detalles de la ciudad" // Título del modal
+        titulo="Detalles de la Instalacion" // Título del modal
         detalles={registroSeleccionado || {}} // Detalles del usuario seleccionado
         width={500} // Ancho personalizado
       />
@@ -293,4 +334,4 @@ function MantenimientoCiudades() {
   );
 }
 
-export default MantenimientoCiudades;
+export default MantenimientoInstalaciones;

@@ -1,8 +1,10 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faCog } from "@fortawesome/free-solid-svg-icons";
+
 import "../../styles/Inicio/EventCard.css";
 
+/* ********** Componente para las imagenes, titulos y navegación de las distitas cajas ********** */
 const EventoCaracteristica = ({
   event,
   onImageClick,

@@ -148,8 +148,8 @@ function MantenimientoPaises() {
           variant="outline-warning"
           onClick={() => navigate("/mantenimientoView")}
           className="d-flex align-items-center gap-2"
-          style={{ marginBottom: '55px', marginLeft: '55px' }}
-        >
+          style={{ marginBottom: "35px", marginLeft: "200px" }}
+          >
           <FaArrowLeft size={20} /> Regresar
         </Button>
       {/* componente de navegación del  navdashboard */}
