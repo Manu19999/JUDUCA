@@ -112,7 +112,7 @@ const GestionEvento = () => {
       <Container>
       <Button
   variant="outline-warning"
-  onClick={() => navigate("/lista-eventos")}
+  onClick={() => navigate("/eventos")}
   className="d-flex align-items-center gap-2"
   style={{  marginTop: '55px' }}
 >
