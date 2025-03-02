@@ -93,7 +93,7 @@ const GestionEvento = () => {
     slidesToShow: 4, // Número de tarjetas visibles a la vez
     slidesToScroll: 1, // Número de tarjetas a desplazar
     autoplay: true, // Desplazamiento automático
-    autoplaySpeed: 2000, // Velocidad del desplazamiento automático
+    autoplaySpeed: 1500, // Velocidad del desplazamiento automático
     responsive: [
       {
         breakpoint: 768, // Configuración para pantallas pequeñas
