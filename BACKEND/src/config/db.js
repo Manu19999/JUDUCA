@@ -1,31 +1,37 @@
-import dotenv from "dotenv";
 import sql from "mssql";
+import dotenv from "dotenv";
 
 dotenv.config();
 
-// Configuración del pool de conexiones
-const poolPromise = new sql.ConnectionPool({
-  server: process.env.DB_HOST,  
+const config = {
+  server: process.env.DB_HOST,
   database: process.env.DB_NAME,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   port: parseInt(process.env.DB_PORT, 10) || 1433,
   options: {
-    encrypt: false, // Desactiva SSL si no tienes un certificado
+    encrypt: false,
     trustServerCertificate: true,
   },
-}).connect();  // Al llamar connect() se garantiza la conexión asíncrona
+};
 
-// Función para retornar la promesa de la conexión
-async function conexionbd() {
+// Función para ejecutar consultas SQL con manejo de errores
+async function ejecutarConsulta(query) {
+  let pool;
   try {
-    const pool = await poolPromise;  // Esperamos la conexión
-    console.log("✅ Conexión establecida con SQL Server");
-    return pool;  // Retornamos el pool ya conectado
-  } catch (err) {
-    console.error("❌ Error en la conexión:", err);
-    throw err;
+    pool = await sql.connect(config);
+    const result = await pool.request().query(query);
+
+    return { error: [], data: result.recordset }; // Si no hay error, error es un arreglo vacío
+  } catch (error) {
+    console.error("⚠️ Error en la consulta:", error);
+    return { error: [{ message: error.message }], data: [] }; // Error en arreglo, data vacía
+  } finally {
+    if (pool) {
+      await pool.close();
+      console.log("🔌 Conexión cerrada correctamente");
+    }
   }
 }
 
-export default conexionbd;
+export default ejecutarConsulta;
