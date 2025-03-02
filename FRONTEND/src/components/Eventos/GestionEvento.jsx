@@ -52,7 +52,7 @@ const GestionEvento = () => {
     },
     {
       id: 5,
-      title: "Equipos",
+      title: "Juegos",
       image: EventImage5,
       description: "Creación de los equipos y competencias.",
       size: "medium", // Asigna un tamaño
@@ -71,6 +71,9 @@ const GestionEvento = () => {
     }
     if (id === 4) {
       navigate("/credencialView");
+    }
+    if (id === 5) {
+      navigate("/JuegoView");
     }
   };
 

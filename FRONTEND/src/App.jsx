@@ -14,6 +14,7 @@ import AsignarCampos from "./pages/AsignacionCampos";
 import DiseñadorCredencial from "./pages/DiseñadorCredencial";
 import CredencialView from "./pages/credencialView";
 import MantenimientoView from "./pages/mantenimientoView";
+import JuegoView from "./pages/juegosView";
 import MantenimientoPaises from "./pages/Mantenimientos/MantenimientoPaises";
 import MantenimientoCiudades from "./pages/Mantenimientos/MantenimientoCiudades";
 import MantenimientoInstalaciones from "./pages/Mantenimientos/MantenimientoInstalaciones";
@@ -63,6 +64,7 @@ function App() {
         <Route path="/roles" element={<Roles />} />
         <Route path="/seguridad" element={<CajaSeguridad />} />
 
+
         <Route path="/crear-evento" element={<CreateEvent />} />
         <Route path="/crearCredencial" element={<CreateCredencial />} />
         <Route path="/confCredencial" element={<ConfigCredencial />} />
@@ -70,17 +72,13 @@ function App() {
         <Route path="/DiseñadorCredencial" element={<DiseñadorCredencial />} />
         <Route path="/credencialView" element={<CredencialView />} />
         <Route path="/mantenimientoView" element={<MantenimientoView />} />
+        <Route path="/JuegoView" element={<JuegoView />} />
         <Route path="/MantenimientoPaises" element={<MantenimientoPaises />} />
         <Route path="/MantenimientoCiudades"element={<MantenimientoCiudades />} />
         <Route path="/MantenimientoInstalaciones"element={<MantenimientoInstalaciones />} />
         <Route path="/MantenimientoGeneros"element={<MantenimientoGeneros />} />
         <Route path="/MantenimientoApiMap"element={<MantenimientoApiMap />} />
-
-        <Route
-          path="/asignarcredencial/:id"
-          element={<AsignacionCredencial />}
-        />
-
+        <Route path="/asignarcredencial/:id" element={<AsignacionCredencial />}/>
         <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="/voucher" element={<Vouchers />} />
