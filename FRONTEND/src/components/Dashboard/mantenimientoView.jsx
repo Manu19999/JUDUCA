@@ -8,7 +8,7 @@ import instalaciones from "../../assets/Mantenimientos/instalaciones.jpg";
 import competencias from "../../assets/Mantenimientos/competencias.jpg";
 import disciplinas from "../../assets/Mantenimientos/disciplinas.jpg";
 import reglas from "../../assets/Mantenimientos/reglas.jpg";
-import comedores from "../../assets/Mantenimientos/comedores.jpg";
+import apiMapping from "../../assets/Mantenimientos/apiMapping.jpg";
 import generos from "../../assets/Mantenimientos/generos.jpg";
 
 import "../../styles/Inicio/GestionAreas.css"; // Estilos de las cajas
@@ -42,32 +42,22 @@ const GestionMantenimiento = () => {
       title: "Mantenimiento de Instalaciones",
       image: instalaciones,
       url: "/MantenimientoInstalaciones"
-
     },
+
     {
       id: 4,
-      title: "Mantenimiento de Competencias",
-      image: competencias,
-    },
-    {
-      id: 5,
-      title: "Mantenimiento de Disciplinas",
-      image: disciplinas,
-    },
-    {
-      id: 6,
-      title: "Mantenimiento de Reglas",
-      image: reglas,
-    },
-    {
-      id: 7,
-      title: "Mantenimiento de Comedores",
-      image: comedores,
-    },
-    {
-      id: 8,
       title: "Mantenimiento de Generos",
       image: generos,
+      url: "/MantenimientoGeneros"
+
+    },
+
+    {
+      id: 5,
+      title: "Mantenimiento Mapeo de Data",
+      image: apiMapping,
+      url: "/MantenimientoApiMap"
+
     },
  
   ];

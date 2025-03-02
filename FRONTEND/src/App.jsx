@@ -17,6 +17,8 @@ import MantenimientoView from "./pages/mantenimientoView";
 import MantenimientoPaises from "./pages/Mantenimientos/MantenimientoPaises";
 import MantenimientoCiudades from "./pages/Mantenimientos/MantenimientoCiudades";
 import MantenimientoInstalaciones from "./pages/Mantenimientos/MantenimientoInstalaciones";
+import MantenimientoGeneros from "./pages/Mantenimientos/MantenimientoGeneros";
+import MantenimientoApiMap from "./pages/Mantenimientos/MantenimientoApiMap";
 
 import AsignacionCredencial from "./pages/AsignacionCredencial";
 
@@ -71,6 +73,8 @@ function App() {
         <Route path="/MantenimientoPaises" element={<MantenimientoPaises />} />
         <Route path="/MantenimientoCiudades"element={<MantenimientoCiudades />} />
         <Route path="/MantenimientoInstalaciones"element={<MantenimientoInstalaciones />} />
+        <Route path="/MantenimientoGeneros"element={<MantenimientoGeneros />} />
+        <Route path="/MantenimientoApiMap"element={<MantenimientoApiMap />} />
 
         <Route
           path="/asignarcredencial/:id"
