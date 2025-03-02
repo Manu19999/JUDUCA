@@ -26,35 +26,35 @@ const GestionEvento = () => {
       id: 1,
       title: "Fichas",
       image: EventImage,
-      description: "Creación y gestión de fichas para el evento.",
+      description: "Creación y gestión de fichas.",
       size: "medium", // Asigna un tamaño
     },
     {
       id: 2,
       title: "Registro",
       image: EventImage3,
-      description: "Fichas de registro e inscriciones al evento.",
+      description: "Fichas de registro e inscriciones.",
       size: "small", // Asigna un tamaño
     },
     {
       id: 3,
       title: "Vauchers",
       image: EventImage4,
-      description: "Inscripciones de los atletas.",
+      description: "Control de tickets y vouchers.",
       size: "medium", // Asigna un tamaño
     },
     {
       id: 4,
       title: "Diseñador de Credenciales",
       image: EventImage6,
-      description: "Configura el diseño de la credencial.",
+      description: "Asignar credenciales.",
       size: "medium", // Asigna un tamaño
     },
     {
       id: 5,
       title: "Equipos",
       image: EventImage5,
-      description: "Creación de los equipos a las disciplinas.",
+      description: "Creación de los equipos y competencias.",
       size: "medium", // Asigna un tamaño
     },
   ];
