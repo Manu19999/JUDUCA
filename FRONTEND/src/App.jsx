@@ -31,17 +31,22 @@ import Tickets from "./pages/tickets";
 import Usuarios from "./pages/Seguridad/Usuarios";
 import Roles from "./pages/Seguridad/Roles";
 
+
 //Rutas de los Eventos
+import CajaEvento from "./pages/CajaEventos";
 import Eventos from "./pages/GestionEvento";
 import ListaEventos from "./pages/ListaEventos";
-import ListaFichas from "./pages/CrearFicha";
+import ListaFichas from "./pages/LlenarFichas";
 import Formularios_Fichas from "./pages/FormularioFicha";
 import RegistroParticipante from "./pages/RegistroParticipante";
 import RegistroSalud from "./pages/RegistroSalud";
-import EventoMantenimiento from "./pages/EventoMantenimiento";
+
 
 // Importa el componente Breadcrumb
 import AppBreadcrumb from "./components/AppBreadcrumb";
+import CajaFichas from "./pages/CajaFichas";
+import Llena_Fichas from "./pages/LlenarFichas";
+
 
 function App() {
   return (
@@ -55,7 +60,6 @@ function App() {
         <Route path="/roles" element={<Roles />} />
         <Route path="/seguridad" element={<CajaSeguridad />} />
 
-
         <Route path="/crear-evento" element={<CreateEvent />} />
         <Route path="/crearCredencial" element={<CreateCredencial />} />
         <Route path="/confCredencial" element={<ConfigCredencial />} />
@@ -64,10 +68,15 @@ function App() {
         <Route path="/credencialView" element={<CredencialView />} />
         <Route path="/mantenimientoView" element={<MantenimientoView />} />
         <Route path="/MantenimientoPaises" element={<MantenimientoPaises />} />
-        <Route path="/MantenimientoCiudades" element={<MantenimientoCiudades />} />
+        <Route
+          path="/MantenimientoCiudades"
+          element={<MantenimientoCiudades />}
+        />
 
-        <Route path="/asignarcredencial/:id" element={<AsignacionCredencial />} />
-
+        <Route
+          path="/asignarcredencial/:id"
+          element={<AsignacionCredencial />}
+        />
 
         <Route path="/dashboard" element={<Dashboard />} />
 
@@ -76,13 +85,14 @@ function App() {
         <Route path="/comedor" element={<Comedores />} />
         <Route path="/Ticket" element={<Tickets />} />
 
+        <Route path="/eventos" element={<CajaEvento />} />
+        <Route path="/lista-fichas" element={<CajaFichas />} />
         <Route path="/gestion-evento" element={<Eventos />} />
         <Route path="/lista-eventos" element={<ListaEventos />} />
-        <Route path="/lista-fichas" element={<ListaFichas />} />
         <Route path="/Formulario-fichas" element={<Formularios_Fichas />} />
+        <Route path="/llenar-fichas" element={<Llena_Fichas />} />
         <Route path="/ficha-participantes" element={<RegistroParticipante />} />
         <Route path="/ficha-salud" element={<RegistroSalud />} />
-        <Route path="/mantenimiento-evento" element={<EventoMantenimiento />} />
       </Routes>
     </Router>
   );

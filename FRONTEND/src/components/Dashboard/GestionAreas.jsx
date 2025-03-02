@@ -27,7 +27,7 @@ const GestionAreas = () => {
       title: "Eventos",
       image: EventosImage,
       description: "Administración de eventos, inscripciones y equipos.",
-      route: "/lista-eventos", // Ruta a la que redirige
+      route: "/eventos", // Ruta a la que redirige
     },
     {
       id: 3,
