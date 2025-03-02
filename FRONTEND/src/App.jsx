@@ -16,6 +16,7 @@ import CredencialView from "./pages/credencialView";
 import MantenimientoView from "./pages/mantenimientoView";
 import MantenimientoPaises from "./pages/Mantenimientos/MantenimientoPaises";
 import MantenimientoCiudades from "./pages/Mantenimientos/MantenimientoCiudades";
+import MantenimientoInstalaciones from "./pages/Mantenimientos/MantenimientoInstalaciones";
 
 import AsignacionCredencial from "./pages/AsignacionCredencial";
 
@@ -68,10 +69,8 @@ function App() {
         <Route path="/credencialView" element={<CredencialView />} />
         <Route path="/mantenimientoView" element={<MantenimientoView />} />
         <Route path="/MantenimientoPaises" element={<MantenimientoPaises />} />
-        <Route
-          path="/MantenimientoCiudades"
-          element={<MantenimientoCiudades />}
-        />
+        <Route path="/MantenimientoCiudades"element={<MantenimientoCiudades />} />
+        <Route path="/MantenimientoInstalaciones"element={<MantenimientoInstalaciones />} />
 
         <Route
           path="/asignarcredencial/:id"
