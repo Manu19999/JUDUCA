@@ -20,6 +20,11 @@ const NavDashboard = () => {
     setMenuOpen(false); // Cierra el menú en dispositivos móviles
   };
 
+  const handleEscanerClick = () => {
+    navigate("/escaneoCredencial"); // Redirige a /dashboard
+    setMenuOpen(false); // Cierra el menú en dispositivos móviles
+  };
+
   // Menú desplegable para el perfil
   const profileMenu = (
     <Menu>
@@ -65,6 +70,13 @@ const NavDashboard = () => {
             onClick={handleInicioClick} // Redirige a /dashboard
           >
             Inicio
+          </a>
+          <a
+            
+            className="navlinkcustom"
+            onClick={handleEscanerClick} // Redirige a /dashboard
+          >
+            Escaneo
           </a>
 
           {/* Menú desplegable de perfil con ícono */}

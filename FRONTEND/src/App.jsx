@@ -12,9 +12,13 @@ import CreateCredencial from "./pages/Credencial";
 import ConfigCredencial from "./pages/PlantillaCredencial"; // Importa la nueva página de inicio
 import AsignarCampos from "./pages/AsignacionCampos";
 import DiseñadorCredencial from "./pages/DiseñadorCredencial";
+import EscanerCredencial from "./pages/escanerCredenciales";
+
+
 import CredencialView from "./pages/credencialView";
 import MantenimientoView from "./pages/mantenimientoView";
 import JuegoView from "./pages/juegosView";
+
 import MantenimientoPaises from "./pages/Mantenimientos/MantenimientoPaises";
 import MantenimientoCiudades from "./pages/Mantenimientos/MantenimientoCiudades";
 import MantenimientoInstalaciones from "./pages/Mantenimientos/MantenimientoInstalaciones";
@@ -70,6 +74,9 @@ function App() {
         <Route path="/confCredencial" element={<ConfigCredencial />} />
         <Route path="/AsignacionCampos" element={<AsignarCampos />} />
         <Route path="/DiseñadorCredencial" element={<DiseñadorCredencial />} />
+        <Route path="/asignarcredencial/:id" element={<AsignacionCredencial />}/>
+        <Route path="/escaneoCredencial" element={<EscanerCredencial />} />
+
         <Route path="/credencialView" element={<CredencialView />} />
         <Route path="/mantenimientoView" element={<MantenimientoView />} />
         <Route path="/JuegoView" element={<JuegoView />} />
