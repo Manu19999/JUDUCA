@@ -42,9 +42,10 @@ import Roles from "./pages/Seguridad/Roles";
 
 //Rutas de los Eventos
 import CajaEvento from "./pages/CajaEventos";
+import CajaFichas from "./pages/CajaFichas";
+import Llena_Fichas from "./pages/LlenarFichas";
 import Eventos from "./pages/GestionEvento";
-import ListaEventos from "./pages/ListaEventos";
-import ListaFichas from "./pages/LlenarFichas";
+import GestionFicha from "./pages/Eventos/GestionFichas";
 import Formularios_Fichas from "./pages/FormularioFicha";
 import RegistroParticipante from "./pages/RegistroParticipante";
 import RegistroSalud from "./pages/RegistroSalud";
@@ -52,8 +53,8 @@ import RegistroSalud from "./pages/RegistroSalud";
 
 // Importa el componente Breadcrumb
 import AppBreadcrumb from "./components/AppBreadcrumb";
-import CajaFichas from "./pages/CajaFichas";
-import Llena_Fichas from "./pages/LlenarFichas";
+
+
 
 
 function App() {
@@ -68,24 +69,38 @@ function App() {
         <Route path="/roles" element={<Roles />} />
         <Route path="/seguridad" element={<CajaSeguridad />} />
 
-
         <Route path="/crear-evento" element={<CreateEvent />} />
         <Route path="/crearCredencial" element={<CreateCredencial />} />
         <Route path="/confCredencial" element={<ConfigCredencial />} />
         <Route path="/AsignacionCampos" element={<AsignarCampos />} />
         <Route path="/DiseñadorCredencial" element={<DiseñadorCredencial />} />
-        <Route path="/asignarcredencial/:id" element={<AsignacionCredencial />}/>
+        <Route
+          path="/asignarcredencial/:id"
+          element={<AsignacionCredencial />}
+        />
         <Route path="/escaneoCredencial" element={<EscanerCredencial />} />
 
         <Route path="/credencialView" element={<CredencialView />} />
         <Route path="/mantenimientoView" element={<MantenimientoView />} />
         <Route path="/JuegoView" element={<JuegoView />} />
         <Route path="/MantenimientoPaises" element={<MantenimientoPaises />} />
-        <Route path="/MantenimientoCiudades"element={<MantenimientoCiudades />} />
-        <Route path="/MantenimientoInstalaciones"element={<MantenimientoInstalaciones />} />
-        <Route path="/MantenimientoGeneros"element={<MantenimientoGeneros />} />
-        <Route path="/MantenimientoApiMap"element={<MantenimientoApiMap />} />
-        <Route path="/asignarcredencial/:id" element={<AsignacionCredencial />}/>
+        <Route
+          path="/MantenimientoCiudades"
+          element={<MantenimientoCiudades />}
+        />
+        <Route
+          path="/MantenimientoInstalaciones"
+          element={<MantenimientoInstalaciones />}
+        />
+        <Route
+          path="/MantenimientoGeneros"
+          element={<MantenimientoGeneros />}
+        />
+        <Route path="/MantenimientoApiMap" element={<MantenimientoApiMap />} />
+        <Route
+          path="/asignarcredencial/:id"
+          element={<AsignacionCredencial />}
+        />
         <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="/voucher" element={<Vouchers />} />
@@ -95,8 +110,8 @@ function App() {
 
         <Route path="/eventos" element={<CajaEvento />} />
         <Route path="/lista-fichas" element={<CajaFichas />} />
+        <Route path="/fichas" element={<GestionFicha />} />
         <Route path="/gestion-evento" element={<Eventos />} />
-        <Route path="/lista-eventos" element={<ListaEventos />} />
         <Route path="/Formulario-fichas" element={<Formularios_Fichas />} />
         <Route path="/llenar-fichas" element={<Llena_Fichas />} />
         <Route path="/ficha-participantes" element={<RegistroParticipante />} />
