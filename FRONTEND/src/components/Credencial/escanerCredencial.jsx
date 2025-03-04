@@ -1,5 +1,5 @@
-//import { useState } from "react";
-//import { QrReader } from "react-qr-reader";
+import { useState } from "react";
+import { QrReader } from "react-qr-reader";
 
 const QRScanner = () => {
   const [scanResult, setScanResult] = useState(null);
