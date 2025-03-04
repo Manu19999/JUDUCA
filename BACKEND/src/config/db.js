@@ -24,8 +24,15 @@ async function ejecutarConsulta(query) {
 
     return { error: [], data: result.recordset }; // Si no hay error, error es un arreglo vacío
   } catch (error) {
+    // Manejamos el error específico relacionado con hashes (si existe)
+    if (error.message.toLowerCase().includes('hash')) {
+      console.error("⚠️ Error relacionado con Hash:", error.message);
+      return { error: [{ message: "Hubo un problema con el hash en la consulta." }], data: [] };
+    }
+
+    // Manejamos otros tipos de error
     console.error("⚠️ Error en la consulta:", error);
-    return { error: [{ message: error.message }], data: [] }; // Error en arreglo, data vacía
+    return { error: [{ message: error.message }], data: [] }; // Error genérico
   } finally {
     if (pool) {
       await pool.close();
