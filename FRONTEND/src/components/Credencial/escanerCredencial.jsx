@@ -13,23 +13,33 @@ const QRScanner = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md text-center">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800">Escanear Código QR</h2>
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">
+          Escanear Código QR
+        </h2>
         <div className="border-2 border-gray-300 rounded-lg overflow-hidden mb-4">
           <QrReader
-            constraints={{ facingMode: "environment" }}
+            constraints={{ environment: "user" }}
             onResult={(result, error) => {
               if (result) {
                 setScanResult(result.text);
                 setErrorMessage(null);
+                // Redirige a una URL externa cuando se escanea el código QR
+                window.location.href = result.text; // Redirige al valor del QR (una URL externa)
               }
               if (error) {
-                setErrorMessage("No se pudo leer el código QR, intenta nuevamente.");
+                setErrorMessage(
+                  "No se pudo leer el código QR, intenta nuevamente."
+                );
               }
             }}
             className="w-full h-auto"
           />
         </div>
-        {scanResult && <p className="text-green-600 font-semibold">Resultado: {scanResult}</p>}
+        {scanResult && (
+          <p className="text-green-600 font-semibold">
+            Resultado: {scanResult}
+          </p>
+        )}
         {errorMessage && <p className="text-red-600">{errorMessage}</p>}
         {(scanResult || errorMessage) && (
           <button
