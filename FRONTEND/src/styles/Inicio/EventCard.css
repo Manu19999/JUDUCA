@@ -49,34 +49,36 @@
 }
 
 /* ===== EVENT CARD STYLES ===== */
-.eventcard {
+.cardevent {
   position: relative;
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   background-color: #ffffff; /* Fondo blanco */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  width: 300px; /* Ancho fijo */
-  min-width: 280px; /* Asegura que las tarjetas no se compriman */
-  flex: 0 0 auto; /* Evita que las tarjetas se ajusten dinámicamente */
+  width: 300px; /* Ancho reducido de la tarjeta */
+  height: 90%;
+  display: flex;
+  flex-direction: column; /* Altura automática para adaptarse al contenido */
+  margin: 10px; /* Margen para separar las tarjetas */
 }
 
-.eventcard:hover {
+.cardevent:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   filter: brightness(1.05); /* Aumenta ligeramente el brillo */
 }
 
-.eventimage {
+.imagenevent {
   width: 100%;
-  height: 150px; /* Altura de la imagen */
+  height: 180px; /* Altura fija para la imagen */
   object-fit: cover;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 }
 
-.eventcontent {
-  padding: 15px;
+.conteevent {
+  padding: 10px 15px; /* Padding reducido (10px arriba/abajo, 15px izquierda/derecha) */
   background-color: #ffffff; /* Fondo blanco */
   color: #1d386e; /* Color de texto principal */
   display: flex;
@@ -84,30 +86,112 @@
   justify-content: space-between;
 }
 
-.eventtitle {
+.titleevent {
   text-align: center;
-  font-size: 1.3rem;
+  font-size: 1rem; /* Tamaño de fuente reducido */
   font-weight: bold;
   margin: 0 0 7px 0;
   color: #facc15;
 }
 
-.eventdate {
-  font-size: 0.9rem;
-  margin: 6px 0;
-  color: #666;
+.dateevent {
+  font-size: 0.85rem; /* Tamaño de fuente reducido */
+  margin: 6px 0; /* Margen reducido */
+  color: #666; /* Color de la fecha */
   text-align: center;
 }
 
-.eventdescription {
-  font-size: 0.8rem;
-  line-height: 1.4;
-  margin-bottom: 10px;
-  color: #444;
+.descripevent {
+  font-size: 0.75rem; /* Tamaño de fuente reducido */
+  line-height: 1.4; /* Altura de línea reducida */
+  margin: 0 0 10px 0; /* Margen inferior reducido */
+  color: #444; /* Color de la descripción */
   text-align: center;
 }
 
-/* ===== ICONS STYLES ===== */
+
+
+@media (max-width: 480px) {
+  .cardevent {
+    width: 250px; /* Una columna en móviles */
+    height: 70%; /* Máximo ancho para mantener consistencia */
+  }
+
+  .imagenevent {
+    height: 120px; /* Altura reducida en móviles */
+  }
+
+  .conteevent {
+    padding: 10px; /* Padding reducido en móviles */
+  }
+
+  .titleevent {
+    font-size: 0.9rem; /* Tamaño de fuente reducido en móviles */
+  }
+
+  .dateevent {
+    font-size: 0.8rem; /* Tamaño de fuente reducido en móviles */
+  }
+
+  .descripevent {
+    font-size: 0.7rem; /* Tamaño de fuente reducido en móviles */
+  }
+}
+
+@media (max-width: 400px) {
+  .cardevent {
+    width: 200px; /* Una columna en móviles */
+    height: 60%; /* Máximo ancho para mantener consistencia */
+  }
+
+  .imagenevent {
+    height: 100px; /* Altura reducida en móviles */
+  }
+
+  .conteevent {
+    padding: 8px; /* Padding reducido en móviles */
+  }
+
+  .titleevent {
+    font-size: 0.8rem; /* Tamaño de fuente reducido en móviles */
+  }
+
+  .dateevent {
+    font-size: 0.7rem; /* Tamaño de fuente reducido en móviles */
+  }
+
+  .descripevent {
+    font-size: 0.6rem; /* Tamaño de fuente reducido en móviles */
+  }
+}
+
+@media (max-width: 336px) {
+  .cardevent {
+    width: 180px; /* Una columna en móviles */
+    height: 55%; /* Máximo ancho para mantener consistencia */
+  }
+
+  .imagenevent {
+    height: 80px; /* Altura reducida en móviles */
+  }
+
+  .conteevent {
+    padding: 6px; /* Padding reducido en móviles */
+  }
+
+  .titleevent {
+    font-size: 0.7rem; /* Tamaño de fuente reducido en móviles */
+  }
+
+  .dateevent {
+    font-size: 0.6rem; /* Tamaño de fuente reducido en móviles */
+  }
+
+  .descripevent {
+    font-size: 0.5rem; /* Tamaño de fuente reducido en móviles */
+  }
+}
+/*Diseño de los iconos de los eventos */
 .eventicons {
   display: flex;
   justify-content: flex-end;

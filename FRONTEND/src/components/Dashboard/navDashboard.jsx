@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Dropdown, Menu } from "antd";
-import { CaretDownFilled } from "@ant-design/icons";
-import { MdLogout } from "react-icons/md";
+import { UserOutlined, LogoutOutlined, CaretDownFilled } from "@ant-design/icons";
 import "../../styles/Inicio/Navbar.css";
 import logo from "../../assets/logo-unah-blanco.png";
 
@@ -16,35 +15,32 @@ const NavDashboard = () => {
     setMenuOpen(false);
   };
 
-  const seguridadItems = [
-    { key: "1", label: "Usuarios", onClick: () => navigate("/usuarios") },
-    { key: "2", type: "divider" },
-    { key: "3", label: "Roles", onClick: () => navigate("/roles") },
-    { key: "4", type: "divider" },
-    { key: "5", label: "Bitácora" },
-    { key: "6", type: "divider" },
-    { key: "7", label: "Permisos" },
-  ];
+  const handleInicioClick = () => {
+    navigate("/dashboard"); // Redirige a /dashboard
+    setMenuOpen(false); // Cierra el menú en dispositivos móviles
+  };
 
-  const credencialesItems = [
-    { key: "1", label: "Asignar Credencial", onClick: () => navigate("/crearCredencial") },
-    { key: "2", type: "divider" },
-    { key: "3", label: "Configuración credencial", onClick: () => navigate("/confCredencial") },
-  ];
+  const handleEscanerClick = () => {
+    navigate("/escaneoCredencial"); // Redirige a /dashboard
+    setMenuOpen(false); // Cierra el menú en dispositivos móviles
+  };
 
-  const vouchersItems = [
-    { key: "1", label: "Vouchers", onClick: () => navigate("/voucher") },
-    { key: "2", type: "divider" },
-    { key: "3", label: "Consumo Vouchers", onClick: () => navigate("/consumo") },
-    { key: "4", type: "divider" },
-    { key: "5", label: "Tickets", onClick: () => navigate("/ticket") },
-    { key: "6", type: "divider" },
-    { key: "7", label: "Comedores", onClick: () => navigate("/comedor") },
-  ];
+  // Menú desplegable para el perfil
+  const profileMenu = (
+    <Menu>
+      <Menu.Item key="profile" icon={<UserOutlined />}>
+        Perfil
+      </Menu.Item>
+      <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={handleLogoutClick}>
+        Cerrar sesión
+      </Menu.Item>
+    </Menu>
+  );
 
   return (
     <header className="navbar-custom">
       <div className="navbar-container">
+        {/* Logo y nombre de la plataforma */}
         <div className="navbar-brand">
           <a
             href="https://www.unah.edu.hn/"
@@ -57,6 +53,7 @@ const NavDashboard = () => {
           </a>
         </div>
 
+        {/* Botón de menú para móviles */}
         <button
           className={`custom-toggle ${menuOpen ? "open" : ""}`}
           onClick={() => setMenuOpen(!menuOpen)}
@@ -64,41 +61,31 @@ const NavDashboard = () => {
           {menuOpen ? "✖" : "☰"}
         </button>
 
+        {/* Menú de navegación */}
         <nav className={`custom-menu ${menuOpen ? "show" : ""}`}>
-          <a href="#inicio" className="navlinkcustom" onClick={() => setMenuOpen(false)}>
+          {/* Enlace de inicio */}
+          <a
+            
+            className="navlinkcustom"
+            onClick={handleInicioClick} // Redirige a /dashboard
+          >
             Inicio
           </a>
-
-          <Dropdown menu={{ items: seguridadItems }}>
-            <a className="navlinkcustom" onClick={(e) => e.preventDefault()} style={{ cursor: "pointer" }}>
-              Seguridad <CaretDownFilled />
-            </a>
-          </Dropdown>
-
-          <a className="navlinkcustom" onClick={() => navigate("/lista-eventos")} style={{ cursor: "pointer" }}>
-            Eventos
+          <a
+            
+            className="navlinkcustom"
+            onClick={handleEscanerClick} // Redirige a /dashboard
+          >
+            Escaneo
           </a>
 
-          <Dropdown menu={{ items: credencialesItems }}>
+          {/* Menú desplegable de perfil con ícono */}
+          <Dropdown overlay={profileMenu} trigger={["click"]}>
             <a className="navlinkcustom" onClick={(e) => e.preventDefault()} style={{ cursor: "pointer" }}>
-              Credenciales <CaretDownFilled />
+              <UserOutlined style={{ fontSize: "20px" }} /> <CaretDownFilled />
             </a>
           </Dropdown>
-
-          <Dropdown menu={{ items: vouchersItems }}>
-            <a className="navlinkcustom" onClick={(e) => e.preventDefault()} style={{ cursor: "pointer" }}>
-              Vouchers y tickets <CaretDownFilled />
-            </a>
-          </Dropdown>
-
-          <button className="btn-acceder mobile-only" onClick={handleLogoutClick}>
-            Cerrar sesión <MdLogout />
-          </button>
         </nav>
-
-        <button className="btn-acceder desktop-only" onClick={handleLogoutClick}>
-          Cerrar sesión <MdLogout />
-        </button>
       </div>
     </header>
   );

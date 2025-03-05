@@ -1,6 +1,6 @@
 /* Estilos para la sección Acerca de */
 .about-section {
-    padding: 100px 20px;
+    padding: 130px 20px;
     background: #ffffff; /* Fondo sólido y limpio */
     text-align: center;
     overflow: hidden;
@@ -108,6 +108,17 @@
       margin: 20px auto 0;
       hyphens: auto; /* Permite dividir palabras para evitar huecos grandes */
       word-spacing: -0.5px; /* Reduce espacios grandes entre palabras */
+    }
+    
+  }
+
+  @media (max-width: 337px) {
+    .about-title {
+      font-size: 1.65rem;
+    }
+  
+    .about-description {
+      font-size: clamp(0.9rem, 2vw, 1rem);
     }
     
   }

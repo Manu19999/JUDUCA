@@ -73,10 +73,12 @@ const GestionCredenciales = () => {
       telefono: "+57 316 777 8888",
       direccion: "Calle 90, Bucaramanga, Colombia",
     },
+ 
+
   ];
 
   const handleImageClick = (id) => {
-    navigate(`/asignar-credencial/${id}`);
+    navigate(`/asignarcredencial/${id}`);
   };
 
   const handleVerInfo = (persona) => {
@@ -84,31 +86,30 @@ const GestionCredenciales = () => {
     setShowModal(true);
   };
 
-  const handleManageClick = (id) => {
-    console.log(`Gestionar credencial de la persona con id ${id}`);
+  const handleConfigurarCredencial = (id) => {
+    navigate(`/asignacionCampos`);
   };
 
   return (
     <section id="credenciales" className="eventlist">
       <Container>
       <Button
-  variant="outline-dark"
+  variant="outline-warning"
   onClick={() => navigate("/gestion-evento")}
   className="d-flex align-items-center gap-2"
-  style={{  marginTop: '30Px' }}
+  style={{  marginTop: '30px' }}
 >
   <FaArrowLeft size={20} /> Regresar
 </Button>
-
-        <h2 className="eventlisttitle">Asignación de Credenciales</h2>
+        <h1 className="credenciallisttitle">Asignación de Credenciales</h1>
         <Row>
           {credencialesOptions.map((persona) => (
-            <Col key={persona.id} xs={4} sm={3} md={2} lg={2} xl={2}>
+            <Col key={persona.id} xs={12} sm={6} md={4} lg={3} xl={2}>
               <TargetaCredencial
                 event={persona}
                 onImageClick={() => handleImageClick(persona.id)}
                 handleVerInfo={() => handleVerInfo(persona)} // Pasamos el objeto completo
-                onManageClick={() => handleManageClick(persona.id)}
+                handleConfigurarCredencial={() => handleConfigurarCredencial(persona.id)}
                 showIcons={true}
               />
             </Col>
@@ -121,7 +122,6 @@ const GestionCredenciales = () => {
             style={{
               backgroundColor: "#e3f2fd",
               borderRadius: "10px",
-              padding: "20px",
             }}
           >
             <Modal.Header closeButton>

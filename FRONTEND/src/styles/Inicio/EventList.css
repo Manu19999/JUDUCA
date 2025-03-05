@@ -1,7 +1,7 @@
 /* ===== EVENT LIST STYLES ===== */
-.eventlist {
+.listevent {
   text-align: center;
-  padding: 80px 20px;
+  padding: 90px 20px;
   background-color: #ffffff; /* Fondo blanco */
 }
 
@@ -13,59 +13,68 @@
 }
 
 /* Estilos para el carrusel */
-.eventgrid {
+.gridevent {
   display: flex;
   flex-direction: column; /* Por defecto en columna */
   align-items: center;
   gap: 20px;
   overflow-x: hidden;
   position: relative;
-  padding-bottom: 20px;
+  padding-bottom: 50px;
 }
 
-.eventgrid.two-events {
-  flex-direction: row; /* Se pone en fila si hay solo dos eventos */
-  justify-content: center;
-}
-
-
-.carousel-container {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-  justify-content: center; /* Centra las tarjetas dentro del contenedor */
-  margin-bottom: 15px; /* Espacio debajo del carrusel */
+.contcarrusel {
+   display: flex;
+  justify-content: center; /* Centra las tarjetas horizontalmente */
+  align-items: center; /* Centra las tarjetas verticalmente */
+  gap: 20px; /* Espacio entre las tarjetas */
+  width: 100%; /* Asegura que el contenedor ocupe todo el ancho */
+  padding: 0 60px; /* Espacio para los botones de navegación */
+  position: relative;
+  height: 350px; /* Altura fija para el contenedor del carrusel */
+  overflow: hidden; /* Evita que el contenido desborde */
 }
 
 /* Estilos para los botones del carrusel */
-.carousel-buttons {
+.buttcarrusel {
   display: flex;
   justify-content: center; /* Centra los botones horizontalmente */
   gap: 20px; /* Espacio entre los botones */
 }
 
-.carousel-button {
-  background: white; /* Fondo blanco */
-  border: 1px solid #336699; /* Borde azul */
-  color: #336699; /* Color azul para el ícono */
-  font-size: 24px;
+.buttcarrusel {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente */
+  color: white; /* Color de la flecha */
+  border: 1px solid rgba(255, 255, 255, 0.5); /* Borde sutil */
+  border-radius: 50%; /* Forma circular */
+  padding: 12px; /* Tamaño del botón */
   cursor: pointer;
-  width: 40px; /* Tamaño fijo */
-  height: 40px; /* Tamaño fijo */
-  border-radius: 50%; /* Forma perfectamente redonda */
-  z-index: 10;
-  transition: all 0.3s ease;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 40px; /* Ancho fijo */
+  height: 40px; /* Alto fijo */
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* Transición suave */
 }
 
-.carousel-button:hover {
-  background: #e9eef4; /* Fondo gris claro al hacer hover */
-  border-color: #1D386E; /* Borde azul más oscuro al hacer hover */
-  color: #1D386E; /* Color azul más oscuro para el ícono al hacer hover */
+.buttcarrusel:hover {
+  background-color: rgba(0, 0, 0, 0.8); /* Fondo más oscuro al hacer hover */
+  border-color: rgba(255, 255, 255, 0.8); /* Borde más visible al hacer hover */
 }
 
-.eventlisttitle {
+.buttcarrusel.prev {
+  left: 20px; /* Posición del botón anterior */
+}
+
+.buttcarrusel.next {
+  right: 20px; /* Posición del botón siguiente */
+}
+
+.titlelistevent {
   font-size: 2.5rem;
   font-weight: bold;
   color: #1D386E; /* Color principal de la UNAH */
@@ -86,15 +95,15 @@
 }
 
 /* Pestañas */
-.eventtabs {
+.optionsevent {
   display: flex;
   justify-content: center;
   flex-wrap: wrap; /* Permite que las pestañas se ajusten en pantallas pequeñas */
   gap: 15px;
-  margin-bottom: 40px;
+  margin-bottom: 35px;
 }
 
-.eventtab {
+.optionevent {
   font-size: 1.1rem;
   color: #336699; /* Color principal de la UNAH */
   padding: 12px 24px;
@@ -107,14 +116,14 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.eventtab:hover {
+.optionevent:hover {
   background: #e0e8f0; /* Fondo gris un poco más oscuro */
   border: 1px solid #add1f8;
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.eventtab.active {
+.optionevent.active {
   background: #336699; /* Fondo azul cuando está activo */
   color: white;
   box-shadow: 0 4px 12px rgba(51, 102, 153, 0.3);
@@ -122,56 +131,120 @@
 
 /* Ajuste de columnas para mejor visualización */
 @media (max-width: 768px) {
-  .eventlist {
+  .listevent {
     padding: 60px 15px;
     margin-top: 40px;
   }
 
-  .eventlisttitle {
+  .titlelistevent {
     font-size: 2rem;
     margin-bottom: 30px;
   }
 
-  .eventtabs {
+  .optionsevent {
     gap: 10px;
     margin-bottom: 30px;
   }
 
-  .eventtab {
+  .optionevent {
     font-size: 1rem;
     padding: 10px 20px;
   }
 
-  .eventgrid {
+  .gridevent {
     gap: 15px;
     padding-bottom: 15px;
   }
 
+  .contcarrusel {
+    padding: 0 20px; /* Menos espacio en los lados */
+    gap: 10px; /* Menos espacio entre las tarjetas */
+  }
+
+  .buttcarrusel {
+    width: 30px; /* Botones más pequeños */
+    height: 30px;
+    padding: 8px;
+  }
+
+  .buttcarrusel.prev {
+    left: 10px; /* Posición ajustada */
+  }
+
+  .buttcarrusel.next {
+    right: 10px; /* Posición ajustada */
+  }
 }
 
 @media (max-width: 480px) {
-  .eventlist {
-    padding: 40px 10px;
+  .listevent {
+    padding: 80px 10px;
   }
 
-  .eventlisttitle {
-    font-size: 1.75rem;
+  .titlelistevent {
+    font-size: 1.8rem;
     margin-bottom: 20px;
   }
 
-  .eventtabs {
+  .optionsevent {
     gap: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
 
-  .eventtab {
+  .optionevent {
     font-size: 0.9rem;
     padding: 8px 16px;
   }
 
-  .eventgrid {
+  .gridevent {
     gap: 10px;
     padding-bottom: 10px;
   }
-  
+}
+
+@media (max-width: 401px) {
+
+  .optionsevent {
+    gap: 8px;
+    margin-bottom: -5px;
+  }
+
+  .indicacarrusel {
+    margin-top: -20px;
+  }
+}
+
+@media (max-width: 337px) {
+  .listevent {
+    padding: 50px 10px;
+  }
+
+  .titlelistevent {
+    font-size: 1.7rem;
+  }
+
+  .optionsevent {
+    gap: 8px;
+    margin-bottom: -30px;
+  }
+}
+
+.indicacarrusel {
+  display: flex;
+  justify-content: center;
+}
+
+.indicacarrusel .indica {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ccc;
+  border: none;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.indicacarrusel .indica.active {
+  background-color: #333;
 }

@@ -1,0 +1,46 @@
+/* Estilos para el contenedor del Breadcrumb */
+.breadcrumb-container {
+    margin-top: 80px; /* Ajusta este valor según la altura de tu Nav */
+    margin-bottom: -60px;
+    padding: 0 16px; /* Añade un poco de padding para que no esté pegado a los bordes */
+    z-index: 1; /* Asegura que el Breadcrumb esté por encima de otros elementos si es necesario */
+    background-color: #fff; /* Fondo blanco para que no se mezcle con otros elementos */
+    position: sticky; /* Opcional: Hace que el Breadcrumb sea "sticky" si lo prefieres */
+    top: 60px; /* Ajusta este valor según la altura de tu Nav */
+  }
+  
+  /* Estilos para los ítems del Breadcrumb */
+  .ant-breadcrumb {
+    font-size: 14px;
+  }
+  
+  /* Estilos base para todos los ítems del Breadcrumb */
+  .breadcrumb-item {
+    color: #807f7f; /* Color gris oscuro para todos los ítems */
+    text-decoration: none; /* Quita el subrayado */
+    transition: all 0.3s ease; /* Transición suave para el hover */
+    padding: 4px 8px; /* Añade un poco de padding para que el hover se vea mejor */
+    border-radius: 4px; /* Bordes redondeados para el hover */
+  }
+  
+  /* Estilos para los elementos clickeables */
+  .clickable {
+    cursor: pointer; /* Cambia el cursor a pointer */
+  }
+  
+  .clickable:hover {
+    color: #000; /* Color negro al hacer hover */
+    background-color: #f5f5f5; /* Fondo gris beige al hacer hover */
+  }
+  
+  /* Estilos para el último ítem del Breadcrumb (no clickeable) */
+  .last-item {
+    color: rgba(0, 0, 0, 0.7); /* Color gris más oscuro para el último ítem */
+    
+  }
+  
+  /* Estilos para el separador personalizado */
+  .ant-breadcrumb-separator {
+    margin: 0 8px; /* Espaciado alrededor del separador */
+    color: rgba(0, 0, 0, 0.45); /* Color gris para el separador */
+  }

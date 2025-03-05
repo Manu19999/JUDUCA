@@ -1,13 +1,11 @@
 import GestionEvento from "../components/Eventos/GestionEvento";
-import Nav from '../components/Dashboard/navDashboard';
-
-
+import Nav from "../components/Dashboard/navDashboard";
 const Eventos = () => {
   return (
     <div>
-            <Nav />
-
+      <Nav />
       <GestionEvento />
+      <Nav />
     </div>
   );
 };

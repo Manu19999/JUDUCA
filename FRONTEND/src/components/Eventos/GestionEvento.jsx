@@ -1,67 +1,78 @@
 import React from "react";
-import { Container } from "react-bootstrap";
+import { Container, Button  } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 import Slider from "react-slick";
+
 import EventoCaracteristica from "./EventoCaracteristica";
-import EventImage from "../../assets/eventoConcierto.jpg";
+
+import EventImage from "../../assets/Eventos/Fichas.jpg";
 import EventImage3 from "../../assets/FichaInscripcion.jpg";
 import EventImage4 from "../../assets/FichaMedica.jpg";
 import EventImage5 from "../../assets/CrearEquipo.jpg";
 import EventImage6 from "../../assets/Credencial.jpg";
-import "../../styles/Inicio/EventList.css";
+
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "../../styles/Credencial/credencial.css";
 
+/* ***************** Componente que nos permite gestionar el evento seleccionado asignandole fichas, vauchers, credenciales etc. ****** */
 const GestionEvento = () => {
   const navigate = useNavigate();
 
   const upcomingEvents = [
     {
       id: 1,
-      title: "JUDUCA",
+      title: "Fichas",
       image: EventImage,
-      description: "Juegos Deportivos Universitarios Centroamericanos.",
+      description: "Creación y gestión de fichas.",
       size: "medium", // Asigna un tamaño
     },
     {
       id: 2,
-      title: "Ficha de Inscripciones",
+      title: "Registro",
       image: EventImage3,
-      description: "Inscripciones de los atletas.",
+      description: "Fichas de registro e inscriciones.",
       size: "small", // Asigna un tamaño
     },
     {
       id: 3,
-      title: "Ficha de Salud",
+      title: "Vauchers",
       image: EventImage4,
-      description: "Inscripciones de los atletas.",
+      description: "Control de tickets y vouchers.",
       size: "medium", // Asigna un tamaño
     },
     {
       id: 4,
       title: "Diseñador de Credenciales",
       image: EventImage6,
-      description: "Configura el diseño de la credencial.",
+      description: "Asignar credenciales.",
       size: "medium", // Asigna un tamaño
     },
     {
       id: 5,
-      title: "Crear Equipo",
+      title: "Juegos",
       image: EventImage5,
-      description: "Creación de los equipos a las disciplinas y actividades.",
+      description: "Creación de los equipos y competencias.",
       size: "medium", // Asigna un tamaño
     },
   ];
 
   const handleImageClick = (id) => {
     if (id === 1) {
-      navigate("/mantenimiento-evento");
+      navigate("/lista-fichas");
     }
     if (id === 2) {
-      navigate("/ficha-participantes");
+      navigate("/llenar-fichas");
     }
     if (id === 3) {
       navigate("/ficha-salud");
+    }
+    if (id === 4) {
+      navigate("/credencialView");
+    }
+    if (id === 5) {
+      navigate("/JuegoView");
     }
     if (id === 4) {
       navigate("/credencialView");
@@ -84,7 +95,7 @@ const GestionEvento = () => {
     slidesToShow: 4, // Número de tarjetas visibles a la vez
     slidesToScroll: 1, // Número de tarjetas a desplazar
     autoplay: true, // Desplazamiento automático
-    autoplaySpeed: 2000, // Velocidad del desplazamiento automático
+    autoplaySpeed: 1500, // Velocidad del desplazamiento automático
     responsive: [
       {
         breakpoint: 768, // Configuración para pantallas pequeñas
@@ -104,6 +115,14 @@ const GestionEvento = () => {
   return (
     <section id="events" className="eventlist">
       <Container>
+      <Button
+  variant="outline-warning"
+  onClick={() => navigate("/eventos")}
+  className="d-flex align-items-center gap-2"
+  style={{  marginTop: '55px' }}
+>
+  <FaArrowLeft size={20} /> Regresar
+</Button>
         <h2 className="eventlisttitle">Evento</h2>
         <Slider {...settings}>
           {upcomingEvents.map((event) => (
@@ -113,7 +132,6 @@ const GestionEvento = () => {
                 onImageClick={() => handleImageClick(event.id)}
                 onEditClick={() => handleEditClick(event.id)}
                 onManageClick={() => handleManageClick(event.id)}
-                showIcons={event.id === 1}
               />
             </div>
           ))}

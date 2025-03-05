@@ -75,7 +75,7 @@ const AsignacionCampos = () => {
     <div className="container-fluid2">
       <button
         className="btnAgg"
-        onClick={() => navigate("/confCredencial")}
+        onClick={() => navigate("/credencialView")}
         style={{ marginBottom: "10px" }}
       >
         <FaArrowLeft size={20} /> Regresar
