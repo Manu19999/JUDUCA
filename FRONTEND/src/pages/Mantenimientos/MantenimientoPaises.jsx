@@ -93,7 +93,7 @@ function MantenimientoPaises() {
 
   // Abrir modal de detalles
   const handleDetails = (id) => {
-    const registro = datos.find((d) => d.id === idPais);
+    const registro = datos.find((d) => d.id === id);
     setRegistroSeleccionado(registro);
     setShowDetailsModal(true);
   };
