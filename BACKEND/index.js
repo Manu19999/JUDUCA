@@ -2,6 +2,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors"; 
+import PaisesRoutes from "./src/routes/PaisesRoutes.js";
 import CredencialRoutes from "./src/routes/CredencialRoutes.js";
 import VoucherComidaRoutes from "./src/routes/VoucherComidaRoutes.js";
 
@@ -19,6 +20,7 @@ app.use(cors({
 }));
 
 /* RUTAS */
+app.use("/api/paises", PaisesRoutes);
 app.use("/api/credencial", CredencialRoutes);
 app.use("/api/voucherComida", VoucherComidaRoutes);
 
