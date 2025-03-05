@@ -2,7 +2,7 @@ import ejecutarConsulta from "../config/db.js";
 
 export const getUbicacionesCampos = async (req, res) => {
   try {
-    const { error, data } = await ejecutarConsulta("SELECT * FROM tblPais");
+    const { error, data } = await ejecutarConsulta("SELECT * FROM tblCredencialesParticipantes");
 
     res.status(200).json({
       error: {
