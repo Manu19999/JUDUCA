@@ -5,15 +5,19 @@ export const getUbicacionesCampos = async (req, res) => {
     const { error, data } = await ejecutarConsulta("SELECT * FROM tblPais");
 
     res.status(200).json({
-      success: true,
-      data: data || [],  // Si no hay datos, devuelve un array vacío
-      error: error || [], // Si no hay errores, devuelve un array vacío
+      error: {
+        hashError: [],  // Siempre presente, aunque vacío
+        otherErrors: error || [], // Otros errores, si los hay
+      },
+      data: data || [],  // Siempre devuelve un array, aunque esté vacío
     });
   } catch (err) {
     res.status(500).json({
-      success: false,
-      data: [], // Aseguramos que data esté presente
-      error: [{ type: "serverError", message: "Error interno del servidor" }],
+      error: {
+        hashError: [],
+        otherErrors: [{ type: "serverError", message: "Error interno del servidor" }],
+      },
+      data: [],
     });
   }
 };

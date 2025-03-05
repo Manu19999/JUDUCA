@@ -15,64 +15,30 @@ const config = {
   },
 };
 
-// Crear pool de conexiones reutilizable
-let pool;
-
-async function getPool() {
-  if (!pool) {
-    try {
-      pool = await sql.connect(config);
-      console.log("✅ Conectado a la base de datos");
-    } catch (error) {
-      console.error("🚨 Error de conexión a la base de datos:", error.message);
-      throw error;
-    }
-  }
-  return pool;
-}
-
-// Función para ejecutar consultas SQL con manejo de errores categorizados
-async function ejecutarConsulta(query, params = {}) {
+// Función para ejecutar consultas SQL con manejo de errores
+async function ejecutarConsulta(query) {
+  let pool;
   try {
-    const pool = await getPool();
-    const request = pool.request();
+    pool = await sql.connect(config);
+    const result = await pool.request().query(query);
 
-    // Agregar parámetros a la consulta si existen
-    Object.keys(params).forEach((key) => {
-      request.input(key, params[key]);
-    });
-
-    const result = await request.query(query);
-    return { error: [], data: result.recordset };
+    return { error: [], data: result.recordset }; // Si no hay error, error es un arreglo vacío
   } catch (error) {
-    let errorResponse = { error: [], data: [] };
-
-    // ⚠️ Detectamos si es un error relacionado con HASH
-    if (error.message.toLowerCase().includes("hash")) {
-      console.error("⚠️ HashError:", error.message);
-      errorResponse.error.push({ type: "hashError", message: "Hubo un problema con el hash en la consulta." });
-
-    // ⚠️ Detectamos si es un error de datos (Ejemplo: tipos incorrectos o valores nulos)
-    } else if (error.message.toLowerCase().includes("data") || error.message.toLowerCase().includes("null")) {
-      console.error("⚠️ DataError:", error.message);
-      errorResponse.error.push({ type: "dataError", message: "Hubo un problema con los datos enviados." });
-
-    // ⚠️ Si no es ninguno de los anteriores, lo tratamos como error genérico
-    } else {
-      console.error("⚠️ Error General en SQL:", error.message);
-      errorResponse.error.push({ type: "error", message: error.message });
+    // Manejamos el error específico relacionado con hashes (si existe)
+    if (error.message.toLowerCase().includes('hash')) {
+      console.error("⚠️ Error relacionado con Hash:", error.message);
+      return { error: [{ message: "Hubo un problema con el hash en la consulta." }], data: [] };
     }
 
-    return errorResponse;
+    // Manejamos otros tipos de error
+    console.error("⚠️ Error en la consulta:", error);
+    return { error: [{ message: error.message }], data: [] }; // Error genérico
+  } finally {
+    if (pool) {
+      await pool.close();
+      console.log("🔌 Conexión cerrada correctamente");
+    }
   }
 }
-
-// Cerrar conexión cuando se cierre la app
-process.on("exit", async () => {
-  if (pool) {
-    await pool.close();
-    console.log("🔌 Conexión cerrada correctamente");
-  }
-});
 
 export default ejecutarConsulta;
