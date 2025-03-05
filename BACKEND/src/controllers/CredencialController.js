@@ -1,7 +1,19 @@
 import ejecutarConsulta from "../config/db.js";
 
 export const getUbicacionesCampos = async (req, res) => {
-  const { error, data } = await ejecutarConsulta("SELECT * FROM tblEventos");
+  try {
+    const { error, data } = await ejecutarConsulta("SELECT * FROM tblPais");
 
-  res.json({ error, data }); // Siempre devuelve los dos arreglos
+    res.status(200).json({
+      success: true,
+      data: data || [],  // Si no hay datos, devuelve un array vacío
+      error: error || [], // Si no hay errores, devuelve un array vacío
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      data: [], // Aseguramos que data esté presente
+      error: [{ type: "serverError", message: "Error interno del servidor" }],
+    });
+  }
 };
