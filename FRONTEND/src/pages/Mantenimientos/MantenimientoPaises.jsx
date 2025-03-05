@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import { useNavigate } from "react-router-dom";
 import Tabla from "../../components/Crud/Tabla.jsx";
 import Nav from "../../components/Dashboard/navDashboard.jsx";
@@ -17,35 +17,18 @@ import { FaArrowLeft  } from "react-icons/fa";
 const { Option } = Select;
 const { TabPane } = Tabs;
 
-// Datos de ejemplo para simular una base de datos de usuarios
-const datos = [
-  {
-    id: 1,
-    pais: "ARGENTINA",
-  },
-  {
-    id: 2,
-    pais: "PERU",
-  },
-  {
-    id: 3,
-    pais: "HONDURAS",
-  },
-  {
-    id: 4,
-    pais: "MEXICO",
-  },
-];
 
 // Columnas de la tabla de usuarios
 const columnas = [
-  { nombre: "#", campo: "id", ancho: "5%" },
-  { nombre: "Pais", campo: "pais", ancho: "30%" },
+  { nombre: "#", campo: "idPais", ancho: "5%" },
+  { nombre: "Pais", campo: "nombre", ancho: "30%" },
   { nombre: "Acción", campo: "accion", ancho: "10%" },
 ];
 
 function MantenimientoPaises() {
       const navigate = useNavigate();
+      const [datos, setDatos] = useState([]);
+
     
   // Estados para controlar la visibilidad de los modales
   const [showNuevoModal, setShowNuevoModal] = useState(false);
@@ -58,6 +41,22 @@ function MantenimientoPaises() {
   // Hooks de Ant Design para gestionar formularios
   const [formNuevo] = Form.useForm(); // Formulario para el modal de nuevo registro
   const [formEditar] = Form.useForm(); // Formulario para el modal de edición
+
+  useEffect(() => {
+    fetch("http://localhost:4000/api/paises/getPaises")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Datos recibidos:", data); // Verifica la estructura de los datos
+        if (Array.isArray(data.data)) {
+          setDatos(data.data); // Solo guardamos el array de países
+        } else {
+          console.error("Error: La API no devolvió un array en 'data'");
+          setDatos([]); // Evita errores si la API devuelve un formato inesperado
+        }
+      })
+      .catch((error) => console.error("Error al obtener los datos:", error));
+  }, []);
+  
 
   // Abrir modal de nuevo registro
   const handleNuevoRegistro = () => {
@@ -94,7 +93,7 @@ function MantenimientoPaises() {
 
   // Abrir modal de detalles
   const handleDetails = (id) => {
-    const registro = datos.find((d) => d.id === id);
+    const registro = datos.find((d) => d.id === idPais);
     setRegistroSeleccionado(registro);
     setShowDetailsModal(true);
   };
