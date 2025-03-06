@@ -45,6 +45,7 @@ import CajaEvento from "./pages/CajaEventos";
 import CajaFichas from "./pages/CajaFichas";
 import Llena_Fichas from "./pages/LlenarFichas";
 import Eventos from "./pages/GestionEvento";
+import GestionEventos from "./pages/Eventos/GestionEventos";
 import GestionFicha from "./pages/Eventos/GestionFichas";
 import Formularios_Fichas from "./pages/FormularioFicha";
 import RegistroParticipante from "./pages/RegistroParticipante";
@@ -53,6 +54,7 @@ import RegistroSalud from "./pages/RegistroSalud";
 
 // Importa el componente Breadcrumb
 import AppBreadcrumb from "./components/AppBreadcrumb";
+
 
 
 
@@ -111,6 +113,7 @@ function App() {
         <Route path="/eventos" element={<CajaEvento />} />
         <Route path="/lista-fichas" element={<CajaFichas />} />
         <Route path="/fichas" element={<GestionFicha />} />
+        <Route path="/control-eventos" element={<GestionEventos />} />
         <Route path="/gestion-evento" element={<Eventos />} />
         <Route path="/Formulario-fichas" element={<Formularios_Fichas />} />
         <Route path="/llenar-fichas" element={<Llena_Fichas />} />

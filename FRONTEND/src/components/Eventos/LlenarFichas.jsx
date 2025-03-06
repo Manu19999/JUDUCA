@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaPlus, FaCog } from "react-icons/fa"; // Importa los íconos
 
 import Nav from "../../components/Dashboard/navDashboard";
 
@@ -29,7 +29,7 @@ const LlenarFichas = () => {
       id: 2,
       title: "Inscripción de delegados",
       image: Delegados,
-      description: "nscripción de los delegados de las universidades.",
+      description: "Inscripción de los delegados de las universidades.",
       route: "/fichas",
     },
     {
@@ -40,35 +40,35 @@ const LlenarFichas = () => {
       route: "/fichas",
     },
     {
-      id: 3,
+      id: 4,
       title: "Otras fichas",
       image: Otras,
       description: "Inscripción o registro de otras fichas.",
       route: "/fichas",
     },
     {
-      id: 3,
+      id: 4,
       title: "Otras fichas",
       image: Otras,
       description: "Inscripción o registro de otras fichas.",
       route: "/fichas",
     },
     {
-      id: 3,
+      id: 4,
       title: "Otras fichas",
       image: Otras,
       description: "Inscripción o registro de otras fichas.",
       route: "/fichas",
     },
     {
-      id: 3,
+      id: 4,
       title: "Otras fichas",
       image: Otras,
       description: "Inscripción o registro de otras fichas.",
       route: "/fichas",
     },
     {
-      id: 3,
+      id: 4,
       title: "Otras fichas",
       image: Otras,
       description: "Inscripción o registro de otras fichas.",
@@ -80,11 +80,23 @@ const LlenarFichas = () => {
     navigate(route);
   };
 
+  // Función para manejar el clic en el ícono de "ojo"
+  const handleViewClick = () => {
+    console.log("Ver detalles de la ficha");
+    // Aquí puedes redirigir a una vista de detalles o abrir un modal
+  };
+
+  // Función para manejar el clic en el ícono de "ajustes"
+  const handleSettingsClick = () => {
+    console.log("Configurar ficha");
+    // Aquí puedes redirigir a una vista de configuración o abrir un modal
+  };
+
   return (
     <section id="caja-seguridad" className="caja-seguridad-container">
       <Container>
         <Nav />
-        {/* Botón para añadir un nuevo voucher */}
+        {/* Botón para regresar */}
         <div className="crud">
           <Button
             variant="outline-warning"
@@ -94,7 +106,10 @@ const LlenarFichas = () => {
           >
             <FaArrowLeft size={20} /> Regresar
           </Button>
+
           <h2 className="caja-seguridad-title">Fichas de Registro</h2>
+
+          {/* Lista de fichas */}
           <div className="caja-seguridad-grid">
             {items.map((item) => (
               <div key={item.id} className="caja-seguridad-card">
@@ -106,6 +121,24 @@ const LlenarFichas = () => {
                 />
                 <h3>{item.title}</h3>
                 <p className="eventdescription">{item.description}</p>
+
+                {/* Íconos de ojo y ajustes */}
+                <div className="eventicons">
+                  <FaPlus
+                    onClick={() => navigate("/ficha-participantes")}
+                    className="eventicon manage-btn-credencial"
+                    style={{ marginBottom: "10px", cursor: "pointer" }}
+                  />
+                  <FaCog
+                    onClick={() => navigate("/fichas")}
+                    className="eventicon manage-btn-credencial"
+                    style={{
+                      marginBottom: "10px",
+                      marginInline: "10px",
+                      cursor: "pointer",
+                    }}
+                  />
+                </div>
               </div>
             ))}
           </div>

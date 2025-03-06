@@ -276,11 +276,11 @@ const datos = [
 // Columnas de la tabla de usuarios
 const columnas = [
   { nombre: "#", campo: "id", ancho: "5%" },
-  { nombre: "Usuario", campo: "usuario", ancho: "20%" },
-  { nombre: "Correo", campo: "correo", ancho: "40%" },
-  { nombre: "Rol", campo: "rol", ancho: "25%" },
-  { nombre: "Estado", campo: "estado", ancho: "15%" },
-  { nombre: "Acción", campo: "accion", ancho: "20%" },
+  { nombre: "Nombre", campo: "nombre", ancho: "20%" },
+  { nombre: "Genero", campo: "genero", ancho: "10%" },
+  { nombre: "Fecha de nacimiento", campo: "fechaNacimiento", ancho: "15%" },
+  { nombre: "Teléfono", campo: "telefono", ancho: "10%" },
+  { nombre: "Acción", campo: "accion", ancho: "10%" },
 ];
 
 function GestionFicha() {
@@ -585,7 +585,7 @@ function GestionFicha() {
       <ModalEditar
         show={showEditModal} // Controla la visibilidad del modal
         onHide={handleCerrarEditModal} // Función para cerrar el modal
-        titulo="Editar Usuario" // Título del modal
+        titulo="Editar Ficha" // Título del modal
         onGuardar={handleGuardarEdit} // Función para guardar los cambios
         form={formEditar} // Formulario del modal
         registroSeleccionado={registroSeleccionado} // Usuario seleccionado
@@ -642,20 +642,6 @@ function GestionFicha() {
                     <Input type="date" />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Tipo de Sangre"
-                    name="tipoSangre"
-                    rules={[
-                      {
-                        required: true,
-                        message: "El tipo de sangre es obligatorio",
-                      },
-                    ]}
-                  >
-                    <Input placeholder="Ingresa el tipo de sangre" />
-                  </Form.Item>
-                </Col>
               </Row>
               <Row gutter={16}>
                 <Col span={12}>
@@ -681,7 +667,7 @@ function GestionFicha() {
             </TabPane>
 
             {/* Pestaña: Datos de Usuario */}
-            <TabPane tab="Datos de Usuario" key="2">
+            <TabPane tab="Datos Médicos" key="2">
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
@@ -700,17 +686,16 @@ function GestionFicha() {
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    label="Contraseña"
-                    name="contraseña"
+                    label="Tipo de Sangre"
+                    name="tipoSangre"
                     rules={[
                       {
                         required: true,
-                        message: "La contraseña es obligatoria",
+                        message: "El tipo de sangre es obligatorio",
                       },
-                      { min: 8, message: "Debe tener al menos 8 caracteres" },
                     ]}
                   >
-                    <Input.Password placeholder="Ingresa la contraseña" />
+                    <Input placeholder="Ingresa el tipo de sangre" />
                   </Form.Item>
                 </Col>
               </Row>
