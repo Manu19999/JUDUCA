@@ -68,7 +68,7 @@ const EventList = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide(activeTab === "upcoming" ? upcomingEvents : pastEvents);
-    }, 100000);
+    }, 7000);
     return () => clearInterval(interval);
   }, [carouselIndex, activeTab, visibleCount]);
 
