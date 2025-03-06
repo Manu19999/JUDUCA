@@ -52,7 +52,7 @@ const GestionEvento = () => {
     },
     {
       id: 5,
-      title: "Equipos",
+      title: "Juegos",
       image: EventImage5,
       description: "Creación de los equipos y competencias.",
       size: "medium", // Asigna un tamaño
@@ -72,6 +72,9 @@ const GestionEvento = () => {
     if (id === 4) {
       navigate("/credencialView");
     }
+    if (id === 5) {
+      navigate("/JuegoView");
+    }
   };
 
   const handleEditClick = (id) => {
@@ -90,7 +93,7 @@ const GestionEvento = () => {
     slidesToShow: 4, // Número de tarjetas visibles a la vez
     slidesToScroll: 1, // Número de tarjetas a desplazar
     autoplay: true, // Desplazamiento automático
-    autoplaySpeed: 2000, // Velocidad del desplazamiento automático
+    autoplaySpeed: 1500, // Velocidad del desplazamiento automático
     responsive: [
       {
         breakpoint: 768, // Configuración para pantallas pequeñas

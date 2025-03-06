@@ -2,23 +2,16 @@ import React, { useState } from "react";
 import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import TargetaMantenimiento from "../Dashboard/TargetaMantenimientos";
-import paises from "../../assets/Mantenimientos/paises.jpg";
-import ciudades from "../../assets/Mantenimientos/ciudades.jpg";
-import instalaciones from "../../assets/Mantenimientos/instalaciones.jpg";
 import competencias from "../../assets/Mantenimientos/competencias.jpg";
 import disciplinas from "../../assets/Mantenimientos/disciplinas.jpg";
 import reglas from "../../assets/Mantenimientos/reglas.jpg";
-import apiMapping from "../../assets/Mantenimientos/apiMapping.jpg";
-import generos from "../../assets/Mantenimientos/generos.jpg";
+
 
 import "../../styles/Inicio/GestionAreas.css"; // Estilos de las cajas
-
-
-
 import "../../styles/Credencial/credencial.css";
 import { FaArrowLeft } from "react-icons/fa";
 
-const GestionMantenimiento = () => {
+const GestionJuegos = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [selectedMantenimiento, setSelectedMantenimiento] = useState(null);
@@ -26,40 +19,21 @@ const GestionMantenimiento = () => {
   const mantenimientosOptions = [
     {
       id: 1,
-      title: "Mantenimiento de Paises",
-      image: paises,
-      url: "/MantenimientoPaises"
+      title: "Competencias",
+      image: competencias,
     },
     {
       id: 2,
-      title: "Mantenimiento de Ciudades",
-      image: ciudades,
-      url: "/MantenimientoCiudades"
+      title: "Disciplinas",
+      image: disciplinas,
 
     },
     {
       id: 3,
-      title: "Mantenimiento de Instalaciones",
-      image: instalaciones,
-      url: "/MantenimientoInstalaciones"
+      title: "Reglas",
+      image: reglas,
     },
 
-    {
-      id: 4,
-      title: "Mantenimiento de Generos",
-      image: generos,
-      url: "/MantenimientoGeneros"
-
-    },
-
-    {
-      id: 5,
-      title: "Mantenimiento Mapeo de Data",
-      image: apiMapping,
-      url: "/MantenimientoApiMap"
-
-    },
- 
   ];
 
   const handleImageClick = (id) => {
@@ -77,12 +51,12 @@ const GestionMantenimiento = () => {
 
         <Button
           variant="outline-warning"
-          onClick={() => navigate("/dashboard")}
+          onClick={() => navigate("/gestion-evento")}
           className="d-flex align-items-center gap-2"
           style={{ marginTop: '55px' }}
         >
           <FaArrowLeft size={20} /> Regresar
-        </Button>  <h2 className="credenciallisttitle">MANTENIMIENTOS</h2>
+        </Button>  <h2 className="credenciallisttitle">JUEGOS</h2>
         <Row>
           {mantenimientosOptions.map((mantenimiento) => (
             <Col key={mantenimiento.id} xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -137,4 +111,4 @@ const GestionMantenimiento = () => {
   );
 };
 
-export default GestionMantenimiento;
+export default GestionJuegos;

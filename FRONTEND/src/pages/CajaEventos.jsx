@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Container, Button, Modal, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaEye, FaCog } from "react-icons/fa";
+import { useDropzone } from "react-dropzone";
 
 import Nav from "../components/Dashboard/navDashboard";
 
 import JUDUCA from "../assets/Eventos/JUDUCA.jpg";
 import FUCAIN from "../assets/Eventos/FUCAIN.jpg";
-import UniversidadesImage from "../assets/Eventos/DANZA.jpg";
+import DANZA from "../assets/Eventos/DANZA.jpg";
 
 import "../styles/Inicio/Caja-seguridad.css";
 import "../styles/Evento/Eventos.css";
@@ -23,6 +24,8 @@ const CajaEventos = () => {
     endDate: "",
     description: "",
   });
+  const [foto, setFoto] = useState(null);
+  const [previewFoto, setPreviewFoto] = useState(null);
 
   const items = [
     {
@@ -42,7 +45,7 @@ const CajaEventos = () => {
     {
       id: 3,
       title: "DANZA",
-      image: UniversidadesImage,
+      image: DANZA,
       description: "Danza folclórica universitaria.",
       route: "/gestion-evento",
     },
@@ -57,10 +60,30 @@ const CajaEventos = () => {
     setEvent({ ...event, [name]: value });
   };
 
+  const handleDrop = (acceptedFiles) => {
+    const file = acceptedFiles[0];
+    setFoto(file);
+    setPreviewFoto(URL.createObjectURL(file));
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: handleDrop,
+    accept: "image/*",
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Evento guardado:", event);
+    console.log("Evento guardado:", { ...event, foto });
     setIsModalOpen(false);
+    setEvent({
+      name: "",
+      location: "",
+      startDate: "",
+      endDate: "",
+      description: "",
+    });
+    setFoto(null);
+    setPreviewFoto(null);
   };
 
   return (
@@ -68,7 +91,6 @@ const CajaEventos = () => {
       <Container>
         <Nav />
 
-        {/* Botón de regreso */}
         <div className="crud">
           <Button
             variant="outline-warning"
@@ -79,10 +101,8 @@ const CajaEventos = () => {
             <FaArrowLeft size={20} /> Regresar
           </Button>
 
-          {/* Título */}
           <h2 className="caja-seguridad-title">Gestión de Eventos</h2>
 
-          {/* Botones de tabs */}
           <div className="eventtabs">
             <button
               className={`eventtab ${activeTab === "past" ? "active" : ""}`}
@@ -113,13 +133,25 @@ const CajaEventos = () => {
                 />
                 <h3>{item.title}</h3>
                 <p className="eventdescription">{item.description}</p>
+                <div className="eventicons">
+                  <FaEye
+                    onClick={() => console.log("Ver info de", item.title)}
+                    className="eventicon manage-btn-credencial"
+                    style={{ cursor: "pointer" }}
+                  />
+                  <FaCog
+                    onClick={() => console.log("Configurar", item.title)}
+                    className="eventicon manage-btn-credencial"
+                    style={{ cursor: "pointer", marginLeft: "10px" }}
+                  />
+                </div>
               </div>
             ))}
           </div>
         </div>
       </Container>
 
-      {/* Modal para crear un nuevo evento */}
+      {/* Modal para crear evento */}
       <Modal show={isModalOpen} onHide={() => setIsModalOpen(false)} centered>
         <div
           style={{
@@ -143,6 +175,7 @@ const CajaEventos = () => {
                   required
                 />
               </Form.Group>
+
               <Form.Group controlId="eventLocation">
                 <Form.Label>Ubicación</Form.Label>
                 <Form.Control
@@ -153,6 +186,7 @@ const CajaEventos = () => {
                   required
                 />
               </Form.Group>
+
               <Form.Group controlId="eventStartDate">
                 <Form.Label>Fecha de inicio</Form.Label>
                 <Form.Control
@@ -163,6 +197,7 @@ const CajaEventos = () => {
                   required
                 />
               </Form.Group>
+
               <Form.Group controlId="eventEndDate">
                 <Form.Label>Fecha de fin</Form.Label>
                 <Form.Control
@@ -173,6 +208,7 @@ const CajaEventos = () => {
                   required
                 />
               </Form.Group>
+
               <Form.Group controlId="eventDescription">
                 <Form.Label>Descripción</Form.Label>
                 <Form.Control
@@ -183,6 +219,37 @@ const CajaEventos = () => {
                   onChange={handleChange}
                 />
               </Form.Group>
+
+              <Form.Group controlId="eventPhoto">
+                <Form.Label>Foto</Form.Label>
+                <div
+                  {...getRootProps()}
+                  style={{
+                    border: "2px dashed #007bff",
+                    padding: "20px",
+                    textAlign: "center",
+                    cursor: "pointer",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <input {...getInputProps()} />
+                  <p>Arrastra una foto aquí o haz clic para seleccionar</p>
+                </div>
+
+                {previewFoto && (
+                  <img
+                    src={previewFoto}
+                    alt="Vista previa"
+                    style={{
+                      width: "150px",
+                      height: "150px",
+                      objectFit: "cover",
+                      borderRadius: "10px",
+                    }}
+                  />
+                )}
+              </Form.Group>
+
               <Modal.Footer>
                 <Button
                   variant="secondary"

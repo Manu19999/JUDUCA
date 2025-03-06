@@ -1,13 +1,12 @@
-import EventosActivos from "../components/Eventos/EventosActivo";
+import GestionJuegos from "../components/Juegos/juegosView";
 import Nav from '../components/Dashboard/navDashboard';
 
 
-export default function ListaEventos() {
+export default function ListaFichas() {
   return (
     <div className="container mx-auto p-4">
             <Nav />
-
-      <EventosActivos />
+      <GestionJuegos />
     </div>
   );
 }
