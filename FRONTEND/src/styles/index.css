@@ -10,7 +10,6 @@
 /* ===== Tipografía Global ===== */
 body {
   font-family: "Montserrat", sans-serif !important;
-  background-color: white !important;
   color: var(--text-color) !important;
   line-height: 1.6;
 }
