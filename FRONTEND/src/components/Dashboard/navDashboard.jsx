@@ -71,14 +71,14 @@ const NavDashboard = () => {
           >
             Inicio
           </a>
-          <a
+         {/*  <a
             
             className="navlinkcustom"
             onClick={handleEscanerClick} // Redirige a /dashboard
           >
             Escaneo
           </a>
-
+ */}
           {/* Menú desplegable de perfil con ícono */}
           <Dropdown overlay={profileMenu} trigger={["click"]}>
             <a className="navlinkcustom" onClick={(e) => e.preventDefault()} style={{ cursor: "pointer" }}>

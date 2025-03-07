@@ -1,5 +1,5 @@
 import express from "express";
-import { getVouchersComidas, insertVoucherComida, updateVoucherComida } from "../controllers/VoucherComidaController.js";
+import { getVouchersComidas, insertVoucherComida, updateVoucherComida } from "../controllers/voucherComidaController.js";
 
 const router = express.Router();
 

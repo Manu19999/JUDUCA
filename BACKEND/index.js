@@ -1,31 +1,40 @@
-/*                     IMPORTS                                   */
-
-import conexionbd from './src/config/db.js';
+//++++++++++++++++++++++++++  Librería externa  ++++++++++++++++++++++++++
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors'; 
-import CredencialRoutes from './src/routes/CredencialRoutes.js';
-import VoucherComidaRoutes   from './src/routes/VoucherComidaRoutes.js';
-/*                     CONFIGURACIONES BACKEND                                  */
 
-const app = express();
+
+
+//++++++++++++++++++++++++++  Importaciones de rutas de credenciales  ++++++++++++++++++++++++++
+import CredencialRoutes from './src/modules/credenciales/routes/credencialRoutes.js';
+
+//++++++++++++++++++++++++++  Importaciones de rutas de eventos  ++++++++++++++++++++++++++
+
+
+
+//++++++++++++++++++++++++++  Importaciones de rutas de fichas  ++++++++++++++++++++++++++
+
+
+
+//++++++++++++++++++++++++++  Importaciones de rutas de juegos  ++++++++++++++++++++++++++
+
+
+
+//++++++++++++++++++++++++++  Importaciones de rutas de seguridad  ++++++++++++++++++++++++++
+
+
+//++++++++++++++++++++++++++  Importaciones de rutas de vouchers  ++++++++++++++++++++++++++
+import VoucherComidaRoutes   from './src/modules/vouchers/routes/voucherComidaRoutes.js';
+
+
+
+//++++++++++++++++++++++++++ Configuraciones del servidor ++++++++++++++++++++++++++
+
 dotenv.config(); 
+const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-let connection;
-
-const connect = async () => {
-  try {
-      connection = await conexionbd(); 
-      console.log('Base de datos conectada correctamente');
-  } catch (error) {
-      console.error('Error al conectar a la base de datos:', error);
-      process.exit(1); 
-  }
-};
-
-connect();
 
 app.use(cors({
     origin: 'http://localhost:5173', // Permitir sólo desde el frontend
@@ -34,18 +43,29 @@ app.use(cors({
 }));
 
 
-/*                     RUTAS                                  */
+//++++++++++++++++++++++++++ Rutas ++++++++++++++++++++++++++
 
-// Usar el router de Credencial
+//Credenciales
 app.use('/api/credencial', CredencialRoutes);
 
-// Usar el router de VoucherComida
-app.use('/api/voucherComida', VoucherComidaRoutes);  // Usar el router correctamente
+//Eventos
 
 
-/*                     INICIALIZACION DEL SERVIDOR                                  */
-const PORT = 4000;
+//Fichas
 
+
+//Juegos
+
+
+//Seguridad
+
+
+//Vouchers
+app.use('/api/voucherComida', VoucherComidaRoutes); 
+
+
+//++++++++++++++++++++++++++ Inicialización del servidor ++++++++++++++++++++++++++ 
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto: ${PORT}`);
 });
