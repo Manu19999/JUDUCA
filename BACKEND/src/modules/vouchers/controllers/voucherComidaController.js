@@ -1,4 +1,4 @@
-import conexionbd from "../config/db.js";  // Importar conexionbd
+import conexionbd from "../../../config/db.js";  // Importar conexionbd
 import sql from 'mssql';  // Importar sql para usar los tipos de datos
 
 // Obtener todos los vouchers

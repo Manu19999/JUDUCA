@@ -1,5 +1,5 @@
 import express from 'express';
-import { getUbicacionesCampos } from '../controllers/CredencialController.js';
+import { getUbicacionesCampos } from '../controllers/credencialController.js';
 
 const router = express.Router();
 
