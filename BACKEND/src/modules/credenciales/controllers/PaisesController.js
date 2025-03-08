@@ -1,23 +1,19 @@
-import ejecutarConsulta from "../config/db.js";
+import conexionbd from "../../../config/db.js";
+import apiResponse from "../../../utils/apiResponse.js";
 
-export const getPaises= async (req, res) => {
+export const getPaises = async (req, res) => {
+  const response = new apiResponse();
+
   try {
-    const { error, data } = await ejecutarConsulta("SELECT * FROM tblPais");
+    const pool = await conexionbd(); // Obtener conexión del pool
+    const result = await pool.request().query("SELECT * FROM tblPais");
 
-    res.status(200).json({
-      error: {
-        hashError: [],  // Siempre presente, aunque vacío
-        otherErrors: error || [], // Otros errores, si los hay
-      },
-      data: data || [],  // Siempre devuelve un array, aunque esté vacío
-    });
-  } catch (err) {
-    res.status(500).json({
-      error: {
-        hashError: [],
-        otherErrors: [{ type: "serverError", message: "Error interno del servidor" }],
-      },
-      data: [],
-    });
+    response.setData(result.recordset);
+    res.status(200).json(response.getResponse());
+  } catch (error) {
+    console.error("Error en getPaises:", error);
+    response.setHasError(true);
+    response.setErrors([error.message]);
+    res.status(500).json(response.getResponse());
   }
 };
