@@ -5,13 +5,28 @@ import "../styles/AppBreadcrumb.css";
 
 // Mapeo de nombres mas legible personalizados para las rutas
 const routeNames = {
+  //Seguridad
   dashboard: "Dashboard",
   seguridad: "Seguridad",
   usuarios: "Usuarios",
   roles: "Roles",
-  "lista-eventos": "Lista-Eventos",
+
+  //Eventos
+  eventos: "Eventos",
+  "gestion-evento": "Gestión Evento",
+  "lista-fichas": "Fichas",
+  "Formulario-fichas": "Formulario-Ficha",
+  "llenar-fichas": "Registro-Ficha",
+  credencialView: "Credenciales",
+
+  //Mantenimientos
   mantenimientoView: "Mantenimientos",
-  MantenimientoPaises: "Países"
+  MantenimientoPaises: "Países",
+  MantenimientoCiudades: "Ciudades",
+  MantenimientoInstalaciones: "Instalaciones",
+  MantenimientoGeneros: "Géneros",
+  MantenimientoApiMap: "ApiMap",
+
 };
 
 // Función para obtener la jerarquía basada en la ruta actual
@@ -30,17 +45,45 @@ const getHierarchy = (pathname) => {
   }
   
   // Mapeo manual de la jerarquía eventos
-  if (pathnames.includes("lista-eventos")) {
-    return ["dashboard", "lista-eventos"];
+  if (pathnames.includes("eventos")) {
+    return ["dashboard", "eventos"];
   }
+  if (pathnames.includes("gestion-evento")) {
+    return ["dashboard", "eventos","gestion-evento"];
+  }
+  if (pathnames.includes("lista-fichas")) {
+    return ["dashboard", "eventos","gestion-evento","lista-fichas"];
+  }
+  /*
+  if (pathnames.includes("Formulario-fichas")) {
+    return ["dashboard", "eventos","gestion-evento","lista-fichas","Formulario-fichas"];
+  }
+  */
 
-
+  if (pathnames.includes("llenar-fichas")) {
+    return ["dashboard", "eventos","gestion-evento","llenar-fichas"];
+  }
+  if (pathnames.includes("credencialView")) {
+    return ["dashboard", "eventos","gestion-evento","credencialView"];
+  }
   // Mapeo manual de la jerarquía mantenimientos
   if (pathnames.includes("mantenimientoView")) {
     return ["dashboard", "mantenimientoView"];
   }
   if (pathnames.includes("MantenimientoPaises")) {
     return ["dashboard", "mantenimientoView","MantenimientoPaises"];
+  }
+  if (pathnames.includes("MantenimientoCiudades")) {
+    return ["dashboard", "mantenimientoView","MantenimientoCiudades"];
+  }
+  if (pathnames.includes("MantenimientoInstalaciones")) {
+    return ["dashboard", "mantenimientoView","MantenimientoInstalaciones"];
+  }
+  if (pathnames.includes("MantenimientoGeneros")) {
+    return ["dashboard", "mantenimientoView","MantenimientoGeneros"];
+  }
+  if (pathnames.includes("MantenimientoApiMap")) {
+    return ["dashboard", "mantenimientoView","MantenimientoApiMap"];
   }
   return pathnames;
 };
@@ -60,13 +103,20 @@ const AppBreadcrumb = () => {
 
   // Función para manejar el clic en "Seguridad"
   const handleSeguridadClick = () => {
-    navigate("/seguridad"); // Rnavega a la ruta seguridad cuando se hace clic en el item "Seguridad"
+    navigate("/seguridad"); // navega a la ruta seguridad cuando se hace clic en el item "Seguridad"
   };
 
   const handleMantenimientoClick = () => {
-    navigate("/mantenimientoView"); // Rnavega a la ruta seguridad cuando se hace clic en el item "Seguridad"
+    navigate("/mantenimientoView"); // navega a la ruta seguridad cuando se hace clic en el item "Seguridad"
   };
 
+  const handleEventoClick = () => {
+    navigate("/eventos"); // navega a la ruta seguridad cuando se hace clic en el item "Seguridad"
+  };
+
+  const handleGestionEventoClick = () => {
+    navigate("/gestion-evento"); // navega a la ruta seguridad cuando se hace clic en el item "Seguridad"
+  };
   return (
     <div className="breadcrumb-container">
       <Breadcrumb separator=">" style={{ margin: "16px 0" }}>
@@ -93,6 +143,30 @@ const AppBreadcrumb = () => {
               <Breadcrumb.Item key={name}>
                 <span
                   onClick={handleMantenimientoClick}
+                  className="breadcrumb-item clickable"
+                >
+                  {displayName}
+                </span>
+              </Breadcrumb.Item>
+            );
+          }
+          if (name === "eventos") {
+            return (
+              <Breadcrumb.Item key={name}>
+                <span
+                  onClick={handleEventoClick}
+                  className="breadcrumb-item clickable"
+                >
+                  {displayName}
+                </span>
+              </Breadcrumb.Item>
+            );
+          }
+          if (name === "gestion-evento") {
+            return (
+              <Breadcrumb.Item key={name}>
+                <span
+                  onClick={handleGestionEventoClick}
                   className="breadcrumb-item clickable"
                 >
                   {displayName}
