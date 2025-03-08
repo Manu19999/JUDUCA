@@ -1,6 +1,6 @@
 import React from "react";
-import Nav from '../components/Dashboard/navDashboard';
-import ConfiguracionCredencial from "../components/Credencial/creacionPlantilla"; // Asegúrate de 
+import Nav from '../../components/Dashboard/navDashboard';
+import ConfiguracionCredencial from "../../components/Credencial/creacionPlantilla"; // Asegúrate de 
 
 const ConfCredenciales = () => {
   return (
