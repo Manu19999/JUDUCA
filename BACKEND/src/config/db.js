@@ -1,44 +1,31 @@
-import sql from "mssql";
 import dotenv from "dotenv";
+import sql from "mssql";
 
 dotenv.config();
 
-const config = {
-  server: process.env.DB_HOST,
+// Configuración del pool de conexiones
+const poolPromise = new sql.ConnectionPool({
+  server: process.env.DB_HOST,  
   database: process.env.DB_NAME,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   port: parseInt(process.env.DB_PORT, 10) || 1433,
   options: {
-    encrypt: false,
+    encrypt: false, // Desactiva SSL si no tienes un certificado
     trustServerCertificate: true,
   },
-};
+}).connect();  // Al llamar connect() se garantiza la conexión asíncrona
 
-// Función para ejecutar consultas SQL con manejo de errores
-async function ejecutarConsulta(query) {
-  let pool;
+// Función para retornar la promesa de la conexión
+async function conexionbd() {
   try {
-    pool = await sql.connect(config);
-    const result = await pool.request().query(query);
-
-    return { error: [], data: result.recordset }; // Si no hay error, error es un arreglo vacío
-  } catch (error) {
-    // Manejamos el error específico relacionado con hashes (si existe)
-    if (error.message.toLowerCase().includes('hash')) {
-      console.error("⚠️ Error relacionado con Hash:", error.message);
-      return { error: [{ message: "Hubo un problema con el hash en la consulta." }], data: [] };
-    }
-
-    // Manejamos otros tipos de error
-    console.error("⚠️ Error en la consulta:", error);
-    return { error: [{ message: error.message }], data: [] }; // Error genérico
-  } finally {
-    if (pool) {
-      await pool.close();
-      console.log("🔌 Conexión cerrada correctamente");
-    }
+    const pool = await poolPromise;  // Esperamos la conexión
+    console.log("✅ Conexión establecida con SQL Server");
+    return pool;  // Retornamos el pool ya conectado
+  } catch (err) {
+    console.error("❌ Error en la conexión:", err);
+    throw err;
   }
 }
 
-export default ejecutarConsulta;
+export default conexionbd;

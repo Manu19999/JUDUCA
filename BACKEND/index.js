@@ -43,10 +43,7 @@ app.use(cors({
   credentials: true,
 }));
 
-/* RUTAS */
-app.use("/api/paises", PaisesRoutes);
-app.use("/api/credencial", CredencialRoutes);
-app.use("/api/voucherComida", VoucherComidaRoutes);
+
 
 //++++++++++++++++++++++++++ Rutas ++++++++++++++++++++++++++
 
