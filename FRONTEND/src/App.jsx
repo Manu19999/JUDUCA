@@ -44,6 +44,7 @@ const AsignacionCredencial =React.lazy(() => import("./pages/AsignacionCredencia
 
 //vouchers y tickets
 const Vouchers =React.lazy(() => import("./pages/voucher"));
+const CajaVouchers =React.lazy(() => import("./pages/Vouchers/CajaVouchers"));
 const ConsumosVouchers =React.lazy(() => import("./pages/ConsumoVoucher"));
 const Comedores =React.lazy(() => import("./pages/Comedores"));
 const Tickets =React.lazy(() => import("./pages/tickets"));
@@ -103,6 +104,7 @@ function App() {
         <Route path="/asignarcredencial/:id" element={<AsignacionCredencial />} />
         
         {/* ruta para vouchers y tickets */}
+        <Route path="/vouchers" element={<CajaVouchers />} />
         <Route path="/voucher" element={<Vouchers />} />
         <Route path="/consumo" element={<ConsumosVouchers />} />
         <Route path="/comedor" element={<Comedores />} />

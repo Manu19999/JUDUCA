@@ -4,8 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import SeguridadImage from "../../assets/seguridad.jpg"; // Imagen para Seguridad
 import EventosImage from "../../assets/eventos.jpg"; // Imagen para Eventos
 import MantenimientosImage from "../../assets/mantenimientos.jpg"; // Imagen para Mantenimientos
-import IzquierdaIcon from "../../assets/Iconos/izquierda.png"; // Ícono de regresar
-import DerechaIcon from "../../assets/Iconos/derecha.png"; // Ícono de avanzar (opcional)
+
 
 import "../../styles/Inicio/GestionAreas.css"; // Estilos de las cajas
 
