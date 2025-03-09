@@ -75,7 +75,7 @@ const AsignacionCampos = () => {
     <div className="container-fluid2">
       <button
         className="btnAgg"
-        onClick={() => navigate("/credencialView")}
+        onClick={() => navigate("/OpcionCredencial")}
         style={{ marginBottom: "10px" }}
       >
         <FaArrowLeft size={20} /> Regresar
@@ -128,8 +128,8 @@ const AsignacionCampos = () => {
               backgroundSize: "cover",
               backgroundPosition: "center",
               display: "grid",
-              width: "400px",
-              height: "250px",
+              width: "450px",
+              height: "450px",
               gridTemplateColumns: "repeat(3, 1fr)",
               gap: "5px",
               margin: "auto",

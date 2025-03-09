@@ -1,7 +1,7 @@
 import React from "react";
-import CredencialForm from "../../components/Credencial/credencial"; 
-import Tabla from "../../components/Crud/Tabla";
-import Nav from '../../components/Dashboard/navDashboard';
+import CredencialForm from "../components/Credencial/credencial"; 
+import Tabla from "../components/Crud/Tabla";
+import Nav from '../components/Dashboard/navDashboard';
 import { FaIdBadge } from 'react-icons/fa';
 
 const datos = [

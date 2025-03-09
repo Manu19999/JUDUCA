@@ -34,13 +34,13 @@ const RegistroParticipante =React.lazy(() => import("./pages/RegistroParticipant
 const RegistroSalud =React.lazy(() => import("./pages/RegistroSalud"));
 
 //credenciales
-const CreateCredencial =React.lazy(() => import("./pages/Credencial")); 
-const ConfigCredencial =React.lazy(() => import("./pages/PlantillaCredencial"));
-const AsignarCampos =React.lazy(() => import("./pages/AsignacionCampos"));
-const DiseñadorCredencial =React.lazy(() => import("./pages/DiseñadorCredencial"));
-const EscanerCredencial =React.lazy(() => import("./pages/escanerCredenciales"));
-const CredencialView =React.lazy(() => import("./pages/credencialView"));
-const AsignacionCredencial =React.lazy(() => import("./pages/AsignacionCredencial"));
+const CreateCredencial =React.lazy(() => import("./pages/Credenciales/Credencial")); 
+const ConfigCredencial =React.lazy(() => import("./pages/Credenciales/PlantillaCredencial"));
+const AsignarCampos =React.lazy(() => import("./pages/Credenciales/AsignacionCampos"));
+const DiseñadorCredencial =React.lazy(() => import("./pages/Credenciales/DiseñadorCredencial"));
+const EscanerCredencial =React.lazy(() => import("./pages/Credenciales/escanerCredenciales"));
+const CredencialView =React.lazy(() => import("./pages/Credenciales/credencialView"));
+const OpcionCredencial =React.lazy(() => import("./pages/Credenciales/DiseñoListaCredencial"));
 
 //vouchers y tickets
 const Vouchers =React.lazy(() => import("./pages/voucher"));
@@ -50,11 +50,11 @@ const Comedores =React.lazy(() => import("./pages/Comedores"));
 const Tickets =React.lazy(() => import("./pages/tickets"));
 
 //Juegos
-const JuegoView =React.lazy(() => import("./pages/juegosView"));
+const JuegoView =React.lazy(() => import("./pages/Juegos/juegosView"));
 
 
 //+++++++++++++++++++++++++ importación caja de mantenimientos y sus elementos +++++++++++++++++++++++++
-const MantenimientoView =React.lazy(() => import("./pages/mantenimientoView"));
+const MantenimientoView =React.lazy(() => import("./pages/Mantenimientos/mantenimientoView"));
 const MantenimientoPaises =React.lazy(() => import("./pages/Mantenimientos/MantenimientoPaises"));
 const MantenimientoCiudades =React.lazy(() => import("./pages/Mantenimientos/MantenimientoCiudades"));
 const MantenimientoInstalaciones =React.lazy(() => import("./pages/Mantenimientos/MantenimientoInstalaciones"));
@@ -101,7 +101,7 @@ function App() {
         <Route path="/DiseñadorCredencial" element={<DiseñadorCredencial />} />
         <Route path="/escaneoCredencial" element={<EscanerCredencial />} />
         <Route path="/credencialView" element={<CredencialView />} />
-        <Route path="/asignarcredencial/:id" element={<AsignacionCredencial />} />
+        <Route path="/OpcionCredencial" element={<OpcionCredencial />} />
         
         {/* ruta para vouchers y tickets */}
         <Route path="/vouchers" element={<CajaVouchers />} />

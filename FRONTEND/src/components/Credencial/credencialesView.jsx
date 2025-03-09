@@ -1,88 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import TargetaCredencial from "../Credencial/targetaCredencial";
-import EventImage6 from "../../assets/Credencial.jpg";
+import EventImage6 from "../../assets/Credencial.jpg"; // Imagen de la ficha
+import Inscripciones from "../../assets/Eventos/Inscripciones.jpg";
+import Delegados from "../../assets/Eventos/Delegados.jpg";
+import Voluntariados from "../../assets/Eventos/Voluntariado.jpg";
 import "../../styles/Credencial/credencial.css";
 import { FaArrowLeft } from "react-icons/fa";
-
 
 const GestionCredenciales = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  const [selectedPersona, setSelectedPersona] = useState(null);
+  const [selectedFicha, setSelectedFicha] = useState(null);
+  const [fichasOptions, setFichasOptions] = useState([]);
 
-  const credencialesOptions = [
-    {
-      id: 1,
-      title: "Juan Pérez",
-      image: EventImage6,
-      description: "Estudiante de Ingeniería",
-      edad: 22,
-      email: "juan.perez@email.com",
-      telefono: "+57 320 123 4567",
-      direccion: "Calle 123, Bogotá, Colombia",
-    },
-    {
-      id: 2,
-      title: "María Gómez",
-      image: EventImage6,
-      description: "Estudiante de Medicina",
-      edad: 24,
-      email: "maria.gomez@email.com",
-      telefono: "+57 310 654 7890",
-      direccion: "Carrera 45, Medellín, Colombia",
-    },
-    {
-      id: 3,
-      title: "Carlos López",
-      image: EventImage6,
-      description: "Estudiante de Derecho",
-      edad: 23,
-      email: "carlos.lopez@email.com",
-      telefono: "+57 301 111 2233",
-      direccion: "Avenida Principal, Cali, Colombia",
-    },
-    {
-      id: 4,
-      title: "Ana Martínez",
-      image: EventImage6,
-      description: "Estudiante de Arquitectura",
-      edad: 25,
-      email: "ana.martinez@email.com",
-      telefono: "+57 315 987 6543",
-      direccion: "Calle 78, Barranquilla, Colombia",
-    },
-    {
-      id: 5,
-      title: "Pedro Ramírez",
-      image: EventImage6,
-      description: "Estudiante de Economía",
-      edad: 21,
-      email: "pedro.ramirez@email.com",
-      telefono: "+57 318 222 3333",
-      direccion: "Calle 50, Cartagena, Colombia",
-    },
-    {
-      id: 6,
-      title: "Sofía Herrera",
-      image: EventImage6,
-      description: "Estudiante de Psicología",
-      edad: 22,
-      email: "sofia.herrera@email.com",
-      telefono: "+57 316 777 8888",
-      direccion: "Calle 90, Bucaramanga, Colombia",
-    },
- 
+  // 🔹 Datos en duro basados en la estructura de tblFichasRegistros
+  useEffect(() => {
+    const datosFichas = [
+      {
+        idFichaRegistro: 1,
+        idEvento: 1,
+        nombreFicha: "Inscripción componente académico JUDUCA",
+        fotoRegistro: Inscripciones,
+        activo: true,
+        comentarios: "Inscripción de los participantes al evento.",
+      },
+      {
+        idFichaRegistro: 2,
+        idEvento: 2,
+        nombreFicha: "Inscripción de delegados.",
+        fotoRegistro: Delegados,
+        activo: false,
+        comentarios: "Inscripción de los delegados de las universidades.",
+      },
+      {
+        idFichaRegistro: 3,
+        idEvento: 3,
+        nombreFicha: "Inscripción de voluntariado",
+        fotoRegistro: Voluntariados,
+        activo: true,
+        comentarios: "Inscripción de los voluntariados al evento.",
+      },
+    ];
 
-  ];
+    // Transformamos los datos para la lista de credenciales
+    const fichasConDatos = datosFichas.map((ficha) => ({
+      id: ficha.idFichaRegistro,
+      title: ficha.nombreFicha,
+      image: ficha.fotoRegistro,
+      description: ficha.comentarios,
+      idEvento: ficha.idEvento,
+      activo: ficha.activo ? "Activo" : "Inactivo",
+    }));
 
-  const handleImageClick = (id) => {
-    navigate(`/asignarcredencial/${id}`);
+    setFichasOptions(fichasConDatos);
+  }, []);
+
+  const handleImageClick = (ficha) => {
+    navigate(`/OpcionCredencial`, { state: { selectedFicha: ficha } });
   };
 
-  const handleVerInfo = (persona) => {
-    setSelectedPersona(persona); // Pasamos el objeto completo
+  const handleVerInfo = (ficha) => {
+    setSelectedFicha(ficha);
     setShowModal(true);
   };
 
@@ -93,23 +73,24 @@ const GestionCredenciales = () => {
   return (
     <section id="credenciales" className="eventlist">
       <Container>
-      <Button
-  variant="outline-warning"
-  onClick={() => navigate("/gestion-evento")}
-  className="d-flex align-items-center gap-2"
-  style={{  marginTop: '30px' }}
->
-  <FaArrowLeft size={20} /> Regresar
-</Button>
+        <Button
+          variant="outline-warning"
+          onClick={() => navigate("/gestion-evento")}
+          className="d-flex align-items-center gap-2"
+          style={{ marginTop: "30px" }}
+        >
+          <FaArrowLeft size={20} /> Regresar
+        </Button>
+
         <h1 className="credenciallisttitle">Asignación de Credenciales</h1>
         <Row>
-          {credencialesOptions.map((persona) => (
-            <Col key={persona.id} xs={12} sm={6} md={4} lg={3} xl={2}>
+          {fichasOptions.map((ficha) => (
+            <Col key={ficha.id} xs={12} sm={6} md={4} lg={3} xl={2}>
               <TargetaCredencial
-                event={persona}
-                onImageClick={() => handleImageClick(persona.id)}
-                handleVerInfo={() => handleVerInfo(persona)} // Pasamos el objeto completo
-                handleConfigurarCredencial={() => handleConfigurarCredencial(persona.id)}
+                event={ficha}
+                onImageClick={() => handleImageClick(ficha)}
+                handleVerInfo={() => handleVerInfo(ficha)}
+                handleConfigurarCredencial={() => handleConfigurarCredencial(ficha.id)}
                 showIcons={true}
               />
             </Col>
@@ -118,21 +99,16 @@ const GestionCredenciales = () => {
 
         {/* Modal con más información */}
         <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-          <div
-            style={{
-              backgroundColor: "#e3f2fd",
-              borderRadius: "10px",
-            }}
-          >
+          <div style={{ backgroundColor: "#e3f2fd", borderRadius: "10px" }}>
             <Modal.Header closeButton>
-              <Modal.Title>Detalles del Participante</Modal.Title>
+              <Modal.Title>Detalles de la Ficha</Modal.Title>
             </Modal.Header>
             <Modal.Body className="text-center">
-              {selectedPersona && (
+              {selectedFicha && (
                 <>
                   <img
-                    src={selectedPersona.image}
-                    alt={selectedPersona.title}
+                    src={selectedFicha.image}
+                    alt={selectedFicha.title}
                     className="shadow-sm"
                     style={{
                       width: "150px",
@@ -144,17 +120,15 @@ const GestionCredenciales = () => {
                     }}
                   />
                   <h3 style={{ color: "#1f2e54", fontWeight: "bold", marginTop: "15px" }}>
-                    {selectedPersona.title}
+                    {selectedFicha.title}
                   </h3>
                   <p style={{ color: "#6c757d", fontSize: "1rem" }}>
-                    {selectedPersona.description}
+                    {selectedFicha.description}
                   </p>
                   <hr />
                   <div style={{ textAlign: "left", padding: "10px" }}>
-                    <p><strong>Edad:</strong> {selectedPersona.edad} años</p>
-                    <p><strong>Email:</strong> {selectedPersona.email}</p>
-                    <p><strong>Teléfono:</strong> {selectedPersona.telefono}</p>
-                    <p><strong>Dirección:</strong> {selectedPersona.direccion}</p>
+                    <p><strong>ID Evento:</strong> {selectedFicha.idEvento}</p>
+                    <p><strong>Estado:</strong> {selectedFicha.activo}</p>
                   </div>
                 </>
               )}
