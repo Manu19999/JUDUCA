@@ -46,7 +46,7 @@ const Seleccion = () => {
 
         {selectedFicha && (
           <div style={{ marginTop: '20px',alignContent: 'center', textAlign: 'center' }}>
-            <h3>{selectedFicha.title}</h3>
+            <h3>Ficha Seleccionada : {selectedFicha.title}</h3>
             <p>{selectedFicha.description}</p>
           </div>
         )}
