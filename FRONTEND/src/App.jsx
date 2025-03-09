@@ -41,6 +41,8 @@ const DiseñadorCredencial =React.lazy(() => import("./pages/Credenciales/Diseñ
 const EscanerCredencial =React.lazy(() => import("./pages/Credenciales/escanerCredenciales"));
 const CredencialView =React.lazy(() => import("./pages/Credenciales/credencialView"));
 const OpcionCredencial =React.lazy(() => import("./pages/Credenciales/DiseñoListaCredencial"));
+const AsignacionCredencial =React.lazy(() => import("./pages/Credenciales/AsignacionCredencial"));
+
 
 //vouchers y tickets
 const Vouchers =React.lazy(() => import("./pages/voucher"));
@@ -102,6 +104,8 @@ function App() {
         <Route path="/escaneoCredencial" element={<EscanerCredencial />} />
         <Route path="/credencialView" element={<CredencialView />} />
         <Route path="/OpcionCredencial" element={<OpcionCredencial />} />
+        <Route path="/asignarcredencial" element={<AsignacionCredencial />} />
+
         
         {/* ruta para vouchers y tickets */}
         <Route path="/vouchers" element={<CajaVouchers />} />

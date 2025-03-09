@@ -22,7 +22,7 @@ const Seleccion = () => {
       id: 1,
       title: "Listado de participantes",
       image: EventImage6,
-      url: ""
+      url: "/asignarcredencial"
     },
     {
       id: 2,
