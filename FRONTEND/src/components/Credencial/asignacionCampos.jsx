@@ -1,9 +1,25 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 import { FaArrowLeft } from "react-icons/fa";
 
 const AsignacionCampos = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { selectedFicha } = location.state || {}; // Recibir la ficha seleccionada
+
+  const [fichaActual, setFichaActual] = useState(null);
+
+  // Validar si la ficha seleccionada está presente
+  useEffect(() => {
+    if (selectedFicha) {
+      setFichaActual(selectedFicha);
+    } else {
+      alert("No se ha seleccionado una ficha.");
+      navigate("/credencialView"); // Redirigir si no hay ficha seleccionada
+    }
+  }, [selectedFicha, navigate]);
+
   const [ubicaciones] = useState([
     { id: 1, descripcion: "Arriba a la Izquierda", value: "arriba-izquierda" },
     { id: 2, descripcion: "Arriba al Centro", value: "arriba-centro" },
@@ -15,7 +31,6 @@ const AsignacionCampos = () => {
     { id: 8, descripcion: "Abajo al Centro", value: "abajo-centro" },
     { id: 9, descripcion: "Abajo a la Derecha", value: "abajo-derecha" },
   ]);
-  const navigate = useNavigate();
 
   // Cargar configuraciones de la plantilla desde localStorage
   const [configPlantilla, setConfigPlantilla] = useState(() => {
@@ -39,11 +54,12 @@ const AsignacionCampos = () => {
   const verificarYRedirigir = () => {
     // Verifica si todas las ubicaciones tienen asignaciones
     const todasLlenas = ubicaciones.every((ubicacion) => asignaciones[ubicacion.id]);
-  
+
     if (todasLlenas) {
-      navigate("/DiseñadorCredencial"); // Ajusta con la ruta deseada
-    } 
+      navigate("/DiseñadorCredencial", { state: { selectedFicha: fichaActual } }); // Pasar la ficha seleccionada
+    }
   };
+
   const handleGuardar = () => {
     if (ubicacionSeleccionada && nuevaDescripcion.trim() !== "") {
       setAsignaciones((prev) => {
@@ -54,10 +70,10 @@ const AsignacionCampos = () => {
         localStorage.setItem("asignaciones", JSON.stringify(nuevasAsignaciones));
         return nuevasAsignaciones;
       });
-  
+
       setNuevaDescripcion("");
       setUbicacionSeleccionada("");
-  
+
       // Verifica si todos los campos están llenos y redirige
       verificarYRedirigir();
     } else {
@@ -73,13 +89,21 @@ const AsignacionCampos = () => {
 
   return (
     <div className="container-fluid2">
+
       <button
         className="btnAgg"
-        onClick={() => navigate("/OpcionCredencial")}
+        onClick={() => navigate("/credencialView")}
         style={{ marginBottom: "10px" }}
       >
         <FaArrowLeft size={20} /> Regresar
       </button>
+                {/* Mostrar la ficha seleccionada */}
+                {fichaActual && (
+        <div className="credenciallisttitle" style={{ marginTop: '20px', alignContent: 'center', textAlign: 'center' }}>
+          <h2>Diseñador de Credencial para : {fichaActual.title}</h2>
+          <p>{fichaActual.description}</p>
+        </div>
+      )}
 
       <div className="row">
         <div className="col-md-4">
@@ -128,8 +152,8 @@ const AsignacionCampos = () => {
               backgroundSize: "cover",
               backgroundPosition: "center",
               display: "grid",
-              width: "450px",
-              height: "450px",
+              width: "600px",
+              height: "350px",
               gridTemplateColumns: "repeat(3, 1fr)",
               gap: "5px",
               margin: "auto",

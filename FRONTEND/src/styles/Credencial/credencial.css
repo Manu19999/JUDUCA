@@ -169,6 +169,7 @@
     border-radius: 5px;
     color: black
   }
+  
 
   .table-credencial  {
     width: 100%;
@@ -193,6 +194,7 @@
 .row {
   gap: 95px; /* Espacio entre tarjetas */
   justify-content: center; /* Centrar las tarjetas */
+  margin-top: 20px; /* Espaciado superior */
 }
 
 .credencial {

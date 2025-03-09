@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
-import TargetaMantenimiento from "../Dashboard/TargetaMantenimientos";
+import TargetaEstado from "../Credencial/targetasEstadoCredencial"; // Importar el componente correcto
 import EventImage6 from "../../assets/Credencial.jpg"; // Imagen de la ficha
 import "../../styles/Credencial/credencial.css";
 import { FaArrowLeft } from "react-icons/fa";
@@ -11,12 +11,14 @@ const Seleccion = () => {
   const location = useLocation();
   const [selectedFicha, setSelectedFicha] = useState(null);
 
+  // Recibir la ficha seleccionada desde el estado de navegación
   useEffect(() => {
     if (location.state && location.state.selectedFicha) {
       setSelectedFicha(location.state.selectedFicha);
     }
   }, [location]);
 
+  // Opciones disponibles
   const mantenimientosOptions = [
     {
       id: 1,
@@ -45,18 +47,18 @@ const Seleccion = () => {
         </Button>
 
         {selectedFicha && (
-          <div style={{ marginTop: '20px',alignContent: 'center', textAlign: 'center' }}>
+          <div className="credenciallisttitle" style={{ marginTop: '20px', alignContent: 'center', textAlign: 'center' }}>
             <h3>Ficha Seleccionada : {selectedFicha.title}</h3>
             <p>{selectedFicha.description}</p>
           </div>
         )}
 
         <Row>
-          {mantenimientosOptions.map((mantenimiento) => (
-            <Col key={mantenimiento.id} xs={12} sm={6} md={4} lg={3} xl={2}>
-              <TargetaMantenimiento
-                mantenimiento={mantenimiento}
-                showIcons={true}
+          {mantenimientosOptions.map((Estado) => (
+            <Col key={Estado.id} xs={12} sm={6} md={4} lg={3} xl={2}>
+              <TargetaEstado
+                Estado={Estado} // Pasar la opción como prop "Estado"
+                selectedFicha={selectedFicha} // Pasar la ficha seleccionada
               />
             </Col>
           ))}
