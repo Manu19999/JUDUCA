@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 import { FaArrowLeft } from "react-icons/fa";
+import { Button } from "react-bootstrap";
 
 const AsignacionCampos = () => {
   const navigate = useNavigate();
@@ -90,13 +91,16 @@ const AsignacionCampos = () => {
   return (
     <div className="container-fluid2">
 
-      <button
-        className="btnAgg"
+
+      <Button
+        variant="outline-warning"
         onClick={() => navigate("/credencialView")}
-        style={{ marginBottom: "10px" }}
-      >
+       className="d-flex align-items-center gap-2"
+        style={{ marginBottom: '55px', marginLeft: '55px' }}
+        >
         <FaArrowLeft size={20} /> Regresar
-      </button>
+      </Button>
+
                 {/* Mostrar la ficha seleccionada */}
                 {fichaActual && (
         <div className="credenciallisttitle" style={{ marginTop: '20px', alignContent: 'center', textAlign: 'center' }}>

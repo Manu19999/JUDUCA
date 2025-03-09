@@ -170,7 +170,7 @@ function CrearCredenciales() {
 
       {fichaActual && (
         <div className="credenciallisttitle" style={{ marginTop: '20px', alignContent: 'center', textAlign: 'center' }}>
-          <h2>Diseñador de Credencial para : {fichaActual.title}</h2>
+          <h2>Gestion de Credenciales para : {fichaActual.title}</h2>
           <p>{fichaActual.description}</p>
         </div>
       )}

@@ -27,7 +27,7 @@ const TargetaCredencial = ({
         <div className="eventicons">
           {showIcons && (
             <>
-              <FontAwesomeIcon
+             {/* <FontAwesomeIcon
                 icon={faEye}
                 onClick={handleVerInfo}
                 className="eventicon manage-btn-credencial"
@@ -40,7 +40,7 @@ const TargetaCredencial = ({
                 className="eventicon manage-btn-credencial"
                 style={{ marginBottom: '10px', marginInline: '10px'}} // Cambia el cursor para indicar que es clicable
 
-              />
+              />*/}
             </>
           )}
         </div>

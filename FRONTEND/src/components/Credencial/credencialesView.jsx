@@ -21,10 +21,10 @@ const GestionCredenciales = () => {
       {
         idFichaRegistro: 1,
         idEvento: 1,
-        nombreFicha: "Inscripción componente académico JUDUCA",
+        nombreFicha: "Inscripción académico JUDUCA",
         fotoRegistro: Inscripciones,
         activo: true,
-        comentarios: "Inscripción de los participantes al evento.",
+        comentarios: "Inscripción de los participantes.",
       },
       {
         idFichaRegistro: 2,
@@ -32,7 +32,7 @@ const GestionCredenciales = () => {
         nombreFicha: "Inscripción de delegados.",
         fotoRegistro: Delegados,
         activo: false,
-        comentarios: "Inscripción de los delegados de las universidades.",
+        comentarios: "Inscripción de los delegados.",
       },
       {
         idFichaRegistro: 3,
@@ -40,7 +40,7 @@ const GestionCredenciales = () => {
         nombreFicha: "Inscripción de voluntariado",
         fotoRegistro: Voluntariados,
         activo: true,
-        comentarios: "Inscripción de los voluntariados al evento.",
+        comentarios: "Inscripción de los voluntariados.",
       },
     ];
 
@@ -82,7 +82,7 @@ const GestionCredenciales = () => {
           <FaArrowLeft size={20} /> Regresar
         </Button>
 
-        <h2 className="credenciallisttitle">Asignación de Credenciales</h2>
+        <h2 className="credenciallisttitle">Generar Credenciales</h2>
         <Row>
           {fichasOptions.map((ficha) => (
             <Col key={ficha.id} xs={12} sm={6} md={4} lg={3} xl={2}>
