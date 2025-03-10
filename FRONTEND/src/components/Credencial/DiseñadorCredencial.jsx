@@ -1,161 +1,83 @@
-import React, { useReducer, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Button } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
-import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 
-const initialState = JSON.parse(localStorage.getItem("credencialState")) || {
-  eventoSeleccionado: null,
-  fichaSeleccionada: null,
-  camposUbicaciones: {},
-};
-
-const credencialReducer = (state, action) => {
-  switch (action.type) {
-    case "SET_EVENTO":
-      return { ...state, eventoSeleccionado: action.payload, fichaSeleccionada: null, camposUbicaciones: {} };
-    case "SET_FICHA":
-      return { ...state, fichaSeleccionada: action.payload };
-    case "SET_CAMPO_UBICACION":
-      return {
-        ...state,
-        camposUbicaciones: { ...state.camposUbicaciones, [action.payload.ubicacion]: action.payload.campo },
-      };
-    case "RESET_CREDENCIAL":
-      return initialState;
-    default:
-      return state;
-  }
-};
-
-const VistaPreviaCredencial = ({ camposUbicaciones, persona, handleDrop, handleDragOver }) => {
-  return (
-    <div
-      className="credencial"
-      style={{
-        backgroundImage: `url(${fondoCredencial})`,
-        backgroundSize: "cover",
-        width: "400px",
-        height: "250px",
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
-        gap: "5px",
-        padding: "10px",
-        border: "3px solid black",
-        borderRadius: "10px",
-      }}
-    >
-      {[...Array(9)].map((_, index) => (
-        <div
-          key={index}
-          className="grid-item"
-          onDragOver={handleDragOver}
-          onDrop={(e) => handleDrop(e, index)}
-          style={{
-            border: "1px solid gray",
-            textAlign: "center",
-            padding: "5px",
-            backgroundColor: "#e9ecef",
-            borderRadius: "5px",
-            minHeight: "50px",
-          }}
-        >
-          {camposUbicaciones[index] ? (
-            <strong>{camposUbicaciones[index].nombre}:</strong>
-          ) : (
-            "Arrastra aquí"
-          )}
-          <br />
-          {persona && camposUbicaciones[index]
-            ? persona[camposUbicaciones[index].nombre.toLowerCase()] || "Vacío"
-            : "Vacío"}
-        </div>
-      ))}
-    </div>
-  );
-};
-
-const DisenoCredencial = () => {
-  const [state, dispatch] = useReducer(credencialReducer, initialState);
+const VistaDiseñoCredencial = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { selectedFicha, idCampoCredencial } = location.state || {};
+
+  const [diseñoCredencial, setDiseñoCredencial] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("credencialState", JSON.stringify(state));
-  }, [state]);
+    if (!selectedFicha || !idCampoCredencial) {
+      alert("No se ha seleccionado una ficha o un campo de credencial.");
+      navigate("/credencialView");
+      return;
+    }
 
-  const handleDragStart = (e, campo) => {
-    e.dataTransfer.setData("campo", JSON.stringify(campo));
-  };
+    const fetchDiseñoCredencial = () => {
+      try {
+        // Obtener el diseño de credencial desde localStorage
+        const storedDiseño = localStorage.getItem("diseñoCredencial");
+        if (!storedDiseño) {
+          throw new Error("No se encontró el diseño de credencial en localStorage.");
+        }
+        const diseño = JSON.parse(storedDiseño);
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
+        // Aquí puedes filtrar o procesar los datos si es necesario
+        const diseñoFiltrado = diseño.find(
+          (item) => item.idFichaRegistro === selectedFicha.id && item.idCampoCredencial === idCampoCredencial
+        );
 
-  const handleDrop = (e, ubicacion) => {
-    e.preventDefault();
-    const campo = JSON.parse(e.dataTransfer.getData("campo"));
-    dispatch({ type: "SET_CAMPO_UBICACION", payload: { ubicacion, campo } });
-  };
+        if (!diseñoFiltrado) {
+          throw new Error("No se encontró el diseño de credencial para la ficha y campo seleccionados.");
+        }
 
-  const eventos = [
-    { id: 1, nombre: "JUDUCA" },
-    { id: 2, nombre: "SUCA" },
-  ];
+        setDiseñoCredencial(diseñoFiltrado);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const fichas = {
-    1: [
-      { id: 101, nombre: "Ficha 101", participante: { nombre: "Juan", apellido: "Pérez", dni: "123456", cargo: "Atleta", empresa: "UNAH" } },
-      { id: 102, nombre: "Ficha 102", participante: { nombre: "María", apellido: "Gómez", dni: "654321", cargo: "Entrenadora", empresa: "USAC" } },
-    ],
-    2: [
-      { id: 201, nombre: "Ficha 201", participante: { nombre: "Carlos", apellido: "Ruiz", dni: "987654", cargo: "Árbitro", empresa: "UCR" } },
-    ],
-  };
+    fetchDiseñoCredencial();
+  }, [selectedFicha, idCampoCredencial, navigate]);
 
-  const camposDisponibles = [
-    { id: 1, nombre: "Nombre" },
-    { id: 2, nombre: "Apellido" },
-    { id: 3, nombre: "DNI" },
-    { id: 4, nombre: "Cargo" },
-    { id: 5, nombre: "Empresa" },
-  ];
+  if (loading) return <div>Cargando...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="container-fluid">
-      <button className="btnAgg" onClick={() => navigate("/asignacionCampos")}> <FaArrowLeft size={20} /> Regresar </button>
-      <button className="btnReset" onClick={() => dispatch({ type: "RESET_CREDENCIAL" })}> Reiniciar </button>
-      <div className="row">
-        <div className="col-md-4">
-          <h3>Configuración de Credencial</h3>
-          <label>Selecciona un evento:</label>
-          <select className="form-control" onChange={(e) => dispatch({ type: "SET_EVENTO", payload: e.target.value })}>
-            <option value="">-- Selecciona un evento --</option>
-            {eventos.map((evento) => (<option key={evento.id} value={evento.id}>{evento.nombre}</option>))}
-          </select>
-          {state.eventoSeleccionado && (
-            <>
-              <label>Selecciona una ficha:</label>
-              <select className="form-control" onChange={(e) => {
-                const ficha = fichas[state.eventoSeleccionado]?.find((f) => f.id === parseInt(e.target.value));
-                dispatch({ type: "SET_FICHA", payload: ficha });
-              }}>
-                <option value="">-- Selecciona una ficha --</option>
-                {fichas[state.eventoSeleccionado]?.map((ficha) => (<option key={ficha.id} value={ficha.id}>{ficha.nombre}</option>))}
-              </select>
-            </>
-          )}
-          <label>Campos Disponibles:</label>
+      <Button
+        variant="outline-warning"
+        onClick={() => navigate("/credencialView")}
+        className="d-flex align-items-center gap-2"
+        style={{ marginBottom: "20px", marginLeft: "20px" }}
+      >
+        <FaArrowLeft size={20} /> Regresar
+      </Button>
+
+      {diseñoCredencial && (
+        <div className="text-center my-4">
+          <h2>Diseño de Credencial para: {selectedFicha.title}</h2>
+          <p>{selectedFicha.description}</p>
           <div>
-            {camposDisponibles.map((campo) => (
-              <div key={campo.id} draggable onDragStart={(e) => handleDragStart(e, campo)} style={{ padding: "10px", border: "1px solid #ccc", cursor: "grab" }}>{campo.nombre}</div>
-            ))}
+            <h3>Detalles del Diseño</h3>
+            <p>ID Diseño: {diseñoCredencial.idDiseñoCredencial}</p>
+            <p>ID Evento: {diseñoCredencial.idEvento}</p>
+            <p>ID Campo Credencial: {diseñoCredencial.idCampoCredencial}</p>
+            <p>ID Ficha Registro: {diseñoCredencial.idFichaRegistro}</p>
+            <p>Fecha de Vigencia: {new Date(diseñoCredencial.fechaVidencia).toLocaleDateString()}</p>
           </div>
         </div>
-        <div className="col-md-6">
-          <VistaPreviaCredencial camposUbicaciones={state.camposUbicaciones} persona={state.fichaSeleccionada?.participante} handleDrop={handleDrop} handleDragOver={handleDragOver} />
-        </div>
-      </div>
+      )}
     </div>
   );
 };
 
-export default DisenoCredencial;
+export default VistaDiseñoCredencial;
