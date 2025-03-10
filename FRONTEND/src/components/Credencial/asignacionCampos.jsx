@@ -1,16 +1,34 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
+import { Button, Alert } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
-import { Button } from "react-bootstrap";
+import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 
 const AsignacionCampos = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { selectedFicha } = location.state || {};
 
-  const [fichaActual, setFichaActual] = useState(null);
-  const [ubicaciones] = useState([
+  // Recuperar ficha seleccionada
+  const selectedFicha = location.state?.selectedFicha || JSON.parse(localStorage.getItem("selectedFicha")) || null;
+  const [fichaActual, setFichaActual] = useState(selectedFicha);
+  const [error, setError] = useState(null);
+
+  // Generar o recuperar ID de campo credencial
+  const [idCampoCredencial, setIdCampoCredencial] = useState(() => {
+    return localStorage.getItem("idCampoCredencial") || Date.now();
+  });
+
+  // ✅ Se asegura que `idCampoCredencial` siempre se guarde
+  useEffect(() => {
+    localStorage.setItem("idCampoCredencial", idCampoCredencial);
+  }, [idCampoCredencial]);
+
+  // ✅ Estado para gestionar los valores de asignación
+  const [ubicacionSeleccionada, setUbicacionSeleccionada] = useState("");
+  const [nuevaDescripcion, setNuevaDescripcion] = useState("");
+
+  // Lista de ubicaciones posibles
+  const ubicaciones = [
     { id: "arriba-izquierda", descripcion: "Arriba a la Izquierda" },
     { id: "arriba-centro", descripcion: "Arriba al Centro" },
     { id: "arriba-derecha", descripcion: "Arriba a la Derecha" },
@@ -20,35 +38,13 @@ const AsignacionCampos = () => {
     { id: "abajo-izquierda", descripcion: "Abajo a la Izquierda" },
     { id: "abajo-centro", descripcion: "Abajo al Centro" },
     { id: "abajo-derecha", descripcion: "Abajo a la Derecha" },
-  ]);
+  ];
 
-  const [configPlantilla] = useState(() => {
-    const savedConfig = localStorage.getItem("configPlantilla");
-    return savedConfig
-      ? JSON.parse(savedConfig)
-      : { colorFondo: "#ffffff", tipoFuente: "Arial" };
-  });
-
-  const [nuevaDescripcion, setNuevaDescripcion] = useState("");
-  const [ubicacionSeleccionada, setUbicacionSeleccionada] = useState("");
+  // ✅ Recuperar asignaciones desde localStorage
   const [asignaciones, setAsignaciones] = useState(() => {
     const savedData = localStorage.getItem("asignaciones");
     return savedData ? JSON.parse(savedData) : {};
   });
-
-  const [idCampoCredencial, setIdCampoCredencial] = useState(() => {
-    // Obtener el idCampoCredencial desde localStorage
-    return localStorage.getItem("idCampoCredencial");
-  });
-
-  useEffect(() => {
-    if (selectedFicha) {
-      setFichaActual(selectedFicha);
-    } else {
-      alert("No se ha seleccionado una ficha.");
-      navigate("/credencialView");
-    }
-  }, [selectedFicha, navigate]);
 
   useEffect(() => {
     localStorage.setItem("asignaciones", JSON.stringify(asignaciones));
@@ -56,7 +52,7 @@ const AsignacionCampos = () => {
 
   const handleGuardar = () => {
     if (!ubicacionSeleccionada || nuevaDescripcion.trim() === "") {
-      alert("Por favor, seleccione una ubicación y escriba una descripción.");
+      setError("Seleccione una ubicación y escriba una descripción.");
       return;
     }
 
@@ -67,23 +63,28 @@ const AsignacionCampos = () => {
 
     setNuevaDescripcion("");
     setUbicacionSeleccionada("");
+    setError(null);
     verificarYRedirigir();
   };
 
   const handleEliminar = (id) => {
-    const nuevasAsignaciones = { ...asignaciones };
-    delete nuevasAsignaciones[id];
-    setAsignaciones(nuevasAsignaciones);
+    setAsignaciones((prev) => {
+      const nuevasAsignaciones = { ...prev };
+      delete nuevasAsignaciones[id];
+      return nuevasAsignaciones;
+    });
+
+    // ✅ Se actualiza `localStorage` al eliminar un campo
+    useEffect(() => {
+      localStorage.setItem("asignaciones", JSON.stringify(asignaciones));
+    }, [asignaciones]);
   };
 
   const verificarYRedirigir = () => {
-    const todasLlenas = ubicaciones.every(
-      (ubicacion) => asignaciones[ubicacion.id]
-    );
+    const todasLlenas = ubicaciones.every((ubicacion) => asignaciones[ubicacion.id]);
     if (todasLlenas) {
-      navigate("/DiseñadorCredencial", {
-        state: { selectedFicha: fichaActual, idCampoCredencial },
-      });
+      localStorage.setItem("selectedFicha", JSON.stringify(fichaActual));
+      navigate("/DiseñadorCredencial", { state: { selectedFicha: fichaActual, idCampoCredencial } });
     }
   };
 
@@ -98,11 +99,20 @@ const AsignacionCampos = () => {
         <FaArrowLeft size={20} /> Regresar
       </Button>
 
-      {fichaActual && (
+      {error && <Alert variant="danger">{error}</Alert>}
+
+      {fichaActual ? (
         <div className="text-center my-4">
           <h2>Diseñador de Credencial para: {fichaActual.title}</h2>
           <p>{fichaActual.description}</p>
         </div>
+      ) : (
+        <Alert variant="warning" className="text-center">
+          No se seleccionó ninguna ficha. 
+          <Button variant="primary" onClick={() => navigate("/SeleccionarFicha")} className="mt-2">
+            Seleccionar Ficha
+          </Button>
+        </Alert>
       )}
 
       <div className="row">
@@ -154,28 +164,14 @@ const AsignacionCampos = () => {
               margin: "auto",
               border: "3px solid black",
               padding: "10px",
-              backgroundColor: configPlantilla.colorFondo,
-              fontFamily: configPlantilla.tipoFuente,
+              backgroundColor: "#ffffff",
+              fontFamily: "Arial",
               borderRadius: "10px",
             }}
           >
             {ubicaciones.map((ubicacion) => (
-              <div
-                key={ubicacion.id}
-                style={{
-                  border: "1px solid gray",
-                  minHeight: "50px",
-                  textAlign: "center",
-                  padding: "5px",
-                  backgroundColor: "#e9ecef",
-                  borderRadius: "5px",
-                  fontFamily: configPlantilla.tipoFuente,
-                  position: "relative",
-                }}
-              >
-                <strong>
-                  {asignaciones[ubicacion.id]?.descripcion || "Vacío"}
-                </strong>
+              <div key={ubicacion.id} style={{ border: "1px solid gray", textAlign: "center", padding: "5px", position: "relative" }}>
+                <strong>{asignaciones[ubicacion.id]?.descripcion || "Vacío"}</strong>
                 {asignaciones[ubicacion.id] && (
                   <button
                     onClick={() => handleEliminar(ubicacion.id)}
