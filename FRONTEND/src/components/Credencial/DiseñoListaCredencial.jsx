@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import TargetaEstado from "../Credencial/targetasEstadoCredencial"; // Importar el componente correcto
-import EventImage6 from "../../assets/Credencial.jpg"; // Imagen de la ficha
+import agregarCredencial from "../../assets/FondosCredencial/agregarCredencial.jpg"; // Imagen de la ficha
+import configCredencial from "../../assets/FondosCredencial/configCredencial.jpg"; // Imagen de la ficha
 import "../../styles/Credencial/credencial.css";
 import { FaArrowLeft } from "react-icons/fa";
 
@@ -23,13 +24,13 @@ const Seleccion = () => {
     {
       id: 1,
       title: "Listado de participantes",
-      image: EventImage6,
+      image: agregarCredencial,
       url: "/asignarcredencial"
     },
     {
       id: 2,
       title: "Diseñador de credencial",
-      image: EventImage6,
+      image: configCredencial,
       url: "/AsignacionCampos"
     },
   ];
