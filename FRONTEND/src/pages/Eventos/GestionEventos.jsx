@@ -402,7 +402,7 @@ function GestionEventos() {
       <ModalDetalles
         show={showDetailsModal} // Controla la visibilidad del modal
         onHide={() => setShowDetailsModal(false)} // Función para cerrar el modal
-        titulo="Detalles de la credencial" // Título del modal
+        titulo="Detalles del evento" // Título del modal
         detalles={registroSeleccionado || {}} // Detalles del usuario seleccionado
         width={500} // Ancho personalizado
       />

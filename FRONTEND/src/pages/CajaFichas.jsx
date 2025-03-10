@@ -215,7 +215,7 @@ const CajaFichas = () => {
                       src={URL.createObjectURL(foto)}
                       alt="Foto seleccionada"
                       style={{
-                        width: "150px",
+                        width: "250px",
                         height: "150px",
                         objectFit: "cover",
                         borderRadius: "10px",

@@ -270,16 +270,21 @@ const items = [
                 </div>
 
                 {previewFoto && (
-                  <img
-                    src={previewFoto}
-                    alt="Vista previa"
-                    style={{
-                      width: "150px",
-                      height: "150px",
-                      objectFit: "cover",
-                      borderRadius: "10px",
-                    }}
-                  />
+                  <div>
+                    <p>
+                      <strong>Foto seleccionada:</strong>
+                    </p>
+                    <img
+                      src={URL.createObjectURL(foto)}
+                      alt="Foto seleccionada"
+                      style={{
+                        width: "250px",
+                        height: "150px",
+                        objectFit: "cover",
+                        borderRadius: "10px",
+                      }}
+                    />
+                  </div>
                 )}
               </Form.Group>
 
