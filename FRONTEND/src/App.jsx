@@ -25,23 +25,25 @@ const InscripcionJUDUCA = React.lazy(() =>
   import("./pages/RegistroParticipante")
 );
 
+
 // Credenciales
-//const CrearCredenciales = React.lazy(() => import("./pages/Credenciales/CreateCredencial"));
 const ConfigCredencial = React.lazy(() => import("./pages/Credenciales/PlantillaCredencial"));
 const AsignarCampos = React.lazy(() => import("./pages/Credenciales/AsignacionCampos"));
 const DiseñadorCredencial = React.lazy(() => import("./pages/Credenciales/DiseñadorCredencial"));
 const EscanerCredencial = React.lazy(() => import("./pages/Credenciales/EscanerCredenciales"));
 const CredencialView = React.lazy(() => import("./pages/Credenciales/CredencialView"));
 const AsignacionCredencial = React.lazy(() => import("./pages/Credenciales/AsignacionCredencial"));
+const ListaDiseñoCredencial = React.lazy(() => import("./pages/Credenciales/DiseñoListaCredencial"));
+
 
 // Vouchers y Tickets
-const Vouchers = React.lazy(() => import("./pages/Vouchers/Voucher"));
+const Vouchers = React.lazy(() => import("./pages/Vouchers/voucher"));
 const ConsumosVouchers = React.lazy(() => import("./pages/Vouchers/ConsumoVoucher"));
 const Comedores = React.lazy(() => import("./pages/Vouchers/Comedores"));
-const Tickets = React.lazy(() => import("./pages/Vouchers/Tickets"));
+const Tickets = React.lazy(() => import("./pages/Vouchers/Tickets "));
 
 // Juegos
-const JuegoView = React.lazy(() => import("./pages/Juegos/JuegoView"));
+const JuegoView = React.lazy(() => import("./pages/Juegos/JuegosView "));
 
 // Mantenimientos
 const MantenimientoView = React.lazy(() => import("./pages/Mantenimientos/MantenimientoView"));
@@ -78,13 +80,13 @@ function App() {
           <Route path="/ficha-participantes" element={<InscripcionJUDUCA />} />
 
           {/* Credenciales */}
-          {/*<Route path="/crearCredencial" element={<CrearCredenciales />} />*/}
           <Route path="/confCredencial" element={<ConfigCredencial />} />
           <Route path="/asignacionCampos" element={<AsignarCampos />} />
           <Route path="/diseñadorCredencial" element={<DiseñadorCredencial />} />
           <Route path="/escaneoCredencial" element={<EscanerCredencial />} />
           <Route path="/credencialView" element={<CredencialView />} />
-          <Route path="/asignarcredencial/:id" element={<AsignacionCredencial />} />
+          <Route path="/asignarcredencial" element={<AsignacionCredencial />} />
+          <Route path="/OpcionCredencial" element={<ListaDiseñoCredencial />}/>
 
           {/* Vouchers y Tickets */}
           <Route path="/vouchers" element={<Vouchers />} />
