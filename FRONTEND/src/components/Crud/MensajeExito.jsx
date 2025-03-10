@@ -4,24 +4,18 @@ import { notification } from "antd";
 const notificationStyles = {
   customNotification: {
     width: "480px",
-    padding: "2rem",
+    padding: "1.6rem",
+    borderRadius: "8px",
+    backgroundColor: "#f6fff6",
+    borderLeft: "6px solid #4dff59",
   },
   title: {
-    fontSize: "16px",
+    fontSize: "18px",
     color: "#426a99",
   },
   description: {
     fontSize: "14px",
     color: "#333",
-  },
-  button: {
-    backgroundColor: "#426a99",
-    borderColor: "#426a99",
-    color: "white",
-  },
-  buttonHover: {
-    backgroundColor: "#325880",
-    borderColor: "#325880",
   },
 };
 
