@@ -35,7 +35,7 @@ const Input = ({
           onClick={() => setShowPassword(!showPassword)}
           aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
         >
-          {showPassword ? <FaEyeSlash /> : <FaEye />}
+          {showPassword ? <FaEye /> : <FaEyeSlash />}
         </span>
       )}
     </div>
