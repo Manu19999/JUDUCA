@@ -1,6 +1,6 @@
 import React from "react";
-import Nav from '../components/Dashboard/navDashboard';
-import ConfiguracionCredencial from "../components/Credencial/DiseñadorCredencial"; // 
+import Nav from '../../components/Dashboard/navDashboard';
+import ConfiguracionCredencial from "../../components/Credencial/DiseñadorCredencial"; // 
 
 const DiseñadorCredencial = () => {
   return (

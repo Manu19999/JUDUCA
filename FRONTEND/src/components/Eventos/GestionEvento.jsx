@@ -67,7 +67,7 @@ const GestionEvento = () => {
       navigate("/llenar-fichas");
     }
     if (id === 3) {
-      navigate("");
+      navigate("/vouchers");
     }
     if (id === 4) {
       navigate("/credencialView");

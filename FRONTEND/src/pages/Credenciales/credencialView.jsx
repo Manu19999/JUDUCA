@@ -1,5 +1,5 @@
-import GestionCredenciales from "../components/Credencial/credencialesView";
-import Nav from '../components/Dashboard/navDashboard';
+import GestionCredenciales from "../../components/Credencial/credencialesView";
+import Nav from '../../components/Dashboard/navDashboard';
 
 
 export default function ListaFichas() {

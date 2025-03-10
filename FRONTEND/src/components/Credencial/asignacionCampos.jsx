@@ -1,32 +1,46 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Button, Alert } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
+import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 
 const AsignacionCampos = () => {
-  const [ubicaciones] = useState([
-    { id: 1, descripcion: "Arriba a la Izquierda", value: "arriba-izquierda" },
-    { id: 2, descripcion: "Arriba al Centro", value: "arriba-centro" },
-    { id: 3, descripcion: "Arriba a la Derecha", value: "arriba-derecha" },
-    { id: 4, descripcion: "Medio a la Izquierda", value: "medio-izquierda" },
-    { id: 5, descripcion: "Centro Exacto", value: "centro-exacto" },
-    { id: 6, descripcion: "Medio a la Derecha", value: "medio-derecha" },
-    { id: 7, descripcion: "Abajo a la Izquierda", value: "abajo-izquierda" },
-    { id: 8, descripcion: "Abajo al Centro", value: "abajo-centro" },
-    { id: 9, descripcion: "Abajo a la Derecha", value: "abajo-derecha" },
-  ]);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Cargar configuraciones de la plantilla desde localStorage
-  const [configPlantilla, setConfigPlantilla] = useState(() => {
-    const savedConfig = localStorage.getItem("configPlantilla");
-    return savedConfig
-      ? JSON.parse(savedConfig)
-      : { colorFondo: "#ffffff", tipoFuente: "Arial" };
+  // Recuperar ficha seleccionada
+  const selectedFicha = location.state?.selectedFicha || JSON.parse(localStorage.getItem("selectedFicha")) || null;
+  const [fichaActual, setFichaActual] = useState(selectedFicha);
+  const [error, setError] = useState(null);
+
+  // Generar o recuperar ID de campo credencial
+  const [idCampoCredencial, setIdCampoCredencial] = useState(() => {
+    return localStorage.getItem("idCampoCredencial") || Date.now();
   });
 
-  const [nuevaDescripcion, setNuevaDescripcion] = useState("");
+  // ✅ Se asegura que `idCampoCredencial` siempre se guarde
+  useEffect(() => {
+    localStorage.setItem("idCampoCredencial", idCampoCredencial);
+  }, [idCampoCredencial]);
+
+  // ✅ Estado para gestionar los valores de asignación
   const [ubicacionSeleccionada, setUbicacionSeleccionada] = useState("");
+  const [nuevaDescripcion, setNuevaDescripcion] = useState("");
+
+  // Lista de ubicaciones posibles
+  const ubicaciones = [
+    { id: "arriba-izquierda", descripcion: "Arriba a la Izquierda" },
+    { id: "arriba-centro", descripcion: "Arriba al Centro" },
+    { id: "arriba-derecha", descripcion: "Arriba a la Derecha" },
+    { id: "medio-izquierda", descripcion: "Medio a la Izquierda" },
+    { id: "centro-exacto", descripcion: "Centro Exacto" },
+    { id: "medio-derecha", descripcion: "Medio a la Derecha" },
+    { id: "abajo-izquierda", descripcion: "Abajo a la Izquierda" },
+    { id: "abajo-centro", descripcion: "Abajo al Centro" },
+    { id: "abajo-derecha", descripcion: "Abajo a la Derecha" },
+  ];
+
+  // ✅ Recuperar asignaciones desde localStorage
   const [asignaciones, setAsignaciones] = useState(() => {
     const savedData = localStorage.getItem("asignaciones");
     return savedData ? JSON.parse(savedData) : {};
@@ -36,60 +50,78 @@ const AsignacionCampos = () => {
     localStorage.setItem("asignaciones", JSON.stringify(asignaciones));
   }, [asignaciones]);
 
-  const verificarYRedirigir = () => {
-    // Verifica si todas las ubicaciones tienen asignaciones
-    const todasLlenas = ubicaciones.every((ubicacion) => asignaciones[ubicacion.id]);
-  
-    if (todasLlenas) {
-      navigate("/DiseñadorCredencial"); // Ajusta con la ruta deseada
-    } 
-  };
   const handleGuardar = () => {
-    if (ubicacionSeleccionada && nuevaDescripcion.trim() !== "") {
-      setAsignaciones((prev) => {
-        const nuevasAsignaciones = {
-          ...prev,
-          [ubicacionSeleccionada]: { descripcion: nuevaDescripcion },
-        };
-        localStorage.setItem("asignaciones", JSON.stringify(nuevasAsignaciones));
-        return nuevasAsignaciones;
-      });
-  
-      setNuevaDescripcion("");
-      setUbicacionSeleccionada("");
-  
-      // Verifica si todos los campos están llenos y redirige
-      verificarYRedirigir();
-    } else {
-      alert("Por favor, seleccione una ubicación y escriba una descripción.");
+    if (!ubicacionSeleccionada || nuevaDescripcion.trim() === "") {
+      setError("Seleccione una ubicación y escriba una descripción.");
+      return;
     }
+
+    setAsignaciones((prev) => ({
+      ...prev,
+      [ubicacionSeleccionada]: { descripcion: nuevaDescripcion },
+    }));
+
+    setNuevaDescripcion("");
+    setUbicacionSeleccionada("");
+    setError(null);
+    verificarYRedirigir();
   };
 
   const handleEliminar = (id) => {
-    const nuevasAsignaciones = { ...asignaciones };
-    delete nuevasAsignaciones[id];
-    setAsignaciones(nuevasAsignaciones);
+    setAsignaciones((prev) => {
+      const nuevasAsignaciones = { ...prev };
+      delete nuevasAsignaciones[id];
+      return nuevasAsignaciones;
+    });
+
+    // ✅ Se actualiza `localStorage` al eliminar un campo
+    useEffect(() => {
+      localStorage.setItem("asignaciones", JSON.stringify(asignaciones));
+    }, [asignaciones]);
+  };
+
+  const verificarYRedirigir = () => {
+    const todasLlenas = ubicaciones.every((ubicacion) => asignaciones[ubicacion.id]);
+    if (todasLlenas) {
+      localStorage.setItem("selectedFicha", JSON.stringify(fichaActual));
+      navigate("/DiseñadorCredencial", { state: { selectedFicha: fichaActual, idCampoCredencial } });
+    }
   };
 
   return (
-    <div className="container-fluid2">
-      <button
-        className="btnAgg"
+    <div className="container-fluid">
+      <Button
+        variant="outline-warning"
         onClick={() => navigate("/credencialView")}
-        style={{ marginBottom: "10px" }}
+        className="d-flex align-items-center gap-2"
+        style={{ marginBottom: "20px", marginLeft: "20px" }}
       >
         <FaArrowLeft size={20} /> Regresar
-      </button>
+      </Button>
+
+      {error && <Alert variant="danger">{error}</Alert>}
+
+      {fichaActual ? (
+        <div className="text-center my-4">
+          <h2>Diseñador de Credencial para: {fichaActual.title}</h2>
+          <p>{fichaActual.description}</p>
+        </div>
+      ) : (
+        <Alert variant="warning" className="text-center">
+          No se seleccionó ninguna ficha. 
+          <Button variant="primary" onClick={() => navigate("/SeleccionarFicha")} className="mt-2">
+            Seleccionar Ficha
+          </Button>
+        </Alert>
+      )}
 
       <div className="row">
         <div className="col-md-4">
           <h3 className="text-center my-3">Configuración de Credencial</h3>
-
-          {/* FORMULARIO PARA INGRESAR DATOS */}
           <div className="mb-3">
             <label className="form-label">Ubicación:</label>
             <select
-              className="form-control-credencial"
+              className="form-control"
               value={ubicacionSeleccionada}
               onChange={(e) => setUbicacionSeleccionada(e.target.value)}
             >
@@ -100,72 +132,60 @@ const AsignacionCampos = () => {
                 </option>
               ))}
             </select>
-
-            <div className="mb-3">
-              <label className="form-label">Descripción:</label>
-              <input
-                type="text"
-                className="form-control-credencial"
-                placeholder="Escribir descripción"
-                value={nuevaDescripcion}
-                onChange={(e) => setNuevaDescripcion(e.target.value)}
-              />
-            </div>
-
-            <div className="botones-container">
-              <button className="btnAgg" onClick={handleGuardar}>
-                Guardar
-              </button>
-            </div>
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Descripción:</label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Escribir descripción"
+              value={nuevaDescripcion}
+              onChange={(e) => setNuevaDescripcion(e.target.value)}
+            />
+          </div>
+          <div className="text-center">
+            <button className="btn btn-primary" onClick={handleGuardar}>
+              Guardar
+            </button>
           </div>
         </div>
 
-        <div className="col-md-5 d-flex justify-content-center align-items-center">
-          {/* VISTA PREVIA */}
+        <div className="col-md-6 d-flex justify-content-center align-items-center">
           <div
             style={{
               backgroundImage: `url(${fondoCredencial})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               display: "grid",
-              width: "400px",
-              height: "250px",
+              width: "600px",
+              height: "350px",
               gridTemplateColumns: "repeat(3, 1fr)",
               gap: "5px",
               margin: "auto",
               border: "3px solid black",
               padding: "10px",
-              backgroundColor: configPlantilla.colorFondo,
-              fontFamily: configPlantilla.tipoFuente,
+              backgroundColor: "#ffffff",
+              fontFamily: "Arial",
               borderRadius: "10px",
             }}
           >
             {ubicaciones.map((ubicacion) => (
-              <div
-                key={ubicacion.id}
-                style={{
-                  border: "1px solid gray",
-                  minHeight: "50px",
-                  textAlign: "center",
-                  padding: "5px",
-                  backgroundColor: "#e9ecef",
-                  borderRadius: "5px",
-                  fontFamily: configPlantilla.tipoFuente,
-                }}
-              >
-                <strong>
-                  {asignaciones[ubicacion.id]?.descripcion || "Vacío"}
-                </strong>
+              <div key={ubicacion.id} style={{ border: "1px solid gray", textAlign: "center", padding: "5px", position: "relative" }}>
+                <strong>{asignaciones[ubicacion.id]?.descripcion || "Vacío"}</strong>
                 {asignaciones[ubicacion.id] && (
                   <button
                     onClick={() => handleEliminar(ubicacion.id)}
                     style={{
+                      position: "absolute",
+                      top: "5px",
+                      right: "5px",
                       background: "red",
                       color: "white",
                       border: "none",
-                      borderRadius: "5px",
-                      padding: "2px 5px",
-                      marginLeft: "5px",
+                      borderRadius: "50%",
+                      padding: "2px 6px",
+                      fontSize: "12px",
+                      cursor: "pointer",
                     }}
                   >
                     X

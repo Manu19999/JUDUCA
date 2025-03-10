@@ -1,5 +1,5 @@
-import GestionJuegos from "../components/Juegos/juegosView";
-import Nav from '../components/Dashboard/navDashboard';
+import GestionJuegos from "../../components/Juegos/juegosView";
+import Nav from '../../components/Dashboard/navDashboard';
 
 
 export default function ListaFichas() {
