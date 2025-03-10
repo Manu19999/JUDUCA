@@ -8,6 +8,15 @@
   padding: 20px;
 }
 
+.error-message {
+  color: #fd5b5e; /* Rojo para el texto */
+  font-size: 14px;
+  text-align: center;
+  margin-top: -30px;
+  margin-bottom: 20px;
+  padding: 10px; 
+}
+
 /* Contenedor principal para el logo y el login-box */
 .login-wrapper {
   position: relative; /* Necesario para posicionar el logo de manera absoluta */
