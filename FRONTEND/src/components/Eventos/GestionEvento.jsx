@@ -1,5 +1,5 @@
-import React from "react";
-import { Container, Button  } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import Slider from "react-slick";
@@ -16,9 +16,17 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../../styles/Credencial/credencial.css";
 
-/* ***************** Componente que nos permite gestionar el evento seleccionado asignandole fichas, vauchers, credenciales etc. ****** */
 const GestionEvento = () => {
   const navigate = useNavigate();
+  const [evento, setEvento] = useState(null); // Estado para el evento seleccionado
+
+  // 🔹 Cargar el evento seleccionado desde localStorage
+  useEffect(() => {
+    const eventoGuardado = localStorage.getItem("eventoActivo");
+    if (eventoGuardado) {
+      setEvento(JSON.parse(eventoGuardado));
+    }
+  }, []);
 
   const upcomingEvents = [
     {
@@ -26,112 +34,87 @@ const GestionEvento = () => {
       title: "Fichas",
       image: EventImage,
       description: "Creación y gestión de fichas.",
-      size: "medium", // Asigna un tamaño
+      size: "medium",
     },
     {
       id: 2,
       title: "Registro",
       image: EventImage3,
-      description: "Fichas de registro e inscriciones.",
-      size: "small", // Asigna un tamaño
+      description: "Fichas de registro e inscripciones.",
+      size: "small",
     },
     {
       id: 3,
-      title: "Vauchers",
+      title: "Vouchers",
       image: EventImage4,
       description: "Control de tickets y vouchers.",
-      size: "medium", // Asigna un tamaño
+      size: "medium",
     },
     {
       id: 4,
       title: "Diseñador de Credenciales",
       image: EventImage6,
       description: "Asignar credenciales.",
-      size: "medium", // Asigna un tamaño
+      size: "medium",
     },
     {
       id: 5,
       title: "Juegos",
       image: EventImage5,
       description: "Creación de los equipos y competencias.",
-      size: "medium", // Asigna un tamaño
+      size: "medium",
     },
   ];
 
   const handleImageClick = (id) => {
-    if (id === 1) {
-      navigate("/lista-fichas");
-    }
-    if (id === 2) {
-      navigate("/llenar-fichas");
-    }
-    if (id === 3) {
-      navigate("/vouchers");
-    }
-    if (id === 4) {
-      navigate("/credencialView");
-    }
-    if (id === 5) {
-      navigate("/JuegoView");
-    }
-    if (id === 4) {
-      navigate("/credencialView");
-    }
-  };
-
-  const handleEditClick = (id) => {
-    console.log(`Editar evento con id ${id}`);
-  };
-
-  const handleManageClick = (id) => {
-    console.log(`Gestionar evento con id ${id}`);
+    const routes = {
+      1: "/lista-fichas",
+      2: "/llenar-fichas",
+      3: "/vouchers",
+      4: "/credencialView",
+      5: "/JuegoView",
+    };
+    navigate(routes[id] || "/gestion-evento");
   };
 
   // Configuración del carrusel
   const settings = {
-    dots: true, // Muestra los puntos de navegación
-    infinite: true, // Bucle infinito
-    speed: 500, // Velocidad de transición
-    slidesToShow: 4, // Número de tarjetas visibles a la vez
-    slidesToScroll: 1, // Número de tarjetas a desplazar
-    autoplay: true, // Desplazamiento automático
-    autoplaySpeed: 1500, // Velocidad del desplazamiento automático
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 1500,
     responsive: [
-      {
-        breakpoint: 768, // Configuración para pantallas pequeñas
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 480, // Configuración para pantallas muy pequeñas
-        settings: {
-          slidesToShow: 1,
-        },
-      },
+      { breakpoint: 768, settings: { slidesToShow: 2 } },
+      { breakpoint: 480, settings: { slidesToShow: 1 } },
     ],
   };
 
   return (
     <section id="events" className="eventlist">
       <Container>
-      <Button
-  variant="outline-warning"
-  onClick={() => navigate("/eventos")}
-  className="d-flex align-items-center gap-2"
-  style={{  marginTop: '55px' }}
->
-  <FaArrowLeft size={20} /> Regresar
-</Button>
-        <h2 className="eventlisttitle">Evento</h2>
+        <Button
+          variant="outline-warning"
+          onClick={() => navigate("/eventos")}
+          className="d-flex align-items-center gap-2"
+          style={{ marginTop: "55px" }}
+        >
+          <FaArrowLeft size={20} /> Regresar
+        </Button>
+
+        {/* 🔹 Mostrar el nombre del evento seleccionado */}
+        <h2 className="credenciallisttitle">
+          {evento ? `Evento seleccionado : ${evento.title}` : "Cargando evento..."}
+        </h2>
+
         <Slider {...settings}>
           {upcomingEvents.map((event) => (
             <div key={event.id}>
               <EventoCaracteristica
                 event={event}
                 onImageClick={() => handleImageClick(event.id)}
-                onEditClick={() => handleEditClick(event.id)}
-                onManageClick={() => handleManageClick(event.id)}
               />
             </div>
           ))}

@@ -13,17 +13,16 @@ const AsignacionCampos = () => {
   const [fichaActual, setFichaActual] = useState(selectedFicha);
   const [error, setError] = useState(null);
 
-  // Generar o recuperar ID de campo credencial
+  // Recuperar o mantener el mismo ID de campo credencial sin incrementarlo
   const [idCampoCredencial, setIdCampoCredencial] = useState(() => {
     return localStorage.getItem("idCampoCredencial") || Date.now();
   });
 
-  // ✅ Se asegura que `idCampoCredencial` siempre se guarde
   useEffect(() => {
     localStorage.setItem("idCampoCredencial", idCampoCredencial);
   }, [idCampoCredencial]);
 
-  // ✅ Estado para gestionar los valores de asignación
+  // Estado para manejar la asignación de múltiples ubicaciones
   const [ubicacionSeleccionada, setUbicacionSeleccionada] = useState("");
   const [nuevaDescripcion, setNuevaDescripcion] = useState("");
 
@@ -40,10 +39,10 @@ const AsignacionCampos = () => {
     { id: "abajo-derecha", descripcion: "Abajo a la Derecha" },
   ];
 
-  // ✅ Recuperar asignaciones desde localStorage
+  // Recuperar asignaciones desde `localStorage`
   const [asignaciones, setAsignaciones] = useState(() => {
     const savedData = localStorage.getItem("asignaciones");
-    return savedData ? JSON.parse(savedData) : {};
+    return savedData ? JSON.parse(savedData) : { [idCampoCredencial]: {} };
   });
 
   useEffect(() => {
@@ -58,34 +57,27 @@ const AsignacionCampos = () => {
 
     setAsignaciones((prev) => ({
       ...prev,
-      [ubicacionSeleccionada]: { descripcion: nuevaDescripcion },
+      [idCampoCredencial]: {
+        ...prev[idCampoCredencial],
+        [ubicacionSeleccionada]: { descripcion: nuevaDescripcion },
+      },
     }));
 
     setNuevaDescripcion("");
     setUbicacionSeleccionada("");
     setError(null);
-    verificarYRedirigir();
   };
 
-  const handleEliminar = (id) => {
+  const handleEliminar = (ubicacion) => {
     setAsignaciones((prev) => {
       const nuevasAsignaciones = { ...prev };
-      delete nuevasAsignaciones[id];
+      delete nuevasAsignaciones[idCampoCredencial][ubicacion];
       return nuevasAsignaciones;
     });
-
-    // ✅ Se actualiza `localStorage` al eliminar un campo
-    useEffect(() => {
-      localStorage.setItem("asignaciones", JSON.stringify(asignaciones));
-    }, [asignaciones]);
   };
 
   const verificarYRedirigir = () => {
-    const todasLlenas = ubicaciones.every((ubicacion) => asignaciones[ubicacion.id]);
-    if (todasLlenas) {
-      localStorage.setItem("selectedFicha", JSON.stringify(fichaActual));
-      navigate("/DiseñadorCredencial", { state: { selectedFicha: fichaActual, idCampoCredencial } });
-    }
+    navigate("/DiseñadorCredencial", { state: { selectedFicha: fichaActual, idCampoCredencial } });
   };
 
   return (
@@ -147,6 +139,9 @@ const AsignacionCampos = () => {
             <button className="btn btn-primary" onClick={handleGuardar}>
               Guardar
             </button>
+            <button className="btn btn-success ms-2" onClick={verificarYRedirigir}>
+              Finalizar y Diseñar
+            </button>
           </div>
         </div>
 
@@ -171,8 +166,8 @@ const AsignacionCampos = () => {
           >
             {ubicaciones.map((ubicacion) => (
               <div key={ubicacion.id} style={{ border: "1px solid gray", textAlign: "center", padding: "5px", position: "relative" }}>
-                <strong>{asignaciones[ubicacion.id]?.descripcion || "Vacío"}</strong>
-                {asignaciones[ubicacion.id] && (
+                <strong>{asignaciones[idCampoCredencial]?.[ubicacion.id]?.descripcion || "Vacío"}</strong>
+                {asignaciones[idCampoCredencial]?.[ubicacion.id] && (
                   <button
                     onClick={() => handleEliminar(ubicacion.id)}
                     style={{

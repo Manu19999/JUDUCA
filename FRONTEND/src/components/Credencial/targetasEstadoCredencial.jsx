@@ -19,6 +19,8 @@ const TargetaEstado = ({ Estado, selectedFicha }) => {
         src={Estado.image}
         alt={Estado.title}
         className="eventimage"
+        loading="lazy" // Carga diferida para mejorar el rendimiento
+
       />
       <div className="eventcontent">
         <h3 className="titleCredencial">{Estado.title}</h3>
