@@ -1,113 +1,132 @@
-import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-// Loader de carga
-const Loader = () => <div>Cargando...</div>;
-
-// Importaciones lazy
-const Home = React.lazy(() => import("./pages/Home"));
-const Login = React.lazy(() => import("./pages/Login"));
-const Dashboard = React.lazy(() => import("./pages/Dashboard"));
-
-// Seguridad
-const CajaSeguridad = React.lazy(() => import("./pages/CajaSeguridad"));
-const Usuarios = React.lazy(() => import("./pages/Seguridad/Usuarios"));
-const Roles = React.lazy(() => import("./pages/Seguridad/Roles"));
-
-// Eventos
-const CajaEventos = React.lazy(() => import("./pages/CajaEventos"));
-const GestionEventos = React.lazy(() => import("./pages/Eventos/GestionEventos"));
-const CajaFichas = React.lazy(() => import("./pages/CajaFichas"));
-const LlenaFichas = React.lazy(() => import("./pages/LlenarFichas"));
-const GestionFicha = React.lazy(() => import("./pages/Eventos/GestionFichas"));
-const FormulariosFichas = React.lazy(() => import("./pages/FormularioFicha"));
-const InscripcionJUDUCA = React.lazy(() =>
-  import("./pages/RegistroParticipante")
-);
+import React, { Suspense } from "react";
+import Loader from "./components/Loader"; 
+// Importa el componente Breadcrumb
+import AppBreadcrumb from "./components/AppBreadcrumb";
 
 
-// Credenciales
-const ConfigCredencial = React.lazy(() => import("./pages/Credenciales/PlantillaCredencial"));
-const AsignarCampos = React.lazy(() => import("./pages/Credenciales/AsignacionCampos"));
-const DiseñadorCredencial = React.lazy(() => import("./pages/Credenciales/DiseñadorCredencial"));
-const EscanerCredencial = React.lazy(() => import("./pages/Credenciales/EscanerCredenciales"));
-const CredencialView = React.lazy(() => import("./pages/Credenciales/CredencialView"));
-const AsignacionCredencial = React.lazy(() => import("./pages/Credenciales/AsignacionCredencial"));
-const ListaDiseñoCredencial = React.lazy(() => import("./pages/Credenciales/DiseñoListaCredencial"));
+//+++++++++++++++++++++++++ importación página de Inicio, Login, Dashboard +++++++++++++++++++++++++
+const Home = React.lazy(() => import("./pages/Home")); 
+const Login= React.lazy(() => import ("./pages/Login")) ; 
+const Dashboard =React.lazy(() => import("./pages/Dashboard"));
 
 
-{/*/ Vouchers y Tickets
-const Vouchers = React.lazy(() => import("./pages/Vouchers/voucher"));
-const ConsumosVouchers = React.lazy(() => import("./pages/Vouchers/ConsumoVoucher"));
-const Comedores = React.lazy(() => import("./pages/Vouchers/Comedores"));
-const Tickets = React.lazy(() => import("./pages/Vouchers/Tickets "));
 
-// Juegos
-const JuegoView = React.lazy(() => import("./pages/Juegos/JuegosView "));*/}
+//+++++++++++++++++++++++++ importación caja de Seguridad y sus elementos +++++++++++++++++++++++++
+const CajaSeguridad =React.lazy(() => import("./pages/CajaSeguridad")); 
+const Usuarios =React.lazy(() => import("./pages/Seguridad/Usuarios"));
+const Roles =React.lazy(() => import("./pages/Seguridad/Roles"));
 
-// Mantenimientos
-const MantenimientoView = React.lazy(() => import("./pages/Mantenimientos/MantenimientoView"));
-const MantenimientoPaises = React.lazy(() => import("./pages/Mantenimientos/MantenimientoPaises"));
-const MantenimientoCiudades = React.lazy(() => import("./pages/Mantenimientos/MantenimientoCiudades"));
-const MantenimientoInstalaciones = React.lazy(() => import("./pages/Mantenimientos/MantenimientoInstalaciones"));
-const MantenimientoGeneros = React.lazy(() => import("./pages/Mantenimientos/MantenimientoGeneros"));
-const MantenimientoApiMap = React.lazy(() => import("./pages/Mantenimientos/MantenimientoApiMap"));
+
+
+//+++++++++++++++++++++++++ importación caja de eventos y sus elementos +++++++++++++++++++++++++
+const CajaEvento =React.lazy(() => import("./pages/CajaEventos"));
+//Eventos
+const CreateEvent =React.lazy(() => import("./pages/Evento"));
+const Eventos =React.lazy(() => import("./pages/GestionEvento"));
+
+//Fichas
+const CajaFichas =React.lazy(() => import("./pages/CajaFichas"));
+const Llena_Fichas =React.lazy(() => import("./pages/LlenarFichas"));
+const GestionFicha =React.lazy(() => import("./pages/Eventos/GestionFichas"));
+const Formularios_Fichas =React.lazy(() => import("./pages/FormularioFicha"));
+const RegistroParticipante =React.lazy(() => import("./pages/RegistroParticipante"));
+const RegistroSalud =React.lazy(() => import("./pages/RegistroSalud"));
+
+//credenciales
+const CreateCredencial =React.lazy(() => import("./pages/Credenciales/Credencial")); 
+const ConfigCredencial =React.lazy(() => import("./pages/Credenciales/PlantillaCredencial"));
+const AsignarCampos =React.lazy(() => import("./pages/Credenciales/AsignacionCampos"));
+const DiseñadorCredencial =React.lazy(() => import("./pages/Credenciales/DiseñadorCredencial"));
+const EscanerCredencial =React.lazy(() => import("./pages/Credenciales/escanerCredenciales"));
+const CredencialView =React.lazy(() => import("./pages/Credenciales/credencialView"));
+const OpcionCredencial =React.lazy(() => import("./pages/Credenciales/DiseñoListaCredencial"));
+const AsignacionCredencial =React.lazy(() => import("./pages/Credenciales/AsignacionCredencial"));
+
+
+//vouchers y tickets
+const Vouchers =React.lazy(() => import("./pages/voucher"));
+const CajaVouchers =React.lazy(() => import("./pages/Vouchers/CajaVouchers"));
+const ConsumosVouchers =React.lazy(() => import("./pages/ConsumoVoucher"));
+const Comedores =React.lazy(() => import("./pages/Comedores"));
+const Tickets =React.lazy(() => import("./pages/tickets"));
+
+//Juegos
+const JuegoView =React.lazy(() => import("./pages/Juegos/juegosView"));
+
+
+//+++++++++++++++++++++++++ importación caja de mantenimientos y sus elementos +++++++++++++++++++++++++
+const MantenimientoView =React.lazy(() => import("./pages/Mantenimientos/mantenimientoView"));
+const MantenimientoPaises =React.lazy(() => import("./pages/Mantenimientos/MantenimientoPaises"));
+const MantenimientoCiudades =React.lazy(() => import("./pages/Mantenimientos/MantenimientoCiudades"));
+const MantenimientoInstalaciones =React.lazy(() => import("./pages/Mantenimientos/MantenimientoInstalaciones"));
+const MantenimientoGeneros =React.lazy(() => import("./pages/Mantenimientos/MantenimientoGeneros"));
+const MantenimientoApiMap =React.lazy(() => import("./pages/Mantenimientos/MantenimientoApiMap"));
+
+
 
 function App() {
   return (
     <Router>
+      {/* Breadcrumb */}
+      <AppBreadcrumb />
+      {/* Suspense para manejar la carga de componentes */}
       <Suspense fallback={<Loader />}>
-        <Routes>
-          {/* Página de inicio, login y dashboard */}
-          <Route path="" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+      <Routes>
+        {/* ruta para pagina de inicio, login y dashboard */}
+        <Route path="" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
 
-          {/* Seguridad */}
-          <Route path="/seguridad" element={<CajaSeguridad />} />
-          <Route path="/usuarios" element={<Usuarios />} />
-          <Route path="/roles" element={<Roles />} />
+        {/* ruta para seguridad */}
+        <Route path="/seguridad" element={<CajaSeguridad />} />
+        <Route path="/usuarios" element={<Usuarios />} />
+        <Route path="/roles" element={<Roles />} />
 
-          {/* Eventos */}
-          <Route path="/eventos" element={<CajaEventos />} />
-          <Route path="/gestion-evento" element={<GestionEventos />} />
+        {/* ruta para eventos */}
+        <Route path="/eventos" element={<CajaEvento />} />
+        <Route path="/crear-evento" element={<CreateEvent />} />
+        <Route path="/gestion-evento" element={<Eventos />} />
 
-          {/* Fichas */}
-          <Route path="/lista-fichas" element={<CajaFichas />} />
-          <Route path="/llenar-fichas" element={<LlenaFichas />} />
-          <Route path="/fichas" element={<GestionFicha />} />
-          <Route path="/formulario-fichas" element={<FormulariosFichas />} />
-          <Route path="/ficha-participantes" element={<InscripcionJUDUCA />} />
+        {/* ruta para fichas */}
+        <Route path="/lista-fichas" element={<CajaFichas />} />
+        <Route path="/llenar-fichas" element={<Llena_Fichas />} />
+        <Route path="/fichas" element={<GestionFicha />} />
+        <Route path="/Formulario-fichas" element={<Formularios_Fichas />} />
+        <Route path="/ficha-participantes" element={<RegistroParticipante />} />
+        <Route path="/ficha-salud" element={<RegistroSalud />} />
 
-          {/* Credenciales */}
-          <Route path="/confCredencial" element={<ConfigCredencial />} />
-          <Route path="/asignacionCampos" element={<AsignarCampos />} />
-          <Route path="/diseñadorCredencial" element={<DiseñadorCredencial />} />
-          <Route path="/escaneoCredencial" element={<EscanerCredencial />} />
-          <Route path="/credencialView" element={<CredencialView />} />
-          <Route path="/asignarcredencial" element={<AsignacionCredencial />} />
-          <Route path="/OpcionCredencial" element={<ListaDiseñoCredencial />}/>
+        {/* ruta para credenciales */}
+        <Route path="/crearCredencial" element={<CreateCredencial />} />
+        <Route path="/confCredencial" element={<ConfigCredencial />} />
+        <Route path="/AsignacionCampos" element={<AsignarCampos />} />
+        <Route path="/DiseñadorCredencial" element={<DiseñadorCredencial />} />
+        <Route path="/escaneoCredencial" element={<EscanerCredencial />} />
+        <Route path="/credencialView" element={<CredencialView />} />
+        <Route path="/OpcionCredencial" element={<OpcionCredencial />} />
+        <Route path="/asignarcredencial" element={<AsignacionCredencial />} />
 
-          {/* Vouchers y Tickets 
-          <Route path="/vouchers" element={<Vouchers />} />
-          <Route path="/consumo" element={<ConsumosVouchers />} />
-          <Route path="/comedor" element={<Comedores />} />
-          <Route path="/tickets" element={<Tickets />} />
-          */}
+        
+        {/* ruta para vouchers y tickets */}
+        <Route path="/vouchers" element={<CajaVouchers />} />
+        <Route path="/voucher" element={<Vouchers />} />
+        <Route path="/consumo" element={<ConsumosVouchers />} />
+        <Route path="/comedor" element={<Comedores />} />
+        <Route path="/Ticket" element={<Tickets />} />
 
-          {/* Juegos 
-          <Route path="/juegos" element={<JuegoView />} />
 
-          */}
+        {/* ruta para juegos */}
+        <Route path="/JuegoView" element={<JuegoView />} />
 
-          {/* Mantenimientos */}
-          <Route path="/mantenimiento" element={<MantenimientoView />} />
-          <Route path="/mantenimiento-paises" element={<MantenimientoPaises />} />
-          <Route path="/mantenimiento-ciudades" element={<MantenimientoCiudades />} />
-          <Route path="/mantenimiento-instalaciones" element={<MantenimientoInstalaciones />} />
-          <Route path="/mantenimiento-generos" element={<MantenimientoGeneros />} />
-          <Route path="/mantenimiento-api-map" element={<MantenimientoApiMap />} />
-        </Routes>
+        {/* ruta para mantenimientos */}
+        <Route path="/mantenimientoView" element={<MantenimientoView />} />
+        <Route path="/MantenimientoPaises" element={<MantenimientoPaises />} />
+        <Route path="/MantenimientoCiudades" element={<MantenimientoCiudades />} />
+        <Route path="/MantenimientoInstalaciones" element={<MantenimientoInstalaciones />}/>
+        <Route path="/MantenimientoGeneros" element={<MantenimientoGeneros />} />
+        <Route path="/MantenimientoApiMap" element={<MantenimientoApiMap />} />
+
+      </Routes>
       </Suspense>
     </Router>
   );
