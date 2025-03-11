@@ -36,14 +36,14 @@ const AsignacionCredencial = React.lazy(() => import("./pages/Credenciales/Asign
 const ListaDiseñoCredencial = React.lazy(() => import("./pages/Credenciales/DiseñoListaCredencial"));
 
 
-// Vouchers y Tickets
+{/*/ Vouchers y Tickets
 const Vouchers = React.lazy(() => import("./pages/Vouchers/voucher"));
 const ConsumosVouchers = React.lazy(() => import("./pages/Vouchers/ConsumoVoucher"));
 const Comedores = React.lazy(() => import("./pages/Vouchers/Comedores"));
 const Tickets = React.lazy(() => import("./pages/Vouchers/Tickets "));
 
 // Juegos
-const JuegoView = React.lazy(() => import("./pages/Juegos/JuegosView "));
+const JuegoView = React.lazy(() => import("./pages/Juegos/JuegosView "));*/}
 
 // Mantenimientos
 const MantenimientoView = React.lazy(() => import("./pages/Mantenimientos/MantenimientoView"));
@@ -88,14 +88,17 @@ function App() {
           <Route path="/asignarcredencial" element={<AsignacionCredencial />} />
           <Route path="/OpcionCredencial" element={<ListaDiseñoCredencial />}/>
 
-          {/* Vouchers y Tickets */}
+          {/* Vouchers y Tickets 
           <Route path="/vouchers" element={<Vouchers />} />
           <Route path="/consumo" element={<ConsumosVouchers />} />
           <Route path="/comedor" element={<Comedores />} />
           <Route path="/tickets" element={<Tickets />} />
+          */}
 
-          {/* Juegos */}
+          {/* Juegos 
           <Route path="/juegos" element={<JuegoView />} />
+
+          */}
 
           {/* Mantenimientos */}
           <Route path="/mantenimiento" element={<MantenimientoView />} />
