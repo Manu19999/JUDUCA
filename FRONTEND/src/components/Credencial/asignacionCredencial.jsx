@@ -5,8 +5,11 @@ import Nav from "../../components/Dashboard/navDashboard.jsx";
 import { FaIdBadge, FaArrowLeft } from "react-icons/fa";
 import ModalNuevo from "../../components/Crud/Modal/ModalNuevo.jsx";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito.jsx";
-import { Input, Select, Form, Row, Col, Button, Spin, Alert } from "antd";
+import { Input, Select, Form, Row, Col, Spin, Alert } from "antd";
+import { Container, Modal, Button } from "react-bootstrap";
+
 import "../../styles/Credencial/credencial.css";
+
 
 const { Option } = Select;
 
@@ -112,13 +115,14 @@ function CrearCredenciales() {
       <Nav />
 
       <Button
-        variant="outline-warning"
-        onClick={() => navigate("/credencialView")}
-        className="d-flex align-items-center gap-2"
-        style={{ marginBottom: "55px", marginLeft: "55px" }}
-      >
-        <FaArrowLeft size={20} /> Regresar
-      </Button>
+          variant="outline-warning"
+          onClick={() => navigate("/gestion-evento")}
+          className="d-flex align-items-center gap-2"
+          style={{ marginTop: "30px" }}
+        >
+          <FaArrowLeft size={20} /> Regresar
+        </Button>
+
 
       {fichaActual && (
         <div className="credenciallisttitle" style={{ textAlign: "center", marginTop: "20px" }}>
