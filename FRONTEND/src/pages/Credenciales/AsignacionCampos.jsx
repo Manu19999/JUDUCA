@@ -1,6 +1,6 @@
 import React from "react";
-import Nav from '../components/Dashboard/navDashboard';
- import AsignacionCampos from "../components/Credencial/asignacionCampos"; // Asegúrate 
+import Nav from '../../components/Dashboard/navDashboard';
+ import AsignacionCampos from "../../components/Credencial/asignacionCampos"; // Asegúrate 
 
 const AsignarCampos = () => {
   return (

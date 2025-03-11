@@ -22,7 +22,8 @@ import PaisesRoutes from './src/modules/credenciales/routes/PaisesRoutes.js';
 
 
 //++++++++++++++++++++++++++  Importaciones de rutas de seguridad  ++++++++++++++++++++++++++
-
+import AuthRoutes from './src/modules/seguridad/routes/authRoutes.js';
+import Roles from './src/modules/seguridad/routes/rolesRoutes.js';
 
 //++++++++++++++++++++++++++  Importaciones de rutas de vouchers  ++++++++++++++++++++++++++
 import VoucherComidaRoutes   from './src/modules/vouchers/routes/voucherComidaRoutes.js';
@@ -61,7 +62,8 @@ app.use('/api/paises', PaisesRoutes);
 
 
 //Seguridad
-
+app.use('/api/auth', AuthRoutes);
+app.use('/api/roles', Roles);
 
 //Vouchers
 app.use('/api/voucherComida', VoucherComidaRoutes); 

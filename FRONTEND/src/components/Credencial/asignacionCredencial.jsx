@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect  } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import Tabla from "../../components/Crud/Tabla.jsx";
 import Nav from "../../components/Dashboard/navDashboard.jsx";
 import { FaIdBadge } from "react-icons/fa";
@@ -22,7 +22,7 @@ const datos = [
   {
     id: 1,
     evento: "JUDUCA",
-    participante: "08012003210",
+    participante: "MANUEL ANTONIO RODRIGUEZ",
     tipAcceso: "ATLETA",
     fechaEmision: "2025-01-20",
     fechaVencimiento: "2025-02-20",
@@ -43,7 +43,12 @@ const columnas = [
 ];
 
 function CrearCredenciales() {
-      const navigate = useNavigate();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { selectedFicha } = location.state || {}; // Recibir la ficha seleccionada
+
+  const [fichaActual, setFichaActual] = useState(null);
+
     
   // Estados para controlar la visibilidad de los modales
   const [showNuevoModal, setShowNuevoModal] = useState(false);
@@ -58,6 +63,18 @@ function CrearCredenciales() {
   const [formEditar] = Form.useForm(); // Formulario para el modal de edición
 
   // Abrir modal de nuevo registro
+
+    // Validar si la ficha seleccionada está presente
+    useEffect(() => {
+      if (selectedFicha) {
+        setFichaActual(selectedFicha);
+      } else {
+        alert("No se ha seleccionado una ficha.");
+        navigate("/credencialView"); // Redirigir si no hay ficha seleccionada
+      }
+    }, [selectedFicha, navigate]);
+  
+
   const handleNuevoRegistro = () => {
     setShowNuevoModal(true);
   };
@@ -150,6 +167,14 @@ function CrearCredenciales() {
         >
         <FaArrowLeft size={20} /> Regresar
       </Button>
+
+      {fichaActual && (
+        <div className="credenciallisttitle" style={{ marginTop: '20px', alignContent: 'center', textAlign: 'center' }}>
+          <h2>Gestion de Credenciales para : {fichaActual.title}</h2>
+          <p>{fichaActual.description}</p>
+        </div>
+      )}
+
       {/* componente de navegación del  navdashboard */}
       <Tabla
         columnas={columnas} // Columnas de la tabla
@@ -194,7 +219,7 @@ function CrearCredenciales() {
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    label="DNI / Pasaporte"
+                    label="Participante"
                     name="Participante"
                     rules={[
                       {
@@ -202,8 +227,11 @@ function CrearCredenciales() {
                         message: "La identificacion es obligatoria",
                       },
                     ]}
-                  >
-                    <Input placeholder="Ingresa la identificacion" />
+                  >  <Select placeholder="Selecciona un participante">
+                  <Option value="SAMUEL">SAMUEL</Option>
+                  <Option value="ROBERTO">ROBERTO</Option>
+                  <Option value="MIGUEL">MIGUEL</Option>
+                </Select>
                   </Form.Item>
                 </Col>
               </Row>
@@ -312,7 +340,7 @@ function CrearCredenciales() {
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    label="DNI / Pasaporte"
+                    label="Participante"
                     name="Participante"
                     rules={[
                       {
@@ -321,7 +349,11 @@ function CrearCredenciales() {
                       },
                     ]}
                   >
-                    <Input placeholder="Ingresa la identificacion" />
+                 <Select placeholder="Selecciona un participante">
+                  <Option value="SAMUEL">SAMUEL</Option>
+                  <Option value="ROBERTO">ROBERTO</Option>
+                  <Option value="MIGUEL">MIGUEL</Option>
+                </Select>
                   </Form.Item>
                 </Col>
               </Row>

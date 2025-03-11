@@ -24,6 +24,11 @@ const NavDashboard = () => {
     navigate("/escaneoCredencial"); // Redirige a /dashboard
     setMenuOpen(false); // Cierra el menú en dispositivos móviles
   };
+  const handleVocuherClick = () => {
+    navigate("/vouchers"); // Redirige a /dashboard
+    setMenuOpen(false); // Cierra el menú en dispositivos móviles
+  };
+
 
   // Menú desplegable para el perfil
   const profileMenu = (
@@ -71,6 +76,7 @@ const NavDashboard = () => {
           >
             Inicio
           </a>
+        
          {/*  <a
             
             className="navlinkcustom"

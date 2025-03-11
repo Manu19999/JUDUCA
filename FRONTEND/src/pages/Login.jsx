@@ -14,6 +14,7 @@ const Login = () => {
   const [twoFACode, setTwoFACode] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -30,13 +31,48 @@ const Login = () => {
   const handleForgotPasswordClick = (e) => {
     e.preventDefault();
     setShowForgotPassword(!showForgotPassword);
+    setErrorMessage(""); // Limpiar mensaje de error
+    setEmail("");// Limpiar el input de email
+    setPassword("")
   };
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    console.log("Inicio de sesión exitoso");
-    setShow2FAPopup(true);
+    setErrorMessage(""); // Limpiar mensajes de error anteriores
+  
+    try {
+      const response = await fetch("http://localhost:4000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          contraseña: password, // Asegúrate de usar el mismo campo que en el backend
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        // Si hay un error, mostrar el mensaje del backend
+        setErrorMessage(data.errors?.[0] || "Credenciales inválidas");
+        return;
+      }
+  
+      console.log("Inicio de sesión exitoso:", data);
+  
+      // Guardar el token en localStorage o en un state manager
+      localStorage.setItem("token", data.data.token);
+  
+      // Redirigir al dashboard
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+      setErrorMessage("Error en el servidor. Por favor, inténtalo de nuevo más tarde.");
+    }
   };
+  
 
   const handle2FASubmit = (code) => {
     if (code === "123456") {
@@ -68,6 +104,12 @@ const Login = () => {
               ? "Ingresa tu correo electrónico para recuperar tu contraseña"
               : "Ingresa tus datos para acceder a la plataforma"}
           </h6>
+           {/* Mostrar mensaje de error */}
+            {errorMessage && (
+              <div className="error-message">
+                {errorMessage}
+              </div>
+            )}
           <LoginForm
             showForgotPassword={showForgotPassword}
             handleForgotPasswordClick={handleForgotPasswordClick}

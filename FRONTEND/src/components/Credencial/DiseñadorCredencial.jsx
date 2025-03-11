@@ -1,161 +1,143 @@
-import React, { useReducer, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
-import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Button, Table, Alert, Card, Container } from "react-bootstrap";
+import { FaArrowLeft, FaClipboardList, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
-const initialState = JSON.parse(localStorage.getItem("credencialState")) || {
-  eventoSeleccionado: null,
-  fichaSeleccionada: null,
-  camposUbicaciones: {},
-};
-
-const credencialReducer = (state, action) => {
-  switch (action.type) {
-    case "SET_EVENTO":
-      return { ...state, eventoSeleccionado: action.payload, fichaSeleccionada: null, camposUbicaciones: {} };
-    case "SET_FICHA":
-      return { ...state, fichaSeleccionada: action.payload };
-    case "SET_CAMPO_UBICACION":
-      return {
-        ...state,
-        camposUbicaciones: { ...state.camposUbicaciones, [action.payload.ubicacion]: action.payload.campo },
-      };
-    case "RESET_CREDENCIAL":
-      return initialState;
-    default:
-      return state;
-  }
-};
-
-const VistaPreviaCredencial = ({ camposUbicaciones, persona, handleDrop, handleDragOver }) => {
-  return (
-    <div
-      className="credencial"
-      style={{
-        backgroundImage: `url(${fondoCredencial})`,
-        backgroundSize: "cover",
-        width: "400px",
-        height: "250px",
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
-        gap: "5px",
-        padding: "10px",
-        border: "3px solid black",
-        borderRadius: "10px",
-      }}
-    >
-      {[...Array(9)].map((_, index) => (
-        <div
-          key={index}
-          className="grid-item"
-          onDragOver={handleDragOver}
-          onDrop={(e) => handleDrop(e, index)}
-          style={{
-            border: "1px solid gray",
-            textAlign: "center",
-            padding: "5px",
-            backgroundColor: "#e9ecef",
-            borderRadius: "5px",
-            minHeight: "50px",
-          }}
-        >
-          {camposUbicaciones[index] ? (
-            <strong>{camposUbicaciones[index].nombre}:</strong>
-          ) : (
-            "Arrastra aquí"
-          )}
-          <br />
-          {persona && camposUbicaciones[index]
-            ? persona[camposUbicaciones[index].nombre.toLowerCase()] || "Vacío"
-            : "Vacío"}
-        </div>
-      ))}
-    </div>
-  );
-};
-
-const DisenoCredencial = () => {
-  const [state, dispatch] = useReducer(credencialReducer, initialState);
+const VistaDiseñoCredencial = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Intentar obtener la ficha desde `location.state` o `localStorage`
+  const [selectedFicha, setSelectedFicha] = useState(
+    location.state?.selectedFicha || JSON.parse(localStorage.getItem("selectedFicha")) || null
+  );
+
+  const [diseños, setDiseños] = useState([]);
+  const [campos, setCampos] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("credencialState", JSON.stringify(state));
-  }, [state]);
+    if (!selectedFicha) {
+      setError("⚠ No se seleccionó ninguna ficha. Por favor, vuelve a la página anterior.");
+      return;
+    }
 
-  const handleDragStart = (e, campo) => {
-    e.dataTransfer.setData("campo", JSON.stringify(campo));
-  };
+    // Guardar la ficha seleccionada en localStorage para persistencia
+    localStorage.setItem("selectedFicha", JSON.stringify(selectedFicha));
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
+    // Simulando datos de la base de datos desde localStorage
+    const savedDiseños = localStorage.getItem("diseñosCredencial");
+    const savedCampos = localStorage.getItem("camposCredencial");
 
-  const handleDrop = (e, ubicacion) => {
-    e.preventDefault();
-    const campo = JSON.parse(e.dataTransfer.getData("campo"));
-    dispatch({ type: "SET_CAMPO_UBICACION", payload: { ubicacion, campo } });
-  };
+    if (savedDiseños) {
+      setDiseños(JSON.parse(savedDiseños));
+    } else {
+      setError("⚠ No hay diseños de credenciales disponibles.");
+    }
 
-  const eventos = [
-    { id: 1, nombre: "JUDUCA" },
-    { id: 2, nombre: "SUCA" },
-  ];
-
-  const fichas = {
-    1: [
-      { id: 101, nombre: "Ficha 101", participante: { nombre: "Juan", apellido: "Pérez", dni: "123456", cargo: "Atleta", empresa: "UNAH" } },
-      { id: 102, nombre: "Ficha 102", participante: { nombre: "María", apellido: "Gómez", dni: "654321", cargo: "Entrenadora", empresa: "USAC" } },
-    ],
-    2: [
-      { id: 201, nombre: "Ficha 201", participante: { nombre: "Carlos", apellido: "Ruiz", dni: "987654", cargo: "Árbitro", empresa: "UCR" } },
-    ],
-  };
-
-  const camposDisponibles = [
-    { id: 1, nombre: "Nombre" },
-    { id: 2, nombre: "Apellido" },
-    { id: 3, nombre: "DNI" },
-    { id: 4, nombre: "Cargo" },
-    { id: 5, nombre: "Empresa" },
-  ];
+    if (savedCampos) {
+      setCampos(JSON.parse(savedCampos));
+    }
+  }, [selectedFicha]);
 
   return (
-    <div className="container-fluid">
-      <button className="btnAgg" onClick={() => navigate("/asignacionCampos")}> <FaArrowLeft size={20} /> Regresar </button>
-      <button className="btnReset" onClick={() => dispatch({ type: "RESET_CREDENCIAL" })}> Reiniciar </button>
-      <div className="row">
-        <div className="col-md-4">
-          <h3>Configuración de Credencial</h3>
-          <label>Selecciona un evento:</label>
-          <select className="form-control" onChange={(e) => dispatch({ type: "SET_EVENTO", payload: e.target.value })}>
-            <option value="">-- Selecciona un evento --</option>
-            {eventos.map((evento) => (<option key={evento.id} value={evento.id}>{evento.nombre}</option>))}
-          </select>
-          {state.eventoSeleccionado && (
-            <>
-              <label>Selecciona una ficha:</label>
-              <select className="form-control" onChange={(e) => {
-                const ficha = fichas[state.eventoSeleccionado]?.find((f) => f.id === parseInt(e.target.value));
-                dispatch({ type: "SET_FICHA", payload: ficha });
-              }}>
-                <option value="">-- Selecciona una ficha --</option>
-                {fichas[state.eventoSeleccionado]?.map((ficha) => (<option key={ficha.id} value={ficha.id}>{ficha.nombre}</option>))}
-              </select>
-            </>
+    <Container className="mt-4">
+      <Button 
+        variant="outline-warning" 
+        onClick={() => navigate("/")}
+        className="d-flex align-items-center gap-2 mb-3"
+        style={{ fontSize: "18px" }}
+      >
+        <FaArrowLeft size={20} /> Regresar
+      </Button>
+
+      <h2 className="text-center my-4">🎨 Vista de Diseño de Credencial</h2>
+
+      {error ? (
+        <div className="text-center">
+          <Alert variant="danger" className="py-3">
+            <FaTimesCircle size={20} className="me-2" />
+            {error}
+          </Alert>
+          <Button variant="primary" onClick={() => navigate("/SeleccionarFicha")}>
+            Seleccionar Ficha
+          </Button>
+        </div>
+      ) : (
+        <>
+          {/* 🔹 Información de la Ficha Seleccionada */}
+          {selectedFicha && (
+            <Card className="shadow-sm mb-4">
+              <Card.Body>
+                <h4 className="text-center mb-2">📌 Ficha Seleccionada</h4>
+                <hr />
+                <h5 className="text-center">{selectedFicha.title}</h5>
+                <p className="text-center">{selectedFicha.description}</p>
+              </Card.Body>
+            </Card>
           )}
-          <label>Campos Disponibles:</label>
-          <div>
-            {camposDisponibles.map((campo) => (
-              <div key={campo.id} draggable onDragStart={(e) => handleDragStart(e, campo)} style={{ padding: "10px", border: "1px solid #ccc", cursor: "grab" }}>{campo.nombre}</div>
-            ))}
-          </div>
-        </div>
-        <div className="col-md-6">
-          <VistaPreviaCredencial camposUbicaciones={state.camposUbicaciones} persona={state.fichaSeleccionada?.participante} handleDrop={handleDrop} handleDragOver={handleDragOver} />
-        </div>
-      </div>
-    </div>
+
+          {/* 🔹 Tabla de Diseños de Credencial */}
+          <h4 className="mb-3"><FaClipboardList className="me-2" /> Diseños de Credenciales</h4>
+          <Table striped bordered hover responsive className="shadow-sm">
+            <thead className="table-dark">
+              <tr>
+                <th>ID Diseño</th>
+                <th>ID Evento</th>
+                <th>ID Campo Credencial</th>
+                <th>ID Ficha Registro</th>
+                <th>Fecha de Vigencia</th>
+              </tr>
+            </thead>
+            <tbody>
+              {diseños.length > 0 ? (
+                diseños.map((diseño) => (
+                  <tr key={diseño.idDiseñoCredencial}>
+                    <td>{diseño.idDiseñoCredencial}</td>
+                    <td>{diseño.idEvento}</td>
+                    <td>{diseño.idCampoCredencial}</td>
+                    <td>{diseño.idFichaRegistro}</td>
+                    <td>{diseño.fechaVigencia}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="text-center text-muted">No hay diseños disponibles.</td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+
+          {/* 🔹 Tabla de Campos de Credencial */}
+          <h4 className="mt-4 mb-3"><FaCheckCircle className="me-2 text-success" /> Campos de Credencial</h4>
+          <Table striped bordered hover responsive className="shadow-sm">
+            <thead className="table-primary">
+              <tr>
+                <th>ID Campo Credencial</th>
+                <th>ID Ubicación Campo</th>
+                <th>Característica</th>
+              </tr>
+            </thead>
+            <tbody>
+              {campos.length > 0 ? (
+                campos.map((campo) => (
+                  <tr key={campo.idCampoCredencial}>
+                    <td>{campo.idCampoCredencial}</td>
+                    <td>{campo.idUbicacionCampo}</td>
+                    <td>{campo.caracteristica}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3" className="text-center text-muted">No hay campos disponibles.</td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+        </>
+      )}
+    </Container>
   );
 };
 
-export default DisenoCredencial;
+export default VistaDiseñoCredencial;

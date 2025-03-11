@@ -1,5 +1,5 @@
-import AsignacionCredencial from "../components/Credencial/asignacionCredencial-";
-import Nav from '../components/Dashboard/navDashboard';
+import AsignacionCredencial from "../../components/Credencial/asignacionCredencial";
+import Nav from '../../components/Dashboard/navDashboard';
 
 
 export default function ListaFichas() {

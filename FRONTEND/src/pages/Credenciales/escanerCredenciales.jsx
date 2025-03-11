@@ -1,5 +1,5 @@
-import EscanerCredencial from "../components/Credencial/escanerCredencial";
-import Nav from '../components/Dashboard/navDashboard';
+import EscanerCredencial from "../../components/Credencial/escanerCredencial";
+import Nav from '../../components/Dashboard/navDashboard';
 
 
 export default function ListaFichas() {
