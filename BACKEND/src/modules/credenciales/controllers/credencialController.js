@@ -121,3 +121,129 @@ export const ObtenerParticipantesPorFicha = async (req, res) => {
     res.status(500).json(response.getResponse());
   }
 };
+
+// Controlador para obtener las credenciales generadas por ficha en un evento específico
+export const ObtenerCredencialesPorFicha = async (req, res) => {
+  const { idEvento, idFichaRegistro } = req.params; // Extraer parámetros desde la URL
+  const response = new apiResponse(); // Crear instancia de apiResponse
+
+  try {
+    // Validar que los parámetros sean números enteros
+    if (!idEvento || isNaN(idEvento) || !idFichaRegistro || isNaN(idFichaRegistro)) {
+      response.setHasError(true);
+      response.setErrors(["Los parámetros idEvento e idFichaRegistro deben ser números válidos"]);
+      return res.status(400).json(response.getResponse());
+    }
+
+    const pool = await conexionbd(); // Obtener la conexión a la BD
+
+    // Ejecutar el procedimiento almacenado
+    const result = await pool
+      .request()
+      .input("idEvento", parseInt(idEvento))
+      .input("idFichaRegistro", parseInt(idFichaRegistro))
+      .execute("Credenciales.splCredencialesPorFichaObtener");
+
+    // Verificar si la ficha no pertenece al evento o no tiene credenciales generadas
+    if (result.recordset.length > 0 && result.recordset[0].codigoError) {
+      response.setHasError(true);
+      response.setErrors([result.recordset[0].descripcion]);
+      return res.status(400).json(response.getResponse());
+    }
+
+    // Asignar los datos de las credenciales a la respuesta
+    response.setData(result.recordset);
+
+    // Enviar respuesta exitosa con los datos
+    res.status(200).json(response.getResponse());
+  } catch (error) {
+    console.error("Error en ObtenerCredencialesPorFicha:", error.message);
+
+    // Manejo de error interno del servidor
+    response.setHasError(true);
+    response.setErrors(["Error interno del servidor", error.message]);
+
+    // Enviar respuesta con error
+    res.status(500).json(response.getResponse());
+  }
+};
+
+
+
+
+// Controlador para insertar una credencial con código QR
+export const InsertarCredencial = async (req, res) => {
+  const response = new apiResponse(); // Crear instancia de apiResponse
+
+  try {
+    const {
+      idEvento,
+      tipoAcceso,
+      fechaEmision,
+      fechaVencimiento,
+      activo,
+      usuarioRegistro,
+      fechaRegistro,
+      idFicha,
+      idRegistroParticipanteEvento,
+      idUsuario,
+      idObjeto,
+    } = req.body; // Extraer datos desde el cuerpo de la solicitud
+
+    // 🔹 Validaciones de datos requeridos
+    if (
+      !idEvento || isNaN(idEvento) ||
+      !tipoAcceso || 
+      !fechaEmision || !fechaVencimiento || 
+       activo === undefined || 
+      !usuarioRegistro || 
+      !fechaRegistro || 
+      !idFicha || isNaN(idFicha) || 
+      !idRegistroParticipanteEvento || isNaN(idRegistroParticipanteEvento) ||
+      !idUsuario || isNaN(idUsuario) || 
+      !idObjeto || isNaN(idObjeto)
+    ) {
+      response.setHasError(true);
+      response.setErrors(["Todos los campos son obligatorios y deben ser válidos"]);
+      return res.status(400).json(response.getResponse());
+    }
+
+    const pool = await conexionbd(); // Obtener la conexión a la BD
+
+    // 🔹 Ejecutar el procedimiento almacenado para insertar la credencial
+    const result = await pool
+      .request()
+      .input("idEvento", parseInt(idEvento))
+      .input("tipoAcceso", tipoAcceso)
+      .input("fechaEmision", fechaEmision)
+      .input("fechaVencimiento", fechaVencimiento)
+      .input("activo", activo)
+      .input("usuarioRegistro", usuarioRegistro)
+      .input("fechaRegistro", fechaRegistro)
+      .input("idFicha", parseInt(idFicha))
+      .input("idRegistroParticipanteEvento", parseInt(idRegistroParticipanteEvento))
+      .input("idUsuario", parseInt(idUsuario))
+      .input("idObjeto", parseInt(idObjeto))
+      .execute("Credenciales.splCredencialQrInsertar");
+
+    // 🔹 Verificar si hubo un error en el procedimiento almacenado
+    if (result.recordset.length > 0 && result.recordset[0].codigoError) {
+      response.setHasError(true);
+      response.setErrors([result.recordset[0].descripcion]);
+      return res.status(400).json(response.getResponse());
+    }
+
+    // 🔹 Devolver la credencial insertada
+    response.setData(result.recordset);
+    res.status(201).json(response.getResponse());
+  } catch (error) {
+    console.error("Error en InsertarCredencial:", error.message);
+
+    // Manejo de error interno del servidor
+    response.setHasError(true);
+    response.setErrors(["Error interno del servidor", error.message]);
+
+    // Enviar respuesta con error
+    res.status(500).json(response.getResponse());
+  }
+};

@@ -6,10 +6,9 @@ import { FaIdBadge, FaArrowLeft } from "react-icons/fa";
 import ModalNuevo from "../../components/Crud/Modal/ModalNuevo.jsx";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito.jsx";
 import { Input, Select, Form, Row, Col, Spin, Alert } from "antd";
-import { Container, Modal, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 import "../../styles/Credencial/credencial.css";
-
 
 const { Option } = Select;
 
@@ -19,7 +18,8 @@ function CrearCredenciales() {
   const { selectedFicha } = location.state || {}; // Recibir la ficha seleccionada
 
   const [fichaActual, setFichaActual] = useState(null);
-  const [participantes, setParticipantes] = useState([]); // Participantes disponibles
+  const [credenciales, setCredenciales] = useState([]); // Lista de credenciales generadas
+  const [participantes, setParticipantes] = useState([]); // Lista de participantes
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false); // Control del modal
@@ -27,20 +27,44 @@ function CrearCredenciales() {
 
   const [form] = Form.useForm(); // Formulario Ant Design
 
-  // Validar si la ficha seleccionada está presente
+  // ✅ Cargar credenciales y participantes al montar el componente
   useEffect(() => {
     if (selectedFicha) {
       setFichaActual(selectedFicha);
-      cargarParticipantes(selectedFicha.idEvento, selectedFicha.id); // Cargar participantes
+      cargarCredenciales(selectedFicha.idEvento, selectedFicha.id);
+      cargarParticipantes(selectedFicha.idEvento, selectedFicha.id);
     } else {
       alert("No se ha seleccionado una ficha.");
       navigate("/credencialView"); // Redirigir si no hay ficha seleccionada
     }
   }, [selectedFicha, navigate]);
 
+  // 🔹 Cargar credenciales desde la API
+  const cargarCredenciales = async (idEvento, idFichaRegistro) => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `http://localhost:4000/api/credencial/credenciales/${idEvento}/${idFichaRegistro}`
+      );
+      const data = await response.json();
+
+      if (data.hasError) {
+        throw new Error(data.errors.join(", "));
+      }
+
+      setCredenciales(data.data); // Guardar las credenciales en el estado
+    } catch (err) {
+      console.error("Error al obtener credenciales:", err.message);
+      setError("No se pudieron cargar las credenciales.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // 🔹 Cargar participantes desde la API
   const cargarParticipantes = async (idEvento, idFichaRegistro) => {
     try {
+      setLoading(true);
       const response = await fetch(
         `http://localhost:4000/api/credencial/participantes/${idEvento}/${idFichaRegistro}`
       );
@@ -60,35 +84,35 @@ function CrearCredenciales() {
   };
 
   // 🔹 Abrir el modal y seleccionar participante
-  const handleAsignarCredencial = (id) => {
-    const participante = participantes.find((p) => p.idRegistroParticipanteEvento === id);
-    if (participante) {
-      setParticipanteSeleccionado(participante);
-      setShowModal(true);
-      form.setFieldsValue({
-        nombre: participante.nombreParticipante,
-        tipoAcceso: "",
-        fechaEmision: "",
-        fechaVencimiento: "",
-        activo: true,
-      });
-    }
+  const handleAbrirModal = () => {
+    setShowModal(true);
+    form.resetFields();
   };
 
   // 🔹 Guardar la credencial en la base de datos
   const handleGuardarCredencial = async () => {
     try {
       const values = await form.validateFields();
+
+      if (!participanteSeleccionado) {
+        throw new Error("Debe seleccionar un participante.");
+      }
+
       const credencial = {
         idEvento: fichaActual.idEvento,
-        idRegistroParticipanteEvento: participanteSeleccionado.idRegistroParticipanteEvento,
+        idRegistroParticipanteEvento: participanteSeleccionado,
         tipoAcceso: values.tipoAcceso,
-        fechaEmision: values.fechaEmision,
-        fechaVencimiento: values.fechaVencimiento,
-        activo: values.activo,
+        fechaEmision: values.fechaEmision || new Date().toISOString().split("T")[0],
+        fechaVencimiento: values.fechaVencimiento || null,
+        activo: values.activo ?? true,
+        usuarioRegistro: "admin",
+        fechaRegistro: new Date().toISOString(),
+        idFicha: fichaActual.id,
+        idUsuario: 1,
+        idObjeto: 1,
       };
 
-      const response = await fetch("http://localhost:4000/api/credencial/asignar", {
+      const response = await fetch("http://localhost:4000/api/credencial/insCredencial", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -104,7 +128,7 @@ function CrearCredenciales() {
 
       mostrarMensajeExito("Credencial asignada correctamente.");
       setShowModal(false);
-      cargarParticipantes(fichaActual.idEvento, fichaActual.id); // Recargar la tabla
+      cargarCredenciales(fichaActual.idEvento, fichaActual.id);
     } catch (err) {
       console.error("Error al asignar credencial:", err.message);
     }
@@ -115,14 +139,13 @@ function CrearCredenciales() {
       <Nav />
 
       <Button
-          variant="outline-warning"
-          onClick={() => navigate("/gestion-evento")}
-          className="d-flex align-items-center gap-2"
-          style={{ marginTop: "30px" }}
-        >
-          <FaArrowLeft size={20} /> Regresar
-        </Button>
-
+        variant="outline-warning"
+        onClick={() => navigate("/gestion-evento")}
+        className="d-flex align-items-center gap-2"
+        style={{ marginTop: "30px" }}
+      >
+        <FaArrowLeft size={20} /> Regresar
+      </Button>
 
       {fichaActual && (
         <div className="credenciallisttitle" style={{ textAlign: "center", marginTop: "20px" }}>
@@ -135,23 +158,24 @@ function CrearCredenciales() {
       {loading ? (
         <div className="text-center">
           <Spin size="large" />
-          <p>Cargando participantes...</p>
+          <p>Cargando credenciales...</p>
         </div>
       ) : error ? (
         <Alert message={error} type="error" className="text-center" />
       ) : (
         <Tabla
           columnas={[
-            { nombre: "#", campo: "idRegistroParticipanteEvento", ancho: "5%" },
+            { nombre: "#", campo: "idCredencial", ancho: "5%" },
             { nombre: "Nombre", campo: "nombreParticipante", ancho: "30%" },
-            { nombre: "Estado", campo: "estado", ancho: "20%" },
-            { nombre: "Fecha Registro", campo: "fechaRegistro", ancho: "20%" },
+            { nombre: "Tipo de Acceso", campo: "tipoAcceso", ancho: "20%" },
+            { nombre: "Fecha Emisión", campo: "fechaEmision", ancho: "20%" },
+            { nombre: "Fecha Vencimiento", campo: "fechaVencimiento", ancho: "20%" },
             { nombre: "Acción", campo: "accion", ancho: "20%" },
           ]}
-          datos={participantes}
-          titulo="Gestión de credenciales"
+          datos={credenciales}
+          titulo="Credenciales Generadas"
           icono={<FaIdBadge className="icono-titulo" />}
-          onEdit={handleAsignarCredencial} // Seleccionar persona para asignar credencial
+          onNuevoRegistro={handleAbrirModal} // Agregar nueva credencial
         />
       )}
 
@@ -162,16 +186,28 @@ function CrearCredenciales() {
         titulo="Asignar Credencial"
         onGuardar={handleGuardarCredencial}
         form={form}
+        width={700}
       >
         <Form layout="vertical" form={form}>
-          <Row gutter={15}>
-            <Col span={24}>
-              <Form.Item label="Nombre del Participante" name="nombre">
-                <Input disabled />
+          <Row gutter={24}>
+            <Col span={12}>
+              <Form.Item
+                label="Participante"
+                name="participante"
+                rules={[{ required: true, message: "Seleccione un participante" }]}
+              >
+                <Select
+                  placeholder="Seleccione un participante"
+                  onChange={(value) => setParticipanteSeleccionado(value)}
+                >
+                  {participantes.map((p) => (
+                    <Option key={p.idRegistroParticipanteEvento} value={p.idRegistroParticipanteEvento}>
+                      {p.nombreParticipante}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={15}>
             <Col span={12}>
               <Form.Item
                 label="Tipo de Acceso"
@@ -186,12 +222,14 @@ function CrearCredenciales() {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={6}>
+          </Row>
+          <Row gutter={25}>
+            <Col span={10}>
               <Form.Item label="Fecha de Emisión" name="fechaEmision">
                 <Input type="date" />
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col span={10}>
               <Form.Item label="Fecha de Vencimiento" name="fechaVencimiento">
                 <Input type="date" />
               </Form.Item>
