@@ -297,6 +297,19 @@
 }
 
 
+@media (max-width: 730px) {
+  .estado-activo {
+    font-size: 9px !important; /* 🔹 Reducir la fuente */
+    padding: 1px 6px !important; /* 🔹 Ajustar el padding */
+  }
+}
+
+@media (max-width: 676px) {
+  .estado-activo {
+    font-size: 8.5px !important; /* 🔹 Reducir la fuente */
+  }
+}
+
 @media (max-width: 646px) {
   .tabla-wrapper {
     max-height: 500px !important; /* Ajusta la altura máxima según lo necesites */
@@ -356,6 +369,17 @@
 }
 }
 
+@media (max-width: 676px) {
+  .estado-activo {
+    font-size: 8px !important; /* 🔹 Reducir la fuente */
+  }
+}
+
+@media (max-width: 610px) {
+  .estado-activo {
+    font-size: 7.5px !important; /* 🔹 Reducir la fuente */
+  }
+}
 
 @media (max-width: 590px) {
   .tabla-wrapper {
@@ -538,4 +562,64 @@
     width: 11px;
     height: 11px;
   }
+}
+
+/* x dentro del input del buscador*/
+.contenedorinput {
+  position: relative;
+  display: inline-block;
+}
+
+.contenedorinput input {
+  width: 260px;
+  padding-right: 30px; /* Espacio para la "X" */
+  padding-left: 10px;
+  font-size: 12px;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contenedorinput .clearbtn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.contenedorinput .clearbtn:hover {
+  color: #333;
+}
+
+.estado-activo {
+  display: inline-block;
+  padding: 2px 8px; /* 🔹 Reducir padding para evitar desbordamiento */
+  border-radius: 10px;
+  font-size: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  max-width: 90px; /* 🔹 Evita que el texto se expanda demasiado */
+  white-space: nowrap; /* 🔹 Evita saltos de línea */
+  overflow: hidden;
+  text-overflow: ellipsis; /* 🔹 Agrega "..." si el texto es demasiado largo */
+}
+
+.estado-activo.activo {
+  background-color: #f0fdf4;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+
+.estado-activo.inactivo {
+  background-color: #fff1f2;
+  color: #dc2626;
+  border-color: #fecdd3;
 }

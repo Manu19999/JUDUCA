@@ -6,8 +6,9 @@ import ModalNuevo from "../../components/Crud/Modal/ModalNuevo";
 import ModalEditar from "../../components/Crud/Modal/ModalEditar";
 import ModalConfirmacion from "../../components/Crud/Modal/ModalConfirmacion";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito";
-import { Input, Form } from 'antd';
 import { mostrarMensajeError } from "../../components/Crud/MensajeError"; // Importar el componente de mensaje de error
+import { Input, Form } from 'antd';
+
 
 function Roles() {
   const [showNuevoModal, setShowNuevoModal] = useState(false);
@@ -22,10 +23,21 @@ function Roles() {
   useEffect(() => {
     const obtenerRoles = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/roles"); // Endpoint de la API
+        const token = localStorage.getItem("token"); // Obtener el token del almacenamiento local
+        if (!token) {
+          throw new Error("No hay token disponible");
+        }
+        const response = await fetch("http://localhost:4000/api/roles", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}` // Agregar el token en el encabezado
+          }
+        });
         if (!response.ok) {
           throw new Error("Error al obtener los roles");
         }
+
         const data = await response.json();
         setRoles(data.data); // Actualizar el estado con los roles obtenidos
       } catch (error) {
@@ -33,13 +45,12 @@ function Roles() {
         mostrarMensajeError("Error al cargar los roles. Inténtalo de nuevo más tarde.");
       }
     };
-
     obtenerRoles();
   }, []); // El array vacío asegura que esto solo se ejecute una vez al montar el componente
 
   // Columnas de la tabla
   const columnas = [
-    { nombre: '#', campo: 'idRol', ancho: '5%' },
+    { nombre: '#', campo: 'indice', ancho: '5%' },
     { nombre: 'Nombre', campo: 'nombre', ancho: '20%' },
     { nombre: 'Descripción', campo: 'descripcion', ancho: '40%' },
     { nombre: 'Acción', campo: 'accion', ancho: '20%' }
@@ -136,8 +147,8 @@ function Roles() {
       <Nav />
       <Tabla
         columnas={columnas}
-        datos={roles} // Usar los roles obtenidos de la API
-        titulo="Gestión de roles"
+        datos={roles.map((rol) => ({ ...rol, id: rol.idRol }))}  // Usar los roles obtenidos de la API
+        titulo="Gestión de Roles"
         icono={<FaUserShield className="icono-titulo" />}
         onNuevoRegistro={handleNuevoRegistro}
         onGenerarReporte={() => console.log("Generar reporte en PDF")}
@@ -152,7 +163,7 @@ function Roles() {
         titulo="Nuevo Rol"
         onGuardar={handleGuardarNuevo}
         form={formNuevo} // Pasar el formulario al modal
-        width={800}
+        width={500}
       >
         <Form layout="vertical" form={formNuevo}>
           <Form.Item
@@ -181,7 +192,7 @@ function Roles() {
         onGuardar={handleGuardarEdit}
         form={formEditar}
         registroSeleccionado={registroSeleccionado}
-        width={800} // Ancho personalizado
+        width={500} // Ancho personalizado
       >
         <Form layout="vertical" form={formEditar} initialValues={registroSeleccionado || {}}>
           <Form.Item

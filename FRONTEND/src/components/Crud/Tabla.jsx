@@ -67,15 +67,19 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
                 <tr key={index}>
                   {columnas.map((col, i) => (
                     <td key={i}>
-                      {col.campo === "accion" ? ( // 👈 Si la columna es "accion", mostramos botones
+                      {col.campo === "accion" ? ( // Si la columna es "accion", mostramos botones
                         <BotonesAccionFila
                           id={fila.id}
                           onEdit={onEdit}
                           onDelete={onDelete}
-                          onDetails={onDetails} // 👈 Pasamos onDetails solo si está definido
+                          onDetails={onDetails} // Pasamos onDetails solo si está definido
                         />
+                      ) : col.campo === "indice" ? (
+                        datos.findIndex(d => d.id === fila.id) + 1 // Encuentra el índice original
+                      ) : col.render ? ( // Si la columna tiene un render personalizado, lo usamos
+                        col.render(fila[col.campo], fila) // Pasamos el valor y la fila completa
                       ) : (
-                        fila[col.campo]
+                        fila[col.campo] // Si no, mostramos el valor directamente
                       )}
                     </td>
                   ))}
