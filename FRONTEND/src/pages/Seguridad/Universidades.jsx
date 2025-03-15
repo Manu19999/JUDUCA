@@ -198,7 +198,7 @@ function Universidades() {
           </Form.Item>
 
           {/* Lista desplegable de ciudades dinámicas */}
-          <Form.Item label="Ciudad" name="idCiudad" rules={[{ required: true }]}>
+          <Form.Item label="Ciudad" name="idCiudad" rules={[{ required: true ,  message: "Debe seleccionar una ciudad "}]}>
             <Select placeholder="Selecciona una ciudad">
               {ciudades.map((ciudad) => (
                 <Option key={ciudad.idCiudad} value={ciudad.idCiudad}>
@@ -217,7 +217,7 @@ function Universidades() {
             {fotoPreview && <img src={fotoPreview} alt="Vista previa" className="preview-image" />}
           </Form.Item>
 
-          <Form.Item label="Siglas" name="siglas">
+          <Form.Item label="Siglas" name="siglas" rules={[{ required: true, message: "La sigla es obligatorio" }]}>
             <Input placeholder="Ingresa las siglas de la universidad" />
           </Form.Item>
 
@@ -243,7 +243,7 @@ function Universidades() {
           </Form.Item>
 
           {/* Lista desplegable de ciudades dinámicas en edición */}
-          <Form.Item label="Ciudad" name="idCiudad" rules={[{ required: true }]}>
+          <Form.Item label="Ciudad" name="idCiudad" rules={[{ required: true ,  message: "Debe seleccionar una ciudad "}]}>
             <Select placeholder="Selecciona una ciudad">
               {ciudades.map((ciudad) => (
                 <Option key={ciudad.idCiudad} value={ciudad.idCiudad}>
@@ -262,7 +262,7 @@ function Universidades() {
             {fotoPreview && <img src={fotoPreview} alt="Vista previa" className="preview-image" />}
           </Form.Item>
 
-          <Form.Item label="Siglas" name="siglas">
+          <Form.Item label="Siglas" name="siglas" rules={[{ required: true, message: "La sigla es obligatorio" }]}>
             <Input placeholder="Ingresa las siglas de la universidad" />
           </Form.Item>
 

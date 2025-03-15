@@ -64,7 +64,8 @@
 .custom-modal-card .ant-input {
   height: 38px; /* Altura del input */
   font-size: 14px; /* Tamaño de la fuente */
-  margin-bottom: -15px; /* Espacio entre el input y el footer */
+  margin-bottom: -3px; /* Espacio entre el input y el footer */
+  
 }
 
 /* Estilos para los labels */

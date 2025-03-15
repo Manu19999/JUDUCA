@@ -135,14 +135,18 @@ const CajaFichas = () => {
                 <p className="eventdescription">{item.description}</p>
                 <div className="eventicons">
                   <FaEye
-                    onClick={() => console.log("Ver info de", item.title)}
+                    onClick={() => navigate("/ficha-participantes")}
                     className="eventicon manage-btn-credencial"
                     style={{ marginBottom: "10px", cursor: "pointer" }}
                   />
                   <FaCog
-                    onClick={() => console.log("Configurar", item.title)}
+                    onClick={() => navigate("/Formulario-fichas")}
                     className="eventicon manage-btn-credencial"
-                    style={{ marginBottom: "10px", marginInline: "10px", cursor: "pointer" }}
+                    style={{
+                      marginBottom: "10px",
+                      marginInline: "10px",
+                      cursor: "pointer",
+                    }}
                   />
                 </div>
               </div>
@@ -152,7 +156,13 @@ const CajaFichas = () => {
       </Container>
 
       <Modal show={isModalOpen} onHide={closeModal} centered>
-        <div style={{ backgroundColor: "#e3f2fd", borderRadius: "10px", padding: "20px" }}>
+        <div
+          style={{
+            backgroundColor: "#e3f2fd",
+            borderRadius: "10px",
+            padding: "20px",
+          }}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Crear Ficha</Modal.Title>
           </Modal.Header>
@@ -183,18 +193,33 @@ const CajaFichas = () => {
                 <Form.Label>Foto</Form.Label>
                 <div
                   {...getRootProps()}
-                  style={{ border: "2px dashed #007bff", padding: "20px", textAlign: "center", cursor: "pointer", marginBottom: "10px" }}
+                  style={{
+                    border: "2px dashed #007bff",
+                    padding: "20px",
+                    textAlign: "center",
+                    cursor: "pointer",
+                    marginBottom: "10px",
+                  }}
                 >
                   <input {...getInputProps()} />
-                  <p>Arrastra y suelta una foto aquí o haz clic para seleccionar</p>
+                  <p>
+                    Arrastra y suelta una foto aquí o haz clic para seleccionar
+                  </p>
                 </div>
                 {foto && (
                   <div>
-                    <p><strong>Foto seleccionada:</strong></p>
+                    <p>
+                      <strong>Foto seleccionada:</strong>
+                    </p>
                     <img
                       src={URL.createObjectURL(foto)}
                       alt="Foto seleccionada"
-                      style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: "10px" }}
+                      style={{
+                        width: "250px",
+                        height: "150px",
+                        objectFit: "cover",
+                        borderRadius: "10px",
+                      }}
                     />
                   </div>
                 )}
@@ -202,7 +227,9 @@ const CajaFichas = () => {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="outline-secondary" onClick={closeModal}>Cerrar</Button>
+            <Button variant="outline-secondary" onClick={closeModal}>
+              Cerrar
+            </Button>
             <Button variant="primary">Guardar</Button>
           </Modal.Footer>
         </div>

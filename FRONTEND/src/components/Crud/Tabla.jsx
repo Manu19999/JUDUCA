@@ -10,6 +10,7 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
   const [registrosPorPagina, setRegistrosPorPagina] = useState(8);
   const [busqueda, setBusqueda] = useState('');
   const [datosFiltrados, setDatosFiltrados] = useState(datos);
+  const [busquedaCambiada, setBusquedaCambiada] = useState(false); // Nuevo estado para rastrear cambios en la búsqueda
 
   useEffect(() => {
     const datosFiltrados = datos.filter((fila) =>
@@ -18,8 +19,12 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
       )
     );
     setDatosFiltrados(datosFiltrados);
-    setPaginaActual(1); // Reinicia la página a 1 cuando se realiza una búsqueda
-  }, [busqueda, datos]);
+   // Reiniciar la página solo si la búsqueda ha cambiado
+    if (busquedaCambiada) {
+      setPaginaActual(1);
+      setBusquedaCambiada(false); // Restablecer el estado de búsqueda cambiada
+    }
+  }, [busqueda, datos, busquedaCambiada]);
 
   const indiceUltimoRegistro = paginaActual * registrosPorPagina;
   const indicePrimerRegistro = indiceUltimoRegistro - registrosPorPagina;
@@ -30,6 +35,11 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
   const cambiarRegistrosPorPagina = (e) => {
     setRegistrosPorPagina(Number(e.target.value));
     setPaginaActual(1); // Resetea la página al cambiar los registros por página
+  };
+
+  const handleBusquedaChange = (nuevaBusqueda) => {
+    setBusqueda(nuevaBusqueda);
+    setBusquedaCambiada(true); // Indicar que la búsqueda ha cambiado
   };
 
   return (
@@ -49,7 +59,7 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
           registrosPorPagina={registrosPorPagina}
           cambiarRegistrosPorPagina={cambiarRegistrosPorPagina}
           busqueda={busqueda}
-          setBusqueda={setBusqueda}
+          setBusqueda={handleBusquedaChange} // Usar la función personalizada para manejar la búsqueda
         />
         <div className="tabla-wrapper">
           <table className="tabla">

@@ -16,7 +16,9 @@ import "../styles/Evento/Eventos.css";
 const CajaEventos = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("upcoming");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false); // Modal para crear evento
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false); // Modal para ver detalles
+  const [selectedEvent, setSelectedEvent] = useState(null); // Evento seleccionado para ver detalles
   const [event, setEvent] = useState({
     name: "",
     location: "",
@@ -27,32 +29,56 @@ const CajaEventos = () => {
   const [foto, setFoto] = useState(null);
   const [previewFoto, setPreviewFoto] = useState(null);
 
-  const items = [
-    {
-      id: 1,
-      title: "JUDUCA",
-      image: JUDUCA,
-      description: "Juegos Deportivos Universitarios Centroamericanos.",
-      route: "/gestion-evento",
-    },
-    {
-      id: 2,
-      title: "FUCAIN",
-      image: FUCAIN,
-      description: "Juegos deportivos JUCAIN.",
-      route: "/gestion-evento",
-    },
-    {
-      id: 3,
-      title: "DANZA",
-      image: DANZA,
-      description: "Danza folclórica universitaria.",
-      route: "/gestion-evento",
-    },
-  ];
+const items = [
+  {
+    id: 1,
+    title: "JUDUCA",
+    image: JUDUCA,
+    description: "Juegos Deportivos Universitarios Centroamericanos.",
+    route: "/gestion-evento",
+    fechaInicio: "2023-10-01",
+    fechaFin: "2023-10-10",
+    ubicacion: "UNAH, Honduras",
+    estado: "Activo",
+    fechaCreacion: "2025-09-01",
+    fechaActualizacion: "2025-09-15",
+  },
+  {
+    id: 2,
+    title: "FUCAIN",
+    image: FUCAIN,
+    description: "Juegos deportivos JUCAIN.",
+    route: "/gestion-evento",
+    fechaInicio: "2023-11-15",
+    fechaFin: "2023-11-20",
+    ubicacion: "Managua, Nicaragua",
+    estado: "Activo",
+    fechaCreacion: "2025-10-01",
+    fechaActualizacion: "2025-11-01",
+  },
+  {
+    id: 3,
+    title: "DANZA",
+    image: DANZA,
+    description: "Danza folclórica universitaria.",
+    route: "/gestion-evento",
+    fechaInicio: "2023-12-05",
+    fechaFin: "2023-12-10",
+    ubicacion: "Tegucigalpa, Honduras",
+    estado: "Activo",
+    fechaCreacion: "2025-11-01",
+    fechaActualizacion: "2025-11-15",
+  },
+];
+
 
   const handleImageClick = (route) => {
     navigate(route);
+  };
+
+  const handleViewClick = (event) => {
+    setSelectedEvent(event);
+    setIsViewModalOpen(true); // Abre el modal de detalles
   };
 
   const handleChange = (e) => {
@@ -74,7 +100,7 @@ const CajaEventos = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Evento guardado:", { ...event, foto });
-    setIsModalOpen(false);
+    setIsCreateModalOpen(false);
     setEvent({
       name: "",
       location: "",
@@ -116,7 +142,10 @@ const CajaEventos = () => {
             >
               Próximos
             </button>
-            <button className="eventtab" onClick={() => setIsModalOpen(true)}>
+            <button
+              className="eventtab"
+              onClick={() => setIsCreateModalOpen(true)}
+            >
               Nuevo
             </button>
           </div>
@@ -135,12 +164,12 @@ const CajaEventos = () => {
                 <p className="eventdescription">{item.description}</p>
                 <div className="eventicons">
                   <FaEye
-                    onClick={() => console.log("Ver info de", item.title)}
+                    onClick={() => handleViewClick(item)}
                     className="eventicon manage-btn-credencial"
                     style={{ cursor: "pointer" }}
                   />
                   <FaCog
-                    onClick={() => console.log("Configurar", item.title)}
+                    onClick={() => navigate("/control-eventos")}
                     className="eventicon manage-btn-credencial"
                     style={{ cursor: "pointer", marginLeft: "10px" }}
                   />
@@ -152,7 +181,11 @@ const CajaEventos = () => {
       </Container>
 
       {/* Modal para crear evento */}
-      <Modal show={isModalOpen} onHide={() => setIsModalOpen(false)} centered>
+      <Modal
+        show={isCreateModalOpen}
+        onHide={() => setIsCreateModalOpen(false)}
+        centered
+      >
         <div
           style={{
             backgroundColor: "#e3f2fd",
@@ -237,23 +270,28 @@ const CajaEventos = () => {
                 </div>
 
                 {previewFoto && (
-                  <img
-                    src={previewFoto}
-                    alt="Vista previa"
-                    style={{
-                      width: "150px",
-                      height: "150px",
-                      objectFit: "cover",
-                      borderRadius: "10px",
-                    }}
-                  />
+                  <div>
+                    <p>
+                      <strong>Foto seleccionada:</strong>
+                    </p>
+                    <img
+                      src={URL.createObjectURL(foto)}
+                      alt="Foto seleccionada"
+                      style={{
+                        width: "250px",
+                        height: "150px",
+                        objectFit: "cover",
+                        borderRadius: "10px",
+                      }}
+                    />
+                  </div>
                 )}
               </Form.Group>
 
               <Modal.Footer>
                 <Button
                   variant="secondary"
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={() => setIsCreateModalOpen(false)}
                 >
                   Cerrar
                 </Button>
@@ -263,6 +301,72 @@ const CajaEventos = () => {
               </Modal.Footer>
             </Form>
           </Modal.Body>
+        </div>
+      </Modal>
+
+      {/* Modal para ver detalles del evento */}
+      <Modal
+        show={isViewModalOpen}
+        onHide={() => setIsViewModalOpen(false)}
+        centered
+      >
+        <div
+          style={{
+            backgroundColor: "#e3f2fd",
+            borderRadius: "10px",
+            padding: "20px",
+          }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Detalles del Evento</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {selectedEvent && (
+              <div>
+                <img
+                  src={selectedEvent.image}
+                  alt={selectedEvent.title}
+                  style={{
+                    width: "100%",
+                    height: "200px",
+                    objectFit: "cover",
+                    borderRadius: "10px",
+                    marginBottom: "20px",
+                  }}
+                />
+                <h3>{selectedEvent.title}</h3>
+                <p>{selectedEvent.description}</p>
+                <p>
+                  <strong>Fecha de inicio:</strong> {selectedEvent.fechaInicio}
+                </p>
+                <p>
+                  <strong>Fecha de fin:</strong> {selectedEvent.fechaFin}
+                </p>
+                <p>
+                  <strong>Ubicación:</strong> {selectedEvent.ubicacion}
+                </p>
+                <p>
+                  <strong>Estado:</strong> {selectedEvent.estado}
+                </p>
+                <p>
+                  <strong>Fecha de creación:</strong>{" "}
+                  {selectedEvent.fechaCreacion}
+                </p>
+                <p>
+                  <strong>Fecha de actualización:</strong>{" "}
+                  {selectedEvent.fechaActualizacion}
+                </p>
+              </div>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => setIsViewModalOpen(false)}
+            >
+              Cerrar
+            </Button>
+          </Modal.Footer>
         </div>
       </Modal>
     </section>
