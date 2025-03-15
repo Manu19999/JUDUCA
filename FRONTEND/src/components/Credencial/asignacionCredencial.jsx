@@ -1,46 +1,16 @@
-import React, { useState, useEffect  } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Tabla from "../../components/Crud/Tabla.jsx";
 import Nav from "../../components/Dashboard/navDashboard.jsx";
-import { FaIdBadge } from "react-icons/fa";
+import { FaIdBadge, FaArrowLeft } from "react-icons/fa";
 import ModalNuevo from "../../components/Crud/Modal/ModalNuevo.jsx";
-import ModalEditar from "../../components/Crud/Modal/ModalEditar.jsx";
-import ModalDetalles from "../../components/Crud/Modal/ModalDetalles.jsx";
-import ModalConfirmacion from "../../components/Crud/Modal/ModalConfirmacion.jsx";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito.jsx";
-import { Input, Select, Form, Row, Col, Tabs } from "antd";
+import { Input, Select, Form, Row, Col, Spin, Alert } from "antd";
 import { Button } from "react-bootstrap";
+
 import "../../styles/Credencial/credencial.css";
 
-import { FaArrowLeft } from "react-icons/fa";
-
 const { Option } = Select;
-const { TabPane } = Tabs;
-
-// Datos de ejemplo para simular una base de datos de usuarios
-const datos = [
-  {
-    id: 1,
-    evento: "JUDUCA",
-    participante: "MANUEL ANTONIO RODRIGUEZ",
-    tipAcceso: "ATLETA",
-    fechaEmision: "2025-01-20",
-    fechaVencimiento: "2025-02-20",
-    estado: "ACTIVO",
-  },
-];
-
-// Columnas de la tabla de usuarios
-const columnas = [
-  { nombre: "#", campo: "id", ancho: "5%" },
-  { nombre: "Evento", campo: "evento", ancho: "15%" },
-  { nombre: "Participante", campo: "participante", ancho: "30%" },
-  { nombre: "Tipo de acceso", campo: "tipAcceso", ancho: "25%" },
-  { nombre: "Fecha emision", campo: "fechaEmision", ancho: "20%" },
-  { nombre: "Fecha vencimiento", campo: "fechaVencimiento", ancho: "20%" },
-  { nombre: "Estado", campo: "estado", ancho: "15%" },
-  { nombre: "Acción", campo: "accion", ancho: "20%" },
-];
 
 function CrearCredenciales() {
   const navigate = useNavigate();
@@ -48,111 +18,120 @@ function CrearCredenciales() {
   const { selectedFicha } = location.state || {}; // Recibir la ficha seleccionada
 
   const [fichaActual, setFichaActual] = useState(null);
+  const [credenciales, setCredenciales] = useState([]); // Lista de credenciales generadas
+  const [participantes, setParticipantes] = useState([]); // Lista de participantes
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false); // Control del modal
+  const [participanteSeleccionado, setParticipanteSeleccionado] = useState(null); // Participante seleccionado
 
-    
-  // Estados para controlar la visibilidad de los modales
-  const [showNuevoModal, setShowNuevoModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [form] = Form.useForm(); // Formulario Ant Design
 
-  // Estado para almacenar el usuario seleccionado (para editar, eliminar o ver detalles)
-  const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
-  // Hooks de Ant Design para gestionar formularios
-  const [formNuevo] = Form.useForm(); // Formulario para el modal de nuevo registro
-  const [formEditar] = Form.useForm(); // Formulario para el modal de edición
-
-  // Abrir modal de nuevo registro
-
-    // Validar si la ficha seleccionada está presente
-    useEffect(() => {
-      if (selectedFicha) {
-        setFichaActual(selectedFicha);
-      } else {
-        alert("No se ha seleccionado una ficha.");
-        navigate("/credencialView"); // Redirigir si no hay ficha seleccionada
-      }
-    }, [selectedFicha, navigate]);
-  
-
-  const handleNuevoRegistro = () => {
-    setShowNuevoModal(true);
-  };
-
-  // Abrir modal de edición
-  const handleEdit = (id) => {
-    const registro = datos.find((d) => d.id === id); // Busca el usuario por ID
-
-    if (registro) {
-      console.log("Registro seleccionado:", registro); // Verificar si encuentra el usuario
-
-      setRegistroSeleccionado(registro); // Guarda el registro seleccionado
-      formEditar.setFieldsValue(registro); // Carga los datos en el formulario
-      setShowEditModal(true); // Abre el modal de edición
+  // ✅ Cargar credenciales y participantes al montar el componente
+  useEffect(() => {
+    if (selectedFicha) {
+      setFichaActual(selectedFicha);
+      cargarCredenciales(selectedFicha.idEvento, selectedFicha.id);
+      cargarParticipantes(selectedFicha.idEvento, selectedFicha.id);
     } else {
-      console.error("No se encontró el registro con ID:", id);
+      alert("No se ha seleccionado una ficha.");
+      navigate("/credencialView"); // Redirigir si no hay ficha seleccionada
+    }
+  }, [selectedFicha, navigate]);
+
+  // 🔹 Cargar credenciales desde la API
+  const cargarCredenciales = async (idEvento, idFichaRegistro) => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `http://localhost:4000/api/credencial/credenciales/${idEvento}/${idFichaRegistro}`
+      );
+      const data = await response.json();
+
+      if (data.hasError) {
+        throw new Error(data.errors.join(", "));
+      }
+
+      setCredenciales(data.data); // Guardar las credenciales en el estado
+    } catch (err) {
+      console.error("Error al obtener credenciales:", err.message);
+      setError("No se pudieron cargar las credenciales.");
+    } finally {
+      setLoading(false);
     }
   };
-  // Cerrar el modal de edición y reiniciar el formulario
-  const handleCerrarEditModal = () => {
-    setShowEditModal(false);
-    setRegistroSeleccionado(null); // Limpiar el registro seleccionado
-    formEditar.resetFields(); // Reiniciar el formulario
+
+  // 🔹 Cargar participantes desde la API
+  const cargarParticipantes = async (idEvento, idFichaRegistro) => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `http://localhost:4000/api/credencial/participantes/${idEvento}/${idFichaRegistro}`
+      );
+      const data = await response.json();
+
+      if (data.hasError) {
+        throw new Error(data.errors.join(", "));
+      }
+
+      setParticipantes(data.data); // Guardar los participantes en el estado
+    } catch (err) {
+      console.error("Error al obtener participantes:", err.message);
+      setError("No se pudieron cargar los participantes.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Abrir modal de eliminación
-  const handleDelete = (id) => {
-    const registro = datos.find((d) => d.id === id);
-    setRegistroSeleccionado(registro);
-    setShowDeleteModal(true); // Abrir el modal de eliminación
+  // 🔹 Abrir el modal y seleccionar participante
+  const handleAbrirModal = () => {
+    setShowModal(true);
+    form.resetFields();
   };
 
-  // Abrir modal de detalles
-  const handleDetails = (id) => {
-    const registro = datos.find((d) => d.id === id);
-    setRegistroSeleccionado(registro);
-    setShowDetailsModal(true);
-  };
+  // 🔹 Guardar la credencial en la base de datos
+  const handleGuardarCredencial = async () => {
+    try {
+      const values = await form.validateFields();
 
-  // Guardar nuevo registro
-  const handleGuardarNuevo = () => {
-    formNuevo
-      .validateFields() // Valida los campos del formulario
-      .then((values) => {
-        console.log("Nuevo registro:", values);
-        setShowNuevoModal(false); // Cierra el modal
-        formNuevo.resetFields(); // Limpiar el formulario de nuevo registro
-        mostrarMensajeExito("La credencial se ha registrado correctamente."); // Mensaje de éxito
-      })
-      .catch((error) => {
-        console.error("Error al validar el formulario:", error); // Manejo de errores
+      if (!participanteSeleccionado) {
+        throw new Error("Debe seleccionar un participante.");
+      }
+
+      const credencial = {
+        idEvento: fichaActual.idEvento,
+        idRegistroParticipanteEvento: participanteSeleccionado,
+        tipoAcceso: values.tipoAcceso,
+        fechaEmision: values.fechaEmision || new Date().toISOString().split("T")[0],
+        fechaVencimiento: values.fechaVencimiento || null,
+        activo: values.activo ?? true,
+        usuarioRegistro: "admin",
+        fechaRegistro: new Date().toISOString(),
+        idFicha: fichaActual.id,
+        idUsuario: 1,
+        idObjeto: 1,
+      };
+
+      const response = await fetch("http://localhost:4000/api/credencial/insCredencial", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credencial),
       });
-  };
 
-  // Guardar cambios en el registro editado
-  const handleGuardarEdit = () => {
-    formEditar
-      .validateFields() // Valida los campos del formulario
-      .then((values) => {
-        console.log("Registro editado:", values); // Depuración
-        setShowEditModal(false); // Cierra el modal
-        setRegistroSeleccionado(null); // Limpia el registro seleccionado
-        formEditar.resetFields(); // Limpia el formulario
-        mostrarMensajeExito("La credencial se ha actualizado correctamente."); // Mensaje de éxito
-      })
-      .catch((error) => {
-        console.error("Error al validar el formulario:", error); // Manejo de errores
-      });
-  };
+      const data = await response.json();
 
-  // Confirmar eliminación de un usuario
-  const handleConfirmarDelete = () => {
-    console.log(
-      "Simulación: Eliminar registro con ID:",
-      registroSeleccionado?.id
-    );
-    setShowDeleteModal(false);
-    mostrarMensajeExito("La credencial se ha eliminado correctamente.");
+      if (data.hasError) {
+        throw new Error(data.errors.join(", "));
+      }
+
+      mostrarMensajeExito("Credencial asignada correctamente.");
+      setShowModal(false);
+      cargarCredenciales(fichaActual.idEvento, fichaActual.id);
+    } catch (err) {
+      console.error("Error al asignar credencial:", err.message);
+    }
   };
 
   return (
@@ -161,288 +140,103 @@ function CrearCredenciales() {
 
       <Button
         variant="outline-warning"
-        onClick={() => navigate("/credencialView")}
+        onClick={() => navigate("/gestion-evento")}
         className="d-flex align-items-center gap-2"
-        style={{ marginBottom: '55px', marginLeft: '55px' }}
-        >
+        style={{ marginTop: "30px" }}
+      >
         <FaArrowLeft size={20} /> Regresar
       </Button>
 
       {fichaActual && (
-        <div className="credenciallisttitle" style={{ marginTop: '20px', alignContent: 'center', textAlign: 'center' }}>
-          <h2>Gestion de Credenciales para : {fichaActual.title}</h2>
+        <div className="credenciallisttitle" style={{ textAlign: "center", marginTop: "20px" }}>
+          <h2>Gestión de Credenciales para: {fichaActual.title}</h2>
           <p>{fichaActual.description}</p>
         </div>
       )}
 
-      {/* componente de navegación del  navdashboard */}
-      <Tabla
-        columnas={columnas} // Columnas de la tabla
-        datos={datos} // Datos de la tabla
-        titulo="Gestión de credenciales" // Título de la tabla
-        icono={<FaIdBadge className="icono-titulo" />} // Ícono del título
-        onNuevoRegistro={handleNuevoRegistro} // Función para abrir el modal de nuevo registro
-        onGenerarReporte={() => console.log("Generar reporte en PDF")} // Función para generar reporte
-        onEdit={handleEdit} // Función para abrir el modal de edición
-        onDelete={handleDelete} // Función para abrir el modal de eliminación
-        onDetails={handleDetails} // Función para abrir el modal de detalles
-      />
+      {/* 🔹 Mostrar estado de carga o error */}
+      {loading ? (
+        <div className="text-center">
+          <Spin size="large" />
+          <p>Cargando credenciales...</p>
+        </div>
+      ) : error ? (
+        <Alert message={error} type="error" className="text-center" />
+      ) : (
+        <Tabla
+          columnas={[
+            { nombre: "#", campo: "idCredencial", ancho: "5%" },
+            { nombre: "Nombre", campo: "nombreParticipante", ancho: "30%" },
+            { nombre: "Tipo de Acceso", campo: "tipoAcceso", ancho: "20%" },
+            { nombre: "Fecha Emisión", campo: "fechaEmision", ancho: "20%" },
+            { nombre: "Fecha Vencimiento", campo: "fechaVencimiento", ancho: "20%" },
+            { nombre: "Acción", campo: "accion", ancho: "20%" },
+          ]}
+          datos={credenciales}
+          titulo="Credenciales Generadas"
+          icono={<FaIdBadge className="icono-titulo" />}
+          onNuevoRegistro={handleAbrirModal} // Agregar nueva credencial
+        />
+      )}
 
-      {/* Modal para Nuevo Registro */}
+      {/* 🔹 Modal para Asignar Credencial */}
       <ModalNuevo
-        show={showNuevoModal} // Controla la visibilidad del modal
-        onHide={() => setShowNuevoModal(false)} // Función para cerrar el modal
-        titulo="Nueva Credencial" // Título del modal
-        onGuardar={handleGuardarNuevo} // Función para guardar el nuevo registro
-        form={formNuevo} // Pasar el formulario al modal
-        width={800} // Ancho del modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        titulo="Asignar Credencial"
+        onGuardar={handleGuardarCredencial}
+        form={form}
+        width={700}
       >
-        <Form layout="vertical" form={formNuevo}>
-          <Tabs defaultActiveKey="1">
-            {/* Pestaña: Datos Personales */}
-            <TabPane tab="Ingresar informacion" key="1">
-              <Row gutter={15}>
-                <Col span={8}>
-                  <Form.Item
-                    label="Evento"
-                    name="Evento"
-                    rules={[
-                      { required: true, message: "El evento es obligatorio" },
-                    ]}
-                  >
-                    <Select placeholder="Selecciona un evento">
-                      <Option value="JUDUCA">JUDUCA</Option>
-                      <Option value="SUCA">SUCA</Option>
-                      <Option value="Otro">Otro</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Participante"
-                    name="Participante"
-                    rules={[
-                      {
-                        required: true,
-                        message: "La identificacion es obligatoria",
-                      },
-                    ]}
-                  >  <Select placeholder="Selecciona un participante">
-                  <Option value="SAMUEL">SAMUEL</Option>
-                  <Option value="ROBERTO">ROBERTO</Option>
-                  <Option value="MIGUEL">MIGUEL</Option>
+        <Form layout="vertical" form={form}>
+          <Row gutter={24}>
+            <Col span={12}>
+              <Form.Item
+                label="Participante"
+                name="participante"
+                rules={[{ required: true, message: "Seleccione un participante" }]}
+              >
+                <Select
+                  placeholder="Seleccione un participante"
+                  onChange={(value) => setParticipanteSeleccionado(value)}
+                >
+                  {participantes.map((p) => (
+                    <Option key={p.idRegistroParticipanteEvento} value={p.idRegistroParticipanteEvento}>
+                      {p.nombreParticipante}
+                    </Option>
+                  ))}
                 </Select>
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={15}>
-                <Col span={9}>
-                  <Form.Item
-                    label="Tipo de acceso"
-                    name="tipAcceso"
-                    rules={[
-                      { required: true, message: "El acceso es obligatorio" },
-                    ]}
-                  >
-                    <Select placeholder="Selecciona un tipo de acceso">
-                      <Option value="ATLETA">ATLETA</Option>
-                      <Option value="ENTRENADOR">ENTRENADOR</Option>
-                      <Option value="AUTORIDAD">AUTORIDAD</Option>
-                      <Option value="ORGANIZADOR">ORGANIZADOR</Option>
-                      <Option value="VOLUNTARIO">VOLUNTARIO</Option>
-                      <Option value="PRENSA">PRENSA</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={6}>
-                  <Form.Item
-                    label="Fecha de emision"
-                    name="fechaEmision"
-                    rules={[
-                      {
-                        required: true,
-                        message: "La fecha de emision es obligatoria",
-                      },
-                    ]}
-                  >
-                    <Input type="date" />
-                  </Form.Item>
-                </Col>
-                <Col span={6}>
-                  <Form.Item
-                    label="Fecha de vencimiento"
-                    name="fechaVencimiento"
-                    rules={[
-                      {
-                        required: true,
-                        message: "La fecha de vencimiento es obligatoria",
-                      },
-                    ]}
-                  >
-                    <Input type="date" />
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={16}>
-                <Col span={7}>
-                  <Form.Item
-                    label="Estado"
-                    name="Estado"
-                    rules={[
-                      { required: true, message: "El estado es obligatorio" },
-                    ]}
-                  >
-                    <Select placeholder="Selecciona un estado">
-                      <Option value="ACTIVO">ACTIVO</Option>
-                      <Option value="INACTIVO">INACTIVO</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-              </Row>
-            </TabPane>
-          </Tabs>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Tipo de Acceso"
+                name="tipoAcceso"
+                rules={[{ required: true, message: "Seleccione un tipo de acceso" }]}
+              >
+                <Select placeholder="Selecciona un tipo de acceso">
+                  <Option value="ATLETA">ATLETA</Option>
+                  <Option value="ENTRENADOR">ENTRENADOR</Option>
+                  <Option value="AUTORIDAD">AUTORIDAD</Option>
+                  <Option value="VOLUNTARIO">VOLUNTARIO</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={25}>
+            <Col span={10}>
+              <Form.Item label="Fecha de Emisión" name="fechaEmision">
+                <Input type="date" />
+              </Form.Item>
+            </Col>
+            <Col span={10}>
+              <Form.Item label="Fecha de Vencimiento" name="fechaVencimiento">
+                <Input type="date" />
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </ModalNuevo>
-
-      {/* Modal para Editar Registro */}
-      <ModalEditar
-        show={showEditModal} // Controla la visibilidad del modal
-        onHide={handleCerrarEditModal} // Función para cerrar el modal
-        titulo="Editar Credencial" // Título del modal
-        onGuardar={handleGuardarEdit} // Función para guardar los cambios
-        form={formEditar} // Formulario del modal
-        registroSeleccionado={registroSeleccionado} // Usuario seleccionado
-        width={800} // Ancho del modal
-      >
-        <Form
-          layout="vertical"
-          form={formEditar}
-          initialValues={registroSeleccionado || {}}
-        >
-          <Tabs defaultActiveKey="1">
-            {/* Pestaña: Datos Personales */}
-            <TabPane tab="Editar informacion" key="1">
-              <Row gutter={15}>
-                <Col span={8}>
-                  <Form.Item
-                    label="Evento"
-                    name="evento"
-                    rules={[
-                      { required: true, message: "El evento es obligatorio" },
-                    ]}
-                  >
-                    <Select placeholder="Selecciona un evento">
-                      <Option value="JUDUCA">JUDUCA</Option>
-                      <Option value="SUCA">SUCA</Option>
-                      <Option value="Otro">Otro</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Participante"
-                    name="Participante"
-                    rules={[
-                      {
-                        required: true,
-                        message: "La identificacion es obligatoria",
-                      },
-                    ]}
-                  >
-                 <Select placeholder="Selecciona un participante">
-                  <Option value="SAMUEL">SAMUEL</Option>
-                  <Option value="ROBERTO">ROBERTO</Option>
-                  <Option value="MIGUEL">MIGUEL</Option>
-                </Select>
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={15}>
-                <Col span={9}>
-                  <Form.Item
-                    label="Tipo de acceso"
-                    name="tipAcceso"
-                    rules={[
-                      { required: true, message: "El acceso es obligatorio" },
-                    ]}
-                  >
-                    <Select placeholder="Selecciona un tipo de acceso">
-                      <Option value="ATLETA">ATLETA</Option>
-                      <Option value="ENTRENADOR">ENTRENADOR</Option>
-                      <Option value="AUTORIDAD">AUTORIDAD</Option>
-                      <Option value="ORGANIZADOR">ORGANIZADOR</Option>
-                      <Option value="VOLUNTARIO">VOLUNTARIO</Option>
-                      <Option value="PRENSA">PRENSA</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-
-                <Col span={6}>
-                  <Form.Item
-                    label="Fecha de emision"
-                    name="fechaEmision"
-                    rules={[
-                      {
-                        required: true,
-                        message: "La fecha de emision es obligatoria",
-                      },
-                    ]}
-                  >
-                    <Input type="date" />
-                  </Form.Item>
-                </Col>
-                <Col span={6}>
-                  <Form.Item
-                    label="Fecha de vencimiento"
-                    name="fechaVencimiento"
-                    rules={[
-                      {
-                        required: true,
-                        message: "La fecha de vencimiento es obligatoria",
-                      },
-                    ]}
-                  >
-                    <Input type="date" />
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={16}>
-                <Col span={7}>
-                  <Form.Item
-                    label="Estado"
-                    name="estado"
-                    rules={[
-                      { required: true, message: "El estado es obligatorio" },
-                    ]}
-                  >
-                    <Select placeholder="Selecciona un estado">
-                      <Option value="ACTIVO">ACTIVO</Option>
-                      <Option value="INACTIVO">INACTIVO</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-              </Row>
-            </TabPane>
-          </Tabs>
-        </Form>
-      </ModalEditar>
-
-      {/* Modal para Confirmar Eliminación */}
-      <ModalConfirmacion
-        show={showDeleteModal} // Controla la visibilidad del modal
-        onHide={() => setShowDeleteModal(false)} // Función para cerrar el modal
-        onConfirmar={handleConfirmarDelete} // Función para confirmar la eliminación
-        mensaje={`¿Estás seguro de que deseas eliminar la credencial ${registroSeleccionado?.participante}?`} // Mensaje de confirmación
-      />
-
-      {/* Modal para detalles */}
-      <ModalDetalles
-        show={showDetailsModal} // Controla la visibilidad del modal
-        onHide={() => setShowDetailsModal(false)} // Función para cerrar el modal
-        titulo="Detalles de la credencial" // Título del modal
-        detalles={registroSeleccionado || {}} // Detalles del usuario seleccionado
-        width={500} // Ancho personalizado
-      />
     </div>
   );
 }
