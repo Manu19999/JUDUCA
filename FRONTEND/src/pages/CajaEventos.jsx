@@ -55,7 +55,7 @@ useEffect(() => {
       setEventos(eventosConDatos);
     } catch (err) {
       console.error("Error al obtener eventos:", err.message);
-      setError("No se pudieron cargar los eventos.");
+      setError("Error al conectar con el servidor.");
     } finally {
       setLoading(false);
     }
