@@ -1,10 +1,14 @@
 import express from 'express';
-import { getUbicacionesCampos } from '../controllers/credencialController.js';
+import { ObtenerFichas, ObtenerParticipantesPorFicha, ObtenerCredencialesPorFicha, ObtenerEventos, InsertarCredencial } from '../controllers/credencialController.js';
 
 const router = express.Router();
 
+router.get('/', ObtenerEventos);
+router.get('/fichas', ObtenerFichas);
+router.get('/participantes/:idEvento/:idFichaRegistro', ObtenerParticipantesPorFicha);
+router.get('/credenciales/:idEvento/:idFichaRegistro', ObtenerCredencialesPorFicha);
 
-router.get('/ubicacionescampos', getUbicacionesCampos);
+router.post('/insCredencial', InsertarCredencial);
 
 
 
