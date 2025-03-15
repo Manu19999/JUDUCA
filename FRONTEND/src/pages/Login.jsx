@@ -5,6 +5,8 @@ import "../styles/Login/Login.css";
 import logo from '../assets/mascota.png';
 import LoginForm from "../components/Login/LoginForm";
 import TwoFA from "../components/Login/TwoFA";
+import { validateEmail, validatePassword } from "../components/Login/validaciones";
+
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +17,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const navigate = useNavigate();
 
@@ -39,7 +43,16 @@ const Login = () => {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage(""); // Limpiar mensajes de error anteriores
-  
+    // Validar antes de enviar
+    const emailValidation = validateEmail(email);
+    const passwordValidation = validatePassword(password);
+
+    setEmailError(emailValidation);
+    setPasswordError(passwordValidation);
+
+    if (emailValidation || passwordValidation) {
+      return; // Detener el envío si hay errores
+    }
     try {
       const response = await fetch("http://localhost:4000/api/auth/login", {
         method: "POST",

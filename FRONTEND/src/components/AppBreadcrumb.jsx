@@ -10,6 +10,7 @@ const routeNames = {
   seguridad: "Seguridad",
   usuarios: "Usuarios",
   roles: "Roles",
+  universidades: "Universidades",
 
   //Eventos
   eventos: "Eventos",
@@ -42,6 +43,9 @@ const getHierarchy = (pathname) => {
   }
   if (pathnames.includes("roles")) {
     return ["dashboard", "seguridad", "roles"];
+  }
+  if (pathnames.includes("universidades")) {
+    return ["dashboard", "seguridad", "universidades"];
   }
   
   // Mapeo manual de la jerarquía eventos

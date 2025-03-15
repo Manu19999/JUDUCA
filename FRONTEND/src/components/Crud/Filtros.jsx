@@ -14,12 +14,18 @@ const Filtros = ({ registrosPorPagina, cambiarRegistrosPorPagina, busqueda, setB
         </select>{" "}
         registros
       </label>
-      <input
-        type="text"
-        placeholder="Buscar..."
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-      />
+      {/* Contenedor del input con la X */}
+      <div className="contenedorinput">
+        <input
+          type="text"
+          placeholder="Buscar..."
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+        />
+        {busqueda && ( // Solo muestra la "X" si hay texto
+          <button className="clearbtn" onClick={() => setBusqueda('')}>✕</button>
+        )}
+      </div>
     </div>
   );
 };

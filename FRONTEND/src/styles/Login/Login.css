@@ -17,6 +17,37 @@
   padding: 10px; 
 }
 
+/* ===== Contenedor del input y mensaje de error ===== */
+.input-wrapper {
+  display: flex;
+  flex-direction: column; /* Asegura que el error esté debajo del input */
+  align-items: flex-start; /* Alinea correctamente los mensajes de error */
+  width: 100%;
+}
+
+/* ===== Estilos del mensaje de error debajo del input ===== */
+.input-error-message {
+  color: #fd5b5e; /* Rojo para indicar error */
+  font-size: 12px; /* Tamaño de texto más pequeño */
+  margin-top: 5px; /* Espaciado justo debajo del borde inferior */
+  margin-left: 2.5rem; /* Alineado con el input */
+  text-align: left;
+  width: 90%; /* Mantiene alineación con el input */
+  display: block; /* Para evitar que el texto se solape */
+}
+
+/* ===== Estilos de los mensajes de error en inputs (ahora debajo del border-bottom) ===== */
+.input-error-message {
+  color: #fd5b5e; /* Rojo para indicar error */
+  font-size: 12px; /* Tamaño de texto más pequeño */
+/* Espaciado con respecto al borde inferior */
+  margin-left: 1.5rem; /* Alinear con el input respetando el icono */
+  text-align: left;
+  display: block; /* Mantiene alineado debajo del input */
+  margin-bottom: -20px;
+}
+
+
 /* Contenedor principal para el logo y el login-box */
 .login-wrapper {
   position: relative; /* Necesario para posicionar el logo de manera absoluta */
