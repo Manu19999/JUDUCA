@@ -4,7 +4,7 @@ import checkAuth from "../../../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get('/', obtenerRoles);
+router.get('/',checkAuth, obtenerRoles);
 
 // Insertar un nuevo rol
 router.post('/', checkAuth, insertarRol);

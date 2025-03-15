@@ -19,6 +19,7 @@ const TargetaCredencial = ({
         className="eventimage"
         onClick={onImageClick}
         style={{ cursor: "pointer" }} // Cambia el cursor para indicar que es clicable
+        loading="lazy" // Carga diferida para mejorar 
       />
       <div className="eventcontent">
         <h3 className="titleCredencial">{event.title}</h3>
@@ -27,14 +28,14 @@ const TargetaCredencial = ({
         <div className="eventicons">
           {showIcons && (
             <>
-             {/* <FontAwesomeIcon
+              <FontAwesomeIcon
                 icon={faEye}
                 onClick={handleVerInfo}
                 className="eventicon manage-btn-credencial"
-                style={{ marginBottom: '10px', }} // Cambia el cursor para indicar que es clicable
+                style={{ marginBottom: '10px',marginInline: '10px' }} // Cambia el cursor para indicar que es clicable
 
               />
-              <FontAwesomeIcon
+              {/* <FontAwesomeIcon
                 icon={faCog }
                 onClick={handleConfigurarCredencial}
                 className="eventicon manage-btn-credencial"
