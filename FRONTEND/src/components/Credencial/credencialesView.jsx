@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Modal, Button } from "react-bootstrap";
+import { Container, Row, Col, Modal, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import TargetaCredencial from "../Credencial/targetaCredencial";
-import EventImage6 from "../../assets/Credencial.jpg"; // Imagen de la ficha
+import EventImage6 from "../../assets/Credencial.jpg"; // Imagen de respaldo
 import Inscripciones from "../../assets/Eventos/Inscripciones.jpg";
 import Delegados from "../../assets/Eventos/Delegados.jpg";
 import Voluntariados from "../../assets/Eventos/Voluntariado.jpg";
@@ -14,48 +14,74 @@ const GestionCredenciales = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedFicha, setSelectedFicha] = useState(null);
   const [fichasOptions, setFichasOptions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [evento, setEvento] = useState(null);
 
-  // 🔹 Datos en duro basados en la estructura de tblFichasRegistros
+  // 🔹 Obtener el evento activo desde `localStorage`
   useEffect(() => {
-    const datosFichas = [
-      {
-        idFichaRegistro: 1,
-        idEvento: 1,
-        nombreFicha: "Inscripción académico JUDUCA",
-        fotoRegistro: Inscripciones,
-        activo: true,
-        comentarios: "Inscripción de los participantes.",
-      },
-      {
-        idFichaRegistro: 2,
-        idEvento: 2,
-        nombreFicha: "Inscripción de delegados.",
-        fotoRegistro: Delegados,
-        activo: false,
-        comentarios: "Inscripción de los delegados.",
-      },
-      {
-        idFichaRegistro: 3,
-        idEvento: 3,
-        nombreFicha: "Inscripción de voluntariado",
-        fotoRegistro: Voluntariados,
-        activo: true,
-        comentarios: "Inscripción de los voluntariados.",
-      },
-    ];
-
-    // Transformamos los datos para la lista de credenciales
-    const fichasConDatos = datosFichas.map((ficha) => ({
-      id: ficha.idFichaRegistro,
-      title: ficha.nombreFicha,
-      image: ficha.fotoRegistro,
-      description: ficha.comentarios,
-      idEvento: ficha.idEvento,
-      activo: ficha.activo ? "Activo" : "Inactivo",
-    }));
-
-    setFichasOptions(fichasConDatos);
+    const eventoGuardado = localStorage.getItem("eventoActivo");
+    if (eventoGuardado) {
+      setEvento(JSON.parse(eventoGuardado));
+    }
   }, []);
+
+  useEffect(() => {
+    const obtenerFichas = async () => {
+      if (!evento) return; // Evitar hacer la petición si el evento aún no se ha cargado
+
+      try {
+        const response = await fetch("http://localhost:4000/api/credencial/fichas");
+        const data = await response.json();
+
+        if (data.hasError) {
+          setError("No se pudieron obtener las fichas. Intente más tarde.");
+          setLoading(false);
+          return;
+        }
+
+        if (!data.data || data.data.length === 0) {
+          setError("No hay fichas disponibles.");
+          setLoading(false);
+          return;
+        }
+
+        // 🔹 Filtrar fichas para mostrar solo las del evento activo
+        const fichasFiltradas = data.data.filter(ficha => ficha.idEvento === evento.id);
+
+        if (fichasFiltradas.length === 0) {
+          setError("No hay fichas disponibles para este evento.");
+          setLoading(false);
+          return;
+        }
+
+        // Asignar imágenes locales según el ID de la ficha
+        const imagenesFichas = {
+          1: Inscripciones,
+          2: Delegados,
+          3: Voluntariados,
+        };
+
+        // Transformar los datos para la UI
+        const fichasConDatos = fichasFiltradas.map((ficha) => ({
+          id: ficha.idFichaRegistro,
+          title: ficha.nombreFicha,
+          image: imagenesFichas[ficha.idFichaRegistro] || EventImage6, // Imagen por defecto
+          description: ficha.comentarios || "Sin comentarios",
+          idEvento: ficha.idEvento,
+          activo: ficha.activo ? "Activo" : "Inactivo",
+        }));
+
+        setFichasOptions(fichasConDatos);
+        setLoading(false);
+      } catch (error) {
+        setError("Error al conectar con el servidor.");
+        setLoading(false);
+      }
+    };
+
+    obtenerFichas();
+  }, [evento]); // 🔹 Ejecutar cuando el evento cambie
 
   const handleImageClick = (ficha) => {
     navigate(`/OpcionCredencial`, { state: { selectedFicha: ficha } });
@@ -82,20 +108,32 @@ const GestionCredenciales = () => {
           <FaArrowLeft size={20} /> Regresar
         </Button>
 
-        <h2 className="credenciallisttitle">Generar Credenciales</h2>
-        <Row>
-          {fichasOptions.map((ficha) => (
-            <Col key={ficha.id} xs={12} sm={6} md={4} lg={3} xl={2}>
-              <TargetaCredencial
-                event={ficha}
-                onImageClick={() => handleImageClick(ficha)}
-                handleVerInfo={() => handleVerInfo(ficha)}
-                handleConfigurarCredencial={() => handleConfigurarCredencial(ficha.id)}
-                showIcons={true}
-              />
-            </Col>
-          ))}
-        </Row>
+        {/* 🔹 Mostrar el nombre y estado del evento */}
+        <h2 className="credenciallisttitle">
+          {evento ? `Fichas del Evento :  ${evento.title}` : "Cargando evento..."}
+        </h2>
+
+        {loading ? (
+          <p className="text-center">Cargando fichas...</p>
+        ) : error ? (
+          <Alert variant="warning" className="text-center">
+            {error}
+          </Alert>
+        ) : (
+          <Row>
+            {fichasOptions.map((ficha) => (
+              <Col key={ficha.id} xs={12} sm={6} md={4} lg={3} xl={2}>
+                <TargetaCredencial
+                  event={ficha}
+                  onImageClick={() => handleImageClick(ficha)}
+                  handleVerInfo={() => handleVerInfo(ficha)}
+                  handleConfigurarCredencial={() => handleConfigurarCredencial(ficha.id)}
+                  showIcons={true}
+                />
+              </Col>
+            ))}
+          </Row>
+        )}
 
         {/* Modal con más información */}
         <Modal show={showModal} onHide={() => setShowModal(false)} centered>
