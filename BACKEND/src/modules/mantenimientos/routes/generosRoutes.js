@@ -1,6 +1,6 @@
 import express from 'express';
-import {obtenerGeneros} from '../controllers/generosController.js';
-//import checkAuth from "../../../middleware/authMiddleware.js";
+import {obtenerGeneros, insertarGeneros} from '../controllers/generosController.js';
+import checkAuth from "../../../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -8,6 +8,6 @@ const router = express.Router();
 router.get('/', obtenerGeneros);
 
 // Insertar un nuevo genero
-//router.post('/', checkAuth, insertarGeneros);
+ router.post('/', checkAuth, insertarGeneros);
 
 export default router;
