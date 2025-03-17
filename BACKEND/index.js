@@ -13,7 +13,7 @@ import CredencialRoutes from './src/modules/credenciales/routes/credencialRoutes
 
 
 //++++++++++++++++++++++++++  Importaciones de rutas de fichas  ++++++++++++++++++++++++++
-
+import FichasRoutes from "./src/modules/fichas/routes/fichaRoutes.js";
 
 //++++++++++++++++++++++++++  Importaciones de rutas de mantenimientos  ++++++++++++++++++++++++++
 import Paises from './src/modules/mantenimientos/routes/paisesRoutes.js';
@@ -59,7 +59,7 @@ app.use('/api/credencial', CredencialRoutes);
 
 
 //Fichas
-
+app.use("/api/fichas", FichasRoutes);
 
 //Mantenimientos
 app.use('/api/paises', Paises);

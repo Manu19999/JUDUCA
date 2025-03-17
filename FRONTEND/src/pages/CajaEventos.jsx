@@ -30,44 +30,44 @@ const CajaEventos = () => {
   };
 
   // 🔹 Cargar eventos desde la API
-useEffect(() => {
-  const fetchEventos = async () => {
-    try {
-      const response = await fetch("http://localhost:4000/api/credencial/");
-      const data = await response.json();
-      
-      console.log("Datos de eventos recibidos:", data); // 🔹 Verifica los datos en la consola
+  useEffect(() => {
+    const fetchEventos = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/api/credencial/");
+        const data = await response.json();
 
-      if (data.hasError) {
-        throw new Error(data.errors.join(", "));
+        console.log("Datos de eventos recibidos:", data); // 🔹 Verifica los datos en la consola
+
+        if (data.hasError) {
+          throw new Error(data.errors.join(", "));
+        }
+
+        const eventosConDatos = data.data.map((evento) => ({
+          id: evento.idEvento,
+          title: evento.nombreEvento || "Evento sin nombre", // Si no tiene nombre, asignar por defecto
+          image: evento.fotoEvento
+            ? `data:image/png;base64,${evento.fotoEvento}`
+            : obtenerImagenEvento(evento.nombre), // Asigna imagen basada en el nombre del evento
+          description: evento.descripcion || "Sin descripción",
+          route: "/gestion-evento",
+        }));
+
+        setEventos(eventosConDatos);
+      } catch (err) {
+        console.error("Error al obtener eventos:", err.message);
+        setError("Error al conectar con el servidor.");
+      } finally {
+        setLoading(false);
       }
+    };
 
-      const eventosConDatos = data.data.map((evento) => ({
-        id: evento.idEvento,
-        title: evento.nombreEvento || "Evento sin nombre", // Si no tiene nombre, asignar por defecto
-        image: evento.fotoEvento
-          ? `data:image/png;base64,${evento.fotoEvento}`
-          : obtenerImagenEvento(evento.nombre), // Asigna imagen basada en el nombre del evento
-        description: evento.descripcion || "Sin descripción",
-        route: "/gestion-evento",
-      }));
+    fetchEventos();
+  }, []);
 
-      setEventos(eventosConDatos);
-    } catch (err) {
-      console.error("Error al obtener eventos:", err.message);
-      setError("Error al conectar con el servidor.");
-    } finally {
-      setLoading(false);
-    }
+  const seleccionarEvento = (evento) => {
+    localStorage.setItem("eventoActivo", JSON.stringify(evento)); // Guardar evento en localStorage
+    navigate("/gestion-evento");
   };
-
-  fetchEventos();
-}, []);
-
-const seleccionarEvento = (evento) => {
-  localStorage.setItem("eventoActivo", JSON.stringify(evento)); // Guardar evento en localStorage
-  navigate("/gestion-evento");
-};
 
   return (
     <section id="caja-seguridad" className="caja-seguridad-container">
