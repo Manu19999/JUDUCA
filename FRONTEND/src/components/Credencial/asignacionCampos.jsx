@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Alert } from "react-bootstrap";
+import { Button, Alert, Form } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 
@@ -8,26 +8,23 @@ const AsignacionCampos = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Recuperar ficha seleccionada
   const selectedFicha = location.state?.selectedFicha || JSON.parse(localStorage.getItem("selectedFicha")) || null;
   const [fichaActual, setFichaActual] = useState(selectedFicha);
   const [error, setError] = useState(null);
 
-  // Generar o recuperar ID de campo credencial
   const [idCampoCredencial, setIdCampoCredencial] = useState(() => {
     return localStorage.getItem("idCampoCredencial") || Date.now();
   });
 
-  // ✅ Se asegura que `idCampoCredencial` siempre se guarde
   useEffect(() => {
     localStorage.setItem("idCampoCredencial", idCampoCredencial);
   }, [idCampoCredencial]);
 
-  // ✅ Estado para gestionar los valores de asignación
   const [ubicacionSeleccionada, setUbicacionSeleccionada] = useState("");
   const [nuevaDescripcion, setNuevaDescripcion] = useState("");
+  const [ladoFrente, setLadoFrente] = useState(true);
+  const [leyenda, setLeyenda] = useState("");
 
-  // Lista de ubicaciones posibles
   const ubicaciones = [
     { id: "arriba-izquierda", descripcion: "Arriba a la Izquierda" },
     { id: "arriba-centro", descripcion: "Arriba al Centro" },
@@ -40,7 +37,6 @@ const AsignacionCampos = () => {
     { id: "abajo-derecha", descripcion: "Abajo a la Derecha" },
   ];
 
-  // ✅ Recuperar asignaciones desde localStorage
   const [asignaciones, setAsignaciones] = useState(() => {
     const savedData = localStorage.getItem("asignaciones");
     return savedData ? JSON.parse(savedData) : {};
@@ -58,13 +54,14 @@ const AsignacionCampos = () => {
 
     setAsignaciones((prev) => ({
       ...prev,
-      [ubicacionSeleccionada]: { descripcion: nuevaDescripcion },
+      [ubicacionSeleccionada]: { descripcion: nuevaDescripcion, lado: ladoFrente ? "frente" : "trasero", leyenda },
     }));
 
     setNuevaDescripcion("");
     setUbicacionSeleccionada("");
+    setLadoFrente(true);
+    setLeyenda("");
     setError(null);
-    verificarYRedirigir();
   };
 
   const handleEliminar = (id) => {
@@ -73,19 +70,6 @@ const AsignacionCampos = () => {
       delete nuevasAsignaciones[id];
       return nuevasAsignaciones;
     });
-
-    // ✅ Se actualiza `localStorage` al eliminar un campo
-    useEffect(() => {
-      localStorage.setItem("asignaciones", JSON.stringify(asignaciones));
-    }, [asignaciones]);
-  };
-
-  const verificarYRedirigir = () => {
-    const todasLlenas = ubicaciones.every((ubicacion) => asignaciones[ubicacion.id]);
-    if (todasLlenas) {
-      localStorage.setItem("selectedFicha", JSON.stringify(fichaActual));
-      navigate("/DiseñadorCredencial", { state: { selectedFicha: fichaActual, idCampoCredencial } });
-    }
   };
 
   return (
@@ -100,20 +84,6 @@ const AsignacionCampos = () => {
       </Button>
 
       {error && <Alert variant="danger">{error}</Alert>}
-
-      {fichaActual ? (
-        <div className="text-center my-4">
-          <h2>Diseñador de Credencial para: {fichaActual.title}</h2>
-          <p>{fichaActual.description}</p>
-        </div>
-      ) : (
-        <Alert variant="warning" className="text-center">
-          No se seleccionó ninguna ficha. 
-          <Button variant="primary" onClick={() => navigate("/SeleccionarFicha")} className="mt-2">
-            Seleccionar Ficha
-          </Button>
-        </Alert>
-      )}
 
       <div className="row">
         <div className="col-md-4">
@@ -143,54 +113,67 @@ const AsignacionCampos = () => {
               onChange={(e) => setNuevaDescripcion(e.target.value)}
             />
           </div>
+          <div className="mb-3">
+            <Form.Check
+              type="checkbox"
+              label="Ubicar en el frente"
+              checked={ladoFrente}
+              onChange={() => setLadoFrente(!ladoFrente)}
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Leyenda:</label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Texto adicional o leyenda"
+              value={leyenda}
+              onChange={(e) => setLeyenda(e.target.value)}
+            />
+          </div>
           <div className="text-center">
             <button className="btn btn-primary" onClick={handleGuardar}>
               Guardar
             </button>
           </div>
         </div>
-
-        <div className="col-md-6 d-flex justify-content-center align-items-center">
+        <div className="col-md-6 d-flex flex-wrap">
+          <h3 className="text-center w-100">Previsualización</h3>
           <div
             style={{
               backgroundImage: `url(${fondoCredencial})`,
               backgroundSize: "cover",
-              backgroundPosition: "center",
-              display: "grid",
               width: "600px",
               height: "350px",
+              display: "grid",
               gridTemplateColumns: "repeat(3, 1fr)",
               gap: "5px",
               margin: "auto",
               border: "3px solid black",
               padding: "10px",
               backgroundColor: "#ffffff",
-              fontFamily: "Arial",
-              borderRadius: "10px",
             }}
           >
-            {ubicaciones.map((ubicacion) => (
-              <div key={ubicacion.id} style={{ border: "1px solid gray", textAlign: "center", padding: "5px", position: "relative" }}>
-                <strong>{asignaciones[ubicacion.id]?.descripcion || "Vacío"}</strong>
-                {asignaciones[ubicacion.id] && (
-                  <button
-                    onClick={() => handleEliminar(ubicacion.id)}
-                    style={{
-                      position: "absolute",
-                      top: "5px",
-                      right: "5px",
-                      background: "red",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "50%",
-                      padding: "2px 6px",
-                      fontSize: "12px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    X
-                  </button>
-                )}
+            {Object.keys(asignaciones).map((id) => (
+              <div key={id} style={{ border: "1px solid gray", textAlign: "center", padding: "5px", position: "relative" }}>
+                <strong>{asignaciones[id]?.descripcion || "Vacío"}</strong>
+                <button
+                  onClick={() => handleEliminar(id)}
+                  style={{
+                    position: "absolute",
+                    top: "5px",
+                    right: "5px",
+                    background: "red",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "50%",
+                    padding: "2px 6px",
+                    fontSize: "12px",
+                    cursor: "pointer",
+                  }}
+                >
+                  X
+                </button>
               </div>
             ))}
           </div>
