@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Row, Col, Button, Alert, Form, Toast } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 
-// Ubicaciones 3x3
+// Definición de ubicaciones (3x3)
 const ubicaciones = [
   { id: "arriba-izquierda", descripcion: "Arriba a la Izquierda" },
   { id: "arriba-centro", descripcion: "Arriba al Centro" },
@@ -17,88 +17,141 @@ const ubicaciones = [
   { id: "abajo-derecha", descripcion: "Abajo a la Derecha" },
 ];
 
-const DisenoCredencial = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+// Estilos centralizados para la vista previa y las celdas
+const previewContainerStyle = {
+  backgroundImage: `url(${fondoCredencial})`,
+  backgroundSize: "cover",
+  width: "600px",
+  height: "450px",
+  display: "grid",
+  gridTemplateColumns: "repeat(3, 1fr)",
+  gap: "5px",
+  border: "3px solid black",
+  padding: "10px",
+  backgroundColor: "#ffffff",
+};
 
-  // Obtenemos la ficha seleccionada y las asignaciones desde la vista anterior
+const cellStyle = (hasCampo) => ({
+  border: "1px solid gray",
+  textAlign: "center",
+  padding: "5px",
+  overflow: "hidden",
+  borderRadius: "4px",
+  backgroundColor: hasCampo ? "#d1e7dd" : "#fff",
+});
+
+// Componente para mostrar cada campo pendiente (draggable)
+const FieldCard = ({ campo, onDragStart }) => (
+  <div
+    draggable
+    onDragStart={(e) => onDragStart(e, campo)}
+    className="p-2 mb-2 border rounded bg-light"
+    style={{ cursor: "grab" }}
+  >
+    <strong>{campo.descripcion}</strong>
+    <br />
+    <small>{campo.leyenda}</small>
+    <br />
+    <em>{campo.lado}</em>
+  </div>
+);
+
+// Componente para cada celda de la cuadrícula (DropZone)
+const DropZone = ({ ubicacion, asignacion, onDrop, onDragOver, onDelete }) => (
+  <div
+    onDragOver={onDragOver}
+    onDrop={(e) => onDrop(e, ubicacion.id)}
+    className="p-2 border text-center position-relative rounded"
+    style={{
+      minHeight: "80px",
+      backgroundColor: asignacion ? "#d1e7dd" : "#fff",
+      overflow: "hidden",
+    }}
+  >
+    {asignacion ? (
+      <div>
+        <strong>{asignacion.descripcion}</strong>
+        <br />
+        <small>{asignacion.leyenda}</small>
+        <br />
+        <em>{asignacion.lado}</em>
+        <Button
+          variant="danger"
+          size="sm"
+          onClick={() => onDelete(ubicacion.id)}
+          className="position-absolute top-0 end-0 m-1"
+        >
+          X
+        </Button>
+      </div>
+    ) : (
+      <span>{ubicacion.descripcion}</span>
+    )}
+  </div>
+);
+
+const DisenoCredencial = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Extraer datos de la vista anterior
   const { fichaSeleccionada, asignaciones } = location.state || {};
 
   // Estados
   const [fechaVigencia, setFechaVigencia] = useState("");
-  const [usuarioRegistro] = useState("admin"); // Podrías obtenerlo de sesión
+  const [usuarioRegistro] = useState("admin");
   const [error, setError] = useState(null);
-  const [previewSide, setPreviewSide] = useState("frente"); // Frente / Trasero
+  const [previewSide, setPreviewSide] = useState("frente");
+
+  // Estados para Toast
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+
+  // Notificación Toast
+  const showNotification = useCallback((message) => {
+    setToastMessage(message);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  }, []);
 
   // Función para guardar (simulado)
-  const handleGuardarDiseno = () => {
-    try {
-      if (!fichaSeleccionada) {
-        setError("No hay ficha seleccionada para guardar el diseño.");
-        return;
-      }
-      setError(null);
-
-      // Convertir asignaciones en un array
-      const camposAsignados = Object.entries(asignaciones || {}).map(([key, campo]) => {
-        const [lado, ubicacionId] = key.split("-");
-        return {
-          descripcion: campo.descripcion,
-          leyenda: campo.leyenda,
-          lado,
-          ubicacionId,
-        };
-      });
-
-      const payload = {
-        idFichaRegistro: fichaSeleccionada.idFichaRegistro,
-        fechaVigencia,
-        usuarioRegistro,
-        campos: camposAsignados,
-      };
-
-      console.log("Simulando guardado Diseño Credencial con payload:", payload);
-      alert("Diseño guardado (simulado). Revisa la consola.");
-
-      // Regresar a alguna ruta o mostrar confirmación
-      navigate("/credencialView");
-    } catch (err) {
-      console.error(err);
-      setError("Error al guardar diseño: " + err.message);
+  const handleGuardarDiseno = useCallback(() => {
+    if (!fichaSeleccionada) {
+      setError("No hay ficha seleccionada para guardar el diseño.");
+      return;
     }
-  };
+    setError(null);
 
-  // Vista previa 3x3
-  const renderPreview = () => (
-    <div
-      style={{
-        backgroundImage: `url(${fondoCredencial})`,
-        backgroundSize: "cover",
-        width: "600px",
-        height: "450px",
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
-        gap: "5px",
-        border: "3px solid black",
-        padding: "10px",
-        backgroundColor: "#ffffff",
-      }}
-    >
+    const camposAsignados = Object.entries(asignaciones || {}).map(([key, campo]) => {
+      const [lado, ubicacionId] = key.split("-");
+      return {
+        descripcion: campo.descripcion,
+        leyenda: campo.leyenda,
+        lado,
+        ubicacionId,
+      };
+    });
+
+    const payload = {
+      idFichaRegistro: fichaSeleccionada.idFichaRegistro,
+      fechaVigencia,
+      usuarioRegistro,
+      campos: camposAsignados,
+    };
+
+    console.log("Simulando guardado Diseño Credencial con payload:", payload);
+    showNotification("Diseño guardado (simulado). Revisa la consola.");
+    navigate("/credencialView");
+  }, [fichaSeleccionada, fechaVigencia, usuarioRegistro, asignaciones, navigate, showNotification]);
+
+  // Renderiza la cuadrícula 3x3
+  const renderPreview = useCallback(() => (
+    <div style={previewContainerStyle}>
       {ubicaciones.map((ubicacion) => {
         const key = `${previewSide}-${ubicacion.id}`;
         const campo = asignaciones ? asignaciones[key] : null;
         return (
-          <div
-            key={ubicacion.id}
-            style={{
-              border: "1px solid gray",
-              textAlign: "center",
-              padding: "5px",
-              overflow: "hidden",
-              borderRadius: "4px",
-              backgroundColor: campo ? "#d1e7dd" : "#fff",
-            }}
-          >
+          <div key={ubicacion.id} style={cellStyle(!!campo)}>
             {campo ? (
               <div>
                 <strong>{campo.descripcion}</strong>
@@ -114,11 +167,10 @@ const DisenoCredencial = () => {
         );
       })}
     </div>
-  );
+  ), [previewSide, asignaciones]);
 
   return (
     <div className="container-fluid">
-      {/* Botón de regresar */}
       <Button
         variant="outline-warning"
         onClick={() => navigate("/AsignacionCampos")}
@@ -127,16 +179,15 @@ const DisenoCredencial = () => {
         <FaArrowLeft size={20} /> Regresar
       </Button>
 
-      {/* Mensajes de error */}
       {error && (
         <Alert variant="danger" className="m-3">
           {error}
         </Alert>
       )}
 
-      <div className="row">
-        {/* Panel Izquierdo */}
-        <div className="col-md-4">
+      <Row>
+        {/* Panel Izquierdo: Datos y formulario */}
+        <Col md={4}>
           <h4 className="mt-3">Diseño de Credencial</h4>
           {!fichaSeleccionada ? (
             <Alert variant="danger">No se recibió ninguna ficha seleccionada.</Alert>
@@ -145,8 +196,6 @@ const DisenoCredencial = () => {
               <div className="mb-3">
                 <strong>Ficha Seleccionada:</strong> {fichaSeleccionada.title}
               </div>
-
-              {/* Fecha de vigencia */}
               <Form.Group className="mb-3">
                 <Form.Label>Fecha de Vigencia</Form.Label>
                 <Form.Control
@@ -155,30 +204,42 @@ const DisenoCredencial = () => {
                   onChange={(e) => setFechaVigencia(e.target.value)}
                 />
               </Form.Group>
-
-              {/* Switch para cambiar entre frente y trasero */}
               <Form.Check
                 type="switch"
                 id="switch-preview-side"
-                label={`Vista ${previewSide === "frente" ? "Frontal" : "Trasera"}`}
+                label={`Configurando: ${previewSide === "frente" ? "Frontal" : "Trasera"}`}
                 checked={previewSide === "trasero"}
                 onChange={(e) => setPreviewSide(e.target.checked ? "trasero" : "frente")}
                 className="mb-3"
               />
-
-              {/* Botón Guardar */}
               <Button variant="primary" onClick={handleGuardarDiseno}>
                 Guardar Diseño
               </Button>
             </>
           )}
-        </div>
+        </Col>
 
         {/* Panel Derecho: Vista previa */}
-        <div className="col-md-6 d-flex flex-wrap">
-          <h4 className="w-100 mt-3 text-center">Previsualización</h4>
-          <div style={{ margin: "auto" }}>{renderPreview()}</div>
-        </div>
+        <Col md={6} className="d-flex flex-column">
+          <h4 className="w-100 mt-3 text-center">
+            Previsualización - {previewSide === "frente" ? "Frontal" : "Trasera"}
+          </h4>
+          <div className="mx-auto" style={{ marginTop: "10px" }}>
+            {renderPreview()}
+          </div>
+        </Col>
+      </Row>
+
+      {/* Toast de notificaciones */}
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        className="position-fixed bottom-0 end-0 p-3"
+        style={{ zIndex: 5 }}
+      >
+        <Toast show={showToast} onClose={() => setShowToast(false)} delay={3000} autohide>
+          <Toast.Body>{toastMessage}</Toast.Body>
+        </Toast>
       </div>
     </div>
   );

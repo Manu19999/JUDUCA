@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Alert, Form, Toast } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
@@ -20,6 +20,7 @@ const ubicaciones = [
   { id: "abajo-derecha", descripcion: "Abajo a la Derecha" },
 ];
 
+// Componente FieldCard: muestra un campo pendiente, es draggable
 const FieldCard = ({ campo, onDragStart }) => (
   <div
     draggable
@@ -35,6 +36,7 @@ const FieldCard = ({ campo, onDragStart }) => (
   </div>
 );
 
+// Componente DropZone: celda de la cuadrícula para soltar campos
 const DropZone = ({ ubicacion, asignacion, onDrop, onDragOver, onDelete }) => (
   <div
     onDragOver={onDragOver}
@@ -72,7 +74,7 @@ const AsignacionCampos = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Se extrae la ficha seleccionada (viene de location.state o de localStorage)
+  // Extraer la ficha seleccionada
   const selectedFicha =
     location.state?.selectedFicha ||
     JSON.parse(localStorage.getItem("selectedFicha")) ||
@@ -82,32 +84,29 @@ const AsignacionCampos = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
-  // Estado para definir la vista actual (frente o trasero)
+  // Estado para vista (frente o trasero)
   const [previewSide, setPreviewSide] = useState("frente");
 
-  // Estados para crear un nuevo campo
+  // Estados para crear un campo nuevo
   const [nuevaDescripcion, setNuevaDescripcion] = useState("");
   const [leyenda, setLeyenda] = useState("");
   const [ladoNuevo, setLadoNuevo] = useState(previewSide);
 
-  // Actualiza el lado por defecto al cambiar la vista
+  // Actualizar lado al cambiar la vista
   useEffect(() => {
     setLadoNuevo(previewSide);
   }, [previewSide]);
 
-  // Lista de campos pendientes (solo los que corresponden al lado actual)
+  // Cargar campos pendientes de localStorage
   const [camposPendientes, setCamposPendientes] = useState(() => {
     const stored = localStorage.getItem(LS_CAMPOS_PENDIENTES);
     return stored ? JSON.parse(stored) : [];
   });
   useEffect(() => {
-    localStorage.setItem(
-      LS_CAMPOS_PENDIENTES,
-      JSON.stringify(camposPendientes)
-    );
+    localStorage.setItem(LS_CAMPOS_PENDIENTES, JSON.stringify(camposPendientes));
   }, [camposPendientes]);
 
-  // Asignaciones: se almacenan con clave `${side}-${ubicacion.id}`
+  // Cargar asignaciones de localStorage
   const [asignaciones, setAsignaciones] = useState(() => {
     const saved = localStorage.getItem(LS_ASIGNACIONES);
     return saved ? JSON.parse(saved) : {};
@@ -116,15 +115,15 @@ const AsignacionCampos = () => {
     localStorage.setItem(LS_ASIGNACIONES, JSON.stringify(asignaciones));
   }, [asignaciones]);
 
-  // Función para mostrar notificaciones tipo Toast
-  const showNotification = (message) => {
+  // Notificaciones Toast
+  const showNotification = useCallback((message) => {
     setToastMessage(message);
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
-  };
+  }, []);
 
-  // Crear un nuevo campo y agregarlo a pendientes
-  const handleCrearCampo = () => {
+  // Crear un nuevo campo
+  const handleCrearCampo = useCallback(() => {
     if (nuevaDescripcion.trim() === "") {
       setError("Escriba una descripción para el campo.");
       return;
@@ -140,18 +139,18 @@ const AsignacionCampos = () => {
     setLeyenda("");
     setError(null);
     showNotification("Campo creado. Arrastre para asignar.");
-  };
+  }, [nuevaDescripcion, ladoNuevo, leyenda, showNotification]);
 
-  // Manejo del drag & drop
-  const handleDragStart = (e, campo) => {
+  // Handlers de drag & drop
+  const handleDragStart = useCallback((e, campo) => {
     e.dataTransfer.setData("campo", JSON.stringify(campo));
-  };
+  }, []);
 
-  const handleDragOver = (e) => {
+  const handleDragOver = useCallback((e) => {
     e.preventDefault();
-  };
+  }, []);
 
-  const handleDrop = (e, cellId) => {
+  const handleDrop = useCallback((e, cellId) => {
     e.preventDefault();
     const campoData = e.dataTransfer.getData("campo");
     if (campoData) {
@@ -164,9 +163,9 @@ const AsignacionCampos = () => {
       setCamposPendientes((prev) => prev.filter((c) => c.id !== campo.id));
       showNotification("Campo asignado.");
     }
-  };
+  }, [previewSide, showNotification]);
 
-  const handleEliminarAsignacion = (cellId) => {
+  const handleEliminarAsignacion = useCallback((cellId) => {
     const key = `${previewSide}-${cellId}`;
     if (asignaciones[key]) {
       setCamposPendientes((prev) => [...prev, asignaciones[key]]);
@@ -177,14 +176,15 @@ const AsignacionCampos = () => {
       });
       showNotification("Campo removido.");
     }
-  };
+  }, [asignaciones, previewSide, showNotification]);
 
-  // Función para limpiar todas las asignaciones y pendientes
-  const handleClearAll = () => {
-    setAsignaciones({});
-    setCamposPendientes([]);
-    showNotification("Todas las asignaciones eliminadas.");
-  };
+  const handleClearAll = useCallback(() => {
+    if (window.confirm("¿Seguro que deseas limpiar todas las asignaciones y pendientes?")) {
+      setAsignaciones({});
+      setCamposPendientes([]);
+      showNotification("Todas las asignaciones eliminadas.");
+    }
+  }, [showNotification]);
 
   return (
     <div className="container-fluid">
@@ -196,7 +196,6 @@ const AsignacionCampos = () => {
         <FaArrowLeft size={20} /> Regresar
       </Button>
 
-      {/* Información de la ficha seleccionada */}
       {selectedFicha && (
         <div className="text-center my-3">
           <h3>Ficha Seleccionada: {selectedFicha.title}</h3>
@@ -231,9 +230,7 @@ const AsignacionCampos = () => {
             <Form.Check
               type="switch"
               id="switch-crear-lado"
-              label={`Asignar a ${
-                ladoNuevo === "frente" ? "Frente" : "Trasero"
-              }`}
+              label={`Asignar a ${ladoNuevo === "frente" ? "Frente" : "Trasero"}`}
               checked={ladoNuevo === "trasero"}
               onChange={(e) =>
                 setLadoNuevo(e.target.checked ? "trasero" : "frente")
@@ -241,28 +238,13 @@ const AsignacionCampos = () => {
             />
           </Form.Group>
           <div className="d-flex">
-            <Button
-              style={{ marginLeft: "10px" }}
-              size="md"
-              variant="primary"
-              onClick={handleCrearCampo}
-            >
+            <Button size="md" variant="primary" onClick={handleCrearCampo} className="me-2">
               Crear Campo
             </Button>
             <Button
               size="md"
-              style={{ marginLeft: "10px" }}
-              variant="secondary"
-              onClick={handleClearAll}
-            >
-              Limpiar
-            </Button>
-            <Button
-              style={{ marginLeft: "10px" }}
-              size="md"
               variant="success"
               onClick={() => {
-                // Imagina que "asignaciones" es el objeto con toda la configuración
                 navigate("/diseñadorCredencial", {
                   state: {
                     fichaSeleccionada: selectedFicha,
@@ -273,38 +255,36 @@ const AsignacionCampos = () => {
             >
               Terminar
             </Button>
+
+            <Button size="md" style={{marginLeft:'10px'}} variant="secondary" onClick={handleClearAll} className="me-2">
+              Limpiar
+            </Button>
+
           </div>
           <div className="mt-4">
             <h5>Campos pendientes:</h5>
             {camposPendientes
               .filter((campo) => campo.lado === previewSide)
               .map((campo) => (
-                <FieldCard
-                  key={campo.id}
-                  campo={campo}
-                  onDragStart={handleDragStart}
-                />
+                <FieldCard key={campo.id} campo={campo} onDragStart={handleDragStart} />
               ))}
           </div>
         </div>
 
-        {/* Panel Derecho: Previsualización y asignaciones */}
+        {/* Panel Derecho: Vista previa */}
         <div className="col-md-6">
           <h4 className="text-center my-3">Previsualización</h4>
           <div className="text-center mb-3">
             <Form.Check
               type="switch"
               id="switch-preview-side"
-              label={`Vista ${
-                previewSide === "frente" ? "Frontal" : "Trasera"
-              }`}
+              label={`Vista ${previewSide === "frente" ? "Frontal" : "Trasera"}`}
               checked={previewSide === "trasero"}
               onChange={(e) =>
                 setPreviewSide(e.target.checked ? "trasero" : "frente")
               }
             />
           </div>
-
           <div
             className="mx-auto p-2"
             style={{
@@ -341,12 +321,7 @@ const AsignacionCampos = () => {
         className="position-fixed bottom-0 end-0 p-3"
         style={{ zIndex: 5 }}
       >
-        <Toast
-          show={showToast}
-          onClose={() => setShowToast(false)}
-          delay={3000}
-          autohide
-        >
+        <Toast show={showToast} onClose={() => setShowToast(false)} delay={3000} autohide>
           <Toast.Body>{toastMessage}</Toast.Body>
         </Toast>
       </div>
