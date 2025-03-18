@@ -30,6 +30,7 @@ import Generos from './src/modules/mantenimientos/routes/generosRoutes.js';
 import AuthRoutes from './src/modules/seguridad/routes/authRoutes.js';
 import Roles from './src/modules/seguridad/routes/rolesRoutes.js';
 import Universidades from './src/modules/seguridad/routes/universidadesRoutes.js';
+import Usuarios from './src/modules/seguridad/routes/usuariosRoutes.js';
 
 //++++++++++++++++++++++++++  Importaciones de rutas de vouchers  ++++++++++++++++++++++++++
 import VoucherComidaRoutes   from './src/modules/vouchers/routes/voucherComidaRoutes.js';
@@ -83,7 +84,8 @@ app.use('/api/generos', Generos);
 //Seguridad
 app.use('/api/auth', AuthRoutes);
 app.use('/api/roles', Roles);
-app.use('/api/Universidades', Universidades);
+app.use('/api/universidades', Universidades);
+app.use('/api/usuarios', Usuarios);
 
 //Vouchers
 app.use('/api/voucherComida', VoucherComidaRoutes); 

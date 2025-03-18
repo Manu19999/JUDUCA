@@ -7,6 +7,7 @@ const ValidatedInput = ({
   placeholder,
   rules = [],
   allowSpecialChars = false, // Prop para permitir caracteres especiales y números
+  isTextArea = false, // Prop para indicar si es input tipo text
 }) => {
   const form = Form.useFormInstance(); // Obtiene el formulario automáticamente
 
@@ -22,19 +23,15 @@ const ValidatedInput = ({
       value = value.replace(/[^A-ZÁÉÍÓÚÑ\s]/gi, "");
     }
 
-    // Convertir todo el texto a mayúsculas automáticamente (solo si allowSpecialChars es false)
-    if (!allowSpecialChars) {
-      value = value.toUpperCase();
-    }
+    // **Siempre** convertir a mayúsculas
+    value = value.toUpperCase();
 
     // Eliminar espacios al inicio y normalizar múltiples espacios
     const trimmedValue = value.trimStart(); // Elimina espacios al inicio
     const normalizedValue = trimmedValue.replace(/\s+/g, " "); // Reemplaza múltiples espacios con uno solo
 
-    // Eliminar repeticiones de más de 4 letras consecutivas (solo si allowSpecialChars es false)
-    const finalValue = !allowSpecialChars
-      ? normalizedValue.replace(/(.)\1{4,}/g, (match) => match.slice(0, 4))
-      : normalizedValue;
+    // Eliminar repeticiones de más de 4 letras consecutivas (siempre aplica)
+    const finalValue = normalizedValue.replace(/(.)\1{4,}/g, (match) => match.slice(0, 4));
 
     // Actualiza el valor en el formulario
     form.setFieldsValue({ [name]: finalValue });
@@ -47,14 +44,14 @@ const ValidatedInput = ({
     }
     if (/^\s/.test(value)) {
       // Verifica si el valor comienza con un espacio
-      errors.push("El nombre no puede comenzar con un espacio");
+      errors.push("El texto no puede comenzar con un espacio");
     }
     if (/\s{2,}/.test(value)) {
       // Verifica si hay más de un espacio entre palabras
       errors.push("No se permiten múltiples espacios entre palabras");
     }
-    if (!allowSpecialChars && /(.)\1{4,}/.test(value)) {
-      // Verifica si una letra se repite 5 o más veces (solo si allowSpecialChars es false)
+    if (/(.)\1{4,}/.test(value)) {
+      // Verifica si una letra se repite 5 o más veces (siempre aplica)
       errors.push("No se permite repetir una letra 5 veces consecutivamente");
     }
 
@@ -88,20 +85,22 @@ const ValidatedInput = ({
   };
 
   return (
-    <Form.Item
-      label={label}
-      name={name}
-      rules={[
-        // Reglas personalizadas pasadas como prop
-        ...rules,
-      ]}
-    >
-      <Input
-        placeholder={placeholder}
-        onChange={handleChange}
-        onCopy={handleCopy}
-        onPaste={handlePaste}
-      />
+    <Form.Item label={label} name={name} rules={[...rules]}>
+      {isTextArea ? (
+        <Input.TextArea
+          placeholder={placeholder}
+          onChange={handleChange}
+          onCopy={handleCopy}
+          onPaste={handlePaste}
+        />
+      ) : (
+        <Input
+          placeholder={placeholder}
+          onChange={handleChange}
+          onCopy={handleCopy}
+          onPaste={handlePaste}
+        />
+      )}
     </Form.Item>
   );
 };

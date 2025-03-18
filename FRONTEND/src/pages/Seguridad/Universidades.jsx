@@ -6,8 +6,7 @@ import ModalNuevo from "../../components/Crud/Modal/ModalNuevo";
 import ModalEditar from "../../components/Crud/Modal/ModalEditar";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito";
 import { mostrarMensajeError } from "../../components/Crud/MensajeError"; // Importar el componente de mensaje de error
-import { Input, Form, Select, Switch, Upload  } from 'antd';
-import { UploadOutlined } from "@ant-design/icons"; // Icono para el botón de carga
+import { Input, Form, Select, Switch } from 'antd';
 import SubirImagen from '../../components/SubirImagen'; // Ajusta la ruta según tu estructura de archivos
 import ValidatedInput from "../../utils/ValidatedInput"; 
 
@@ -59,7 +58,14 @@ function Universidades() {
         if (!response.ok) throw new Error("Error al obtener las ciudades");
 
         const data = await response.json();
-        setCiudades(data.data);
+
+        // Mapear las ciudades y concatenar nombre de ciudad y país
+        const ciudadesFormateadas = data.data.map(ciudad => ({
+          idCiudad: ciudad.idCiudad,
+          nombre: `${ciudad.nombre} - ${ciudad.nombrePais}` // Concatenación Ciudad - País
+        }));
+
+        setCiudades(ciudadesFormateadas);
       } catch (error) {
         console.error("Error:", error);
         mostrarMensajeError("Error al cargar las ciudades.");
@@ -68,14 +74,14 @@ function Universidades() {
 
     obtenerCiudades();
   }, []);
-  
+
   
   // Columnas de la tabla
   const columnas = [
     { nombre: '#', campo: 'indice', ancho: '5%' },
-    { nombre: 'Ciudad', campo: 'nombreCiudad', ancho: '20%' },
-    { nombre: 'Universidad', campo: 'nombreUniversidad', ancho: '20%' },
-    { nombre: 'Logo',campo: 'fotoUrl', ancho: '30%',
+    { nombre: 'Ciudad', campo: 'ciudadPais', ancho: '27%' },
+    { nombre: 'Universidad', campo: 'nombreUniversidad', ancho: '30%' },
+    { nombre: 'Logo',campo: 'fotoUrl', ancho: '25%',
       render: (fotoUrl) => (
         <div style={{ textAlign: "center", verticalAlign: "middle" }}>
           <img 
@@ -87,7 +93,7 @@ function Universidades() {
       )
     },
     { nombre: 'Siglas', campo: 'siglas', ancho: '10%' },
-    { nombre: 'Estado', campo: 'activo', ancho: '20%',
+    { nombre: 'Estado', campo: 'activo', ancho: '18%',
       render: (activo) => (
           <span className={`estado-activo ${activo ? 'activo' : 'inactivo'}`}>
             {activo ? 'Activo' : 'Inactivo'}
@@ -114,21 +120,10 @@ function Universidades() {
     setRegistroSeleccionado(null); // Limpiar el registro seleccionado
     formEditar.resetFields(); // Reiniciar el formulario
   };
-
-   // Manejar la carga de la foto y generar la URL de vista previa
-   const handleFotoChange = (info) => {
-    if (info.file.status === "done" || info.file.status === "uploading") {
-      const file = info.file.originFileObj;
-      if (file) {
-        const imageUrl = URL.createObjectURL(file);
-        setFotoPreview(imageUrl);
-      }
-    }
-  };
   
   // Guardar nuevo registro
   const handleGuardarNuevo = async () => {
-  formNuevo.validateFields()
+    formNuevo.validateFields()
     .then(async (values) => {
       try {
         const token = localStorage.getItem("token"); // Obtener el token almacenado correctamente
@@ -145,7 +140,7 @@ function Universidades() {
             fotoUrl: values.fotoUrl, // URL de la foto
             siglas: values.siglas, // Siglas de la universidad
             activo: values.activo, // Estado activo/inactivo
-            idObjeto: 4, // ID del objeto (debe existir en Seguridad.tblObjetos)
+            idObjeto: 4, // ID del objeto
           }),
         });
 
@@ -169,22 +164,57 @@ function Universidades() {
     .catch((error) => {
       console.error("Error al validar el formulario:", error);
     });
-};
+  };
 
   // Guardar cambios en el registro editado
-  const handleGuardarEdit = () => {
-    formEditar
-      .validateFields()
-      .then((values) => {
-        console.log("Registro editado:", values);
-        setShowEditModal(false);
-        setRegistroSeleccionado(null);
-        formEditar.resetFields(); // Limpiar el formulario de edición
-        mostrarMensajeExito("El rol se ha actualizado correctamente."); // Mensaje de éxito
-      })
-      .catch((error) => {
-        console.error("Error al validar el formulario:", error);
+  const handleGuardarEdit = async () => {
+    try {
+      // Validar los campos del formulario
+      const values = await formEditar.validateFields();
+
+      // Obtener el token de autenticación
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No hay token disponible");
+      }
+
+      // Llamar a la API para actualizar la universidad
+      const response = await fetch(`http://localhost:4000/api/universidades/${registroSeleccionado.idUniversidad}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          idCiudad: values.idCiudad,
+          nombre: values.nombreUniversidad,
+          fotoUrl: values.fotoUrl,
+          siglas: values.siglas,
+          activo: values.activo,
+          idObjeto: 4, // ID del objeto (debe existir en Seguridad.tblObjetos)
+        }),
       });
+
+      // Manejar la respuesta de la API
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.errors?.[0] || "Error al actualizar la universidad");
+      }
+
+      // Mostrar mensaje de éxito
+      mostrarMensajeExito("La universidad se ha actualizado correctamente.");
+
+      // Cerrar el modal de edición
+      setShowEditModal(false);
+      setRegistroSeleccionado(null);
+      formEditar.resetFields();
+
+      // Recargar las universidades desde la API
+      await obtenerUniversidades();
+    } catch (error) {
+      // Mostrar mensaje de error
+      mostrarMensajeError(error.message);
+    }
   };
 
 
@@ -256,7 +286,8 @@ function Universidades() {
       >
         <Form layout="vertical" form={formEditar} initialValues={registroSeleccionado || {}}>
           <ValidatedInput name="nombreUniversidad" label="Nombre de la Universidad" placeholder="Ingresa el nombre de la universidad"
-          rules={[{ required: true, message: "El nombre de la universidad es obligatorio" }]}/>
+          rules={[{ required: true, message: "El nombre de la universidad es obligatorio" }]}
+          allowSpecialChars={false}/>
 
           {/* Lista desplegable de ciudades dinámicas en edición */}
           <Form.Item label="Ciudad" name="idCiudad" rules={[{ required: true ,  message: "Debe seleccionar una ciudad "}]}>
@@ -270,16 +301,16 @@ function Universidades() {
           </Form.Item>
 
           <Form.Item label="Logo" name="fotoUrl">
-            <Upload beforeUpload={() => false} onChange={handleFotoChange} showUploadList={false}>
-              <button className="upload-button">
-                <UploadOutlined /> Subir Imagen
-              </button>
-            </Upload>
-            {fotoPreview && <img src={fotoPreview} alt="Vista previa" className="preview-image" />}
+            <SubirImagen
+              onImagenSubida={(url) => formEditar.setFieldsValue({ fotoUrl: url })}
+              imagenActual={registroSeleccionado?.fotoUrl}
+              form={formEditar} // Pasar el formulario de edición
+            />
           </Form.Item>
 
           <ValidatedInput name="siglas" label="Siglas" placeholder="Ingresa las siglas de la universidad"
-          rules={[{ required: true, message: "Las siglas son obligatorias" }]} />
+          rules={[{ required: true, message: "Las siglas son obligatorias" }]} 
+          allowSpecialChars={false}/>
 
           <Form.Item label="Activo" name="activo" valuePropName="checked">
             <Switch />

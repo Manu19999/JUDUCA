@@ -1,12 +1,12 @@
 import express from 'express';
-import {obtenerRoles, insertarRol} from '../controllers/rolesController.js';
+import {obtenerRoles, insertarRol, actualizarRol, eliminarRol} from '../controllers/rolesController.js';
 import checkAuth from "../../../middleware/authMiddleware.js";
 
 const router = express.Router();
 
 router.get('/',checkAuth, obtenerRoles);
-
-// Insertar un nuevo rol
-router.post('/', checkAuth, insertarRol);
+router.post('/', checkAuth, insertarRol);// Insertar un nuevo rol
+router.put('/:idRol', checkAuth, actualizarRol);// Actualizar un rol por su ID (requiere autenticación)
+router.delete("/:idRol", checkAuth, eliminarRol); // Eliminar un rol
 
 export default router;

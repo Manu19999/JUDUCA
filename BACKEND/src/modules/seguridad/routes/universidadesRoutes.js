@@ -1,12 +1,11 @@
 import express from 'express';
-import {obtenerUniversidades,insertarUniversidad} from '../controllers/universidadesController.js';
+import {obtenerUniversidades,insertarUniversidad,actualizarUniversidad} from '../controllers/universidadesController.js';
 import checkAuth from "../../../middleware/authMiddleware.js";
 
 const router = express.Router();
 
 router.get('/', obtenerUniversidades);
-
-// Insertar una nueva universidad
-router.post('/', checkAuth, insertarUniversidad);
+router.post('/', checkAuth, insertarUniversidad);// Insertar una nueva universidad
+router.put('/:idUniversidad', checkAuth, actualizarUniversidad);// Actualizar una universidad por su ID (requiere autenticación)
 
 export default router;
