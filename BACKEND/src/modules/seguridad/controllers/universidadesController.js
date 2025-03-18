@@ -80,3 +80,50 @@ export const insertarUniversidad = async (req, res) => {
     res.status(500).json(response.getResponse());
   }
 };
+
+// Controlador para actualizar una universidad
+export const actualizarUniversidad = async (req, res) => {
+  const { idUniversidad } = req.params; // Obtener el ID de la universidad desde los parámetros de la URL
+  const { idCiudad, nombre, fotoUrl, siglas, activo, idObjeto } = req.body; // Obtener los datos del cuerpo de la solicitud
+  const response = new apiResponse(); // Crear una instancia de apiResponse
+
+  try {
+    // Usar los datos del usuario directamente desde `req.usuario`
+    const idUsuario = req.usuario.idUsuario;
+    const nombreUsuario = req.usuario.nombreUsuario;
+
+    const pool = await conexionbd(); // Obtener el pool de conexiones
+    const result = await pool
+      .request()
+      .input("idUniversidad", sql.Int, idUniversidad) // ID de la universidad a actualizar
+      .input("idCiudad", sql.Int, idCiudad) // ID de la ciudad
+      .input("nombre", sql.NVarChar, nombre) // Nombre de la universidad
+      .input("fotoUrl", sql.NVarChar, fotoUrl) // URL del logo
+      .input("siglas", sql.NVarChar, siglas) // Siglas de la universidad
+      .input("activo", sql.Bit, activo) // Estado activo/inactivo
+      .input("idUsuario", sql.Int, idUsuario) // ID del usuario
+      .input("nombreUsuario", sql.NVarChar, nombreUsuario) // Nombre del usuario
+      .input("idObjeto", sql.Int, idObjeto) // ID del objeto
+      .execute("Eventos.splUniversidadesActualizar"); // Llamar al procedimiento almacenado
+
+    // Si el procedimiento devuelve un error
+    if (result.recordset.length > 0 && result.recordset[0].codigoError) {
+      response.setHasError(true);
+      response.setErrors([result.recordset[0].descripcion]);
+      return res.status(400).json(response.getResponse());
+    }
+
+    // Asignar los datos a la respuesta
+    response.setData(result.recordset[0]);
+
+    // Enviar la respuesta exitosa
+    res.status(200).json(response.getResponse());
+  } catch (error) {
+    // Manejar el error
+    response.setHasError(true);
+    response.setErrors([error.message]);
+
+    // Enviar la respuesta con error
+    res.status(500).json(response.getResponse());
+  }
+};

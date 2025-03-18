@@ -19,32 +19,34 @@ function Roles() {
   const [formEditar] = Form.useForm(); // Formulario para el modal de edición
   const [roles, setRoles] = useState([]); // Estado para almacenar los roles
 
+  //función reutilizable para obtener los roles
+  const obtenerRoles = async () => {
+    try {
+      const token = localStorage.getItem("token"); // Obtener el token del almacenamiento local
+      if (!token) {
+        throw new Error("No hay token disponible");
+      }
+      const response = await fetch("http://localhost:4000/api/roles", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // Agregar el token en el encabezado
+        }
+      });
+      if (!response.ok) {
+        throw new Error("Error al obtener los roles");
+      }
+
+      const data = await response.json();
+      setRoles(data.data); // Actualizar el estado con los roles obtenidos
+    } catch (error) {
+      console.error("Error:", error);
+      mostrarMensajeError("Error al cargar los roles. Inténtalo de nuevo más tarde.");
+    }
+  };
+
   // Llamar a la API para obtener los roles
   useEffect(() => {
-    const obtenerRoles = async () => {
-      try {
-        const token = localStorage.getItem("token"); // Obtener el token del almacenamiento local
-        if (!token) {
-          throw new Error("No hay token disponible");
-        }
-        const response = await fetch("http://localhost:4000/api/roles", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}` // Agregar el token en el encabezado
-          }
-        });
-        if (!response.ok) {
-          throw new Error("Error al obtener los roles");
-        }
-
-        const data = await response.json();
-        setRoles(data.data); // Actualizar el estado con los roles obtenidos
-      } catch (error) {
-        console.error("Error:", error);
-        mostrarMensajeError("Error al cargar los roles. Inténtalo de nuevo más tarde.");
-      }
-    };
     obtenerRoles();
   }, []); // El array vacío asegura que esto solo se ejecute una vez al montar el componente
 
@@ -53,7 +55,7 @@ function Roles() {
     { nombre: '#', campo: 'indice', ancho: '5%' },
     { nombre: 'Nombre', campo: 'nombre', ancho: '20%' },
     { nombre: 'Descripción', campo: 'descripcion', ancho: '40%' },
-    { nombre: 'Acción', campo: 'accion', ancho: '20%' }
+    { nombre: 'Acción', campo: 'accion', ancho: '15%' }
   ];
 
   // Abrir modal de nuevo registro
@@ -67,7 +69,7 @@ function Roles() {
     setRegistroSeleccionado(registro); // Actualizar el registro seleccionado
     setShowEditModal(true); // Abrir el modal de edición
   };
-
+  // cerrar modal de edición
   const handleCerrarEditModal = () => {
     setShowEditModal(false);
     setRegistroSeleccionado(null); // Limpiar el registro seleccionado
@@ -83,64 +85,134 @@ function Roles() {
   // Guardar nuevo registro
   const handleGuardarNuevo = async () => {
     formNuevo.validateFields()
-        .then(async (values) => {
-            try {
-                const token = localStorage.getItem("token"); // Obtener el token almacenado correctamente
+    .then(async (values) => {
+      try {
+        const token = localStorage.getItem("token"); // Obtener el token almacenado correctamente
 
-                const response = await fetch("http://localhost:4000/api/roles", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}` // Asegurar que se envía el token correctamente
-                    },
-                    body: JSON.stringify({
-                        nombre: values.nombre,
-                        descripcion: values.descripcion,
-                        idObjeto: 7, // ID del objeto (debe existir en Seguridad.tblObjetos)
-                    }),
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.errors?.[0] || "Error al insertar el rol");
-                }
-                 // **Actualizar la tabla después de agregar un nuevo rol**
-                 setRoles(prevRoles => [...prevRoles, data.data]);
-                setShowNuevoModal(false);
-                formNuevo.resetFields(); // Limpiar el formulario de nuevo registro
-                mostrarMensajeExito("El rol se ha registrado correctamente."); // Mensaje de éxito
-            } catch (error) {
-                console.error("Error:", error);
-                mostrarMensajeError(error.message);
-            }
-        })
-        .catch((error) => {
-            console.error("Error al validar el formulario:", error);
+        const response = await fetch("http://localhost:4000/api/roles", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}` // Asegurar que se envía el token correctamente
+          },
+          body: JSON.stringify({
+            nombre: values.nombre,
+            descripcion: values.descripcion,
+            idObjeto: 7, // ID del objeto 
+          }),
         });
-};
 
-  // Guardar cambios en el registro editado
-  const handleGuardarEdit = () => {
-    formEditar
-      .validateFields()
-      .then((values) => {
-        console.log("Registro editado:", values);
-        setShowEditModal(false);
-        setRegistroSeleccionado(null);
-        formEditar.resetFields(); // Limpiar el formulario de edición
-        mostrarMensajeExito("El rol se ha actualizado correctamente."); // Mensaje de éxito
-      })
-      .catch((error) => {
-        console.error("Error al validar el formulario:", error);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.errors?.[0] || "Error al insertar el rol");
+        }
+        // **Actualizar la tabla después de agregar un nuevo rol**
+        setRoles(prevRoles => [...prevRoles, data.data]);
+
+        setShowNuevoModal(false);
+        formNuevo.resetFields(); // Limpiar el formulario de nuevo registro
+        mostrarMensajeExito("El rol se ha registrado correctamente."); // Mensaje de éxito
+      } catch (error) {
+        console.error("Error:", error);
+        mostrarMensajeError(error.message);
+      }
+    })
+   .catch((error) => {
+      console.error("Error al validar el formulario:", error);
+    });
+  };
+
+  // Guardar cambios en el registro editado (para roles)
+  const handleGuardarEdit = async () => {
+    try {
+      // Validar los campos del formulario
+      const values = await formEditar.validateFields();
+
+      // Obtener el token de autenticación
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No hay token disponible");
+      }
+
+      // Llamar a la API para actualizar el rol
+      const response = await fetch(`http://localhost:4000/api/roles/${registroSeleccionado.idRol}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          nombre: values.nombre,
+          descripcion: values.descripcion,
+          idObjeto: 4, // ID del objeto 
+        }),
       });
+
+      // Manejar la respuesta de la API
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.errors?.[0] || "Error al actualizar el rol");
+      }
+
+      // Mostrar mensaje de éxito
+      mostrarMensajeExito("El rol se ha actualizado correctamente.");
+
+      // Cerrar el modal de edición
+      setShowEditModal(false);
+      setRegistroSeleccionado(null);
+      formEditar.resetFields();
+
+      // Recargar los roles desde la API
+      await obtenerRoles();
+    } catch (error) {
+      // Mostrar mensaje de error
+      mostrarMensajeError(error.message);
+    }
   };
 
-  const handleConfirmarDelete = () => {
-    console.log("Simulación: Eliminar registro con ID:", registroSeleccionado?.idRol);
-    setShowDeleteModal(false);
-    mostrarMensajeExito("El rol se ha eliminado correctamente.");
+ // Función para eliminar un rol
+  const handleConfirmarDelete = async () => {
+    try {
+      if (!registroSeleccionado) return;
+
+      const token = localStorage.getItem("token"); // Obtener el token
+      if (!token) {
+        throw new Error("No hay token disponible");
+      }
+
+      const response = await fetch(`http://localhost:4000/api/roles/${registroSeleccionado.idRol}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          idObjeto: 7, // ID del objeto según el sistema de seguridad
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.errors?.[0] || "Error al eliminar el rol");
+      }
+
+      // Actualizar la lista de roles sin el rol eliminado
+      setRoles(prevRoles => prevRoles.filter(rol => rol.idRol !== registroSeleccionado.idRol));
+
+      // Cerrar el modal de confirmación
+      setShowDeleteModal(false);
+      setRegistroSeleccionado(null);
+
+      // Mostrar mensaje de éxito
+      mostrarMensajeExito("El rol se ha eliminado correctamente.");
+    } catch (error) {
+      console.error("Error:", error);
+      mostrarMensajeError(error.message);
+    }
   };
+
 
   return (
     <div className="crud">
@@ -167,16 +239,13 @@ function Roles() {
       >
         <Form layout="vertical" form={formNuevo}>
           <ValidatedInput name="nombre" label="Nombre" placeholder="Ingresa el nombre del rol"
-            rules={[{ required: true, message: "El nombre es obligatorio" }]}
-            allowSpecialChars={false} />
+          rules={[{ required: true, message: "El nombre es obligatorio" }]}
+          allowSpecialChars={false} />
 
-          <Form.Item
-            label="Descripción"
-            name="descripcion"
-            rules={[{ required: true, message: "La descripción es obligatoria" }]}
-          >
-            <Input.TextArea placeholder="Descripción del rol" />
-          </Form.Item>
+          <ValidatedInput name="descripcion" label="Descripción" placeholder="Descripción del rol" 
+          rules={[{ required: true, message: "La descripción es obligatoria" }]}
+          allowSpecialChars={false} 
+          isTextArea={true} />
         </Form>
       </ModalNuevo>
 
@@ -191,21 +260,14 @@ function Roles() {
         width={500} // Ancho personalizado
       >
         <Form layout="vertical" form={formEditar} initialValues={registroSeleccionado || {}}>
-          <Form.Item
-            label="Nombre"
-            name="nombre"
-            rules={[{ required: true, message: "El nombre es obligatorio" }]}
-          >
-            <Input placeholder="Ingresa el nombre del rol" />
-          </Form.Item>
+          <ValidatedInput name="nombre" label="Nombre" placeholder="Ingresa el nombre del rol"
+          rules={[{ required: true, message: "El nombre es obligatorio" }]}
+          allowSpecialChars={false} />
 
-          <Form.Item
-            label="Descripción"
-            name="descripcion"
-            rules={[{ required: true, message: "La descripción es obligatoria" }]}
-          >
-            <Input.TextArea placeholder="Descripción del rol" />
-          </Form.Item>
+          <ValidatedInput name="descripcion" label="Descripción" placeholder="Descripción del rol" 
+          rules={[{ required: true, message: "La descripción es obligatoria" }]}
+          allowSpecialChars={false} 
+          isTextArea={true} />
         </Form>
       </ModalEditar>
 
