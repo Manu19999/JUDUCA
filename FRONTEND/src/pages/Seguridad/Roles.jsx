@@ -8,7 +8,7 @@ import ModalConfirmacion from "../../components/Crud/Modal/ModalConfirmacion";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito";
 import { mostrarMensajeError } from "../../components/Crud/MensajeError"; // Importar el componente de mensaje de error
 import { Input, Form } from 'antd';
-
+import ValidatedInput from "../../utils/ValidatedInput"; 
 
 function Roles() {
   const [showNuevoModal, setShowNuevoModal] = useState(false);
@@ -166,13 +166,9 @@ function Roles() {
         width={500}
       >
         <Form layout="vertical" form={formNuevo}>
-          <Form.Item
-            label="Nombre"
-            name="nombre"
+          <ValidatedInput name="nombre" label="Nombre" placeholder="Ingresa el nombre del rol"
             rules={[{ required: true, message: "El nombre es obligatorio" }]}
-          >
-            <Input placeholder="Ingresa el nombre del rol" />
-          </Form.Item>
+            allowSpecialChars={false} />
 
           <Form.Item
             label="Descripción"
