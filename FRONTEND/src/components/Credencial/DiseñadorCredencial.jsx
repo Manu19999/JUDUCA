@@ -1,143 +1,187 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, Table, Alert, Card, Container } from "react-bootstrap";
-import { FaArrowLeft, FaClipboardList, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { Form, Button, Alert } from "react-bootstrap";
+import { FaArrowLeft } from "react-icons/fa";
+import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 
-const VistaDiseñoCredencial = () => {
-  const navigate = useNavigate();
+// Ubicaciones 3x3
+const ubicaciones = [
+  { id: "arriba-izquierda", descripcion: "Arriba a la Izquierda" },
+  { id: "arriba-centro", descripcion: "Arriba al Centro" },
+  { id: "arriba-derecha", descripcion: "Arriba a la Derecha" },
+  { id: "medio-izquierda", descripcion: "Medio a la Izquierda" },
+  { id: "centro-exacto", descripcion: "Centro Exacto" },
+  { id: "medio-derecha", descripcion: "Medio a la Derecha" },
+  { id: "abajo-izquierda", descripcion: "Abajo a la Izquierda" },
+  { id: "abajo-centro", descripcion: "Abajo al Centro" },
+  { id: "abajo-derecha", descripcion: "Abajo a la Derecha" },
+];
+
+const DisenoCredencial = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
-  // Intentar obtener la ficha desde `location.state` o `localStorage`
-  const [selectedFicha, setSelectedFicha] = useState(
-    location.state?.selectedFicha || JSON.parse(localStorage.getItem("selectedFicha")) || null
+  // Obtenemos la ficha seleccionada y las asignaciones desde la vista anterior
+  const { fichaSeleccionada, asignaciones } = location.state || {};
+
+  // Estados
+  const [fechaVigencia, setFechaVigencia] = useState("");
+  const [usuarioRegistro] = useState("admin"); // Podrías obtenerlo de sesión
+  const [error, setError] = useState(null);
+  const [previewSide, setPreviewSide] = useState("frente"); // Frente / Trasero
+
+  // Función para guardar (simulado)
+  const handleGuardarDiseno = () => {
+    try {
+      if (!fichaSeleccionada) {
+        setError("No hay ficha seleccionada para guardar el diseño.");
+        return;
+      }
+      setError(null);
+
+      // Convertir asignaciones en un array
+      const camposAsignados = Object.entries(asignaciones || {}).map(([key, campo]) => {
+        const [lado, ubicacionId] = key.split("-");
+        return {
+          descripcion: campo.descripcion,
+          leyenda: campo.leyenda,
+          lado,
+          ubicacionId,
+        };
+      });
+
+      const payload = {
+        idFichaRegistro: fichaSeleccionada.idFichaRegistro,
+        fechaVigencia,
+        usuarioRegistro,
+        campos: camposAsignados,
+      };
+
+      console.log("Simulando guardado Diseño Credencial con payload:", payload);
+      alert("Diseño guardado (simulado). Revisa la consola.");
+
+      // Regresar a alguna ruta o mostrar confirmación
+      navigate("/credencialView");
+    } catch (err) {
+      console.error(err);
+      setError("Error al guardar diseño: " + err.message);
+    }
+  };
+
+  // Vista previa 3x3
+  const renderPreview = () => (
+    <div
+      style={{
+        backgroundImage: `url(${fondoCredencial})`,
+        backgroundSize: "cover",
+        width: "600px",
+        height: "450px",
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gap: "5px",
+        border: "3px solid black",
+        padding: "10px",
+        backgroundColor: "#ffffff",
+      }}
+    >
+      {ubicaciones.map((ubicacion) => {
+        const key = `${previewSide}-${ubicacion.id}`;
+        const campo = asignaciones ? asignaciones[key] : null;
+        return (
+          <div
+            key={ubicacion.id}
+            style={{
+              border: "1px solid gray",
+              textAlign: "center",
+              padding: "5px",
+              overflow: "hidden",
+              borderRadius: "4px",
+              backgroundColor: campo ? "#d1e7dd" : "#fff",
+            }}
+          >
+            {campo ? (
+              <div>
+                <strong>{campo.descripcion}</strong>
+                <br />
+                <small>{campo.leyenda}</small>
+                <br />
+                <em>{campo.lado}</em>
+              </div>
+            ) : (
+              <span>{ubicacion.descripcion}</span>
+            )}
+          </div>
+        );
+      })}
+    </div>
   );
 
-  const [diseños, setDiseños] = useState([]);
-  const [campos, setCampos] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    if (!selectedFicha) {
-      setError("⚠ No se seleccionó ninguna ficha. Por favor, vuelve a la página anterior.");
-      return;
-    }
-
-    // Guardar la ficha seleccionada en localStorage para persistencia
-    localStorage.setItem("selectedFicha", JSON.stringify(selectedFicha));
-
-    // Simulando datos de la base de datos desde localStorage
-    const savedDiseños = localStorage.getItem("diseñosCredencial");
-    const savedCampos = localStorage.getItem("camposCredencial");
-
-    if (savedDiseños) {
-      setDiseños(JSON.parse(savedDiseños));
-    } else {
-      setError("⚠ No hay diseños de credenciales disponibles.");
-    }
-
-    if (savedCampos) {
-      setCampos(JSON.parse(savedCampos));
-    }
-  }, [selectedFicha]);
-
   return (
-    <Container className="mt-4">
-      <Button 
-        variant="outline-warning" 
-        onClick={() => navigate("/")}
-        className="d-flex align-items-center gap-2 mb-3"
-        style={{ fontSize: "18px" }}
+    <div className="container-fluid">
+      {/* Botón de regresar */}
+      <Button
+        variant="outline-warning"
+        onClick={() => navigate("/AsignacionCampos")}
+        className="d-flex align-items-center gap-2 mt-3 ms-3"
       >
         <FaArrowLeft size={20} /> Regresar
       </Button>
 
-      <h2 className="text-center my-4">🎨 Vista de Diseño de Credencial</h2>
-
-      {error ? (
-        <div className="text-center">
-          <Alert variant="danger" className="py-3">
-            <FaTimesCircle size={20} className="me-2" />
-            {error}
-          </Alert>
-          <Button variant="primary" onClick={() => navigate("/SeleccionarFicha")}>
-            Seleccionar Ficha
-          </Button>
-        </div>
-      ) : (
-        <>
-          {/* 🔹 Información de la Ficha Seleccionada */}
-          {selectedFicha && (
-            <Card className="shadow-sm mb-4">
-              <Card.Body>
-                <h4 className="text-center mb-2">📌 Ficha Seleccionada</h4>
-                <hr />
-                <h5 className="text-center">{selectedFicha.title}</h5>
-                <p className="text-center">{selectedFicha.description}</p>
-              </Card.Body>
-            </Card>
-          )}
-
-          {/* 🔹 Tabla de Diseños de Credencial */}
-          <h4 className="mb-3"><FaClipboardList className="me-2" /> Diseños de Credenciales</h4>
-          <Table striped bordered hover responsive className="shadow-sm">
-            <thead className="table-dark">
-              <tr>
-                <th>ID Diseño</th>
-                <th>ID Evento</th>
-                <th>ID Campo Credencial</th>
-                <th>ID Ficha Registro</th>
-                <th>Fecha de Vigencia</th>
-              </tr>
-            </thead>
-            <tbody>
-              {diseños.length > 0 ? (
-                diseños.map((diseño) => (
-                  <tr key={diseño.idDiseñoCredencial}>
-                    <td>{diseño.idDiseñoCredencial}</td>
-                    <td>{diseño.idEvento}</td>
-                    <td>{diseño.idCampoCredencial}</td>
-                    <td>{diseño.idFichaRegistro}</td>
-                    <td>{diseño.fechaVigencia}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="text-center text-muted">No hay diseños disponibles.</td>
-                </tr>
-              )}
-            </tbody>
-          </Table>
-
-          {/* 🔹 Tabla de Campos de Credencial */}
-          <h4 className="mt-4 mb-3"><FaCheckCircle className="me-2 text-success" /> Campos de Credencial</h4>
-          <Table striped bordered hover responsive className="shadow-sm">
-            <thead className="table-primary">
-              <tr>
-                <th>ID Campo Credencial</th>
-                <th>ID Ubicación Campo</th>
-                <th>Característica</th>
-              </tr>
-            </thead>
-            <tbody>
-              {campos.length > 0 ? (
-                campos.map((campo) => (
-                  <tr key={campo.idCampoCredencial}>
-                    <td>{campo.idCampoCredencial}</td>
-                    <td>{campo.idUbicacionCampo}</td>
-                    <td>{campo.caracteristica}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="3" className="text-center text-muted">No hay campos disponibles.</td>
-                </tr>
-              )}
-            </tbody>
-          </Table>
-        </>
+      {/* Mensajes de error */}
+      {error && (
+        <Alert variant="danger" className="m-3">
+          {error}
+        </Alert>
       )}
-    </Container>
+
+      <div className="row">
+        {/* Panel Izquierdo */}
+        <div className="col-md-4">
+          <h4 className="mt-3">Diseño de Credencial</h4>
+          {!fichaSeleccionada ? (
+            <Alert variant="danger">No se recibió ninguna ficha seleccionada.</Alert>
+          ) : (
+            <>
+              <div className="mb-3">
+                <strong>Ficha Seleccionada:</strong> {fichaSeleccionada.title}
+              </div>
+
+              {/* Fecha de vigencia */}
+              <Form.Group className="mb-3">
+                <Form.Label>Fecha de Vigencia</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={fechaVigencia}
+                  onChange={(e) => setFechaVigencia(e.target.value)}
+                />
+              </Form.Group>
+
+              {/* Switch para cambiar entre frente y trasero */}
+              <Form.Check
+                type="switch"
+                id="switch-preview-side"
+                label={`Vista ${previewSide === "frente" ? "Frontal" : "Trasera"}`}
+                checked={previewSide === "trasero"}
+                onChange={(e) => setPreviewSide(e.target.checked ? "trasero" : "frente")}
+                className="mb-3"
+              />
+
+              {/* Botón Guardar */}
+              <Button variant="primary" onClick={handleGuardarDiseno}>
+                Guardar Diseño
+              </Button>
+            </>
+          )}
+        </div>
+
+        {/* Panel Derecho: Vista previa */}
+        <div className="col-md-6 d-flex flex-wrap">
+          <h4 className="w-100 mt-3 text-center">Previsualización</h4>
+          <div style={{ margin: "auto" }}>{renderPreview()}</div>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default VistaDiseñoCredencial;
+export default DisenoCredencial;

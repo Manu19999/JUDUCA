@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Alert, Form } from "react-bootstrap";
+import { Button, Alert, Form, Toast } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 
@@ -24,13 +24,8 @@ const FieldCard = ({ campo, onDragStart }) => (
   <div
     draggable
     onDragStart={(e) => onDragStart(e, campo)}
-    style={{
-      border: "1px solid #ccc",
-      padding: "8px",
-      marginBottom: "5px",
-      cursor: "grab",
-      backgroundColor: "#f8f9fa",
-    }}
+    className="p-2 mb-2 border rounded bg-light"
+    style={{ cursor: "grab" }}
   >
     <strong>{campo.descripcion}</strong>
     <br />
@@ -44,11 +39,8 @@ const DropZone = ({ ubicacion, asignacion, onDrop, onDragOver, onDelete }) => (
   <div
     onDragOver={onDragOver}
     onDrop={(e) => onDrop(e, ubicacion.id)}
+    className="p-2 border text-center position-relative rounded"
     style={{
-      border: "1px solid gray",
-      textAlign: "center",
-      padding: "5px",
-      position: "relative",
       minHeight: "80px",
       backgroundColor: asignacion ? "#d1e7dd" : "#fff",
       overflow: "hidden",
@@ -61,23 +53,14 @@ const DropZone = ({ ubicacion, asignacion, onDrop, onDragOver, onDelete }) => (
         <small>{asignacion.leyenda}</small>
         <br />
         <em>{asignacion.lado}</em>
-        <button
+        <Button
+          variant="danger"
+          size="sm"
           onClick={() => onDelete(ubicacion.id)}
-          style={{
-            position: "absolute",
-            top: "5px",
-            right: "5px",
-            background: "red",
-            color: "white",
-            border: "none",
-            borderRadius: "50%",
-            padding: "2px 6px",
-            fontSize: "12px",
-            cursor: "pointer",
-          }}
+          className="position-absolute top-0 end-0 m-1"
         >
           X
-        </button>
+        </Button>
       </div>
     ) : (
       <span>{ubicacion.descripcion}</span>
@@ -88,11 +71,16 @@ const DropZone = ({ ubicacion, asignacion, onDrop, onDragOver, onDelete }) => (
 const AsignacionCampos = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Se extrae la ficha seleccionada (viene de location.state o de localStorage)
   const selectedFicha =
     location.state?.selectedFicha ||
     JSON.parse(localStorage.getItem("selectedFicha")) ||
     null;
+
   const [error, setError] = useState(null);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   // Estado para definir la vista actual (frente o trasero)
   const [previewSide, setPreviewSide] = useState("frente");
@@ -102,7 +90,7 @@ const AsignacionCampos = () => {
   const [leyenda, setLeyenda] = useState("");
   const [ladoNuevo, setLadoNuevo] = useState(previewSide);
 
-  // Si se cambia la vista, se actualiza el lado por defecto en la creación
+  // Actualiza el lado por defecto al cambiar la vista
   useEffect(() => {
     setLadoNuevo(previewSide);
   }, [previewSide]);
@@ -113,7 +101,10 @@ const AsignacionCampos = () => {
     return stored ? JSON.parse(stored) : [];
   });
   useEffect(() => {
-    localStorage.setItem(LS_CAMPOS_PENDIENTES, JSON.stringify(camposPendientes));
+    localStorage.setItem(
+      LS_CAMPOS_PENDIENTES,
+      JSON.stringify(camposPendientes)
+    );
   }, [camposPendientes]);
 
   // Asignaciones: se almacenan con clave `${side}-${ubicacion.id}`
@@ -124,6 +115,13 @@ const AsignacionCampos = () => {
   useEffect(() => {
     localStorage.setItem(LS_ASIGNACIONES, JSON.stringify(asignaciones));
   }, [asignaciones]);
+
+  // Función para mostrar notificaciones tipo Toast
+  const showNotification = (message) => {
+    setToastMessage(message);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
 
   // Crear un nuevo campo y agregarlo a pendientes
   const handleCrearCampo = () => {
@@ -141,9 +139,10 @@ const AsignacionCampos = () => {
     setNuevaDescripcion("");
     setLeyenda("");
     setError(null);
+    showNotification("Campo creado. Arrastre para asignar.");
   };
 
-  // Drag & Drop: maneja el inicio del drag
+  // Manejo del drag & drop
   const handleDragStart = (e, campo) => {
     e.dataTransfer.setData("campo", JSON.stringify(campo));
   };
@@ -152,7 +151,6 @@ const AsignacionCampos = () => {
     e.preventDefault();
   };
 
-  // Al soltar, se asigna el campo a la celda con clave compuesta
   const handleDrop = (e, cellId) => {
     e.preventDefault();
     const campoData = e.dataTransfer.getData("campo");
@@ -164,10 +162,10 @@ const AsignacionCampos = () => {
         [key]: campo,
       }));
       setCamposPendientes((prev) => prev.filter((c) => c.id !== campo.id));
+      showNotification("Campo asignado.");
     }
   };
 
-  // Elimina la asignación de una celda y devuelve el campo a pendientes
   const handleEliminarAsignacion = (cellId) => {
     const key = `${previewSide}-${cellId}`;
     if (asignaciones[key]) {
@@ -177,7 +175,15 @@ const AsignacionCampos = () => {
         delete updated[key];
         return updated;
       });
+      showNotification("Campo removido.");
     }
+  };
+
+  // Función para limpiar todas las asignaciones y pendientes
+  const handleClearAll = () => {
+    setAsignaciones({});
+    setCamposPendientes([]);
+    showNotification("Todas las asignaciones eliminadas.");
   };
 
   return (
@@ -185,17 +191,24 @@ const AsignacionCampos = () => {
       <Button
         variant="outline-warning"
         onClick={() => navigate("/credencialView")}
-        className="d-flex align-items-center gap-2"
-        style={{ marginBottom: "20px", marginLeft: "20px" }}
+        className="d-flex align-items-center gap-2 mt-3 ms-3"
       >
         <FaArrowLeft size={20} /> Regresar
       </Button>
+
+      {/* Información de la ficha seleccionada */}
+      {selectedFicha && (
+        <div className="text-center my-3">
+          <h3>Ficha Seleccionada: {selectedFicha.title}</h3>
+        </div>
+      )}
+
       {error && <Alert variant="danger">{error}</Alert>}
 
       <div className="row">
-        {/* Panel Izquierdo: Formulario para crear campo y lista de pendientes */}
+        {/* Panel Izquierdo: Crear campo y lista de pendientes */}
         <div className="col-md-4">
-          <h3 className="text-center my-3">Crear Campo</h3>
+          <h4 className="text-center my-3">Crear Campo</h4>
           <Form.Group className="mb-3">
             <Form.Label>Descripción:</Form.Label>
             <Form.Control
@@ -214,52 +227,94 @@ const AsignacionCampos = () => {
               onChange={(e) => setLeyenda(e.target.value)}
             />
           </Form.Group>
-          <div className="mb-3">
+          <Form.Group className="mb-3">
             <Form.Check
               type="switch"
               id="switch-crear-lado"
-              label={`Asignar a ${ladoNuevo === "frente" ? "Frente" : "Trasero"}`}
+              label={`Asignar a ${
+                ladoNuevo === "frente" ? "Frente" : "Trasero"
+              }`}
               checked={ladoNuevo === "trasero"}
-              onChange={(e) => setLadoNuevo(e.target.checked ? "trasero" : "frente")}
+              onChange={(e) =>
+                setLadoNuevo(e.target.checked ? "trasero" : "frente")
+              }
             />
-          </div>
-          <div className="text-center">
-            <Button variant="primary" onClick={handleCrearCampo}>
-              Crear Campo (Arrastrar)
+          </Form.Group>
+          <div className="d-flex">
+            <Button
+              style={{ marginLeft: "10px" }}
+              size="md"
+              variant="primary"
+              onClick={handleCrearCampo}
+            >
+              Crear Campo
+            </Button>
+            <Button
+              size="md"
+              style={{ marginLeft: "10px" }}
+              variant="secondary"
+              onClick={handleClearAll}
+            >
+              Limpiar
+            </Button>
+            <Button
+              style={{ marginLeft: "10px" }}
+              size="md"
+              variant="success"
+              onClick={() => {
+                // Imagina que "asignaciones" es el objeto con toda la configuración
+                navigate("/diseñadorCredencial", {
+                  state: {
+                    fichaSeleccionada: selectedFicha,
+                    asignaciones,
+                  },
+                });
+              }}
+            >
+              Terminar
             </Button>
           </div>
           <div className="mt-4">
-            <h5>Campos pendientes</h5>
+            <h5>Campos pendientes:</h5>
             {camposPendientes
               .filter((campo) => campo.lado === previewSide)
               .map((campo) => (
-                <FieldCard key={campo.id} campo={campo} onDragStart={handleDragStart} />
+                <FieldCard
+                  key={campo.id}
+                  campo={campo}
+                  onDragStart={handleDragStart}
+                />
               ))}
           </div>
         </div>
 
-        {/* Panel Derecho: Previsualización con switch para cambiar entre frente y trasero */}
+        {/* Panel Derecho: Previsualización y asignaciones */}
         <div className="col-md-6">
-          <h3 className="text-center my-3">Previsualización</h3>
+          <h4 className="text-center my-3">Previsualización</h4>
           <div className="text-center mb-3">
             <Form.Check
               type="switch"
               id="switch-preview-side"
-              label={`Vista ${previewSide === "frente" ? "Frontal" : "Trasera"}`}
+              label={`Vista ${
+                previewSide === "frente" ? "Frontal" : "Trasera"
+              }`}
               checked={previewSide === "trasero"}
-              onChange={(e) => setPreviewSide(e.target.checked ? "trasero" : "frente")}
+              onChange={(e) =>
+                setPreviewSide(e.target.checked ? "trasero" : "frente")
+              }
             />
           </div>
+
           <div
+            className="mx-auto p-2"
             style={{
               backgroundImage: `url(${fondoCredencial})`,
               backgroundSize: "cover",
-              width: "600px",
-              height: "350px",
+              width: "650px",
+              height: "450px",
               display: "grid",
               gridTemplateColumns: "repeat(3, 1fr)",
               gap: "5px",
-              margin: "auto",
               border: "3px solid black",
               padding: "10px",
               backgroundColor: "#ffffff",
@@ -277,6 +332,23 @@ const AsignacionCampos = () => {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Toast de notificaciones */}
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        className="position-fixed bottom-0 end-0 p-3"
+        style={{ zIndex: 5 }}
+      >
+        <Toast
+          show={showToast}
+          onClose={() => setShowToast(false)}
+          delay={3000}
+          autohide
+        >
+          <Toast.Body>{toastMessage}</Toast.Body>
+        </Toast>
       </div>
     </div>
   );
