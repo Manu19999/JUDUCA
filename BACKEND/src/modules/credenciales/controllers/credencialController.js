@@ -121,6 +121,35 @@ export const ObtenerParticipantesPorFicha = async (req, res) => {
     res.status(500).json(response.getResponse());
   }
 };
+export const ObtenerUbicacionesCampos = async (req, res) => {
+  const response = new apiResponse();
+
+  try {
+    const pool = await conexionbd();
+    const result = await pool.request().execute("Credenciales.splObtenerUbicacionesCampos");
+
+    // Filtrar en Node.js antes de enviar la respuesta
+    const ubicacionesFiltradas = result.recordset.filter((ubicacion) => {
+      return ubicacion.descripcion !== "Sin descripción" && // Excluir sin descripción
+             !(ubicacion.fila === 0 && ubicacion.columna === 0); // Excluir ubicación (0,0)
+    });
+
+    if (ubicacionesFiltradas.length === 0) {
+      response.setHasError(true);
+      response.setErrors(["No se encontraron ubicaciones válidas."]);
+      return res.status(404).json(response.getResponse());
+    }
+
+    response.setData(ubicacionesFiltradas);
+    return res.status(200).json(response.getResponse());
+
+  } catch (error) {
+    console.error("Error al obtener ubicaciones:", error);
+    response.setHasError(true);
+    response.setErrors(["Error interno del servidor."]);
+    return res.status(500).json(response.getResponse());
+  }
+};
 
 // Controlador para obtener las credenciales generadas por ficha en un evento específico
 export const ObtenerCredencialesPorFicha = async (req, res) => {
