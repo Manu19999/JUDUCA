@@ -10,7 +10,7 @@ import uploadRoutes from './src/modules/seguridad/routes/uploadRoutes.js'; // Im
 import CredencialRoutes from './src/modules/credenciales/routes/credencialRoutes.js';
 
 //++++++++++++++++++++++++++  Importaciones de rutas de eventos  ++++++++++++++++++++++++++
-
+import EventosRoutes from './src/modules/eventos/routes/EventoRoutes.js';
 
 
 //++++++++++++++++++++++++++  Importaciones de rutas de fichas  ++++++++++++++++++++++++++
@@ -67,7 +67,7 @@ app.use("/api", uploadRoutes);
 app.use('/api/credencial', CredencialRoutes);
 
 //Eventos
-
+app.use('/api/eventos', EventosRoutes);
 
 //Fichas
 app.use("/api/fichas", FichasRoutes);
