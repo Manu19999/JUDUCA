@@ -7,6 +7,19 @@ import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 const LS_CAMPOS_PENDIENTES = "camposPendientes";
 const LS_ASIGNACIONES = "asignaciones";
 
+// Definición de ubicaciones (las 9 celdas de la cuadrícula)
+const ubicaciones = [
+  { id: "arriba-izquierda", descripcion: "Arriba a la Izquierda" },
+  { id: "arriba-centro", descripcion: "Arriba al Centro" },
+  { id: "arriba-derecha", descripcion: "Arriba a la Derecha" },
+  { id: "medio-izquierda", descripcion: "Medio a la Izquierda" },
+  { id: "centro-exacto", descripcion: "Centro Exacto" },
+  { id: "medio-derecha", descripcion: "Medio a la Derecha" },
+  { id: "abajo-izquierda", descripcion: "Abajo a la Izquierda" },
+  { id: "abajo-centro", descripcion: "Abajo al Centro" },
+  { id: "abajo-derecha", descripcion: "Abajo a la Derecha" },
+];
+
 // Componente FieldCard: muestra un campo pendiente, es draggable
 const FieldCard = ({ campo, onDragStart }) => (
   <div
@@ -27,7 +40,7 @@ const FieldCard = ({ campo, onDragStart }) => (
 const DropZone = ({ ubicacion, asignacion, onDrop, onDragOver, onDelete }) => (
   <div
     onDragOver={onDragOver}
-    onDrop={(e) => onDrop(e, ubicacion.idUbicacionCampo)} // Usar idUbicacionCampo
+    onDrop={(e) => onDrop(e, ubicacion.id)}
     className="p-2 border text-center position-relative rounded"
     style={{
       minHeight: "80px",
@@ -45,7 +58,7 @@ const DropZone = ({ ubicacion, asignacion, onDrop, onDragOver, onDelete }) => (
         <Button
           variant="danger"
           size="sm"
-          onClick={() => onDelete(ubicacion.idUbicacionCampo)}
+          onClick={() => onDelete(ubicacion.id)}
           className="position-absolute top-0 end-0 m-1"
         >
           X
@@ -57,22 +70,19 @@ const DropZone = ({ ubicacion, asignacion, onDrop, onDragOver, onDelete }) => (
   </div>
 );
 
-
 const AsignacionCampos = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  // Estado para almacenar ubicaciones desde la API
-  const [ubicaciones, setUbicaciones] = useState([]);
-  const [error, setError] = useState(null);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
 
   // Extraer la ficha seleccionada
   const selectedFicha =
     location.state?.selectedFicha ||
     JSON.parse(localStorage.getItem("selectedFicha")) ||
     null;
+
+  const [error, setError] = useState(null);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   // Estado para vista (frente o trasero)
   const [previewSide, setPreviewSide] = useState("frente");
@@ -82,49 +92,28 @@ const AsignacionCampos = () => {
   const [leyenda, setLeyenda] = useState("");
   const [ladoNuevo, setLadoNuevo] = useState(previewSide);
 
+  // Actualizar lado al cambiar la vista
+  useEffect(() => {
+    setLadoNuevo(previewSide);
+  }, [previewSide]);
+
   // Cargar campos pendientes de localStorage
   const [camposPendientes, setCamposPendientes] = useState(() => {
     const stored = localStorage.getItem(LS_CAMPOS_PENDIENTES);
     return stored ? JSON.parse(stored) : [];
   });
+  useEffect(() => {
+    localStorage.setItem(LS_CAMPOS_PENDIENTES, JSON.stringify(camposPendientes));
+  }, [camposPendientes]);
+
   // Cargar asignaciones de localStorage
   const [asignaciones, setAsignaciones] = useState(() => {
     const saved = localStorage.getItem(LS_ASIGNACIONES);
     return saved ? JSON.parse(saved) : {};
   });
-
-  // Guardar cambios en localStorage
-  useEffect(() => {
-    localStorage.setItem(LS_CAMPOS_PENDIENTES, JSON.stringify(camposPendientes));
-  }, [camposPendientes]);
-
   useEffect(() => {
     localStorage.setItem(LS_ASIGNACIONES, JSON.stringify(asignaciones));
   }, [asignaciones]);
-
-  // Actualizar el lado cuando cambia previewSide
-  useEffect(() => {
-    setLadoNuevo(previewSide);
-  }, [previewSide]);
-
-  // Obtener ubicaciones desde la API
-  useEffect(() => {
-    const obtenerUbicaciones = async () => {
-      try {
-        const response = await fetch("http://localhost:4000/api/credencial/ubicacionCampos");
-        if (!response.ok) throw new Error("Error al obtener ubicaciones");
-
-        const data = await response.json();
-        // Se espera que la API retorne un objeto { success: true, data: [...] }
-        setUbicaciones(data.data);
-      } catch (error) {
-        console.error("Error:", error);
-        setError("No se pudieron cargar las ubicaciones.");
-      }
-    };
-
-    obtenerUbicaciones();
-  }, []);
 
   // Notificaciones Toast
   const showNotification = useCallback((message) => {
@@ -161,39 +150,33 @@ const AsignacionCampos = () => {
     e.preventDefault();
   }, []);
 
-  const handleDrop = useCallback(
-    (e, cellId) => {
-      e.preventDefault();
-      const campoData = e.dataTransfer.getData("campo");
-      if (campoData) {
-        const campo = JSON.parse(campoData);
-        const key = `${previewSide}-${cellId}`;
-        setAsignaciones((prev) => ({
-          ...prev,
-          [key]: campo,
-        }));
-        setCamposPendientes((prev) => prev.filter((c) => c.id !== campo.id));
-        showNotification("Campo asignado.");
-      }
-    },
-    [previewSide, showNotification]
-  );
-
-  const handleEliminarAsignacion = useCallback(
-    (cellId) => {
+  const handleDrop = useCallback((e, cellId) => {
+    e.preventDefault();
+    const campoData = e.dataTransfer.getData("campo");
+    if (campoData) {
+      const campo = JSON.parse(campoData);
       const key = `${previewSide}-${cellId}`;
-      if (asignaciones[key]) {
-        setCamposPendientes((prev) => [...prev, asignaciones[key]]);
-        setAsignaciones((prev) => {
-          const updated = { ...prev };
-          delete updated[key];
-          return updated;
-        });
-        showNotification("Campo removido.");
-      }
-    },
-    [asignaciones, previewSide, showNotification]
-  );
+      setAsignaciones((prev) => ({
+        ...prev,
+        [key]: campo,
+      }));
+      setCamposPendientes((prev) => prev.filter((c) => c.id !== campo.id));
+      showNotification("Campo asignado.");
+    }
+  }, [previewSide, showNotification]);
+
+  const handleEliminarAsignacion = useCallback((cellId) => {
+    const key = `${previewSide}-${cellId}`;
+    if (asignaciones[key]) {
+      setCamposPendientes((prev) => [...prev, asignaciones[key]]);
+      setAsignaciones((prev) => {
+        const updated = { ...prev };
+        delete updated[key];
+        return updated;
+      });
+      showNotification("Campo removido.");
+    }
+  }, [asignaciones, previewSide, showNotification]);
 
   const handleClearAll = useCallback(() => {
     if (window.confirm("¿Seguro que deseas limpiar todas las asignaciones y pendientes?")) {
@@ -272,15 +255,11 @@ const AsignacionCampos = () => {
             >
               Terminar
             </Button>
-            <Button
-              size="md"
-              style={{ marginLeft: "10px" }}
-              variant="secondary"
-              onClick={handleClearAll}
-              className="me-2"
-            >
+
+            <Button size="md" style={{marginLeft:'10px'}} variant="secondary" onClick={handleClearAll} className="me-2">
               Limpiar
             </Button>
+
           </div>
           <div className="mt-4">
             <h5>Campos pendientes:</h5>
@@ -321,21 +300,16 @@ const AsignacionCampos = () => {
               backgroundColor: "#ffffff",
             }}
           >
-            {ubicaciones.length > 0 ? (
-              ubicaciones.map((ubicacion) => (
-                <DropZone
-                  key={ubicacion.idUbicacionCampo} // Usa la propiedad correcta
-                  ubicacion={ubicacion}
-                  asignacion={asignaciones[`${previewSide}-${ubicacion.idUbicacionCampo}`]} // Usa el id correcto
-                  onDragOver={handleDragOver}
-                  onDrop={handleDrop}
-                  onDelete={handleEliminarAsignacion}
-                />
-              ))
-            ) : (
-              <p className="text-center">Cargando ubicaciones...</p>
-            )}
-
+            {ubicaciones.map((ubicacion) => (
+              <DropZone
+                key={ubicacion.id}
+                ubicacion={ubicacion}
+                asignacion={asignaciones[`${previewSide}-${ubicacion.id}`]}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                onDelete={handleEliminarAsignacion}
+              />
+            ))}
           </div>
         </div>
       </div>

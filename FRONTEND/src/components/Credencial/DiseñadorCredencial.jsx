@@ -1,8 +1,21 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Row, Col, Button, Alert, Form, Toast } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
+
+// Definición de ubicaciones (3x3)
+const ubicaciones = [
+  { id: "arriba-izquierda", descripcion: "Arriba a la Izquierda" },
+  { id: "arriba-centro", descripcion: "Arriba al Centro" },
+  { id: "arriba-derecha", descripcion: "Arriba a la Derecha" },
+  { id: "medio-izquierda", descripcion: "Medio a la Izquierda" },
+  { id: "centro-exacto", descripcion: "Centro Exacto" },
+  { id: "medio-derecha", descripcion: "Medio a la Derecha" },
+  { id: "abajo-izquierda", descripcion: "Abajo a la Izquierda" },
+  { id: "abajo-centro", descripcion: "Abajo al Centro" },
+  { id: "abajo-derecha", descripcion: "Abajo a la Derecha" },
+];
 
 // Estilos centralizados para la vista previa y las celdas
 const previewContainerStyle = {
@@ -90,9 +103,6 @@ const DisenoCredencial = () => {
   const [error, setError] = useState(null);
   const [previewSide, setPreviewSide] = useState("frente");
 
-  // Estado para cargar las ubicaciones desde el endpoint
-  const [ubicaciones, setUbicaciones] = useState([]);
-
   // Estados para Toast
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -102,23 +112,6 @@ const DisenoCredencial = () => {
     setToastMessage(message);
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
-  }, []);
-
-  // Obtener ubicaciones desde el endpoint
-  useEffect(() => {
-    const fetchUbicaciones = async () => {
-      try {
-        const response = await fetch("http://localhost:4000/api/credencial/ubicacionCampos");
-        if (!response.ok) throw new Error("Error al obtener ubicaciones");
-        const data = await response.json();
-        // Se espera que la API retorne { success: true, data: [...] }
-        setUbicaciones(data.data);
-      } catch (err) {
-        console.error("Error fetching ubicaciones:", err);
-        setError("No se pudieron cargar las ubicaciones.");
-      }
-    };
-    fetchUbicaciones();
   }, []);
 
   // Función para guardar (simulado)
@@ -151,34 +144,30 @@ const DisenoCredencial = () => {
     navigate("/credencialView");
   }, [fichaSeleccionada, fechaVigencia, usuarioRegistro, asignaciones, navigate, showNotification]);
 
-  // Renderiza la cuadrícula 3x3 usando las ubicaciones cargadas desde el endpoint
+  // Renderiza la cuadrícula 3x3
   const renderPreview = useCallback(() => (
     <div style={previewContainerStyle}>
-      {ubicaciones.length > 0 ? (
-        ubicaciones.map((ubicacion) => {
-          const key = `${previewSide}-${ubicacion.id}`;
-          const campo = asignaciones ? asignaciones[key] : null;
-          return (
-            <div key={ubicacion.id} style={cellStyle(!!campo)}>
-              {campo ? (
-                <div>
-                  <strong>{campo.descripcion}</strong>
-                  <br />
-                  <small>{campo.leyenda}</small>
-                  <br />
-                  <em>{campo.lado}</em>
-                </div>
-              ) : (
-                <span>{ubicacion.descripcion}</span>
-              )}
-            </div>
-          );
-        })
-      ) : (
-        <p className="text-center">Cargando ubicaciones...</p>
-      )}
+      {ubicaciones.map((ubicacion) => {
+        const key = `${previewSide}-${ubicacion.id}`;
+        const campo = asignaciones ? asignaciones[key] : null;
+        return (
+          <div key={ubicacion.id} style={cellStyle(!!campo)}>
+            {campo ? (
+              <div>
+                <strong>{campo.descripcion}</strong>
+                <br />
+                <small>{campo.leyenda}</small>
+                <br />
+                <em>{campo.lado}</em>
+              </div>
+            ) : (
+              <span>{ubicacion.descripcion}</span>
+            )}
+          </div>
+        );
+      })}
     </div>
-  ), [previewSide, asignaciones, ubicaciones]);
+  ), [previewSide, asignaciones]);
 
   return (
     <div className="container-fluid">
