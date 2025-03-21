@@ -9,6 +9,8 @@ import { mostrarMensajeError } from "../../components/Crud/MensajeError"; // Imp
 import { Input, Form, Select, Switch } from 'antd';
 import SubirImagen from '../../components/SubirImagen'; // Ajusta la ruta según tu estructura de archivos
 import ValidatedInput from "../../utils/ValidatedInput"; 
+import BotonRegresar from "../../components/Dashboard/BotonRegresar";
+
 
 function Universidades() {
   const [showNuevoModal, setShowNuevoModal] = useState(false);
@@ -221,6 +223,7 @@ function Universidades() {
   return (
     <div className="crud">
       <Nav />
+      <BotonRegresar to="/seguridad" text="Regresar" />
       <Tabla
         columnas={columnas}
         datos={universidades.map((universidad) => ({ ...universidad, id: universidad.idUniversidad }))} 

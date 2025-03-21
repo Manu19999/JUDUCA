@@ -10,6 +10,7 @@ import RolesImage from "../../src/assets/roles.jpg";
 import UniversidadesImage from "../../src/assets/Universidad.jpg";
 import ParametrosImage from "../../src/assets/parametros.jpg";
 import BitacoraImage from "../../src/assets/bitacora.jpg";
+import BotonRegresar from "../components/Dashboard/BotonRegresar";
 
 import "../styles/Inicio/Caja-seguridad.css";
 
@@ -66,14 +67,9 @@ const CajaSeguridad = () => {
       <Nav />
       {/* Botón para añadir un nuevo voucher */}
       <div className="crud">
-      <Button
-          variant="outline-warning"
-          onClick={() => navigate("/dashboard")}
-          className="d-flex align-items-center gap-2"
-          style={{ marginTrim: '80px' }}
-        >
-          <FaArrowLeft size={20} /> Regresar
-        </Button>  
+       
+        <BotonRegresar to="/dashboard" text="Regresar"  />
+
         <h2 className="caja-seguridad-title">Géstion de seguridad</h2>
         <div className="caja-seguridad-grid">
             

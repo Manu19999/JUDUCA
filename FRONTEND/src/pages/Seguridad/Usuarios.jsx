@@ -8,6 +8,7 @@ import ModalDetalles from "../../components/Crud/Modal/ModalDetalles";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito";
 import { mostrarMensajeError } from "../../components/Crud/MensajeError"; // Importar el componente de mensaje de error
 import { Input, Select, Form, Card,Row, Col, DatePicker,Tabs } from 'antd';
+import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -125,6 +126,7 @@ function Usuarios() {
   return (
     <div className="crud">
       <Nav />{/* componente de navegación del  navdashboard */}
+      <BotonRegresar to="/seguridad" text="Regresar" />
       <Tabla 
         columnas={columnas}// Columnas de la tabla
         datos={usuarios.map((usuario) => ({ ...usuario, id: usuario.idUsuario }))}  // Usar los usuarios obtenidos de la API
