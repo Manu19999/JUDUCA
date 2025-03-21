@@ -7,6 +7,7 @@ import ModalEditar from "../../components/Crud/Modal/ModalEditar.jsx";
 import ModalDetalles from "../../components/Crud/Modal/ModalDetalles.jsx";
 import ModalConfirmacion from "../../components/Crud/Modal/ModalConfirmacion.jsx";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito.jsx";
+import BotonRegresar from '../../components/Dashboard/BotonRegresar.jsx';
 import { Input, Select, Form, Row, Col, Tabs  } from "antd";
 import { Button } from "react-bootstrap";
 import "../../styles/Credencial/credencial.css";
@@ -142,15 +143,8 @@ function MantenimientoPaises() {
   return (
     <div className="crud">
       <Nav />
+      <BotonRegresar to="/mantenimientoView" text="Regresar"  />
 
-      <Button
-          variant="outline-warning"
-          onClick={() => navigate("/mantenimientoView")}
-          className="d-flex align-items-center gap-2"
-          style={{ marginBottom: "35px", marginLeft: "200px" }}
-          >
-          <FaArrowLeft size={20} /> Regresar
-        </Button>
       {/* componente de navegación del  navdashboard */}
       <Tabla
         columnas={columnas} // Columnas de la tabla

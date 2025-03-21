@@ -1,8 +1,7 @@
 import React from "react";
 import { Container, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
-
+import BotonRegresar from '../components/Dashboard/BotonRegresar.jsx';
 import Nav from '../components/Dashboard/navDashboard';
 
 import UsuariosImage from "../../src/assets/usuarios.jpg";
@@ -66,14 +65,9 @@ const CajaSeguridad = () => {
       <Nav />
       {/* Botón para añadir un nuevo voucher */}
       <div className="crud">
-      <Button
-          variant="outline-warning"
-          onClick={() => navigate("/dashboard")}
-          className="d-flex align-items-center gap-2"
-          style={{ marginTrim: '80px' }}
-        >
-          <FaArrowLeft size={20} /> Regresar
-        </Button>  
+        
+      <BotonRegresar to="/dashboard" text="Regresar" top="80px" right="20px" />
+
         <h2 className="caja-seguridad-title">Géstion de seguridad</h2>
         <div className="caja-seguridad-grid">
             

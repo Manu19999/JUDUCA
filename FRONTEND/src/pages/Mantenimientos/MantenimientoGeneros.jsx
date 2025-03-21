@@ -8,6 +8,7 @@ import ModalDetalles from "../../components/Crud/Modal/ModalDetalles.jsx";
 import ModalConfirmacion from "../../components/Crud/Modal/ModalConfirmacion.jsx";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito.jsx";
 import { Input, Select, Form, Row, Col, Tabs } from "antd";
+import BotonRegresar from '../../components/Dashboard/BotonRegresar.jsx';
 import { Button } from "react-bootstrap";
 import "../../styles/Credencial/credencial.css";
 import { FaMale, FaFemale, FaGenderless, FaTransgenderAlt } from 'react-icons/fa';
@@ -141,14 +142,8 @@ function MantenimientoGeneros() {
   return (
     <div className="crud">
       <Nav />
-      <Button
-        variant="outline-warning"
-        onClick={() => navigate("/mantenimientoView")}
-        className="d-flex align-items-center gap-2"
-        style={{ marginBottom: "35px", marginLeft: "200px" }}
-      >
-        <FaArrowLeft size={20} /> Regresar
-      </Button>
+      <BotonRegresar to="/mantenimientoView" text="Regresar"  />
+
       {/* componente de navegación del  navdashboard */}
       <Tabla
         columnas={columnas} // Columnas de la tabla
