@@ -7,13 +7,11 @@ import LoginForm from "../components/Login/LoginForm";
 import TwoFA from "../components/Login/TwoFA";
 import { validateEmail, validatePassword } from "../components/Login/validaciones";
 
-
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState({ email: false, password: false });
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [show2FAPopup, setShow2FAPopup] = useState(false);
-  const [twoFACode, setTwoFACode] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -35,15 +33,15 @@ const Login = () => {
   const handleForgotPasswordClick = (e) => {
     e.preventDefault();
     setShowForgotPassword(!showForgotPassword);
-    setErrorMessage(""); // Limpiar mensaje de error
-    setEmail("");// Limpiar el input de email
-    setPassword("")
+    setErrorMessage("");
+    setEmail("");
+    setPassword("");
   };
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage(""); // Limpiar mensajes de error anteriores
-    // Validar antes de enviar
+    setErrorMessage("");
+
     const emailValidation = validateEmail(email);
     const passwordValidation = validatePassword(password);
 
@@ -51,8 +49,9 @@ const Login = () => {
     setPasswordError(passwordValidation);
 
     if (emailValidation || passwordValidation) {
-      return; // Detener el envío si hay errores
+      return;
     }
+
     try {
       const response = await fetch("http://localhost:4000/api/auth/login", {
         method: "POST",
@@ -61,39 +60,57 @@ const Login = () => {
         },
         body: JSON.stringify({
           email,
-          contraseña: password, // Asegúrate de usar el mismo campo que en el backend
+          contraseña: password,
         }),
       });
-  
+
       const data = await response.json();
-  
+
       if (!response.ok) {
-        // Si hay un error, mostrar el mensaje del backend
         setErrorMessage(data.errors?.[0] || "Credenciales inválidas");
         return;
       }
-  
-      console.log("Inicio de sesión exitoso:", data);
-  
-      // Guardar el token en localStorage o en un state manager
-      localStorage.setItem("token", data.data.token);
-  
-      // Redirigir al dashboard
-      navigate("/dashboard");
+
+      // Solo guardar token si pasa 2FA luego
+      localStorage.setItem("usuarioEmail", email);
+      localStorage.setItem("tokenPending", data.data.token);
+
+      setShow2FAPopup(true);
+
     } catch (error) {
       console.error("Error en la solicitud:", error);
       setErrorMessage("Error en el servidor. Por favor, inténtalo de nuevo más tarde.");
     }
   };
-  
 
-  const handle2FASubmit = (code) => {
-    if (code === "123456") {
-      console.log("Código 2FA válido. Acceso concedido.");
-      setShow2FAPopup(false);
-      navigate("/dashboard");
-    } else {
-      console.log("Código 2FA inválido. Inténtalo de nuevo.");
+  const handle2FASubmit = async (code) => {
+    const email = localStorage.getItem("usuarioEmail");
+
+    try {
+      const response = await fetch("http://localhost:4000/api/twofactor/verificarCodigo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, codigo: code }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.valido) {
+        console.log("✅ Código 2FA válido");
+        const token = localStorage.getItem("tokenPending");
+        localStorage.setItem("token", token);
+        localStorage.removeItem("usuarioEmail");
+        localStorage.removeItem("tokenPending");
+        setShow2FAPopup(false);
+        navigate("/dashboard");
+      } else {
+        setErrorMessage("Código inválido o expirado.");
+      }
+    } catch (error) {
+      console.error("Error al verificar 2FA:", error);
+      setErrorMessage("Error al verificar el código.");
     }
   };
 
@@ -108,6 +125,7 @@ const Login = () => {
             <img src={logo} alt="Logo" className="login-image" />
           </Link>
         </Tooltip>
+
         <div className="login-box">
           <h1 className="login-title">
             {showForgotPassword ? "Recuperar Contraseña" : "Iniciar Sesión"}
@@ -117,12 +135,13 @@ const Login = () => {
               ? "Ingresa tu correo electrónico para recuperar tu contraseña"
               : "Ingresa tus datos para acceder a la plataforma"}
           </h6>
-           {/* Mostrar mensaje de error */}
-            {errorMessage && (
-              <div className="error-message">
-                {errorMessage}
-              </div>
-            )}
+
+          {errorMessage && (
+            <div className="error-message">
+              {errorMessage}
+            </div>
+          )}
+
           <LoginForm
             showForgotPassword={showForgotPassword}
             handleForgotPasswordClick={handleForgotPasswordClick}
@@ -136,11 +155,18 @@ const Login = () => {
             setPassword={setPassword}
             showPassword={showPassword}
             setShowPassword={setShowPassword}
+            emailError={emailError}
+            passwordError={passwordError}
           />
         </div>
       </div>
 
-      {show2FAPopup && <TwoFA onClose={() => setShow2FAPopup(false)} onSubmit={handle2FASubmit} />}
+      {show2FAPopup && (
+        <TwoFA
+          onClose={() => setShow2FAPopup(false)}
+          onSubmit={handle2FASubmit}
+        />
+      )}
     </div>
   );
 };

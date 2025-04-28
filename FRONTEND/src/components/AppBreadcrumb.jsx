@@ -16,6 +16,9 @@ const routeNames = {
   eventos: "Eventos",
   "gestion-evento": "Gestión Evento",
   "lista-fichas": "Fichas",
+  "vouchers": "Gestión de Vouchers",
+  "voucher": "Voucher",
+  "nuevo-voucher": "Nuevo Voucher",
   "Formulario-fichas": "Formulario-Ficha",
   "llenar-fichas": "Registro-Ficha",
   credencialView: "Credenciales",
@@ -57,6 +60,15 @@ const getHierarchy = (pathname) => {
   }
   if (pathnames.includes("lista-fichas")) {
     return ["dashboard", "eventos","gestion-evento","lista-fichas"];
+  }
+  if (pathnames.includes("vouchers")){
+    return ["dashboard", "eventos","gestion-evento","vouchers"];
+  }
+  if (pathnames.includes("voucher")){
+    return ["dashboard", "eventos","gestion-evento","vouchers","voucher"];
+  }
+  if (pathnames.includes("nuevo-voucher")){
+    return ["dashboard", "eventos","gestion-evento","vouchers","nuevo-voucher"];
   }
   /*
   if (pathnames.includes("Formulario-fichas")) {

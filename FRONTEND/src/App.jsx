@@ -51,6 +51,7 @@ const CajaVouchers =React.lazy(() => import("./pages/Vouchers/CajaVouchers"));
 const ConsumosVouchers =React.lazy(() => import("./pages/ConsumoVoucher"));
 const Comedores =React.lazy(() => import("./pages/Comedores"));
 const Tickets =React.lazy(() => import("./pages/tickets"));
+const NuevoVoucher =React.lazy(() => import("./pages/Vouchers/Nuevo-Voucher"));
 
 //Juegos
 const JuegoView =React.lazy(() => import("./pages/Juegos/juegosView"));
@@ -115,6 +116,7 @@ function App() {
         <Route path="/consumo" element={<ConsumosVouchers />} />
         <Route path="/comedor" element={<Comedores />} />
         <Route path="/Ticket" element={<Tickets />} />
+        <Route path="/nuevo-voucher" element={<NuevoVoucher />} />
 
 
         {/* ruta para juegos */}

@@ -2,18 +2,19 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors'; 
-
+import path from 'path';
+import uploadRoutes from './src/modules/seguridad/routes/uploadRoutes.js'; // Importar las rutas de subida de imágenes
 
 
 //++++++++++++++++++++++++++  Importaciones de rutas de credenciales  ++++++++++++++++++++++++++
 import CredencialRoutes from './src/modules/credenciales/routes/credencialRoutes.js';
 
 //++++++++++++++++++++++++++  Importaciones de rutas de eventos  ++++++++++++++++++++++++++
-
+import EventosRoutes from './src/modules/eventos/routes/EventoRoutes.js';
 
 
 //++++++++++++++++++++++++++  Importaciones de rutas de fichas  ++++++++++++++++++++++++++
-
+import FichasRoutes from "./src/modules/fichas/routes/fichaRoutes.js";
 
 //++++++++++++++++++++++++++  Importaciones de rutas de mantenimientos  ++++++++++++++++++++++++++
 import Paises from './src/modules/mantenimientos/routes/paisesRoutes.js';
@@ -29,6 +30,9 @@ import Generos from './src/modules/mantenimientos/routes/generosRoutes.js';
 import AuthRoutes from './src/modules/seguridad/routes/authRoutes.js';
 import Roles from './src/modules/seguridad/routes/rolesRoutes.js';
 import Universidades from './src/modules/seguridad/routes/universidadesRoutes.js';
+import Usuarios from './src/modules/seguridad/routes/usuariosRoutes.js';
+import twoFactorRoutes from './src/modules/seguridad/routes/twoFactorRoutes.js';
+
 
 //++++++++++++++++++++++++++  Importaciones de rutas de vouchers  ++++++++++++++++++++++++++
 import VoucherComidaRoutes   from './src/modules/vouchers/routes/voucherComidaRoutes.js';
@@ -38,6 +42,9 @@ import VoucherComidaRoutes   from './src/modules/vouchers/routes/voucherComidaRo
 //++++++++++++++++++++++++++ Configuraciones del servidor ++++++++++++++++++++++++++
 
 dotenv.config(); 
+// Definir el puerto de una vez y usarlo en todo el código
+const PORT = process.env.PORT || 4000;
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -49,6 +56,12 @@ app.use(cors({
     credentials: true, // Para permitir cookies en las solicitudes
 }));
 
+// Servir archivos estáticos desde la carpeta "uploads"
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
+// Usar las rutas de subida de imágenes
+app.use("/api", uploadRoutes);
+
 
 //++++++++++++++++++++++++++ Rutas ++++++++++++++++++++++++++
 
@@ -56,10 +69,10 @@ app.use(cors({
 app.use('/api/credencial', CredencialRoutes);
 
 //Eventos
-
+app.use('/api/eventos', EventosRoutes);
 
 //Fichas
-
+app.use("/api/fichas", FichasRoutes);
 
 //Mantenimientos
 app.use('/api/paises', Paises);
@@ -73,14 +86,16 @@ app.use('/api/generos', Generos);
 //Seguridad
 app.use('/api/auth', AuthRoutes);
 app.use('/api/roles', Roles);
-app.use('/api/Universidades', Universidades);
+app.use('/api/universidades', Universidades);
+app.use('/api/usuarios', Usuarios);
+app.use('/api/twofactor', twoFactorRoutes);
+
 
 //Vouchers
 app.use('/api/voucherComida', VoucherComidaRoutes); 
 
 
 //++++++++++++++++++++++++++ Inicialización del servidor ++++++++++++++++++++++++++ 
-const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto: ${PORT}`);
 });

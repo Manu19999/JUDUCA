@@ -1,83 +1,62 @@
-import React, { useState } from "react";
-import { Container, Button, Modal, Form } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container, Button, Modal, Spinner, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaEye, FaCog } from "react-icons/fa";
 import { useDropzone } from "react-dropzone";
-
 import Nav from "../components/Dashboard/navDashboard";
-
-import Inscripciones from "../assets/Eventos/Inscripciones.jpg";;
-import Delegados from "../assets/Eventos/Delegados.jpg";
-import Voluntariados from "../assets/Eventos/Voluntariado.jpg";
-import Otras from "../assets/Eventos/otras.jpg";
-
-
-import "../styles/Inicio/Caja-seguridad.css";
-import "../styles/Evento/Eventos.css";
 
 const CajaFichas = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("upcoming");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [fichas, setFichas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [nombreFicha, setNombreFicha] = useState("");
   const [comentarios, setComentarios] = useState("");
   const [foto, setFoto] = useState(null);
 
-  const fichas = [
-    {
-      id: 1,
-      title: "Inscripción componente académico JUDUCA",
-      image: Inscripciones,
-      description: "Ficha para inscribir a los participantes al evento.",
-      route: "/Formulario-fichas",
-    },
-    {
-      id: 2,
-      title: "Inscripción de delegados",
-      image: Delegados,
-      description: "Inscripción de los delegados de las universidades.",
-      route: "/Formulario-fichas",
-    },
-    {
-      id: 3,
-      title: "Inscripción de voluntariado",
-      image: Voluntariados,
-      description: "Inscripción de los voluntariados al evento.",
-      route: "/Formulario-fichas",
-    },
-    {
-      id: 3,
-      title: "Otras fichas",
-      image: Otras,
-      description: "Inscripción o registro de otras fichas.",
-      route: "/Formulario-fichas",
-    },
-    {
-      id: 3,
-      title: "Otras fichas",
-      image: Otras,
-      description: "Inscripción o registro de otras fichas.",
-      route: "/Formulario-fichas",
-    },
-    {
-      id: 3,
-      title: "Otras fichas",
-      image: Otras,
-      description: "Inscripción o registro de otras fichas.",
-      route: "/Formulario-fichas",
-    },
-    {
-      id: 3,
-      title: "Otras fichas",
-      image: Otras,
-      description: "Inscripción o registro de otras fichas.",
-      route: "/Formulario-fichas",
-    },
-  ];
+  const eventoActivo = JSON.parse(localStorage.getItem("eventoActivo"));
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  useEffect(() => {
+    const fetchFichas = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:4000/api/fichas/${eventoActivo.id}`
+        );
+        const data = await response.json();
+
+        if (data.hasError) {
+          throw new Error(data.errors.join(", "));
+        }
+
+        setFichas(
+          data.data.map((ficha) => ({
+            id: ficha.idFicha,
+            title: ficha.nombreFicha,
+            image: ficha.fotoFicha
+              ? `data:image/png;base64,${ficha.fotoFicha}`
+              : "default_ficha.jpg",
+            description: ficha.descripcion,
+            route: "/Formulario-fichas",
+          }))
+        );
+      } catch (err) {
+        setError("Error al cargar fichas.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (eventoActivo) {
+      fetchFichas();
+    } else {
+      setError("No hay un evento seleccionado.");
+      setLoading(false);
+    }
+  }, []);
+
+  const closeModal = () => setIsModalOpen(false);
 
   const handleDrop = (acceptedFiles) => {
     setFoto(acceptedFiles[0]);
@@ -97,12 +76,14 @@ const CajaFichas = () => {
             variant="outline-warning"
             onClick={() => navigate("/dashboard")}
             className="d-flex align-items-center gap-2"
-            style={{ margin: "20px 0" }}
+            style={{ marginTop: "20px" }}
           >
             <FaArrowLeft size={20} /> Regresar
           </Button>
 
-          <h2 className="caja-seguridad-title">Gestión de Fichas</h2>
+          <h2 className="caja-seguridad-title">
+            Fichas de {eventoActivo?.title || "Evento"}
+          </h2>
 
           <div className="eventtabs">
             <button
@@ -122,36 +103,43 @@ const CajaFichas = () => {
             </button>
           </div>
 
-          <div className="caja-seguridad-grid">
-            {fichas.map((item) => (
-              <div key={item.id} className="caja-seguridad-card">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="caja-seguridad-image"
-                  onClick={() => navigate(item.route)}
-                />
-                <h3>{item.title}</h3>
-                <p className="eventdescription">{item.description}</p>
-                <div className="eventicons">
-                  <FaEye
-                    onClick={() => navigate("/ficha-participantes")}
-                    className="eventicon manage-btn-credencial"
-                    style={{ marginBottom: "10px", cursor: "pointer" }}
-                  />
-                  <FaCog
-                    onClick={() => navigate("/Formulario-fichas")}
-                    className="eventicon manage-btn-credencial"
-                    style={{
-                      marginBottom: "10px",
-                      marginInline: "10px",
-                      cursor: "pointer",
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
+          {loading ? (
+            <div className="text-center">
+              <Spinner animation="border" variant="primary" />
+              <p>Cargando fichas...</p>
+            </div>
+          ) : error ? (
+            <p className="text-center text-danger">{error}</p>
+          ) : (
+            <div className="caja-seguridad-grid">
+              {fichas.length === 0 ? (
+                <p className="text-center">No hay fichas disponibles.</p>
+              ) : (
+                fichas.map((ficha) => (
+                  <div key={ficha.id} className="caja-seguridad-card">
+                    <img
+                      src={ficha.image}
+                      alt={ficha.title}
+                      className="caja-seguridad-image"
+                      onClick={() => navigate(ficha.route)}
+                    />
+                    <h3>{ficha.title}</h3>
+                    <p className="eventdescription">{ficha.description}</p>
+                    <div className="eventicons">
+                      <FaEye
+                        className="eventicon"
+                        onClick={() => navigate("/ficha-participantes")}
+                      />
+                      <FaCog
+                        className="eventicon"
+                        onClick={() => navigate("/Formulario-fichas")}
+                      />
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
         </div>
       </Container>
 
@@ -167,64 +155,57 @@ const CajaFichas = () => {
             <Modal.Title>Crear Ficha</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
-              <Form.Group controlId="formFichaNombre">
-                <Form.Label>Nombre de la Ficha</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={nombreFicha}
-                  onChange={(e) => setNombreFicha(e.target.value)}
-                  placeholder="Ingrese el nombre de la ficha"
-                />
-              </Form.Group>
+            <Form.Group controlId="formFichaNombre">
+              <Form.Label>Nombre de la Ficha</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Ingrese el nombre de la ficha"
+                value={nombreFicha}
+                onChange={(e) => setNombreFicha(e.target.value)}
+              />
+            </Form.Group>
 
-              <Form.Group controlId="formComentario">
-                <Form.Label>Comentarios</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  value={comentarios}
-                  onChange={(e) => setComentarios(e.target.value)}
-                  placeholder="Escriba sus comentarios"
-                />
-              </Form.Group>
+            <Form.Group controlId="formComentario">
+              <Form.Label>Comentarios</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={comentarios}
+                onChange={(e) => setComentarios(e.target.value)}
+                placeholder="Escriba sus comentarios"
+              />
+            </Form.Group>
 
-              <Form.Group controlId="formFoto">
-                <Form.Label>Foto</Form.Label>
-                <div
-                  {...getRootProps()}
+            <Form.Group controlId="formFoto">
+              <Form.Label>Foto</Form.Label>
+              <div
+                {...getRootProps()}
+                style={{
+                  border: "2px dashed #007bff",
+                  padding: "20px",
+                  textAlign: "center",
+                  cursor: "pointer",
+                  marginBottom: "10px",
+                }}
+              >
+                <input {...getInputProps()} />
+                <p>
+                  Arrastra y suelta una foto aquí o haz clic para seleccionar
+                </p>
+              </div>
+              {foto && (
+                <img
+                  src={URL.createObjectURL(foto)}
+                  alt="Foto seleccionada"
                   style={{
-                    border: "2px dashed #007bff",
-                    padding: "20px",
-                    textAlign: "center",
-                    cursor: "pointer",
-                    marginBottom: "10px",
+                    width: "250px",
+                    height: "150px",
+                    objectFit: "cover",
+                    borderRadius: "10px",
                   }}
-                >
-                  <input {...getInputProps()} />
-                  <p>
-                    Arrastra y suelta una foto aquí o haz clic para seleccionar
-                  </p>
-                </div>
-                {foto && (
-                  <div>
-                    <p>
-                      <strong>Foto seleccionada:</strong>
-                    </p>
-                    <img
-                      src={URL.createObjectURL(foto)}
-                      alt="Foto seleccionada"
-                      style={{
-                        width: "250px",
-                        height: "150px",
-                        objectFit: "cover",
-                        borderRadius: "10px",
-                      }}
-                    />
-                  </div>
-                )}
-              </Form.Group>
-            </Form>
+                />
+              )}
+            </Form.Group>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="outline-secondary" onClick={closeModal}>
@@ -239,3 +220,4 @@ const CajaFichas = () => {
 };
 
 export default CajaFichas;
+

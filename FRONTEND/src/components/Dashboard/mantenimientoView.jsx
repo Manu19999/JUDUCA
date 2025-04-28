@@ -10,7 +10,7 @@ import disciplinas from "../../assets/Mantenimientos/disciplinas.jpg";
 import reglas from "../../assets/Mantenimientos/reglas.jpg";
 import apiMapping from "../../assets/Mantenimientos/apiMapping.jpg";
 import generos from "../../assets/Mantenimientos/generos.jpg";
-
+import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Inicio/GestionAreas.css"; // Estilos de las cajas
 
 
@@ -75,14 +75,9 @@ const GestionMantenimiento = () => {
     <section id="mantenimientos" className="mantenimiento-list">
       <Container>
 
-        <Button
-          variant="outline-warning"
-          onClick={() => navigate("/dashboard")}
-          className="d-flex align-items-center gap-2"
-          style={{ marginTop: '55px' }}
-        >
-          <FaArrowLeft size={20} /> Regresar
-        </Button>  <h2 className="credenciallisttitle">MANTENIMIENTOS</h2>
+      <FaArrowLeft size={20} /> Regresar
+      <BotonRegresar to="/dashboard" text="Regresar"  />
+       <h2 className="credenciallisttitle">MANTENIMIENTOS</h2>
         <Row>
           {mantenimientosOptions.map((mantenimiento) => (
             <Col key={mantenimiento.id} xs={12} sm={6} md={4} lg={3} xl={2}>

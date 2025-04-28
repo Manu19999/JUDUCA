@@ -1,143 +1,259 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, Table, Alert, Card, Container } from "react-bootstrap";
-import { FaArrowLeft, FaClipboardList, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { Row, Col, Button, Alert, Form, Toast } from "react-bootstrap";
+import { FaArrowLeft } from "react-icons/fa";
+import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 
-const VistaDiseñoCredencial = () => {
+// Estilos centralizados para la vista previa y las celdas
+const previewContainerStyle = {
+  backgroundImage: `url(${fondoCredencial})`,
+  backgroundSize: "cover",
+  width: "600px",
+  height: "450px",
+  display: "grid",
+  gridTemplateColumns: "repeat(3, 1fr)",
+  gap: "5px",
+  border: "3px solid black",
+  padding: "10px",
+  backgroundColor: "#ffffff",
+};
+
+const cellStyle = (hasCampo) => ({
+  border: "1px solid gray",
+  textAlign: "center",
+  padding: "5px",
+  overflow: "hidden",
+  borderRadius: "4px",
+  backgroundColor: hasCampo ? "#d1e7dd" : "#fff",
+});
+
+// Componente para mostrar cada campo pendiente (draggable)
+const FieldCard = ({ campo, onDragStart }) => (
+  <div
+    draggable
+    onDragStart={(e) => onDragStart(e, campo)}
+    className="p-2 mb-2 border rounded bg-light"
+    style={{ cursor: "grab" }}
+  >
+    <strong>{campo.descripcion}</strong>
+    <br />
+    <small>{campo.leyenda}</small>
+    <br />
+    <em>{campo.lado}</em>
+  </div>
+);
+
+// Componente para cada celda de la cuadrícula (DropZone)
+const DropZone = ({ ubicacion, asignacion, onDrop, onDragOver, onDelete }) => (
+  <div
+    onDragOver={onDragOver}
+    onDrop={(e) => onDrop(e, ubicacion.id)}
+    className="p-2 border text-center position-relative rounded"
+    style={{
+      minHeight: "80px",
+      backgroundColor: asignacion ? "#d1e7dd" : "#fff",
+      overflow: "hidden",
+    }}
+  >
+    {asignacion ? (
+      <div>
+        <strong>{asignacion.descripcion}</strong>
+        <br />
+        <small>{asignacion.leyenda}</small>
+        <br />
+        <em>{asignacion.lado}</em>
+        <Button
+          variant="danger"
+          size="sm"
+          onClick={() => onDelete(ubicacion.id)}
+          className="position-absolute top-0 end-0 m-1"
+        >
+          X
+        </Button>
+      </div>
+    ) : (
+      <span>{ubicacion.descripcion}</span>
+    )}
+  </div>
+);
+
+const DisenoCredencial = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Intentar obtener la ficha desde `location.state` o `localStorage`
-  const [selectedFicha, setSelectedFicha] = useState(
-    location.state?.selectedFicha || JSON.parse(localStorage.getItem("selectedFicha")) || null
-  );
+  // Extraer datos de la vista anterior
+  const { fichaSeleccionada, asignaciones } = location.state || {};
 
-  const [diseños, setDiseños] = useState([]);
-  const [campos, setCampos] = useState([]);
+  // Estados
+  const [fechaVigencia, setFechaVigencia] = useState("");
+  const [usuarioRegistro] = useState("admin");
   const [error, setError] = useState(null);
+  const [previewSide, setPreviewSide] = useState("frente");
 
+  // Estado para cargar las ubicaciones desde el endpoint
+  const [ubicaciones, setUbicaciones] = useState([]);
+
+  // Estados para Toast
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+
+  // Notificación Toast
+  const showNotification = useCallback((message) => {
+    setToastMessage(message);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  }, []);
+
+  // Obtener ubicaciones desde el endpoint
   useEffect(() => {
-    if (!selectedFicha) {
-      setError("⚠ No se seleccionó ninguna ficha. Por favor, vuelve a la página anterior.");
+    const fetchUbicaciones = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/api/credencial/ubicacionCampos");
+        if (!response.ok) throw new Error("Error al obtener ubicaciones");
+        const data = await response.json();
+        // Se espera que la API retorne { success: true, data: [...] }
+        setUbicaciones(data.data);
+      } catch (err) {
+        console.error("Error fetching ubicaciones:", err);
+        setError("No se pudieron cargar las ubicaciones.");
+      }
+    };
+    fetchUbicaciones();
+  }, []);
+
+  // Función para guardar (simulado)
+  const handleGuardarDiseno = useCallback(() => {
+    if (!fichaSeleccionada) {
+      setError("No hay ficha seleccionada para guardar el diseño.");
       return;
     }
+    setError(null);
 
-    // Guardar la ficha seleccionada en localStorage para persistencia
-    localStorage.setItem("selectedFicha", JSON.stringify(selectedFicha));
+    const camposAsignados = Object.entries(asignaciones || {}).map(([key, campo]) => {
+      const [lado, ubicacionId] = key.split("-");
+      return {
+        descripcion: campo.descripcion,
+        leyenda: campo.leyenda,
+        lado,
+        ubicacionId,
+      };
+    });
 
-    // Simulando datos de la base de datos desde localStorage
-    const savedDiseños = localStorage.getItem("diseñosCredencial");
-    const savedCampos = localStorage.getItem("camposCredencial");
+    const payload = {
+      idFichaRegistro: fichaSeleccionada.idFichaRegistro,
+      fechaVigencia,
+      usuarioRegistro,
+      campos: camposAsignados,
+    };
 
-    if (savedDiseños) {
-      setDiseños(JSON.parse(savedDiseños));
-    } else {
-      setError("⚠ No hay diseños de credenciales disponibles.");
-    }
+    console.log("Simulando guardado Diseño Credencial con payload:", payload);
+    showNotification("Diseño guardado (simulado). Revisa la consola.");
+    navigate("/credencialView");
+  }, [fichaSeleccionada, fechaVigencia, usuarioRegistro, asignaciones, navigate, showNotification]);
 
-    if (savedCampos) {
-      setCampos(JSON.parse(savedCampos));
-    }
-  }, [selectedFicha]);
+  // Renderiza la cuadrícula 3x3 usando las ubicaciones cargadas desde el endpoint
+  const renderPreview = useCallback(() => (
+    <div style={previewContainerStyle}>
+      {ubicaciones.length > 0 ? (
+        ubicaciones.map((ubicacion) => {
+          const key = `${previewSide}-${ubicacion.id}`;
+          const campo = asignaciones ? asignaciones[key] : null;
+          return (
+            <div key={ubicacion.id} style={cellStyle(!!campo)}>
+              {campo ? (
+                <div>
+                  <strong>{campo.descripcion}</strong>
+                  <br />
+                  <small>{campo.leyenda}</small>
+                  <br />
+                  <em>{campo.lado}</em>
+                </div>
+              ) : (
+                <span>{ubicacion.descripcion}</span>
+              )}
+            </div>
+          );
+        })
+      ) : (
+        <p className="text-center">Cargando ubicaciones...</p>
+      )}
+    </div>
+  ), [previewSide, asignaciones, ubicaciones]);
 
   return (
-    <Container className="mt-4">
-      <Button 
-        variant="outline-warning" 
-        onClick={() => navigate("/")}
-        className="d-flex align-items-center gap-2 mb-3"
-        style={{ fontSize: "18px" }}
+    <div className="container-fluid">
+      <Button
+        variant="outline-warning"
+        onClick={() => navigate("/AsignacionCampos")}
+        className="d-flex align-items-center gap-2 mt-3 ms-3"
       >
         <FaArrowLeft size={20} /> Regresar
       </Button>
 
-      <h2 className="text-center my-4">🎨 Vista de Diseño de Credencial</h2>
-
-      {error ? (
-        <div className="text-center">
-          <Alert variant="danger" className="py-3">
-            <FaTimesCircle size={20} className="me-2" />
-            {error}
-          </Alert>
-          <Button variant="primary" onClick={() => navigate("/SeleccionarFicha")}>
-            Seleccionar Ficha
-          </Button>
-        </div>
-      ) : (
-        <>
-          {/* 🔹 Información de la Ficha Seleccionada */}
-          {selectedFicha && (
-            <Card className="shadow-sm mb-4">
-              <Card.Body>
-                <h4 className="text-center mb-2">📌 Ficha Seleccionada</h4>
-                <hr />
-                <h5 className="text-center">{selectedFicha.title}</h5>
-                <p className="text-center">{selectedFicha.description}</p>
-              </Card.Body>
-            </Card>
-          )}
-
-          {/* 🔹 Tabla de Diseños de Credencial */}
-          <h4 className="mb-3"><FaClipboardList className="me-2" /> Diseños de Credenciales</h4>
-          <Table striped bordered hover responsive className="shadow-sm">
-            <thead className="table-dark">
-              <tr>
-                <th>ID Diseño</th>
-                <th>ID Evento</th>
-                <th>ID Campo Credencial</th>
-                <th>ID Ficha Registro</th>
-                <th>Fecha de Vigencia</th>
-              </tr>
-            </thead>
-            <tbody>
-              {diseños.length > 0 ? (
-                diseños.map((diseño) => (
-                  <tr key={diseño.idDiseñoCredencial}>
-                    <td>{diseño.idDiseñoCredencial}</td>
-                    <td>{diseño.idEvento}</td>
-                    <td>{diseño.idCampoCredencial}</td>
-                    <td>{diseño.idFichaRegistro}</td>
-                    <td>{diseño.fechaVigencia}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="text-center text-muted">No hay diseños disponibles.</td>
-                </tr>
-              )}
-            </tbody>
-          </Table>
-
-          {/* 🔹 Tabla de Campos de Credencial */}
-          <h4 className="mt-4 mb-3"><FaCheckCircle className="me-2 text-success" /> Campos de Credencial</h4>
-          <Table striped bordered hover responsive className="shadow-sm">
-            <thead className="table-primary">
-              <tr>
-                <th>ID Campo Credencial</th>
-                <th>ID Ubicación Campo</th>
-                <th>Característica</th>
-              </tr>
-            </thead>
-            <tbody>
-              {campos.length > 0 ? (
-                campos.map((campo) => (
-                  <tr key={campo.idCampoCredencial}>
-                    <td>{campo.idCampoCredencial}</td>
-                    <td>{campo.idUbicacionCampo}</td>
-                    <td>{campo.caracteristica}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="3" className="text-center text-muted">No hay campos disponibles.</td>
-                </tr>
-              )}
-            </tbody>
-          </Table>
-        </>
+      {error && (
+        <Alert variant="danger" className="m-3">
+          {error}
+        </Alert>
       )}
-    </Container>
+
+      <Row>
+        {/* Panel Izquierdo: Datos y formulario */}
+        <Col md={4}>
+          <h4 className="mt-3">Diseño de Credencial</h4>
+          {!fichaSeleccionada ? (
+            <Alert variant="danger">No se recibió ninguna ficha seleccionada.</Alert>
+          ) : (
+            <>
+              <div className="mb-3">
+                <strong>Ficha Seleccionada:</strong> {fichaSeleccionada.title}
+              </div>
+              <Form.Group className="mb-3">
+                <Form.Label>Fecha de Vigencia</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={fechaVigencia}
+                  onChange={(e) => setFechaVigencia(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Check
+                type="switch"
+                id="switch-preview-side"
+                label={`Configurando: ${previewSide === "frente" ? "Frontal" : "Trasera"}`}
+                checked={previewSide === "trasero"}
+                onChange={(e) => setPreviewSide(e.target.checked ? "trasero" : "frente")}
+                className="mb-3"
+              />
+              <Button variant="primary" onClick={handleGuardarDiseno}>
+                Guardar Diseño
+              </Button>
+            </>
+          )}
+        </Col>
+
+        {/* Panel Derecho: Vista previa */}
+        <Col md={6} className="d-flex flex-column">
+          <h4 className="w-100 mt-3 text-center">
+            Previsualización - {previewSide === "frente" ? "Frontal" : "Trasera"}
+          </h4>
+          <div className="mx-auto" style={{ marginTop: "10px" }}>
+            {renderPreview()}
+          </div>
+        </Col>
+      </Row>
+
+      {/* Toast de notificaciones */}
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        className="position-fixed bottom-0 end-0 p-3"
+        style={{ zIndex: 5 }}
+      >
+        <Toast show={showToast} onClose={() => setShowToast(false)} delay={3000} autohide>
+          <Toast.Body>{toastMessage}</Toast.Body>
+        </Toast>
+      </div>
+    </div>
   );
 };
 
-export default VistaDiseñoCredencial;
+export default DisenoCredencial;

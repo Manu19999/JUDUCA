@@ -12,6 +12,7 @@ import { Button } from "react-bootstrap";
 import "../../styles/Credencial/credencial.css";
 import { FaTransgenderAlt } from 'react-icons/fa';
 import { FaArrowLeft } from "react-icons/fa";
+import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 
 
 function MantenimientoGeneros() {
@@ -82,19 +83,56 @@ function MantenimientoGeneros() {
   };
 
   // Guardar nuevo registro
-  const handleGuardarNuevo = () => {
-    formNuevo
-      .validateFields() // Valida los campos del formulario
-      .then((values) => {
-        console.log("Nuevo registro:", values);
-        setShowNuevoModal(false); // Cierra el modal
-        formNuevo.resetFields(); // Limpiar el formulario de nuevo registro
-        mostrarMensajeExito("El género se ha registrado correctamente."); // Mensaje de éxito
+  const handleGuardarNuevo = async () => {
+    formNuevo.validateFields()
+      .then(async (values) => {
+        try {
+          // Obtener el token almacenado correctamente
+          const token = localStorage.getItem("token");
+  
+          if (!token) {
+            throw new Error("No se encontró el token. Inicia sesión nuevamente.");
+          }
+  
+          // Hacer la petición al backend
+          const response = await fetch("http://localhost:4000/api/generos/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`, // Agregar el token
+            },
+            body: JSON.stringify({
+              descripcion: values.descripcion,
+              idObjeto: 7, // Asegurar que este ID existe en Seguridad.tblObjetos
+            }),
+          });
+  
+          // Obtener la respuesta en formato JSON
+          const data = await response.json();
+  
+          if (!response.ok) {
+            throw new Error(data.errors?.[0] || "Error al insertar el género");
+          }
+  
+          // **Actualizar la tabla después de agregar un nuevo género**
+          setGeneros((prevGeneros) => [...prevGeneros, data.data]);
+  
+          // Cerrar el modal y limpiar el formulario
+          setShowNuevoModal(false);
+          formNuevo.resetFields();
+  
+          // Mostrar mensaje de éxito
+          mostrarMensajeExito("El género se ha registrado correctamente.");
+        } catch (error) {
+          console.error("Error:", error);
+          mostrarMensajeError(error.message);
+        }
       })
       .catch((error) => {
-        console.error("Error al validar el formulario:", error); // Manejo de errores
+        console.error("Error al validar el formulario:", error);
       });
   };
+  
 
   // Guardar cambios en el registro editado
   const handleGuardarEdit = () => {
@@ -121,14 +159,7 @@ function MantenimientoGeneros() {
   return (
     <div className="crud">
       <Nav />
-      <Button
-        variant="outline-warning"
-        onClick={() => navigate("/mantenimientoView")}
-        className="d-flex align-items-center gap-2"
-        style={{ marginBottom: "35px", marginLeft: "200px" }}
-      >
-        <FaArrowLeft size={20} /> Regresar
-      </Button>
+      <BotonRegresar to="/mantenimientoView" text="Regresar"  />
       {/* componente de navegación del  navdashboard */}
       <Tabla
         columnas={columnas} // Columnas de la tabla
