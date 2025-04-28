@@ -1,0 +1,179 @@
+/* Estilos generales del modal */
+.custom-modal-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.custom-modal-card .ant-modal-content {
+  border-radius: 12px;
+  padding: 0;
+  max-height: 80vh; /* Altura máxima del modal (80% del viewport) */
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-modal-card .ant-modal-header {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 12px 20px;
+}
+
+.custom-modal-card .ant-modal-body {
+  padding: 28px;
+  overflow-y: auto; /* Habilita el scroll vertical */
+  flex-grow: 1; /* Asegura que el cuerpo ocupe el espacio disponible */
+}
+
+/* Estilos para la barra de desplazamiento en WebKit */
+.custom-modal-card .ant-modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-modal-card .ant-modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.custom-modal-card .ant-modal-body::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.custom-modal-card .ant-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Estilos para la barra de desplazamiento en Firefox */
+.custom-modal-card .ant-modal-body {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+.custom-modal-card .ant-modal-footer {
+  border-top: 1px solid #f0f0f0;
+  padding: 10px 20px;
+}
+
+/* Tamaño general de los botones en el modal */
+.custom-modal-card .ant-modal-footer .ant-btn {
+  height: 35px !important; /* Ajusta la altura */
+  width: 100px;
+}
+
+/* Estilos para los inputs */
+.custom-modal-card .ant-input {
+  height: 38px; /* Altura del input */
+  font-size: 14px; /* Tamaño de la fuente */
+  margin-bottom: -3px; /* Espacio entre el input y el footer */
+  
+}
+
+/* Estilos para los labels */
+.custom-modal-card .ant-form-item-label > label {
+  font-size: 14px; /* Tamaño de la fuente */
+  color: #333; /* Color del texto */
+  margin-bottom: 8px; /* Espacio entre el label y el input */
+}
+
+/* Ajustar el espacio entre el header y el primer label */
+.custom-modal-card .ant-modal-body .ant-form-item:first-child {
+  margin-top: -18px; /* Espacio entre el header y el primer label */
+}
+
+/* Estilos para los placeholders más oscuros */
+.custom-modal-card .ant-input::placeholder {
+  color: #666 !important; /* Un gris más oscuro */
+  opacity: 1 !important; /* Asegura que el color se vea */
+}
+
+/* Si usas Select, también puedes estilizar su placeholder */
+.custom-modal-card .ant-select-selection-placeholder {
+  color: #666 !important;
+}
+
+
+/* Estilos para el botón "Guardar" */
+.custom-modal-card .ant-modal-footer .ant-btn-primary {
+  background-color: #426a99 !important; /* Azul */
+  border-color: #2c5584 !important; /* Borde azul */
+  color: white !important; /* Texto blanco */
+}
+
+.custom-modal-card .ant-modal-footer .ant-btn-primary:hover {
+  background-color: #325880 !important; /* Azul más oscuro al pasar el mouse */
+  border-color: #2c5584 !important;
+}
+
+/* Estilos para el botón "Cancelar" (en ambos modales) */
+.custom-modal-card .ant-modal-footer .ant-btn:not(.ant-btn-primary),
+.confirmacion-modal .ant-modal-footer .confirmacion-cancel-btn.ant-btn {
+  background-color: #e3e3e3 !important; /* Gris */
+  border-color: #b3b3b3 !important; /* Borde gris */
+  color: black !important; /* Texto negro */
+}
+
+.custom-modal-card .ant-modal-footer .ant-btn:not(.ant-btn-primary):hover,
+.confirmacion-modal .ant-modal-footer .confirmacion-cancel-btn.ant-btn:hover {
+  background-color: #cecece !important; /* Gris más oscuro al pasar el mouse */
+  border-color: #b3b3b3 !important;
+}
+
+/* Estilos para el botón "Eliminar" */
+.confirmacion-modal .ant-modal-footer .confirmacion-delete-btn.ant-btn {
+  background-color: #d32f2f !important; /* Rojo más oscuro */
+  border-color: #d32f2f !important; /* Borde rojo más oscuro */
+  color: white !important; /* Texto blanco */
+}
+
+.confirmacion-modal .ant-modal-footer .confirmacion-delete-btn.ant-btn:hover {
+  background-color: #b71c1c !important; /* Rojo aún más oscuro al pasar el mouse */
+  border-color: #b71c1c !important;
+}
+
+
+/* Reducir el margen superior de las pestañas */
+.custom-modal-card .ant-tabs {
+  margin-top: -30px; /* Ajusta este valor según sea necesario */
+  
+}
+/* Agregar margen superior al primer Form.Item de cada pestaña */
+.custom-modal-card .ant-tabs-tabpane .ant-form-item:first-child {
+  margin-top: 4px; /* Ajusta este valor según sea necesario */
+}
+
+
+
+/* Contenedor de detalles */
+.detalle-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* Sin espacio entre filas */
+}
+
+/* Fila de detalles */
+.detalle-fila {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* Espacio entre clave y valor */
+  padding: 10px 12px; /* Espaciado interno */
+  border-bottom: 1px solid #e8e8e8; /* Línea divisoria */
+}
+
+.detalle-fila:last-child {
+  border-bottom: none; /* Eliminar borde de la última fila */
+}
+
+/* Clave (nombre del campo) */
+.detalle-clave {
+  font-weight: 500; /* Texto seminegrita */
+  color: #555; /* Color gris oscuro */
+  min-width: 140px; /* Ancho mínimo para alinear las claves */
+  text-transform: capitalize; /* Convertir la primera letra en mayúscula */
+}
+
+/* Valor (contenido del campo) */
+.detalle-valor {
+  flex: 1; /* Ocupa el espacio restante */
+  color: #777; /* Color gris */
+  word-break: break-word; /* Romper palabras largas */
+}

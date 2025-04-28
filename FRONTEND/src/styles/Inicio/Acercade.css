@@ -1,0 +1,124 @@
+/* Estilos para la sección Acerca de */
+.about-section {
+    padding: 130px 20px;
+    background: #ffffff; /* Fondo sólido y limpio */
+    text-align: center;
+    overflow: hidden;
+  }
+  
+  .about-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px; /* Menos padding para un look más minimalista */
+  }
+  
+  .about-title {
+    font-size: 2.5rem;
+    color: #1D386E;
+    margin-bottom: 20px;
+    font-weight: 600; /* Menos grueso para un look más ligero */
+    position: relative;
+    display: inline-block;
+    animation: fadeInDown 1s ease-in-out;
+  }
+  
+  .about-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 2px; /* Línea más delgada */
+    background-color: #1D386E;
+    margin: 10px auto 0;
+    transition: width 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .about-title:hover::after {
+    width: 100px; /* Línea más larga al hacer hover */
+    background-color: #ff6b6b; /* Cambio de color al hacer hover */
+  }
+  
+  .about-description {
+    font-size: 1.1rem;
+    color: #555;
+    text-align: justify;
+    line-height: 1.8;
+    animation: fadeInUp 1s ease-in-out;
+    margin-top: 20px;
+    max-width: 600px; /* Limita el ancho del texto para mejor legibilidad */
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Animaciones */
+  @keyframes fadeInDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Efecto de subrayado al hacer hover en el párrafo */
+  .about-description:hover {
+    color: #1D386E; /* Cambio de color al hacer hover */
+    transition: color 0.3s ease;
+  }
+  
+  /* Estilos responsivos */
+  @media (max-width: 768px) {
+    .about-section {
+      padding: 80px 15px;
+    }
+  
+    .about-title {
+      font-size: 2rem;
+    }
+  
+    .about-description {
+      font-size: 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .about-title {
+      font-size: 1.8rem;
+    }
+  
+    .about-description {
+      font-size: clamp(1rem, 2.5vw, 1.1rem);
+      color: #555;
+      text-align: justify;
+      line-height: 1.8;
+      animation: fadeInUp 1s ease-in-out;
+      max-width: 600px;
+      margin: 20px auto 0;
+      hyphens: auto; /* Permite dividir palabras para evitar huecos grandes */
+      word-spacing: -0.5px; /* Reduce espacios grandes entre palabras */
+    }
+    
+  }
+
+  @media (max-width: 337px) {
+    .about-title {
+      font-size: 1.65rem;
+    }
+  
+    .about-description {
+      font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+    
+  }

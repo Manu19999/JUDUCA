@@ -1,0 +1,216 @@
+/* Estilos generales del Navbar */
+.navbar-custom {
+  background: linear-gradient(to right, #253A69, #054d91);
+  height: 65px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(103, 123, 172, 0.5);
+  box-shadow: 0px 4px 6px rgba(103, 123, 172, 0.4);
+}
+
+
+/* Contenedor principal */
+.navbar-container {
+  width: 90%;
+  max-width: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+/* Contenedor para el logo y el texto */
+.logo-container {
+  display: flex;
+  align-items: center; /* Alinea el texto y el logo en una sola línea */
+  text-decoration: none;
+  gap: 10px; /* Espacio entre el texto y el logo */
+  margin-left: -50px;
+}
+
+/* Logo */
+.logo-img {
+  height: 50px; /* Ajusta el tamaño del logo según sea necesario */
+  width: auto;
+}
+
+/* Texto "Plataforma de eventos" */
+.platform-text {
+  font-size: 14px;
+  color: white;
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+}
+
+
+/* Asegura que la barra de navegación no se desajuste */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+
+/* Botón de menú toggle */
+.custom-toggle {
+  background: transparent;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  color: white;
+  display: none; /* Oculto en pantallas grandes */
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 8px;
+  border-radius: 5px;
+}
+
+/* Cambio de icono y hover */
+.custom-toggle:hover {
+  background: rgba(0, 123, 255, 0.3);
+}
+
+/* Menú de navegación */
+.custom-menu {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+
+/* Estilos para los enlaces */
+.navlinkcustom {
+  color: white; /* Color del texto */
+  text-decoration: none; /* Elimina el subrayado predeterminado */
+  font-size: 16px;
+  padding: 8px 12px;
+  position: relative; /* Necesario para posicionar el pseudo-elemento */
+  display: inline-block;
+  transition: color 0.3s; /* Transición para el color del texto */
+}
+
+/* Pseudo-elemento para el subrayado */
+.navlinkcustom::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0; /* Inicialmente, el subrayado no es visible */
+  height: 2px; /* Grosor del subrayado */
+  background-color: #ffc107; /* Color del subrayado */
+  transition: width 0.3s ease-in-out; /* Transición para el crecimiento del subrayado */
+}
+
+/* Efecto hover */
+.navlinkcustom:hover {
+  color: #ffc107; /* Cambia el color del texto al hacer hover (opcional) */
+}
+
+/* Hover para el subrayado */
+.navlinkcustom:hover::after {
+  width: 100%; /* El subrayado crece hasta el 100% del ancho del enlace */
+}
+
+
+/* Botón Acceder */
+.btn-acceder {
+  font-size: 17px;
+  border: 1px solid white;
+  background: none;
+  color: white;
+  font-weight: lighter;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 18px;
+}
+
+.btn-acceder:hover {
+  background: #ffffff;
+  color: #253a69;
+  border-color: #253a69;
+}
+
+/* Clases para manejar visibilidad en dispositivos */
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+/* Responsive para móviles */
+@media (max-width: 991px) {
+  .custom-toggle {
+    display: flex; /* Se muestra el botón de menú */
+    display: contents;
+  }
+
+  .custom-menu {
+    position: absolute;
+    top: 65px;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to right, #253a69, #054d91);
+    padding: 0px; /* Reducir el padding */
+    display: none; /* Oculto en móviles por defecto */
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+    gap: 0px; /* Espaciado entre elementos reducido */
+  }
+
+  .custom-menu.show {
+    display: flex; /* ✅ Se muestra cuando se activa */
+  }
+
+  .custom-menu a:last-child,
+  .custom-menu button:last-child {
+      margin-bottom: 15px; /* Ajusta el valor según necesites */
+  }
+
+  .nav-list {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .btn-acceder {
+    width: auto;
+    margin-top: 10px;
+    padding: 4px 8px;
+  }
+
+  .desktop-only {
+    display: none; /* Oculta el botón acceder de escritorio en móviles */
+  }
+
+  .mobile-only {
+    display: block; /* Muestra el botón acceder solo en móviles */
+  }
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .logo-img {
+    height: 50px; /* Reduce tamaño en pantallas pequeñas */
+    margin-left: 40px;
+  }
+
+  .platform-text {
+    font-size: 12px; /* Reduce el tamaño del texto en móviles */
+  }
+
+  .logo-container {
+    gap: 5px; /* Reduce espacio entre el logo y el texto */
+  }
+}

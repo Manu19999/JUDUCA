@@ -1,0 +1,558 @@
+/* ===== Estilos generales ===== */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 780px;
+  background: linear-gradient(135deg, #021a32, #0d2848, #064b61);
+  padding: 20px;
+}
+
+.error-message {
+  color: #fd5b5e; /* Rojo para el texto */
+  font-size: 14px;
+  text-align: center;
+  margin-top: -30px;
+  margin-bottom: 20px;
+  padding: 10px; 
+}
+
+/* ===== Contenedor del input y mensaje de error ===== */
+.input-wrapper {
+  display: flex;
+  flex-direction: column; /* Asegura que el error esté debajo del input */
+  align-items: flex-start; /* Alinea correctamente los mensajes de error */
+  width: 100%;
+}
+
+/* ===== Estilos del mensaje de error debajo del input ===== */
+.input-error-message {
+  color: #fd5b5e; /* Rojo para indicar error */
+  font-size: 12px; /* Tamaño de texto más pequeño */
+  margin-top: 5px; /* Espaciado justo debajo del borde inferior */
+  margin-left: 2.5rem; /* Alineado con el input */
+  text-align: left;
+  width: 90%; /* Mantiene alineación con el input */
+  display: block; /* Para evitar que el texto se solape */
+}
+
+/* ===== Estilos de los mensajes de error en inputs (ahora debajo del border-bottom) ===== */
+.input-error-message {
+  color: #fd5b5e; /* Rojo para indicar error */
+  font-size: 12px; /* Tamaño de texto más pequeño */
+/* Espaciado con respecto al borde inferior */
+  margin-left: 1.5rem; /* Alinear con el input respetando el icono */
+  text-align: left;
+  display: block; /* Mantiene alineado debajo del input */
+  margin-bottom: -20px;
+}
+
+
+/* Contenedor principal para el logo y el login-box */
+.login-wrapper {
+  position: relative; /* Necesario para posicionar el logo de manera absoluta */
+  width: 100%;
+  max-width: 500px; /* Ancho máximo del contenedor */
+}
+
+/* Sombra suave en el login con efecto de vidrio esmerilado */
+.login-box {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.login-title {
+  font-size: 1.5rem;
+  color: #e0e1e1;
+  font-weight: bold; /* Mayor peso de fuente */
+}
+
+.login-subtitle {
+  font-size: 0.9rem;
+  color: #e0e1e1;
+  margin-bottom: 3rem;
+}
+
+/* ===== Estilos del formulario ===== */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%; /* Ocupa todo el ancho disponible */
+}
+
+.input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border-bottom: 1.6px solid rgba(230, 230, 230, 0.4); /* Solo borde inferior */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  width: 90% !important;
+  margin: 0 auto; /* Centra el input */
+}
+
+.input-group:hover {
+  border-color: #dddddd;
+}
+
+.input-group:focus-within {
+  border-color: #dddddd;
+}
+
+/* Icono dentro del input */
+.input-icon {
+  position: absolute;
+  left: 0.5rem; /* Posición a la izquierda */
+  top: 50%; /* Centrado verticalmente */
+  transform: translateY(-50%); /* Ajuste fino para centrar */
+  color: rgb(29, 152, 176);
+  font-size: 1.2rem;
+  pointer-events: none; /* Evita que el icono interfiera con el input */
+}
+
+.input-group input {
+  width: 90%;
+  height: 50px;
+  font-size: 0.9rem;
+  padding: 0.75rem 0.8rem 0.25rem 2.5rem;
+  border: none;
+  background: transparent;
+  color: #f0f0f0; /* Color del texto */
+  outline: none;
+}
+
+.floating-label {
+  position: absolute;
+  left: 2.5rem; /* Ajuste para el ícono */
+  top: 50%; /* Centrado vertical dentro del input */
+  transform: translateY(-50%); /* Ajuste fino para centrar */
+  color: rgba(230, 230, 230, 0.4);
+  font-size: 0.9rem;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.floating-label.active,
+.input-focused + .floating-label {
+  top: -12px; /* Mueve el texto fuera del input, justo en el borde superior */
+  left: 50%; /* Centra horizontalmente */
+  transform: translateX(-50%); /* Ajuste fino para centrar */
+  font-size: 0.8rem; /* Reduce el tamaño del texto */
+  color: #003366; /* Cambia el color */
+   /* Fondo para que no se superponga */
+  padding: 0 0.5rem; /* Espaciado interno */
+  z-index: 1; /* Asegura que el texto esté por encima del input */
+}
+
+.input-focused + .floating-label {
+  top: 1;
+  left: 2rem;
+  font-size: 0.8rem;
+  color: #cecece; /* Fondo no blanco */
+  padding: 0 0.2rem;
+  transform: translateY(0);
+}
+
+/* Icono del ojo */
+.eye-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: rgb(29, 152, 176); /* Color azul */
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+  z-index: 2;
+}
+
+.eye-icon:hover {
+  color: rgb(42, 202, 233); /* Cambia de color al pasar el mouse */
+}
+
+/* Oculta el ícono de ojo predeterminado en Edge */
+input[type="password"]::-ms-reveal {
+  display: none !important;
+}
+
+/* Asegúrate de que el input de tipo password no muestre el ícono de ojo */
+input[type="password"] {
+  -webkit-text-security: disc; /* Para navegadores basados en WebKit (Chrome, Edge, etc.) */
+}
+/* ===== Botón de iniciar sesión ===== */
+.login-button {
+  color: #000000;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  background: #059cba;
+  box-shadow: 0 4px 15px rgba(232, 167, 19, 0);
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%; /* Ocupa todo el ancho disponible */
+}
+
+.login-button:hover {
+  background: #12abca;
+  box-shadow: 0 4px 20px rgba(19, 147, 232, 0.3);
+  
+}
+
+/* ===== Enlace de "Olvidé mi contraseña" ===== */
+.forgot-password {
+  color: #cecece;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease, transform 0.3s ease;
+  text-align: right; /* Alinea el texto a la derecha */
+  width: 100%; /* Ocupa todo el ancho disponible */
+}
+
+.forgot-password:hover {
+  color: #06accd;
+  text-decoration: underline;
+  transform: translateX(5px); /* Desplazamiento horizontal al pasar el mouse */
+}
+
+
+/* Logo */
+.login-image-container {
+  position: absolute;
+  top: -103px; /* Mueve el logo hacia arriba */
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 1;
+}
+
+.login-image {
+  width: 180px;
+  height: auto;
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+  filter: brightness(0.9) contrast(1.2);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.login-image:hover {
+  transform: scale(1.05) translateX(-2px);
+  filter: contrast(1.3) brightness(1) drop-shadow(-3px 0px 9px rgba(255, 0, 0, 0.7)) 
+    drop-shadow(3px 0px 5px rgba(0, 255, 255, 0.7));
+}
+/* Transición suave para el cambio de formularios */
+.login-form {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Efecto de desvanecimiento */
+.login-form.fade-enter {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.login-form.fade-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.login-form.fade-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.login-form.fade-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* RESPONSIVE: Ajuste en pantallas medianas */
+
+@media (max-width: 1450px) {
+  .login-container {
+    min-height: 100vh; /* Reduce el mínimo de altura en pantallas más pequeñas */
+  }
+}
+@media (max-width: 1024px) {
+  .back-to-home-button {
+    top: 50px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 1000px) {
+  .login-container {
+    min-height: 100vh; /* Reduce el mínimo de altura en pantallas más pequeñas */
+  }
+  .back-to-home-button {
+    right: 50px;
+    top: 50px;
+    font-size: 0.8rem;
+  }
+}
+
+/* RESPONSIVE: Ajuste en pantallas pequeñas */
+@media (max-width: 780px) {
+  .login-container {
+    min-height: 100vh; /* Reduce el mínimo de altura en pantallas más pequeñas */
+  }
+  
+  .login-title {
+    font-size: 1.3rem;
+  }
+  
+  .login-subtitle {
+    font-size: 0.8rem;
+  }
+  
+  .login-button {
+    font-size: 0.9rem;
+  }
+
+  .back-to-home-button {
+    height: 40px;
+    top: 50px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 485px) {
+
+  .login-title {
+    font-size: 1.2rem;
+  }
+  
+  .login-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .login-button {
+    font-size: 0.85rem;
+  }
+  
+  .floating-label{
+    font-size: 0.8rem;
+  }
+
+  .login-container {
+    min-height: 110vh;
+  }
+  .back-to-home-button {
+    height: 40px;
+    left: 65%;
+    font-size: 0.7rem;
+  }
+
+}
+
+@media (max-width: 390px) {
+  .back-to-home-button {
+    height: 30px;
+    top: 25px;
+    left: 55%;
+    font-size: 0.6rem;
+  }
+
+}
+
+/* ===== Estilos para el popup de autenticación de doble factor ===== */
+.popup-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Asegura que esté por encima de todo */
+}
+
+.popup-container {
+  background: rgba(255, 255, 255, 0.15); /* Fondo con efecto de vidrio esmerilado */
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  width: 90%;
+  max-width: 450px; /* Ancho máximo del popup */
+  text-align: center;
+  backdrop-filter: blur(30px); /* Efecto de desenfoque */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Borde sutil */
+}
+
+.popup-container h2 {
+  font-size: 1.5rem;
+  color: #e0e1e1; /* Color del texto */
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.popup-container p {
+  font-size: 0.9rem;
+  color: #e0e1e1; /* Color del texto */
+  margin-bottom: 2rem;
+}
+
+.popup-container .input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border-bottom: 1.6px solid rgba(230, 230, 230, 0.4); /* Borde inferior */
+  transition: border-color 0.3s ease;
+  width: 100%;
+  margin: 0 auto 2rem; /* Centra el input y añade margen inferior */
+}
+
+.popup-container .input-group:hover {
+  border-color: #dddddd; /* Cambia el color del borde al pasar el mouse */
+}
+
+.popup-container .input-group input {
+  width: 100%;
+  height: 50px;
+  font-size: 0.9rem;
+  padding: 0.75rem 0.8rem 0.25rem 1rem; /* Ajuste de padding */
+  border: none;
+  background: transparent;
+  color: #f0f0f0; /* Color del texto */
+  outline: none;
+}
+
+.popup-container .input-group input::placeholder {
+  color: rgba(230, 230, 230, 0.4); /* Color del placeholder */
+}
+
+.popup-container .login-button {
+  color: #000000;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  background: #059cba; /* Color de fondo del botón */
+  box-shadow: 0 4px 15px rgba(232, 167, 19, 0);
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%; /* Ocupa todo el ancho disponible */
+}
+
+.popup-container .login-button:hover {
+  background: #12abca; /* Cambia el color de fondo al pasar el mouse */
+  box-shadow: 0 4px 20px rgba(19, 147, 232, 0.3); /* Sombra al pasar el mouse */
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 780px) {
+  .popup-container {
+    padding: 1.5rem;
+  }
+
+  .popup-container h2 {
+    font-size: 1.3rem;
+  }
+
+  .popup-container p {
+    font-size: 0.8rem;
+  }
+
+  .popup-container .login-button {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 485px) {
+  
+  .popup-container {
+    padding: 1rem;
+  }
+
+  .popup-container h2 {
+    font-size: 1.2rem;
+  }
+
+  .popup-container p {
+    font-size: 0.75rem;
+  }
+
+  .popup-container .login-button {
+    font-size: 0.85rem;
+  }
+}
+
+/* ===== Estilos generales ===== */
+@media (max-width: 400px) {
+  .login-container {
+    min-height: 100vh; /* Ajusta la altura mínima */
+    padding: 13px; /* Reduce el padding */
+  }
+
+  .login-wrapper {
+    width: 100%;
+    max-width: 350px; /* Reducir el ancho máximo */
+  }
+
+  .login-box {
+    padding: 1.5rem; /* Reduce el padding */
+    width: 100%;
+  }
+
+  .login-title {
+    font-size: 1.2rem; /* Reduce el tamaño de la fuente */
+  }
+
+  .login-subtitle {
+    font-size: 0.7rem; /* Reduce el tamaño de la fuente */
+    margin-bottom: 2rem; /* Reduce el margen inferior */
+  }
+
+  .login-form {
+    gap: 2rem; /* Reduce el espacio entre los inputs */
+  }
+
+  .input-group input {
+    height: 40px; /* Reduce la altura del input */
+    font-size: 0.8rem; /* Reduce el tamaño de la fuente */
+    padding: 0.75rem 0.5rem 0.25rem 2rem; /* Ajuste en padding */
+  }
+
+  .floating-label {
+    font-size: 0.7rem; /* Reduce el tamaño de la fuente */
+  }
+
+  .login-button {
+    font-size: 0.8rem; /* Reduce el tamaño de la fuente */
+    padding: 0.5rem; /* Reduce el padding */
+  }
+
+  .forgot-password {
+    font-size: 0.8rem; /* Reduce el tamaño de la fuente */
+  }
+
+  
+
+  .back-to-home-button {
+    font-size: 0.6rem; /* Reduce el tamaño de la fuente */
+    height: 30px; /* Reduce la altura */
+    top: 20px; /* Ajusta la posición */
+  }
+}
+
+

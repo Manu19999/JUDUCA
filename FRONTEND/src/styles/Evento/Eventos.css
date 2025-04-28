@@ -1,0 +1,562 @@
+/* ********************* Estilo de los botones de los eventos Pasados, Próximos, Nuevo ************** */
+/* Pestañas */
+.eventtabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* Permite que las pestañas se ajusten en pantallas pequeñas */
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.eventtab {
+  font-size: 1.1rem;
+  color: #336699; /* Color principal de la UNAH */
+  padding: 12px 24px;
+  border: 1px solid #d8e8f9;
+  background: #f0f4f8; /* Fondo gris claro */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 30px;
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.eventtab:hover {
+  background: #e0e8f0; /* Fondo gris un poco más oscuro */
+  border: 1px solid #add1f8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.eventtab.active {
+  background: #336699; /* Fondo azul cuando está activo */
+  color: white;
+  box-shadow: 0 4px 12px rgba(51, 102, 153, 0.3);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(30%) sepia(100%) saturate(500%) hue-rotate(190deg);
+  cursor: pointer;
+}
+
+input[type="date"]::-moz-calendar-picker-indicator {
+  filter: invert(30%) sepia(100%) saturate(500%) hue-rotate(190deg);
+  cursor: pointer;
+}
+
+
+
+/* ***********   Estilos para el Formulario de Fichas   ************* */
+.contenedor-fichas {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.ficha-izquierda, .ficha-derecha {
+  flex: 1;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: black;
+}
+
+.seccion {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #f8f9fa;
+}
+
+.seccion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ddd;
+}
+
+.seccion-header input {
+  width: 70%;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: black;
+  background: white;
+}
+
+.editar-btn,
+.eliminar-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editar-btn {
+  color: black;
+}
+
+.eliminar-btn {
+  background: red;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  width: 20px;
+  height: 20px;
+}
+
+.botones-editar-eliminar {
+  display: flex;
+  gap: 10px;
+}
+
+.nueva-seccion, .nuevo-campo {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.nueva-seccion input, .nuevo-campo input, .nuevo-campo select {
+  flex: 1;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #fff;
+  color: black;
+}
+
+.nueva-seccion button, .nuevo-campo button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.guardar-btn {
+  width: 100%;
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #f8f9fa;
+}
+
+.campo label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.campo input, .campo select {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #fff;
+  color: black;
+}
+
+.campo .botones-editar-eliminar {
+  display: flex;
+  gap: 10px;
+}
+
+.campo .editar-btn,
+.campo .eliminar-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.campo .eliminar-btn {
+  background: red;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  width: 20px;
+  height: 20px;
+}
+
+.edit-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-dialog input {
+  padding: 8px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.edit-dialog button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+
+
+/* ***********   Ficha de Registro de participantes ************** */
+/* Contenedor principal del formulario */
+.registro-form {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+}
+
+.registro-form h2 {
+  text-align: center;
+  color: #222;
+  margin-bottom: 20px;
+}
+
+/* Fieldsets y leyendas */
+.registro-form fieldset {
+  border: none;
+  margin-bottom: 20px;
+  padding: 0;
+}
+
+.registro-form legend {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #007bff;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 5px;
+}
+
+/* Etiquetas e inputs */
+.registro-form label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.registro-form input,
+.registro-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #f9f9f9;
+  color: #333;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.registro-form input:focus,
+.registro-form textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+  outline: none;
+}
+
+/* Agrupación de opciones en línea */
+.opciones-linea {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+/* Para checkbox múltiples en bloque */
+.opciones-multiples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+/* Botón de enviar */
+.btn-register {
+  width: 100%;
+  padding: 12px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background 0.3s ease;
+}
+
+.btn-register:hover {
+  background: #0056b3;
+}
+
+/* ----------------- */
+/* Estilos de Check/Radio con un cuadro y check verde */
+/* ----------------- */
+.custom-check {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.custom-check input[type="checkbox"],
+.custom-check input[type="radio"] {
+  -webkit-appearance: none; 
+  -moz-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  margin-right: 8px;
+  border: 2px solid #000;  /* Borde del cuadro */
+  border-radius: 4px;      /* Ligero redondeo para un look más moderno */
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.custom-check input[type="checkbox"]:hover,
+.custom-check input[type="radio"]:hover {
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+/* Muestra un check verde al estar seleccionado */
+.custom-check input[type="checkbox"]:checked::after,
+.custom-check input[type="radio"]:checked::after {
+  content: "✔";
+  color: green;
+  font-size: 16px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Estilo de la etiqueta asociada */
+.custom-check label {
+  cursor: pointer;
+  color: #333;
+  font-weight: normal;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .registro-form {
+    width: 90%;
+    padding: 20px;
+  }
+}
+
+
+
+/* **** Iconos de editar para la Gestión de eventos  ******* */
+.eventicons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.eventicon {
+  cursor: pointer;
+  color: gray;/
+}
+
+.edit-btn {
+  color: gray; 
+}
+
+.manage-btn {
+  color: gray; 
+}
+
+
+/* *********************  Estilo para las Ficha de Registro dinámicas ******************************* */
+/* General container */
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+}
+
+/* Buttons */
+.form-btn {
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease-in-out;
+}
+
+.add-section-btn {
+  background-color: #007bff;
+  color: white;
+  width: 200px;
+  height: 40px;
+}
+.add-section-btn:hover {
+  background-color: #0056b3;
+}
+
+.delete-btn {
+  background-color: #f7f6f6;
+  color: white;
+  font-size: 14px;
+  padding: 5px 10px;
+}
+.delete-btn:hover {
+  background-color: #a71d2a;
+}
+
+.submit-form-btn {
+  background-color: #28a745;
+  color: white;
+  display: block;
+  margin: 20px auto;
+  width: 30%;
+  text-align: center;
+}
+.submit-form-btn:hover {
+  background-color: #1e7e34;
+}
+
+/* Card styles */
+.form-card {
+  background-color: #e0e0e0;
+  color: black;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  border-left: 4px solid #007bff;
+}
+
+.section-container {
+  padding: 20px;
+}
+
+.section-divider {
+  border: none;
+  height: 2px;
+  background-color: #007bff;
+  margin-bottom: 10px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* Field container */
+.field-container {
+  background-color: #e0e0e0;
+  color: black;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Inputs */
+.form-input {
+   background-color: #ffffff;
+   color: #000;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+.form-input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Checkbox */
+.form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 16px;
+}
+
+.form-checkbox input {
+  width: 20px;
+  height: 20px;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #020202;
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+}
+
+/* Checked style */
+.form-checkbox input:checked::before {
+  content: '✔';
+  color: rgb(15, 15, 15);
+  font-size: 16px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
