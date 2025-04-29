@@ -67,6 +67,7 @@ const AsignacionCampos = () => {
   const [error, setError] = useState(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [caracteristicasFicha, setCaracteristicasFicha] = useState([]); // Estado para características
 
   // Extraer la ficha seleccionada
   const selectedFicha =
@@ -126,6 +127,32 @@ const AsignacionCampos = () => {
     obtenerUbicaciones();
   }, []);
 
+  useEffect(() => {
+    // Verificar que la ficha esté seleccionada
+    if (!selectedFicha) return; // Si no hay ficha seleccionada, no hacer la solicitud
+  
+    console.log("ID de la ficha seleccionada:", selectedFicha.id); // Verifica si el ID es correcto
+  
+    const obtenerCaracteristicas = async () => {
+      try {
+        const response = await fetch(`http://localhost:4000/api/credencial/fichaCaracteristica/${selectedFicha.id}`);
+        if (!response.ok) throw new Error("Error al obtener las características");
+  
+        const data = await response.json();
+        if (data.success) {
+          setCaracteristicasFicha(data.data); // Asumimos que la respuesta contiene 'data'
+        } else {
+          setError("No se pudieron cargar las características de la ficha.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        setError("Hubo un error al obtener las características.");
+      }
+    };
+  
+    obtenerCaracteristicas();
+  }, [selectedFicha]);
+  
   // Notificaciones Toast
   const showNotification = useCallback((message) => {
     setToastMessage(message);
