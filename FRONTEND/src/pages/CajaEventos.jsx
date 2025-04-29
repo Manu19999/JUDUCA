@@ -23,9 +23,9 @@ const CajaEventos = () => {
   const obtenerImagenEvento = (nombreEvento) => {
     if (!nombreEvento) return JUDUCA; // Si no hay nombre, usar imagen de JUDUCA
     const nombre = nombreEvento.toLowerCase();
-    if (nombre.includes("juduca")) return JUDUCA;
-    if (nombre.includes("fucain")) return FUCAIN;
-    if (nombre.includes("danza")) return DANZA;
+    if (nombre.includes("evento 1")) return JUDUCA;
+    if (nombre.includes("evento 2")) return FUCAIN;
+    if (nombre.includes("evento 3")) return DANZA;
     return JUDUCA; // Si no coincide con nada, usar JUDUCA
   };
 
@@ -45,9 +45,8 @@ const CajaEventos = () => {
         const eventosConDatos = data.data.map((evento) => ({
           id: evento.idEvento,
           title: evento.nombreEvento || "Evento sin nombre", // Si no tiene nombre, asignar por defecto
-          image: evento.fotoEvento
-            ? `data:image/png;base64,${evento.fotoEvento}`
-            : obtenerImagenEvento(evento.nombre), // Asigna imagen basada en el nombre del evento
+          image: obtenerImagenEvento(evento.nombreEvento),
+           // Asigna imagen basada en el nombre del evento
           description: evento.descripcion || "Sin descripción",
           route: "/gestion-evento",
         }));
