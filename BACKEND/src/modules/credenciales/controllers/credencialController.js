@@ -76,6 +76,42 @@ export const ObtenerFichas = async (req, res) => {
   }
 };
 
+// Controlador para obtener las caracteristicas de la ficha de un evento específico o todas
+export const ObtenerCarateristicaFicha = async (req, res) => {
+  const { idFichaRegistro } = req.params; // Obtener el ID del evento si se proporciona
+  const response = new apiResponse(); // Crear una instancia de apiResponse
+
+  try {
+    const pool = await conexionbd(); // Obtener el pool de conexiones
+    const result = await pool
+      .request()
+      .input("idFichaRegistro", idFichaRegistro ? idFichaRegistro : null) // Pasar el parámetro opcional
+      .execute("Credenciales.splObtenerCaracteristicasFicha"); // Llamar al procedimiento almacenado
+
+    // Si el procedimiento devuelve un error
+    if (result.recordset.length > 0 && result.recordset[0].codigoError) {
+      response.setHasError(true);
+      response.setErrors([result.recordset[0].descripcion]);
+      return res.status(400).json(response.getResponse());
+    }
+
+    // Asignar los datos a la respuesta
+    response.setData(result.recordset);
+
+    // Enviar la respuesta exitosa
+    res.status(200).json(response.getResponse());
+  } catch (error) {
+    // Manejar el error
+    response.setHasError(true);
+    response.setErrors([error.message]);
+
+    // Enviar la respuesta con error
+    res.status(500).json(response.getResponse());
+  }
+};
+
+
+
 // Controlador para obtener los participantes de una ficha en un evento específico
 export const ObtenerParticipantesPorFicha = async (req, res) => {
   const { idEvento, idFichaRegistro } = req.params; // Extraer parámetros desde la URL
