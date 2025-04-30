@@ -7,7 +7,8 @@ import Inscripciones from "../../assets/Eventos/Inscripciones.jpg";
 import Delegados from "../../assets/Eventos/Delegados.jpg";
 import Voluntariados from "../../assets/Eventos/Voluntariado.jpg";
 import "../../styles/Credencial/credencial.css";
-import { FaArrowLeft } from "react-icons/fa";
+import BotonRegresar from "../../components/Dashboard/BotonRegresar";
+
 
 const GestionCredenciales = () => {
   const navigate = useNavigate();
@@ -99,14 +100,9 @@ const GestionCredenciales = () => {
   return (
     <section id="credenciales" className="eventlist">
       <Container>
-        <Button
-          variant="outline-warning"
-          onClick={() => navigate("/gestion-evento")}
-          className="d-flex align-items-center gap-2"
-          style={{ marginTop: "30px" }}
-        >
-          <FaArrowLeft size={20} /> Regresar
-        </Button>
+
+        <BotonRegresar to="/gestion-evento" text="Regresar" />
+
 
         {/* 🔹 Mostrar el nombre y estado del evento */}
         <h2 className="credenciallisttitle">

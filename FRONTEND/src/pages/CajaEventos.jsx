@@ -5,6 +5,8 @@ import { FaArrowLeft, FaEye, FaCog } from "react-icons/fa";
 import Nav from "../components/Dashboard/navDashboard";
 import "../styles/Inicio/Caja-seguridad.css";
 import "../styles/Evento/Eventos.css";
+import BotonRegresar from "../components/Dashboard/BotonRegresar";
+
 
 // 🔹 Imágenes establecidas previamente
 import JUDUCA from "../assets/Eventos/JUDUCA.jpg";
@@ -74,14 +76,9 @@ const CajaEventos = () => {
         <Nav />
 
         <div className="crud">
-          <Button
-            variant="outline-warning"
-            onClick={() => navigate("/dashboard")}
-            className="d-flex align-items-center gap-2"
-            style={{ marginTop: "30px" }}
-          >
-            <FaArrowLeft size={20} /> Regresar
-          </Button>
+
+          <BotonRegresar to="/dashboard" text="Regresar" />
+          
 
           <h2 className="caja-seguridad-title">Gestión de Eventos</h2>
 
