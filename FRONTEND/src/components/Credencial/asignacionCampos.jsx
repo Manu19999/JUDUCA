@@ -237,7 +237,7 @@ const AsignacionCampos = () => {
             style={{
               backgroundImage: `url(${fondoCredencial})`,
               backgroundSize: "cover",
-              width: "650px",
+              width: "750px",
               height: "450px",
               display: "grid",
               gridTemplateColumns: "repeat(3, 1fr)",

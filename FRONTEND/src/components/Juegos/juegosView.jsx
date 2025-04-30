@@ -5,11 +5,12 @@ import TargetaMantenimiento from "../Dashboard/TargetaMantenimientos";
 import competencias from "../../assets/Mantenimientos/competencias.jpg";
 import disciplinas from "../../assets/Mantenimientos/disciplinas.jpg";
 import reglas from "../../assets/Mantenimientos/reglas.jpg";
+import BotonRegresar from "../../components/Dashboard/BotonRegresar";
+
 
 
 import "../../styles/Inicio/GestionAreas.css"; // Estilos de las cajas
 import "../../styles/Credencial/credencial.css";
-import { FaArrowLeft } from "react-icons/fa";
 
 const GestionJuegos = () => {
   const navigate = useNavigate();
@@ -49,14 +50,11 @@ const GestionJuegos = () => {
     <section id="mantenimientos" className="mantenimiento-list">
       <Container>
 
-        <Button
-          variant="outline-warning"
-          onClick={() => navigate("/gestion-evento")}
-          className="d-flex align-items-center gap-2"
-          style={{ marginTop: '55px' }}
-        >
-          <FaArrowLeft size={20} /> Regresar
-        </Button>  <h2 className="credenciallisttitle">JUEGOS</h2>
+        <BotonRegresar to="/gestion-evento" text="Regresar" />
+
+        <div style={{ paddingTop: "30px" }}>
+
+         <h2 className="credenciallisttitle">JUEGOS</h2>
         <Row>
           {mantenimientosOptions.map((mantenimiento) => (
             <Col key={mantenimiento.id} xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -68,6 +66,8 @@ const GestionJuegos = () => {
             </Col>
           ))}
         </Row>
+        </div >
+
 
         <Modal show={showModal} onHide={() => setShowModal(false)} centered>
           <div style={{ backgroundColor: "#e3f2fd", borderRadius: "10px", padding: "20px" }}>

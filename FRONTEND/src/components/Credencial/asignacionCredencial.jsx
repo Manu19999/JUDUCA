@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Tabla from "../../components/Crud/Tabla.jsx";
 import Nav from "../../components/Dashboard/navDashboard.jsx";
-import { FaIdBadge, FaArrowLeft } from "react-icons/fa";
+import { FaIdBadge } from "react-icons/fa";
 import ModalNuevo from "../../components/Crud/Modal/ModalNuevo.jsx";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito.jsx";
 import { Input, Select, Form, Row, Col, Spin, Alert } from "antd";
 import { Button } from "react-bootstrap";
-
+import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Credencial/credencial.css";
 
 const { Option } = Select;
@@ -137,15 +137,8 @@ function CrearCredenciales() {
   return (
     <div className="crud">
       <Nav />
-
-      <Button
-        variant="outline-warning"
-        onClick={() => navigate("/gestion-evento")}
-        className="d-flex align-items-center gap-2"
-        style={{ marginTop: "30px" }}
-      >
-        <FaArrowLeft size={20} /> Regresar
-      </Button>
+      <BotonRegresar to="/credencialView" text="Regresar" />
+      
 
       {fichaActual && (
         <div className="credenciallisttitle" style={{ textAlign: "center", marginTop: "20px" }}>
