@@ -157,6 +157,53 @@ const AsignacionCampos = () => {
     }
   }, [previewSide, showNotification]);
 
+
+  const guardarAsignaciones = async () => {
+    const asignacionesList = Object.entries(asignaciones).map(([key, campo]) => {
+      const [ladoTexto, idUbicacionCampo] = key.split("-");
+      const lado = ladoTexto === "frente"; // Convertimos a booleano
+  
+      return {
+        idUbicacionCampo: parseInt(idUbicacionCampo),
+        lado,
+        caracteristica: campo.descripcion
+      };
+    });
+  
+    const token = localStorage.getItem("token");
+  
+    try {
+      const response = await fetch("http://localhost:4000/api/credencial/campos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          idFichaRegistro: selectedFicha.id,
+          campos: asignacionesList,
+          fechaVigencia: new Date(),  // Ajusta si tienes un campo real
+          idObjeto: 1  // Ajusta según sea necesario
+        }),
+      });
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error al guardar campos: ${response.status} - ${errorText}`);
+      }
+  
+      showNotification("Asignaciones guardadas exitosamente");
+      navigate("/diseñadorCredencial", {
+        state: { fichaSeleccionada: selectedFicha, asignaciones }
+      });
+  
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+    }
+  };
+  
+
   const handleEliminarAsignacion = useCallback((cellId) => {
     const key = `${previewSide}-${cellId}`;
     setAsignaciones(prev => {
@@ -192,10 +239,8 @@ const AsignacionCampos = () => {
           <div className="d-flex gap-3 mb-3">
             <Button
               variant="success"
-              onClick={() => navigate("/diseñadorCredencial", {
-                state: { fichaSeleccionada: selectedFicha, asignaciones }
-              })}
-            >
+              onClick={guardarAsignaciones}>
+            
               Terminar
             </Button>
             <Button
@@ -207,8 +252,7 @@ const AsignacionCampos = () => {
           </div>
           
           <h4 className="text-center my-3">Campos Disponibles</h4>
-          <div className="mt-4">
-            {camposPendientes
+          <div className="mt-4" style={{ maxHeight: "400px", overflowY: "auto" }}>            {camposPendientes
               // Eliminamos el filtro por lado
               .map(campo => (
                 <FieldCard 

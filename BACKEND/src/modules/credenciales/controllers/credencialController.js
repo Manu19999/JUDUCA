@@ -1,5 +1,6 @@
 import conexionbd from "../../../config/db.js";
 import apiResponse from "../../../utils/apiResponse.js";
+import sql from 'mssql'; // Importar sql para acceder a los tipos de datos
 
 
 
@@ -233,7 +234,66 @@ export const ObtenerCredencialesPorFicha = async (req, res) => {
   }
 };
 
+export const insertarCamposCredencial = async (req, res) => {
+  const response = new apiResponse();
 
+  try {
+    const { idFichaRegistro, campos, fechaVigencia, idObjeto } = req.body;
+
+    // Usuario desde el middleware (autenticado)
+    const idUsuario = req.usuario.idUsuario;
+    const nombreUsuario = req.usuario.nombreUsuario;
+
+    if (!campos || !Array.isArray(campos) || campos.length === 0) {
+      response.setHasError(true);
+      response.setErrors(["Debe proporcionar al menos un campo."]);
+      return res.status(400).json(response.getResponse());
+    }
+
+    const pool = await conexionbd();
+
+    // Crear un Table para el parámetro tipo tabla
+    const camposTable = new sql.Table("Credenciales.TipoCamposCredencial");
+    camposTable.columns.add("idUbicacionCampo", sql.Int);
+    camposTable.columns.add("leyenda", sql.NVarChar(100));
+    camposTable.columns.add("lado", sql.Bit);
+    camposTable.columns.add("caracteristica", sql.NVarChar(100));
+
+    campos.forEach(campo => {
+      camposTable.rows.add(
+        campo.idUbicacionCampo,
+        campo.leyenda,
+        campo.lado,
+        campo.caracteristica
+      );
+    });
+
+    const result = await pool
+      .request()
+      .input("idFichaRegistro", sql.Int, idFichaRegistro)
+      .input("campos", camposTable)
+      .input("fechaVigencia", sql.DateTime, fechaVigencia)
+      .input("idUsuario", sql.Int, idUsuario)
+      .input("nombreUsuario", sql.NVarChar, nombreUsuario)
+      .input("idObjeto", sql.Int, idObjeto)
+      .execute("Credenciales.splInsertarCamposCredencial");
+
+    // Validar si el procedimiento devolvió error
+    if (result.recordset?.[0]?.codigoError) {
+      response.setHasError(true);
+      response.setErrors([result.recordset[0].descripcion]);
+      return res.status(400).json(response.getResponse());
+    }
+    console.log(result);
+    // Retornar respuesta con datos
+    response.setData(result.recordset);
+    res.status(201).json(response.getResponse());
+  } catch (error) {
+    response.setHasError(true);
+    response.setErrors([error.message]);
+    res.status(500).json(response.getResponse());
+  }
+};
 
 
 // Controlador para insertar una credencial con código QR

@@ -1,5 +1,7 @@
 import express from 'express';
-import { ObtenerFichas, ObtenerCarateristicaFicha, ObtenerParticipantesPorFicha, ObtenerCredencialesPorFicha, ObtenerUbicacionesCampos ,ObtenerEventos, InsertarCredencial } from '../controllers/credencialController.js';
+import { ObtenerFichas, ObtenerCarateristicaFicha, ObtenerParticipantesPorFicha, ObtenerCredencialesPorFicha, ObtenerUbicacionesCampos ,ObtenerEventos, InsertarCredencial, insertarCamposCredencial  } from '../controllers/credencialController.js';
+import checkAuth from "../../../middleware/authMiddleware.js";
+
 
 const router = express.Router();
 
@@ -11,6 +13,8 @@ router.get('/credenciales/:idEvento/:idFichaRegistro', ObtenerCredencialesPorFic
 router.get('/ubicacionCampos', ObtenerUbicacionesCampos);
 
 router.post('/insCredencial', InsertarCredencial);
+
+router.post('/campos', checkAuth, insertarCamposCredencial);
 
 
 
