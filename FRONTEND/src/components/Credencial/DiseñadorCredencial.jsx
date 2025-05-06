@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 
@@ -12,20 +12,29 @@ const DiseñadorCredencial = () => {
   const [ubicaciones, setUbicaciones] = useState([]);
   const fichaSeleccionada = location.state?.fichaSeleccionada || null;
 
+  // Obtener asignaciones iniciales
   useEffect(() => {
-    // Obtener asignaciones desde location o localStorage
-    const asignacionesStorage = location.state?.asignaciones || JSON.parse(localStorage.getItem("asignaciones")) || {};
+    const asignacionesStorage =
+      location.state?.asignaciones ||
+      JSON.parse(localStorage.getItem("asignaciones")) || {};
     setAsignaciones(asignacionesStorage);
-  }, [location.state]);
+  }, [location.state?.asignaciones]);
 
+  // Guardar asignaciones en localStorage al cambiar
   useEffect(() => {
-    // Obtener ubicaciones desde el backend
+    localStorage.setItem("asignaciones", JSON.stringify(asignaciones));
+  }, [asignaciones]);
+
+  // Obtener ubicaciones desde API
+  useEffect(() => {
     const fetchUbicaciones = async () => {
       try {
         const response = await fetch("http://localhost:4000/api/credencial/ubicacionCampos");
         if (!response.ok) throw new Error("Error al obtener ubicaciones");
         const data = await response.json();
-        setUbicaciones(data.data);
+        if (Array.isArray(data.data)) {
+          setUbicaciones(data.data);
+        }
       } catch (error) {
         console.error("Error:", error);
       }
@@ -34,75 +43,98 @@ const DiseñadorCredencial = () => {
   }, []);
 
   const handleVolver = () => {
-    // Al volver, pasar las asignaciones y ficha seleccionada como estado
     navigate("/AsignacionCampos", {
       state: {
         selectedFicha: fichaSeleccionada,
-        asignaciones: asignaciones // Pasar las asignaciones a la página anterior
-      }
+        asignaciones: asignaciones,
+      },
     });
   };
 
   return (
     <div className="container-fluid">
-      {/* Usando BotonRegresar con onClick */}
       <BotonRegresar
         to="/AsignacionCampos"
-        text="Volver"
-        onClick={handleVolver} // Pasar handleVolver como onClick
+        text="Regresar"
+        onClick={handleVolver}
       />
 
-      {fichaSeleccionada && (
-        <div className="text-center mb-4">
-          <h3>Vista previa de la credencial: {fichaSeleccionada.title}</h3>
-          <div className="text-center mb-3">
-        <Form.Check
-          type="switch"
-          id="switch-preview-side"
-          label={`Vista ${previewSide === "frente" ? "Frontal" : "Trasera"}`}
-          checked={previewSide === "trasero"}
-          onChange={(e) => setPreviewSide(e.target.checked ? "trasero" : "frente")}
-        />
-      </div>
-        </div>
-      )}
+      {fichaSeleccionada ? (
+        <>
+<div className="text-center mb-4">
+  <h3 className="fw-bold text-primary">
+    Vista previa de la credencial: {fichaSeleccionada.title || "Sin título"}
+  </h3>
+
+  <Form.Check
+    type="switch"
+    id="switch-preview-side"
+    label={`Vista ${previewSide === "frente" ? "Frontal" : "Trasera"}`}
+    checked={previewSide === "trasero"}
+    onChange={(e) =>
+      setPreviewSide(e.target.checked ? "trasero" : "frente")
+    }
+    className="d-inline-block mt-2"
+    style={{ fontSize: "1rem" }}
+  />
+</div>
 
 
-
-      <div
-        className="mx-auto p-2"
-        style={{
-          backgroundImage: `url(${fondoCredencial})`,
-          backgroundSize: "cover",
-          width: "750px",
-          height: "450px",
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "5px",
-          border: "3px solid black",
-          padding: "10px",
-          backgroundColor: "#ffffff",
-        }}
-      >
-        {ubicaciones.map((ubicacion) => {
-          const clave = `${previewSide}-${ubicacion.idUbicacionCampo}`;
-          const campo = asignaciones[clave];
-
-          return (
+          {/* Contenedor con fondo y cuadrícula superpuesta */}
+          <div
+            className="mx-auto position-relative"
+            style={{
+              width: "750px",
+              height: "450px",
+              backgroundImage: `url(${fondoCredencial})`,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              border: "3px solid black",
+              borderRadius: "8px",
+              overflow: "hidden",
+            }}
+          >
             <div
-              key={ubicacion.idUbicacionCampo}
-              className="p-2 border rounded text-center"
+              className="position-absolute top-0 start-0 w-100 h-100 d-grid"
               style={{
-                backgroundColor: campo ? "#d1e7dd" : "#f8f9fa",
-                minHeight: "80px",
-                fontWeight: campo ? "bold" : "normal",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gridTemplateRows: "repeat(3, 1fr)",
+                gap: "5px",
+                padding: "10px",
               }}
             >
-              {campo ? campo.descripcion : <small>{ubicacion.descripcion}</small>}
+              {ubicaciones.map((ubicacion) => {
+                const clave = `${previewSide}-${ubicacion.idUbicacionCampo}`;
+                const campo = asignaciones[clave];
+
+                return (
+                  <div
+                    key={ubicacion.idUbicacionCampo}
+                    className="p-2 border rounded text-center"
+                    style={{
+                      backgroundColor: campo ? "#cfe2ff" : "rgba(255,255,255,0.6)",
+                      color: campo ? "#084298" : "#6c757d",
+                      border: campo ? "2px solid #084298" : "1px dashed #ced4da",
+                      minHeight: "80px",
+                      fontWeight: campo ? "bold" : "normal",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "0.9rem",
+                    }}
+                  >
+                    {campo ? campo.descripcion : <small>{ubicacion.descripcion}</small>}
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
-      </div>
+          </div>
+        </>
+      ) : (
+        <div className="text-center text-muted mt-4">
+          <p>No se ha seleccionado una ficha para mostrar la vista previa.</p>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,46 +1,46 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Alert, Form, Toast } from "react-bootstrap";
+import { Button, Alert, Form, Toast, Card } from "react-bootstrap";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 
 
 const FieldCard = ({ campo, onDragStart }) => (
-  <div
+  <Card
     draggable
     onDragStart={(e) => onDragStart(e, campo)}
-    className="p-2 mb-2 border rounded bg-light"
-    style={{ cursor: "grab" }}
-  >
-    <strong>{campo.descripcion}</strong>
-  </div>
+    className="mb-2 shadow-sm border-0"
+    style={{ cursor: "grab", transition: "transform 0.2s" }}
+    onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.02)")}
+    onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}>
+    <Card.Body className="d-flex align-items-center justify-content-between">
+      <span className="fw-bold">{campo.descripcion}</span>
+      <i className="bi bi-grip-vertical text-muted" style={{ fontSize: "1.2rem" }}></i>
+    </Card.Body>
+  </Card>
 );
 
 const DropZone = ({ ubicacion, asignacion, onDrop, onDragOver, onDelete }) => (
   <div
     onDragOver={onDragOver}
     onDrop={(e) => onDrop(e, ubicacion.idUbicacionCampo)}
-    className="p-2 border text-center position-relative rounded"
-    style={{
-      minHeight: "80px",
-      backgroundColor: asignacion ? "#d1e7dd" : "#fff",
-      overflow: "hidden",
-    }}
+    className={`p-3 rounded border text-center position-relative shadow-sm ${asignacion ? "bg-success bg-opacity-10" : "bg-light"}`}
+    style={{ minHeight: "100px", transition: "background-color 0.3s" }}
   >
     {asignacion ? (
       <div>
         <strong>{asignacion.descripcion}</strong>
         <Button
-          variant="danger"
+          variant="outline-danger"
           size="sm"
           onClick={() => onDelete(ubicacion.idUbicacionCampo)}
-          className="position-absolute top-0 end-0 m-1"
+          className="position-absolute top-0 end-0 m-1 px-2 py-0"
         >
-          X
+          <i className="bi bi-x-lg"></i>
         </Button>
       </div>
     ) : (
-      <span>{ubicacion.descripcion}</span>
+      <span className="text-muted">{ubicacion.descripcion}</span>
     )}
   </div>
 );
@@ -55,14 +55,23 @@ const AsignacionCampos = () => {
   const [caracteristicasFicha, setCaracteristicasFicha] = useState([]);
   const [previewSide, setPreviewSide] = useState("frente");
 
-  const selectedFicha = location.state?.selectedFicha || null;
-
+  const [selectedFicha, setSelectedFicha] = useState(() => {
+    return location.state?.selectedFicha || JSON.parse(localStorage.getItem("selectedFicha"));
+  });
+  
   const [asignaciones, setAsignaciones] = useState({});
 
   const camposPendientes = useMemo(() =>
     caracteristicasFicha.filter(caracteristica =>
       !Object.values(asignaciones).some(asignado => asignado.id === caracteristica.id)
     ), [caracteristicasFicha, asignaciones]);
+
+    useEffect(() => {
+      if (selectedFicha) {
+        localStorage.setItem("selectedFicha", JSON.stringify(selectedFicha));
+      }
+    }, [selectedFicha]);
+
 
 
   useEffect(() => {
@@ -178,7 +187,7 @@ const AsignacionCampos = () => {
         return updated;
       });
 
-      showNotification("Campo asignado.");
+      showNotification("Campo asignado correctamente.");
     }
   }, [previewSide, showNotification]);
 
@@ -334,10 +343,22 @@ const handleClearAll = useCallback(() => {
 }, [asignaciones, showNotification, selectedFicha.id, previewSide]);
 
 
+const handleVolver = () => {
+  navigate("/OpcionCredencial", {
+    state: {
+      selectedFicha: selectedFicha
+    },
+  });
+};
+
   return (
     <div className="container-fluid">
 
-      <BotonRegresar to="/credencialView" text="Regresar" />
+      <BotonRegresar
+        to="/OpcionCredencial"
+        text="Regresar"
+        onClick={handleVolver}
+      />
 
       {selectedFicha && (
         <div className="text-center my-3">
