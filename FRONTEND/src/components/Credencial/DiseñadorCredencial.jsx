@@ -34,24 +34,28 @@ const DiseñadorCredencial = () => {
   }, []);
 
   const handleVolver = () => {
-    navigate("/asignarCampos", {
+    // Al volver, pasar las asignaciones y ficha seleccionada como estado
+    navigate("/AsignacionCampos", {
       state: {
-        selectedFicha: fichaSeleccionada
+        selectedFicha: fichaSeleccionada,
+        asignaciones: asignaciones // Pasar las asignaciones a la página anterior
       }
     });
   };
 
   return (
     <div className="container-fluid">
-      <BotonRegresar to="/credencialView" text="Volver a menú" />
+      {/* Usando BotonRegresar con onClick */}
+      <BotonRegresar
+        to="/AsignacionCampos"
+        text="Volver"
+        onClick={handleVolver} // Pasar handleVolver como onClick
+      />
 
       {fichaSeleccionada && (
         <div className="text-center mb-4">
-          <h3>Vista previa de la credencial : {fichaSeleccionada.title}</h3>
-        </div>
-      )}
-
-      <div className="text-center mb-3">
+          <h3>Vista previa de la credencial: {fichaSeleccionada.title}</h3>
+          <div className="text-center mb-3">
         <Form.Check
           type="switch"
           id="switch-preview-side"
@@ -60,6 +64,10 @@ const DiseñadorCredencial = () => {
           onChange={(e) => setPreviewSide(e.target.checked ? "trasero" : "frente")}
         />
       </div>
+        </div>
+      )}
+
+
 
       <div
         className="mx-auto p-2"

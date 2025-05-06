@@ -380,8 +380,6 @@ export const eliminarCamposCredencial = async (req, res) => {
 };
 
 
-
-
 // Controlador para insertar una credencial con código QR
 export const InsertarCredencial = async (req, res) => {
   const response = new apiResponse(); // Crear instancia de apiResponse

@@ -8,14 +8,23 @@ const BotonRegresar = ({
   text = "Regresar",
   top = "100px",
   right = "20px",
-  variant = "outline-secondary"
+  variant = "outline-secondary",
+  onClick // Agregar el onClick personalizado
 }) => {
   const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick(); // Si se pasa una función, la ejecuta
+    } else {
+      navigate(to); // Si no, simplemente navega al 'to'
+    }
+  };
 
   return (
     <Button
       variant={variant}
-      onClick={() => navigate(to)}
+      onClick={handleClick} // Usar el handler personalizado
       className="d-flex align-items-center gap-2"
       style={{
         position: 'fixed',
