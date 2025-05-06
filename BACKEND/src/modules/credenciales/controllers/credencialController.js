@@ -112,6 +112,37 @@ export const ObtenerCarateristicaFicha = async (req, res) => {
 };
 
 
+// Controlador para obtener los campos de la credencial asignados a una ficha
+export const ObtenerCamposCredencialPorFicha = async (req, res) => {
+  const { idFichaRegistro } = req.params;
+  const response = new apiResponse(); // Instancia de apiResponse
+
+  try {
+    const pool = await conexionbd(); // Obtener conexión a la BD
+    const result = await pool
+      .request()
+      .input("idFichaRegistro", idFichaRegistro)
+      .execute("Credenciales.[splCamposCredencialPorFichaObtener]");
+
+    // Validar si el procedimiento devolvió error
+    if (result.recordset.length > 0 && result.recordset[0].codigoError) {
+      response.setHasError(true);
+      response.setErrors([result.recordset[0].descripcion]);
+      return res.status(400).json(response.getResponse());
+    }
+
+    // Asignar los datos si todo fue correcto
+    response.setData(result.recordset);
+    return res.status(200).json(response.getResponse());
+  } catch (error) {
+    response.setHasError(true);
+    response.setErrors([error.message]);
+    return res.status(500).json(response.getResponse());
+  }
+};
+
+
+
 
 // Controlador para obtener los participantes de una ficha en un evento específico
 export const ObtenerParticipantesPorFicha = async (req, res) => {
@@ -294,6 +325,61 @@ export const insertarCamposCredencial = async (req, res) => {
     res.status(500).json(response.getResponse());
   }
 };
+
+export const eliminarCamposCredencial = async (req, res) => {
+  const response = new apiResponse();
+
+  try {
+    const { idFichaRegistro, idCampos, idObjeto } = req.body;
+
+    // Usuario desde middleware autenticado
+    const idUsuario = req.usuario.idUsuario;
+    const nombreUsuario = req.usuario.nombreUsuario;
+
+    // Validación mínima
+    if (!idCampos || !Array.isArray(idCampos) || idCampos.length === 0) {
+      response.setHasError(true);
+      response.setErrors(["Debe proporcionar al menos un ID de campo a eliminar."]);
+      return res.status(400).json(response.getResponse());
+    }
+
+    const pool = await conexionbd();
+
+    // Crear el table-valued parameter para los IDs de campos
+    const idCamposTable = new sql.Table("Credenciales.tvpIdCamposCredencial");
+    idCamposTable.columns.add("idCampoCredencial", sql.Int);
+
+    idCampos.forEach(id => {
+      idCamposTable.rows.add(id);
+    });
+
+    const result = await pool
+      .request()
+      .input("idFichaRegistro", sql.Int, idFichaRegistro)
+      .input("idCampos", idCamposTable)
+      .input("idUsuario", sql.Int, idUsuario)
+      .input("nombreUsuario", sql.NVarChar, nombreUsuario)
+      .input("idObjeto", sql.Int, idObjeto)
+      .execute("Credenciales.splEliminarCamposCredencial");
+
+    // Validar si hubo error
+    if (result.recordset?.[0]?.codigoError !== 0) {
+      response.setHasError(true);
+      response.setErrors([result.recordset[0].descripcion]);
+      return res.status(400).json(response.getResponse());
+    }
+
+    // Éxito
+    response.setData(result.recordset);
+    return res.status(200).json(response.getResponse());  // Solo esta respuesta
+  } catch (error) {
+    response.setHasError(true);
+    response.setErrors([error.message]);
+    return res.status(500).json(response.getResponse());
+  }
+};
+
+
 
 
 // Controlador para insertar una credencial con código QR

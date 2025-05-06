@@ -4,7 +4,6 @@ import { Button, Alert, Form, Toast } from "react-bootstrap";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 
-const LS_ASIGNACIONES = "asignaciones";
 
 const FieldCard = ({ campo, onDragStart }) => (
   <div
@@ -56,24 +55,15 @@ const AsignacionCampos = () => {
   const [caracteristicasFicha, setCaracteristicasFicha] = useState([]);
   const [previewSide, setPreviewSide] = useState("frente");
 
-  const selectedFicha =
-    location.state?.selectedFicha ||
-    JSON.parse(localStorage.getItem("selectedFicha")) ||
-    null;
+  const selectedFicha = location.state?.selectedFicha || null;
 
-  const [asignaciones, setAsignaciones] = useState(() => {
-    const saved = localStorage.getItem(LS_ASIGNACIONES);
-    return saved ? JSON.parse(saved) : {};
-  });
+  const [asignaciones, setAsignaciones] = useState({});
 
-  const camposPendientes = useMemo(() => 
-    caracteristicasFicha.filter(caracteristica => 
+  const camposPendientes = useMemo(() =>
+    caracteristicasFicha.filter(caracteristica =>
       !Object.values(asignaciones).some(asignado => asignado.id === caracteristica.id)
-  ), [caracteristicasFicha, asignaciones]);
+    ), [caracteristicasFicha, asignaciones]);
 
-  useEffect(() => {
-    localStorage.setItem(LS_ASIGNACIONES, JSON.stringify(asignaciones));
-  }, [asignaciones]);
 
   useEffect(() => {
     const obtenerUbicaciones = async () => {
@@ -100,7 +90,7 @@ const AsignacionCampos = () => {
         const response = await fetch(
           `http://localhost:4000/api/credencial/fichaCaracteristica/${selectedFicha.id}`
         );
-        
+
         if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
 
         const { data } = await response.json();
@@ -114,7 +104,7 @@ const AsignacionCampos = () => {
         }));
 
         setCaracteristicasFicha(caracteristicasFormateadas);
-        
+
       } catch (error) {
         console.error("Error obteniendo características:", error);
         setError(`Error cargando características: ${error.message}`);
@@ -123,6 +113,36 @@ const AsignacionCampos = () => {
 
     obtenerCaracteristicas();
   }, [selectedFicha]);
+
+
+  useEffect(() => {
+    const obtenerAsignaciones = async () => {
+      try {
+        if (!selectedFicha?.id) return;
+
+        const response = await fetch(`http://localhost:4000/api/credencial/CamposCredencial/${selectedFicha.id}`);
+        if (!response.ok) throw new Error(`Error al obtener asignaciones: ${response.status}`);
+
+        const { data } = await response.json();
+        console.log(data)
+        const asignacionesMap = {};
+        for (const asignacion of data) {
+          const key = `${asignacion.lado ? 'frente' : 'trasero'}-${asignacion.idUbicacionCampo}`;
+          asignacionesMap[key] = {
+            id: asignacion.idCampoCredencial,
+            descripcion: asignacion.caracteristica
+          };
+        }
+
+        setAsignaciones(asignacionesMap);
+      } catch (error) {
+        console.error("Error al obtener asignaciones desde la API:", error);
+      }
+    };
+
+    obtenerAsignaciones();
+  }, [selectedFicha]);
+
 
   const showNotification = useCallback((message) => {
     setToastMessage(message);
@@ -139,7 +159,7 @@ const AsignacionCampos = () => {
   const handleDrop = useCallback((e, cellId) => {
     e.preventDefault();
     const campoData = e.dataTransfer.getData("campo");
-    
+
     if (campoData) {
       const campo = JSON.parse(campoData);
       const key = `${previewSide}-${cellId}`;
@@ -162,16 +182,16 @@ const AsignacionCampos = () => {
     const asignacionesList = Object.entries(asignaciones).map(([key, campo]) => {
       const [ladoTexto, idUbicacionCampo] = key.split("-");
       const lado = ladoTexto === "frente"; // Convertimos a booleano
-  
+
       return {
         idUbicacionCampo: parseInt(idUbicacionCampo),
         lado,
         caracteristica: campo.descripcion
       };
     });
-  
+
     const token = localStorage.getItem("token");
-  
+
     try {
       const response = await fetch("http://localhost:4000/api/credencial/campos", {
         method: "POST",
@@ -186,33 +206,66 @@ const AsignacionCampos = () => {
           idObjeto: 1  // Ajusta según sea necesario
         }),
       });
-  
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Error al guardar campos: ${response.status} - ${errorText}`);
       }
-  
+
       showNotification("Asignaciones guardadas exitosamente");
       navigate("/diseñadorCredencial", {
         state: { fichaSeleccionada: selectedFicha, asignaciones }
       });
-  
+
     } catch (err) {
       console.error(err);
       setError(err.message);
     }
   };
-  
 
-  const handleEliminarAsignacion = useCallback((cellId) => {
-    const key = `${previewSide}-${cellId}`;
-    setAsignaciones(prev => {
-      const updated = { ...prev };
-      delete updated[key];
-      return updated;
+
+ const handleEliminarAsignacion = useCallback((cellId) => {
+  const key = `${previewSide}-${cellId}`;
+  const campo = asignaciones[key];  // Encuentra el campo asignado para la celda
+  if (!campo) return;
+
+  // Llamada al backend para eliminar el campo
+  const token = localStorage.getItem("token");
+
+  fetch("http://localhost:4000/api/credencial/deleteCampos", {
+    method: "POST", // O "DELETE" dependiendo de lo que requiera el backend
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      idCampos : [campo.id],  // Envia el idCampoCredencial en lugar de idUbicacionCampo
+      idFichaRegistro: selectedFicha.id,
+      lado: previewSide === "frente",
+      idObjeto: 1 // O el valor que necesites
+    })
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.hasError) {
+        console.error("Error al eliminar campo:", data.errors);
+        setError(data.errors.join(", "));
+      } else {
+        showNotification("Campo eliminado correctamente.");
+        // Eliminarlo del estado local si es necesario
+        setAsignaciones(prev => {
+          const updated = { ...prev };
+          delete updated[key];
+          return updated;
+        });
+      }
+    })
+    .catch(err => {
+      console.error("Error al eliminar campo:", err);
+      setError("Error al eliminar campo.");
     });
-    showNotification("Campo removido.");
-  }, [previewSide, showNotification]);
+}, [previewSide, selectedFicha.id, asignaciones, showNotification]);
+
 
   const handleClearAll = useCallback(() => {
     if (window.confirm("¿Limpiar todas las asignaciones?")) {
@@ -224,7 +277,7 @@ const AsignacionCampos = () => {
   return (
     <div className="container-fluid">
 
-      <BotonRegresar to="/credencialView" text="Regresar"  />
+      <BotonRegresar to="/credencialView" text="Regresar" />
 
       {selectedFicha && (
         <div className="text-center my-3">
@@ -240,7 +293,7 @@ const AsignacionCampos = () => {
             <Button
               variant="success"
               onClick={guardarAsignaciones}>
-            
+
               Terminar
             </Button>
             <Button
@@ -250,17 +303,17 @@ const AsignacionCampos = () => {
               Limpiar
             </Button>
           </div>
-          
+
           <h4 className="text-center my-3">Campos Disponibles</h4>
           <div className="mt-4" style={{ maxHeight: "400px", overflowY: "auto" }}>            {camposPendientes
-              // Eliminamos el filtro por lado
-              .map(campo => (
-                <FieldCard 
-                  key={campo.id} 
-                  campo={campo} 
-                  onDragStart={handleDragStart} 
-                />
-              ))}
+            // Eliminamos el filtro por lado
+            .map(campo => (
+              <FieldCard
+                key={campo.id}
+                campo={campo}
+                onDragStart={handleDragStart}
+              />
+            ))}
           </div>
         </div>
 
@@ -275,7 +328,7 @@ const AsignacionCampos = () => {
               onChange={(e) => setPreviewSide(e.target.checked ? "trasero" : "frente")}
             />
           </div>
-          
+
           <div
             className="mx-auto p-2"
             style={{
@@ -305,9 +358,9 @@ const AsignacionCampos = () => {
         </div>
       </div>
 
-      <Toast 
-        show={showToast} 
-        onClose={() => setShowToast(false)} 
+      <Toast
+        show={showToast}
+        onClose={() => setShowToast(false)}
         className="position-fixed bottom-0 end-0 m-3"
       >
         <Toast.Body>{toastMessage}</Toast.Body>
