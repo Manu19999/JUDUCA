@@ -10,21 +10,55 @@ const DiseñadorCredencial = () => {
   const [previewSide, setPreviewSide] = useState("frente");
   const [asignaciones, setAsignaciones] = useState({});
   const [ubicaciones, setUbicaciones] = useState([]);
-  const fichaSeleccionada = location.state?.fichaSeleccionada || null;
+ const [selectedFicha, setSelectedFicha] = useState(() => {
+    return location.state?.selectedFicha || JSON.parse(localStorage.getItem("selectedFicha"));
+  });
 
-  // Obtener asignaciones iniciales
+
   useEffect(() => {
-    const asignacionesStorage =
-      location.state?.asignaciones ||
-      JSON.parse(localStorage.getItem("asignaciones")) || {};
-    setAsignaciones(asignacionesStorage);
-  }, [location.state?.asignaciones]);
+    if (!selectedFicha?.idFichaRegistro) {
+      console.log("No se ha seleccionado una ficha");
+      return;
+    }
+    // Hacer la llamada a la API...
+  }, [selectedFicha]);
 
-  // Guardar asignaciones en localStorage al cambiar
   useEffect(() => {
-    localStorage.setItem("asignaciones", JSON.stringify(asignaciones));
-  }, [asignaciones]);
-
+    const fetchAsignaciones = async () => {
+      try {
+        if (!selectedFicha?.id) return;
+  
+        const response = await fetch(
+          `http://localhost:4000/api/credencial/diseCredencial/${selectedFicha.id}`
+        );
+  
+        if (!response.ok) throw new Error("Error al obtener diseño de credencial");
+  
+        const result = await response.json();
+  
+        console.log("Datos recibidos del diseño de credencial:", result.data); // 👈 Aquí ves la data
+  
+        const asignacionesMap = {};
+        if (Array.isArray(result.data)) {
+          result.data.forEach((item) => {
+            const lado = parseInt(item.lado, 10) === 1 ? "frente" : "trasero";
+            const clave = `${item.lado ? "frente" : "trasero"}-${item.idUbicacionCampo}`;
+            asignacionesMap[clave] = {
+              idCampoCredencial: item.idCampoCredencial,
+              descripcion: item.caracteristica,
+            };
+          });
+        }
+  
+        setAsignaciones(asignacionesMap);
+      } catch (error) {
+        console.error("Error cargando diseño:", error);
+      }
+    };
+  
+    fetchAsignaciones();
+  }, [selectedFicha]);
+  
   // Obtener ubicaciones desde API
   useEffect(() => {
     const fetchUbicaciones = async () => {
@@ -45,8 +79,7 @@ const DiseñadorCredencial = () => {
   const handleVolver = () => {
     navigate("/AsignacionCampos", {
       state: {
-        selectedFicha: fichaSeleccionada,
-        asignaciones: asignaciones,
+        selectedFicha: selectedFicha,
       },
     });
   };
@@ -59,25 +92,25 @@ const DiseñadorCredencial = () => {
         onClick={handleVolver}
       />
 
-      {fichaSeleccionada ? (
+      {selectedFicha ? (
         <>
-<div className="text-center mb-4">
-  <h3 className="fw-bold text-primary">
-    Vista previa de la credencial: {fichaSeleccionada.title || "Sin título"}
-  </h3>
+          <div className="text-center mb-4">
+            <h3 className="fw-bold text-primary">
+              Vista previa de la credencial: {selectedFicha.title || "Sin título"}
+            </h3>
 
-  <Form.Check
-    type="switch"
-    id="switch-preview-side"
-    label={`Vista ${previewSide === "frente" ? "Frontal" : "Trasera"}`}
-    checked={previewSide === "trasero"}
-    onChange={(e) =>
-      setPreviewSide(e.target.checked ? "trasero" : "frente")
-    }
-    className="d-inline-block mt-2"
-    style={{ fontSize: "1rem" }}
-  />
-</div>
+            <Form.Check
+              type="switch"
+              id="switch-preview-side"
+              label={`Vista ${previewSide === "frente" ? "Frontal" : "Trasera"}`}
+              checked={previewSide === "trasero"}
+              onChange={(e) =>
+                setPreviewSide(e.target.checked ? "trasero" : "frente")
+              }
+              className="d-inline-block mt-2"
+              style={{ fontSize: "1rem" }}
+            />
+          </div>
 
 
           {/* Contenedor con fondo y cuadrícula superpuesta */}

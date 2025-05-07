@@ -228,7 +228,7 @@ const AsignacionCampos = () => {
 
       showNotification("Asignaciones guardadas exitosamente");
       navigate("/diseñadorCredencial", {
-        state: { fichaSeleccionada: selectedFicha, asignaciones }
+        state: { fichaSeleccionada: selectedFicha }
       });
 
     } catch (err) {
