@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Alert, Form, Toast, Card } from "react-bootstrap";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
+import Swal from "sweetalert2";
 
 
 const FieldCard = ({ campo, onDragStart }) => (
@@ -161,7 +162,7 @@ const AsignacionCampos = () => {
       setToastMessage(message);  // Handle string messages normally
     }
     setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
+    setTimeout(() => setShowToast(false), 4000);
   }, []);
 
   const handleDragStart = useCallback((e, campo) => {
@@ -282,66 +283,75 @@ const AsignacionCampos = () => {
 
 
 const handleClearAll = useCallback(() => {
-  if (window.confirm("¿Estás seguro de que deseas limpiar todas las asignaciones?")) {
-    const camposAEliminar = Object.values(asignaciones).map(campo => campo.id);
+  const camposAEliminar = Object.values(asignaciones).map(campo => campo.id);
 
-    // Si no hay asignaciones para limpiar
-    if (camposAEliminar.length === 0) {
-      showNotification({
-        message: "¡Ups! No hay asignaciones para limpiar.",
-        type: "warning",  // Notificación de advertencia
-        duration: 3000,    // Duración de la notificación
-      });
-      return;
-    }
-
-    const token = localStorage.getItem("token");
-
-    fetch("http://localhost:4000/api/credencial/deleteCampos", {
-      method: "POST", 
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        idCampos: camposAEliminar,
-        idFichaRegistro: selectedFicha.id,
-        lado: previewSide === "frente",
-        idObjeto: 1
-      })
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.hasError) {
-          console.error("Error al eliminar campos:", data.errors);
-          setError(data.errors.join(", "));
-          showNotification({
-            message: "Hubo un problema al intentar eliminar los campos. Por favor, intenta más tarde.",
-            type: "error", // Notificación de error
-            duration: 3000,
-          });
-        } else {
-          showNotification({
-            message: "¡Las asignaciones han sido eliminadas exitosamente!",
-            type: "success", // Notificación de éxito
-            duration: 3000,
-          });
-          // Limpiar las asignaciones localmente
-          setAsignaciones({});
-        }
-      })
-      .catch(err => {
-        console.error("Error al eliminar campos:", err);
-        setError("Error al eliminar campos.");
-        showNotification({
-          message: "¡Ocurrió un error inesperado! Por favor, intenta nuevamente.",
-          type: "error", // Notificación de error
-          duration: 3000,
-        });
-      });
+  // Si no hay asignaciones para limpiar
+  if (camposAEliminar.length === 0) {
+    showNotification({
+      message: "¡Ups! No hay asignaciones para limpiar.",
+      type: "warning",
+      duration: 3000,
+    });
+    return;
   }
-}, [asignaciones, showNotification, selectedFicha.id, previewSide]);
 
+  Swal.fire({
+    title: "¿Estás seguro?",
+    text: "Esto eliminará todas las asignaciones de esta credencial.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#253A69",
+    cancelButtonColor: "#ffcc00",
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "Cancelar"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const token = localStorage.getItem("token");
+
+      fetch("http://localhost:4000/api/credencial/deleteCampos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          idCampos: camposAEliminar,
+          idFichaRegistro: selectedFicha.id,
+          lado: previewSide === "frente",
+          idObjeto: 1
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.hasError) {
+            console.error("Error al eliminar campos:", data.errors);
+            setError(data.errors.join(", "));
+            showNotification({
+              message: "Hubo un problema al intentar eliminar los campos. Por favor, intenta más tarde.",
+              type: "error",
+              duration: 3000,
+            });
+          } else {
+            showNotification({
+              message: "¡Las asignaciones han sido eliminadas exitosamente!",
+              type: "success",
+              duration: 3000,
+            });
+            setAsignaciones({});
+          }
+        })
+        .catch(err => {
+          console.error("Error al eliminar campos:", err);
+          setError("Error al eliminar campos.");
+          showNotification({
+            message: "¡Ocurrió un error inesperado! Por favor, intenta nuevamente.",
+            type: "error",
+            duration: 3000,
+          });
+        });
+    }
+  });
+}, [asignaciones, showNotification, selectedFicha.id, previewSide]);
 
 const handleVolver = () => {
   navigate("/OpcionCredencial", {

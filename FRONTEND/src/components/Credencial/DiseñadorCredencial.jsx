@@ -91,12 +91,13 @@ const DiseñadorCredencial = () => {
         text="Regresar"
         onClick={handleVolver}
       />
+      
 
       {selectedFicha ? (
         <>
           <div className="text-center mb-4">
             <h3 className="fw-bold text-primary">
-              Vista previa de la credencial: {selectedFicha.title || "Sin título"}
+              Diseño de la credencial: {selectedFicha.title || "Sin título"}
             </h3>
 
             <Form.Check
