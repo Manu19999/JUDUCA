@@ -24,6 +24,12 @@ const DiseñadorCredencial = () => {
   }, [selectedFicha]);
 
   useEffect(() => {
+    if (selectedFicha) {
+      localStorage.setItem("selectedFicha", JSON.stringify(selectedFicha));
+    }
+  }, [selectedFicha]);
+
+  useEffect(() => {
     const fetchAsignaciones = async () => {
       try {
         if (!selectedFicha?.id) return;
