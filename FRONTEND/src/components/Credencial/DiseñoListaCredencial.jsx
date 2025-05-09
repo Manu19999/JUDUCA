@@ -5,7 +5,8 @@ import TargetaEstado from "../Credencial/targetasEstadoCredencial";
 import agregarCredencial from "../../assets/FondosCredencial/agregarCredencial.jpg";
 import configCredencial from "../../assets/FondosCredencial/configCredencial.jpg";
 import "../../styles/Credencial/credencial.css";
-import { FaArrowLeft } from "react-icons/fa";
+import BotonRegresar from "../../components/Dashboard/BotonRegresar";
+
 
 const Seleccion = () => {
   const navigate = useNavigate();
@@ -41,13 +42,8 @@ const Seleccion = () => {
   return (
     <section id="mantenimientos" className="mantenimiento-list">
       <Container>
-        <Button
-          variant="outline-warning"
-          onClick={() => navigate("/credencialView")}
-          className="d-flex align-items-center gap-2 mt-4"
-        >
-          <FaArrowLeft size={20} /> Regresar
-        </Button>
+        <BotonRegresar to="/credencialView" text="Regresar" />
+        
 
         {selectedFicha ? (
           <div className="credenciallisttitle text-center mt-3">

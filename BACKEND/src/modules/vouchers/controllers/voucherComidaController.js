@@ -30,7 +30,6 @@ export const getVouchersComidas = async (req, res) => {
 };
 
 // Insertar un nuevo voucher
-// Insertar un nuevo voucher
 export const insertVoucherComida = async (req, res) => {
     const {
         idEvento,

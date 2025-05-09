@@ -10,7 +10,7 @@ import uploadRoutes from './src/modules/seguridad/routes/uploadRoutes.js'; // Im
 import CredencialRoutes from './src/modules/credenciales/routes/credencialRoutes.js';
 
 //++++++++++++++++++++++++++  Importaciones de rutas de eventos  ++++++++++++++++++++++++++
-
+import EventosRoutes from './src/modules/eventos/routes/EventoRoutes.js';
 
 
 //++++++++++++++++++++++++++  Importaciones de rutas de fichas  ++++++++++++++++++++++++++
@@ -31,6 +31,8 @@ import AuthRoutes from './src/modules/seguridad/routes/authRoutes.js';
 import Roles from './src/modules/seguridad/routes/rolesRoutes.js';
 import Universidades from './src/modules/seguridad/routes/universidadesRoutes.js';
 import Usuarios from './src/modules/seguridad/routes/usuariosRoutes.js';
+import twoFactorRoutes from './src/modules/seguridad/routes/twoFactorRoutes.js';
+
 
 //++++++++++++++++++++++++++  Importaciones de rutas de vouchers  ++++++++++++++++++++++++++
 import VoucherComidaRoutes   from './src/modules/vouchers/routes/voucherComidaRoutes.js';
@@ -67,7 +69,7 @@ app.use("/api", uploadRoutes);
 app.use('/api/credencial', CredencialRoutes);
 
 //Eventos
-
+app.use('/api/eventos', EventosRoutes);
 
 //Fichas
 app.use("/api/fichas", FichasRoutes);
@@ -86,6 +88,8 @@ app.use('/api/auth', AuthRoutes);
 app.use('/api/roles', Roles);
 app.use('/api/universidades', Universidades);
 app.use('/api/usuarios', Usuarios);
+app.use('/api/twofactor', twoFactorRoutes);
+
 
 //Vouchers
 app.use('/api/voucherComida', VoucherComidaRoutes); 

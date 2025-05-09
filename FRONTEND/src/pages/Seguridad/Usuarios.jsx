@@ -11,6 +11,7 @@ import { Input, Select, Form, Card,Row, Col, DatePicker,Tabs } from 'antd';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
+import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 
 function Usuarios() {
   // Estados para controlar la visibilidad de los modales
@@ -125,6 +126,7 @@ function Usuarios() {
   return (
     <div className="crud">
       <Nav />{/* componente de navegación del  navdashboard */}
+      <BotonRegresar to="/seguridad" text="Regresar" />
       <Tabla 
         columnas={columnas}// Columnas de la tabla
         datos={usuarios.map((usuario) => ({ ...usuario, id: usuario.idUsuario }))}  // Usar los usuarios obtenidos de la API

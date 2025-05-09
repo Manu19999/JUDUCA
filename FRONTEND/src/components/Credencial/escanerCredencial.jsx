@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { QrReader } from "react-qr-reader";
-
+/*
 const QRScanner = () => {
   const [scanResult, setScanResult] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -55,3 +54,4 @@ const QRScanner = () => {
 };
 
 export default QRScanner;
+**/

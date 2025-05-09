@@ -7,7 +7,8 @@ import Inscripciones from "../../assets/Eventos/Inscripciones.jpg";
 import Delegados from "../../assets/Eventos/Delegados.jpg";
 import Voluntariados from "../../assets/Eventos/Voluntariado.jpg";
 import "../../styles/Credencial/credencial.css";
-import { FaArrowLeft } from "react-icons/fa";
+import BotonRegresar from "../../components/Dashboard/BotonRegresar";
+
 
 const GestionCredenciales = () => {
   const navigate = useNavigate();
@@ -99,14 +100,9 @@ const GestionCredenciales = () => {
   return (
     <section id="credenciales" className="eventlist">
       <Container>
-        <Button
-          variant="outline-warning"
-          onClick={() => navigate("/gestion-evento")}
-          className="d-flex align-items-center gap-2"
-          style={{ marginTop: "30px" }}
-        >
-          <FaArrowLeft size={20} /> Regresar
-        </Button>
+
+        <BotonRegresar to="/gestion-evento" text="Regresar" />
+
 
         {/* 🔹 Mostrar el nombre y estado del evento */}
         <h2 className="credenciallisttitle">
@@ -136,7 +132,7 @@ const GestionCredenciales = () => {
         )}
 
         {/* Modal con más información */}
-        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal size='lg' show={showModal} onHide={() => setShowModal(false)} centered>
           <div style={{ backgroundColor: "#e3f2fd", borderRadius: "10px" }}>
             <Modal.Header closeButton>
               <Modal.Title>Detalles de la Ficha</Modal.Title>

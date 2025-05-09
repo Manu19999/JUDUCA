@@ -1,86 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Alert, Form } from "react-bootstrap";
-import { FaArrowLeft } from "react-icons/fa";
+import { Button, Alert, Form, Toast, Card } from "react-bootstrap";
+import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
+import Swal from "sweetalert2";
 
-const LS_CAMPOS_PENDIENTES = "camposPendientes";
-const LS_ASIGNACIONES = "asignaciones";
-
-// Definición de ubicaciones (las 9 celdas de la cuadrícula)
-const ubicaciones = [
-  { id: "arriba-izquierda", descripcion: "Arriba a la Izquierda" },
-  { id: "arriba-centro", descripcion: "Arriba al Centro" },
-  { id: "arriba-derecha", descripcion: "Arriba a la Derecha" },
-  { id: "medio-izquierda", descripcion: "Medio a la Izquierda" },
-  { id: "centro-exacto", descripcion: "Centro Exacto" },
-  { id: "medio-derecha", descripcion: "Medio a la Derecha" },
-  { id: "abajo-izquierda", descripcion: "Abajo a la Izquierda" },
-  { id: "abajo-centro", descripcion: "Abajo al Centro" },
-  { id: "abajo-derecha", descripcion: "Abajo a la Derecha" },
-];
 
 const FieldCard = ({ campo, onDragStart }) => (
-  <div
+  <Card
     draggable
     onDragStart={(e) => onDragStart(e, campo)}
-    style={{
-      border: "1px solid #ccc",
-      padding: "8px",
-      marginBottom: "5px",
-      cursor: "grab",
-      backgroundColor: "#f8f9fa",
-    }}
-  >
-    <strong>{campo.descripcion}</strong>
-    <br />
-    <small>{campo.leyenda}</small>
-    <br />
-    <em>{campo.lado}</em>
-  </div>
+    className="mb-2 shadow-sm border-0"
+    style={{ cursor: "grab", transition: "transform 0.2s" }}
+    onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.02)")}
+    onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}>
+    <Card.Body className="d-flex align-items-center justify-content-between">
+      <span className="fw-bold">{campo.descripcion}</span>
+      <i className="bi bi-grip-vertical text-muted" style={{ fontSize: "1.2rem" }}></i>
+    </Card.Body>
+  </Card>
 );
 
 const DropZone = ({ ubicacion, asignacion, onDrop, onDragOver, onDelete }) => (
   <div
     onDragOver={onDragOver}
-    onDrop={(e) => onDrop(e, ubicacion.id)}
-    style={{
-      border: "1px solid gray",
-      textAlign: "center",
-      padding: "5px",
-      position: "relative",
-      minHeight: "80px",
-      backgroundColor: asignacion ? "#d1e7dd" : "#fff",
-      overflow: "hidden",
-    }}
+    onDrop={(e) => onDrop(e, ubicacion.idUbicacionCampo)}
+    className={`p-3 rounded border text-center position-relative shadow-sm ${asignacion ? "bg-success bg-opacity-10" : "bg-light"}`}
+    style={{ minHeight: "100px", transition: "background-color 0.3s" }}
   >
     {asignacion ? (
       <div>
         <strong>{asignacion.descripcion}</strong>
-        <br />
-        <small>{asignacion.leyenda}</small>
-        <br />
-        <em>{asignacion.lado}</em>
-        <button
-          onClick={() => onDelete(ubicacion.id)}
-          style={{
-            position: "absolute",
-            top: "5px",
-            right: "5px",
-            background: "red",
-            color: "white",
-            border: "none",
-            borderRadius: "50%",
-            padding: "2px 6px",
-            fontSize: "12px",
-            cursor: "pointer",
-          }}
+        <Button
+          variant="outline-danger"
+          size="sm"
+          onClick={() => onDelete(ubicacion.idUbicacionCampo)}
+          className="position-absolute top-0 end-0 m-1 px-2 py-0"
         >
-          X
-        </button>
+          <i className="bi bi-x-lg"></i>
+        </Button>
       </div>
     ) : (
-      <span>{ubicacion.descripcion}</span>
+      <span className="text-muted">{ubicacion.descripcion}</span>
     )}
   </div>
 );
@@ -88,159 +49,381 @@ const DropZone = ({ ubicacion, asignacion, onDrop, onDragOver, onDelete }) => (
 const AsignacionCampos = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const selectedFicha =
-    location.state?.selectedFicha ||
-    JSON.parse(localStorage.getItem("selectedFicha")) ||
-    null;
+  const [ubicaciones, setUbicaciones] = useState([]);
   const [error, setError] = useState(null);
-
-  // Estado para definir la vista actual (frente o trasero)
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [caracteristicasFicha, setCaracteristicasFicha] = useState([]);
   const [previewSide, setPreviewSide] = useState("frente");
 
-  // Estados para crear un nuevo campo
-  const [nuevaDescripcion, setNuevaDescripcion] = useState("");
-  const [leyenda, setLeyenda] = useState("");
-  const [ladoNuevo, setLadoNuevo] = useState(previewSide);
-
-  // Si se cambia la vista, se actualiza el lado por defecto en la creación
-  useEffect(() => {
-    setLadoNuevo(previewSide);
-  }, [previewSide]);
-
-  // Lista de campos pendientes (solo los que corresponden al lado actual)
-  const [camposPendientes, setCamposPendientes] = useState(() => {
-    const stored = localStorage.getItem(LS_CAMPOS_PENDIENTES);
-    return stored ? JSON.parse(stored) : [];
+  const [selectedFicha, setSelectedFicha] = useState(() => {
+    return location.state?.selectedFicha || JSON.parse(localStorage.getItem("selectedFicha"));
   });
-  useEffect(() => {
-    localStorage.setItem(LS_CAMPOS_PENDIENTES, JSON.stringify(camposPendientes));
-  }, [camposPendientes]);
+  
+  const [asignaciones, setAsignaciones] = useState({});
 
-  // Asignaciones: se almacenan con clave `${side}-${ubicacion.id}`
-  const [asignaciones, setAsignaciones] = useState(() => {
-    const saved = localStorage.getItem(LS_ASIGNACIONES);
-    return saved ? JSON.parse(saved) : {};
-  });
-  useEffect(() => {
-    localStorage.setItem(LS_ASIGNACIONES, JSON.stringify(asignaciones));
-  }, [asignaciones]);
+  const camposPendientes = useMemo(() =>
+    caracteristicasFicha.filter(caracteristica =>
+      !Object.values(asignaciones).some(asignado => asignado.id === caracteristica.id)
+    ), [caracteristicasFicha, asignaciones]);
 
-  // Crear un nuevo campo y agregarlo a pendientes
-  const handleCrearCampo = () => {
-    if (nuevaDescripcion.trim() === "") {
-      setError("Escriba una descripción para el campo.");
-      return;
-    }
-    const nuevoCampo = {
-      id: Date.now().toString(),
-      descripcion: nuevaDescripcion,
-      lado: ladoNuevo,
-      leyenda,
+    useEffect(() => {
+      if (selectedFicha) {
+        localStorage.setItem("selectedFicha", JSON.stringify(selectedFicha));
+      }
+    }, [selectedFicha]);
+
+
+
+  useEffect(() => {
+    const obtenerUbicaciones = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/api/credencial/ubicacionCampos");
+        if (!response.ok) throw new Error("Error al obtener ubicaciones");
+        setUbicaciones((await response.json()).data);
+      } catch (error) {
+        console.error("Error:", error);
+        setError("No se pudieron cargar las ubicaciones.");
+      }
     };
-    setCamposPendientes((prev) => [...prev, nuevoCampo]);
-    setNuevaDescripcion("");
-    setLeyenda("");
-    setError(null);
-  };
+    obtenerUbicaciones();
+  }, []);
 
-  // Drag & Drop: maneja el inicio del drag
-  const handleDragStart = (e, campo) => {
+  useEffect(() => {
+    const obtenerCaracteristicas = async () => {
+      try {
+        if (!selectedFicha?.id) {
+          setError("No se ha seleccionado ninguna ficha");
+          return;
+        }
+
+        const response = await fetch(
+          `http://localhost:4000/api/credencial/fichaCaracteristica/${selectedFicha.id}`
+        );
+
+        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+
+        const { data } = await response.json();
+
+        // Mapeo simplificado sin leyenda y lado
+        const caracteristicasFormateadas = data.map(c => ({
+          id: c.idCatalogoCaracteristica || c.id,
+          descripcion: c.caracteristica,
+          requerido: c.valorRequerido,
+          principal: c.valorPrincipal
+        }));
+
+        setCaracteristicasFicha(caracteristicasFormateadas);
+
+      } catch (error) {
+        console.error("Error obteniendo características:", error);
+        setError(`Error cargando características: ${error.message}`);
+      }
+    };
+
+    obtenerCaracteristicas();
+  }, [selectedFicha]);
+
+
+  useEffect(() => {
+    const obtenerAsignaciones = async () => {
+      try {
+        if (!selectedFicha?.id) return;
+
+        const response = await fetch(`http://localhost:4000/api/credencial/CamposCredencial/${selectedFicha.id}`);
+        if (!response.ok) throw new Error(`Error al obtener asignaciones: ${response.status}`);
+
+        const { data } = await response.json();
+        console.log(data)
+        const asignacionesMap = {};
+        for (const asignacion of data) {
+          const key = `${asignacion.lado ? 'frente' : 'trasero'}-${asignacion.idUbicacionCampo}`;
+          asignacionesMap[key] = {
+            id: asignacion.idCampoCredencial,
+            descripcion: asignacion.caracteristica
+          };
+        }
+
+        setAsignaciones(asignacionesMap);
+      } catch (error) {
+        console.error("Error al obtener asignaciones desde la API:", error);
+      }
+    };
+
+    obtenerAsignaciones();
+  }, [selectedFicha]);
+
+
+  const showNotification = useCallback((message) => {
+    if (typeof message === "object") {
+      setToastMessage(message.message);  // Set only the message content
+      // You can also handle `type` and `duration` if needed, depending on your implementation
+    } else {
+      setToastMessage(message);  // Handle string messages normally
+    }
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 4000);
+  }, []);
+
+  const handleDragStart = useCallback((e, campo) => {
     e.dataTransfer.setData("campo", JSON.stringify(campo));
-  };
+  }, []);
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
+  const handleDragOver = useCallback((e) => e.preventDefault(), []);
 
-  // Al soltar, se asigna el campo a la celda con clave compuesta
-  const handleDrop = (e, cellId) => {
+  const handleDrop = useCallback((e, cellId) => {
     e.preventDefault();
     const campoData = e.dataTransfer.getData("campo");
+
     if (campoData) {
       const campo = JSON.parse(campoData);
       const key = `${previewSide}-${cellId}`;
-      setAsignaciones((prev) => ({
-        ...prev,
-        [key]: campo,
-      }));
-      setCamposPendientes((prev) => prev.filter((c) => c.id !== campo.id));
-    }
-  };
 
-  // Elimina la asignación de una celda y devuelve el campo a pendientes
-  const handleEliminarAsignacion = (cellId) => {
-    const key = `${previewSide}-${cellId}`;
-    if (asignaciones[key]) {
-      setCamposPendientes((prev) => [...prev, asignaciones[key]]);
-      setAsignaciones((prev) => {
+      setAsignaciones(prev => {
         const updated = { ...prev };
-        delete updated[key];
+        Object.keys(updated).forEach(k => {
+          if (updated[k]?.id === campo.id) delete updated[k];
+        });
+        updated[key] = campo;
         return updated;
       });
+
+      showNotification("Campo asignado correctamente.");
     }
-  };
+  }, [previewSide, showNotification]);
+
+
+  const guardarAsignaciones = async () => {
+  const asignacionesList = Object.entries(asignaciones).map(([key, campo]) => {
+    const [ladoTexto, idUbicacionCampo] = key.split("-");
+    const lado = ladoTexto === "frente";
+
+    return {
+      idUbicacionCampo: parseInt(idUbicacionCampo),
+      lado,
+      caracteristica: campo.descripcion
+    };
+  });
+
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await fetch("http://localhost:4000/api/credencial/campos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        idFichaRegistro: selectedFicha.id,
+        campos: asignacionesList,
+        fechaVigencia: new Date(),  // Ajusta si tienes un campo real
+        idObjeto: 1
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Error al guardar campos: ${response.status} - ${errorText}`);
+    }
+
+    await Swal.fire({
+      icon: "success",
+      title: "¡Asignaciones guardadas!",
+      text: "Las asignaciones fueron registradas correctamente.",
+      confirmButtonColor: "#253A69",
+    });
+
+    navigate("/diseñadorCredencial", {
+      state: { fichaSeleccionada: selectedFicha }
+    });
+
+  } catch (err) {
+    console.error(err);
+
+    await Swal.fire({
+      icon: "error",
+      title: "Error al guardar",
+      text: err.message || "Ocurrió un problema al guardar las asignaciones.",
+      confirmButtonColor: "#d33",
+    });
+
+    setError(err.message);
+  }
+};
+
+
+ const handleEliminarAsignacion = useCallback((cellId) => {
+  const key = `${previewSide}-${cellId}`;
+  const campo = asignaciones[key];  // Encuentra el campo asignado para la celda
+  if (!campo) return;
+
+  // Llamada al backend para eliminar el campo
+  const token = localStorage.getItem("token");
+
+  fetch("http://localhost:4000/api/credencial/deleteCampos", {
+    method: "POST", // O "DELETE" dependiendo de lo que requiera el backend
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      idCampos : [campo.id],  // Envia el idCampoCredencial en lugar de idUbicacionCampo
+      idFichaRegistro: selectedFicha.id,
+      lado: previewSide === "frente",
+      idObjeto: 1 // O el valor que necesites
+    })
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.hasError) {
+        console.error("Error al eliminar campo:", data.errors);
+        setError(data.errors.join(", "));
+      } else {
+        showNotification("Campo eliminado correctamente.");
+        // Eliminarlo del estado local si es necesario
+        setAsignaciones(prev => {
+          const updated = { ...prev };
+          delete updated[key];
+          return updated;
+        });
+      }
+    })
+    .catch(err => {
+      console.error("Error al eliminar campo:", err);
+      setError("Error al eliminar campo.");
+    });
+}, [previewSide, selectedFicha.id, asignaciones, showNotification]);
+
+
+const handleClearAll = useCallback(() => {
+  const camposAEliminar = Object.values(asignaciones).map(campo => campo.id);
+
+  // Si no hay asignaciones para limpiar
+  if (camposAEliminar.length === 0) {
+    showNotification({
+      message: "¡Ups! No hay asignaciones para limpiar.",
+      type: "warning",
+      duration: 3000,
+    });
+    return;
+  }
+
+  Swal.fire({
+    title: "¿Estás seguro?",
+    text: "Esto eliminará todas las asignaciones de esta credencial.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#253A69",
+    cancelButtonColor: "#ffcc00",
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "Cancelar"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const token = localStorage.getItem("token");
+
+      fetch("http://localhost:4000/api/credencial/deleteCampos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          idCampos: camposAEliminar,
+          idFichaRegistro: selectedFicha.id,
+          lado: previewSide === "frente",
+          idObjeto: 1
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.hasError) {
+            console.error("Error al eliminar campos:", data.errors);
+            setError(data.errors.join(", "));
+            showNotification({
+              message: "Hubo un problema al intentar eliminar los campos. Por favor, intenta más tarde.",
+              type: "error",
+              duration: 3000,
+            });
+          } else {
+            showNotification({
+              message: "¡Las asignaciones han sido eliminadas exitosamente!",
+              type: "success",
+              duration: 3000,
+            });
+            setAsignaciones({});
+          }
+        })
+        .catch(err => {
+          console.error("Error al eliminar campos:", err);
+          setError("Error al eliminar campos.");
+          showNotification({
+            message: "¡Ocurrió un error inesperado! Por favor, intenta nuevamente.",
+            type: "error",
+            duration: 3000,
+          });
+        });
+    }
+  });
+}, [asignaciones, showNotification, selectedFicha.id, previewSide]);
+
+const handleVolver = () => {
+  navigate("/OpcionCredencial", {
+    state: {
+      selectedFicha: selectedFicha
+    },
+  });
+};
 
   return (
     <div className="container-fluid">
-      <Button
-        variant="outline-warning"
-        onClick={() => navigate("/credencialView")}
-        className="d-flex align-items-center gap-2"
-        style={{ marginBottom: "20px", marginLeft: "20px" }}
-      >
-        <FaArrowLeft size={20} /> Regresar
-      </Button>
+
+      <BotonRegresar
+        to="/OpcionCredencial"
+        text="Regresar"
+        onClick={handleVolver}
+      />
+
+      {selectedFicha && (
+        <div className="text-center my-3">
+          <h3>Ficha Seleccionada: {selectedFicha.title}</h3>
+        </div>
+      )}
+
       {error && <Alert variant="danger">{error}</Alert>}
 
       <div className="row">
-        {/* Panel Izquierdo: Formulario para crear campo y lista de pendientes */}
         <div className="col-md-4">
-          <h3 className="text-center my-3">Crear Campo</h3>
-          <Form.Group className="mb-3">
-            <Form.Label>Descripción:</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Escribir descripción"
-              value={nuevaDescripcion}
-              onChange={(e) => setNuevaDescripcion(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Leyenda:</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Texto adicional o leyenda"
-              value={leyenda}
-              onChange={(e) => setLeyenda(e.target.value)}
-            />
-          </Form.Group>
-          <div className="mb-3">
-            <Form.Check
-              type="switch"
-              id="switch-crear-lado"
-              label={`Asignar a ${ladoNuevo === "frente" ? "Frente" : "Trasero"}`}
-              checked={ladoNuevo === "trasero"}
-              onChange={(e) => setLadoNuevo(e.target.checked ? "trasero" : "frente")}
-            />
-          </div>
-          <div className="text-center">
-            <Button variant="primary" onClick={handleCrearCampo}>
-              Crear Campo (Arrastrar)
+          <div className="d-flex gap-3 mb-3">
+            <Button
+              variant="success"
+              onClick={guardarAsignaciones}>
+
+              Terminar
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleClearAll}
+            >
+              Limpiar
             </Button>
           </div>
-          <div className="mt-4">
-            <h5>Campos pendientes</h5>
-            {camposPendientes
-              .filter((campo) => campo.lado === previewSide)
-              .map((campo) => (
-                <FieldCard key={campo.id} campo={campo} onDragStart={handleDragStart} />
-              ))}
+
+          <h4 className="text-center my-3">Campos Disponibles</h4>
+          <div className="mt-4" style={{ maxHeight: "400px", overflowY: "auto" }}>            {camposPendientes
+            // Eliminamos el filtro por lado
+            .map(campo => (
+              <FieldCard
+                key={campo.id}
+                campo={campo}
+                onDragStart={handleDragStart}
+              />
+            ))}
           </div>
         </div>
 
-        {/* Panel Derecho: Previsualización con switch para cambiar entre frente y trasero */}
         <div className="col-md-6">
-          <h3 className="text-center my-3">Previsualización</h3>
+          <h4 className="text-center my-3">Previsualización</h4>
           <div className="text-center mb-3">
             <Form.Check
               type="switch"
@@ -250,26 +433,27 @@ const AsignacionCampos = () => {
               onChange={(e) => setPreviewSide(e.target.checked ? "trasero" : "frente")}
             />
           </div>
+
           <div
+            className="mx-auto p-2"
             style={{
               backgroundImage: `url(${fondoCredencial})`,
               backgroundSize: "cover",
-              width: "600px",
-              height: "350px",
+              width: "750px",
+              height: "450px",
               display: "grid",
               gridTemplateColumns: "repeat(3, 1fr)",
               gap: "5px",
-              margin: "auto",
               border: "3px solid black",
               padding: "10px",
               backgroundColor: "#ffffff",
             }}
           >
-            {ubicaciones.map((ubicacion) => (
+            {ubicaciones.map(ubicacion => (
               <DropZone
-                key={ubicacion.id}
+                key={ubicacion.idUbicacionCampo}
                 ubicacion={ubicacion}
-                asignacion={asignaciones[`${previewSide}-${ubicacion.id}`]}
+                asignacion={asignaciones[`${previewSide}-${ubicacion.idUbicacionCampo}`]}
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
                 onDelete={handleEliminarAsignacion}
@@ -278,6 +462,14 @@ const AsignacionCampos = () => {
           </div>
         </div>
       </div>
+
+      <Toast
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        className="position-fixed bottom-0 end-0 m-3"
+      >
+        <Toast.Body>{toastMessage}</Toast.Body>
+      </Toast>
     </div>
   );
 };

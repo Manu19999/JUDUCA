@@ -3,7 +3,7 @@ import { Container, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import Slider from "react-slick";
-
+import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import EventoCaracteristica from "./EventoCaracteristica";
 
 import EventImage from "../../assets/Eventos/Fichas.jpg";
@@ -81,11 +81,11 @@ const GestionEvento = () => {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 300,
     slidesToShow: 4,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 1500,
+    autoplaySpeed: 2500,
     responsive: [
       { breakpoint: 768, settings: { slidesToShow: 2 } },
       { breakpoint: 480, settings: { slidesToShow: 1 } },
@@ -93,22 +93,19 @@ const GestionEvento = () => {
   };
 
   return (
+
     <section id="events" className="eventlist">
+
       <Container>
-        <Button
-          variant="outline-warning"
-          onClick={() => navigate("/eventos")}
-          className="d-flex align-items-center gap-2"
-          style={{ marginTop: "55px" }}
-        >
-          <FaArrowLeft size={20} /> Regresar
-        </Button>
+        <BotonRegresar to="/eventos" text="Regresar" />
+
 
         {/* 🔹 Mostrar el nombre del evento seleccionado */}
-        <h2 className="credenciallisttitle">
-          {evento ? `Evento seleccionado : ${evento.title}` : "Cargando evento..."}
-        </h2>
-
+        <div style={{ paddingTop: "30px" }}>
+          <h2 className="credenciallisttitle">
+            {evento ? `Evento seleccionado : ${evento.title}` : "Cargando evento..."}
+          </h2>
+       
         <Slider {...settings}>
           {upcomingEvents.map((event) => (
             <div key={event.id}>
@@ -119,6 +116,7 @@ const GestionEvento = () => {
             </div>
           ))}
         </Slider>
+        </div >
       </Container>
     </section>
   );

@@ -9,6 +9,7 @@ import { mostrarMensajeExito } from "../../components/Crud/MensajeExito";
 import { mostrarMensajeError } from "../../components/Crud/MensajeError"; // Importar el componente de mensaje de error
 import { Input, Form } from 'antd';
 import ValidatedInput from "../../utils/ValidatedInput"; 
+import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 
 function Roles() {
   const [showNuevoModal, setShowNuevoModal] = useState(false);
@@ -217,6 +218,7 @@ function Roles() {
   return (
     <div className="crud">
       <Nav />
+      <BotonRegresar to="/seguridad" text="Regresar" />
       <Tabla
         columnas={columnas}
         datos={roles.map((rol) => ({ ...rol, id: rol.idRol }))}  // Usar los roles obtenidos de la API

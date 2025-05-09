@@ -12,7 +12,7 @@ import { Button } from "react-bootstrap";
 import "../../styles/Credencial/credencial.css";
 import { FaGlobe } from "react-icons/fa";
 import { FaArrowLeft  } from "react-icons/fa";
-
+import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 function MantenimientoPaises() {
   const navigate = useNavigate();
     
@@ -120,14 +120,7 @@ function MantenimientoPaises() {
   return (
     <div className="crud">
       <Nav />
-      <Button
-          variant="outline-warning"
-          onClick={() => navigate("/mantenimientoView")}
-          className="d-flex align-items-center gap-2"
-          style={{ marginBottom: "35px", marginLeft: "200px" }}
-          >
-          <FaArrowLeft size={20} /> Regresar
-        </Button>
+      <BotonRegresar to="/mantenimientoView" text="Regresar"  />
       {/* componente de navegación del  navdashboard */}
       <Tabla
         columnas={columnas} // Columnas de la tabla
