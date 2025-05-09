@@ -194,49 +194,63 @@ const AsignacionCampos = () => {
 
 
   const guardarAsignaciones = async () => {
-    const asignacionesList = Object.entries(asignaciones).map(([key, campo]) => {
-      const [ladoTexto, idUbicacionCampo] = key.split("-");
-      const lado = ladoTexto === "frente"; // Convertimos a booleano
+  const asignacionesList = Object.entries(asignaciones).map(([key, campo]) => {
+    const [ladoTexto, idUbicacionCampo] = key.split("-");
+    const lado = ladoTexto === "frente";
 
-      return {
-        idUbicacionCampo: parseInt(idUbicacionCampo),
-        lado,
-        caracteristica: campo.descripcion
-      };
+    return {
+      idUbicacionCampo: parseInt(idUbicacionCampo),
+      lado,
+      caracteristica: campo.descripcion
+    };
+  });
+
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await fetch("http://localhost:4000/api/credencial/campos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        idFichaRegistro: selectedFicha.id,
+        campos: asignacionesList,
+        fechaVigencia: new Date(),  // Ajusta si tienes un campo real
+        idObjeto: 1
+      }),
     });
 
-    const token = localStorage.getItem("token");
-
-    try {
-      const response = await fetch("http://localhost:4000/api/credencial/campos", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          idFichaRegistro: selectedFicha.id,
-          campos: asignacionesList,
-          fechaVigencia: new Date(),  // Ajusta si tienes un campo real
-          idObjeto: 1  // Ajusta según sea necesario
-        }),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Error al guardar campos: ${response.status} - ${errorText}`);
-      }
-
-      showNotification("Asignaciones guardadas exitosamente");
-      navigate("/diseñadorCredencial", {
-        state: { fichaSeleccionada: selectedFicha }
-      });
-
-    } catch (err) {
-      console.error(err);
-      setError(err.message);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Error al guardar campos: ${response.status} - ${errorText}`);
     }
-  };
+
+    await Swal.fire({
+      icon: "success",
+      title: "¡Asignaciones guardadas!",
+      text: "Las asignaciones fueron registradas correctamente.",
+      confirmButtonColor: "#253A69",
+    });
+
+    navigate("/diseñadorCredencial", {
+      state: { fichaSeleccionada: selectedFicha }
+    });
+
+  } catch (err) {
+    console.error(err);
+
+    await Swal.fire({
+      icon: "error",
+      title: "Error al guardar",
+      text: err.message || "Ocurrió un problema al guardar las asignaciones.",
+      confirmButtonColor: "#d33",
+    });
+
+    setError(err.message);
+  }
+};
 
 
  const handleEliminarAsignacion = useCallback((cellId) => {

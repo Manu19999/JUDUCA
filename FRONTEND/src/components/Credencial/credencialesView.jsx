@@ -132,7 +132,7 @@ const GestionCredenciales = () => {
         )}
 
         {/* Modal con más información */}
-        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal size='lg' show={showModal} onHide={() => setShowModal(false)} centered>
           <div style={{ backgroundColor: "#e3f2fd", borderRadius: "10px" }}>
             <Modal.Header closeButton>
               <Modal.Title>Detalles de la Ficha</Modal.Title>

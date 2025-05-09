@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
@@ -10,7 +10,8 @@ const DiseñadorCredencial = () => {
   const [previewSide, setPreviewSide] = useState("frente");
   const [asignaciones, setAsignaciones] = useState({});
   const [ubicaciones, setUbicaciones] = useState([]);
- const [selectedFicha, setSelectedFicha] = useState(() => {
+  const printRef = useRef();
+  const [selectedFicha, setSelectedFicha] = useState(() => {
     return location.state?.selectedFicha || JSON.parse(localStorage.getItem("selectedFicha"));
   });
 
@@ -33,17 +34,17 @@ const DiseñadorCredencial = () => {
     const fetchAsignaciones = async () => {
       try {
         if (!selectedFicha?.id) return;
-  
+
         const response = await fetch(
           `http://localhost:4000/api/credencial/diseCredencial/${selectedFicha.id}`
         );
-  
+
         if (!response.ok) throw new Error("Error al obtener diseño de credencial");
-  
+
         const result = await response.json();
-  
+
         console.log("Datos recibidos del diseño de credencial:", result.data); // 👈 Aquí ves la data
-  
+
         const asignacionesMap = {};
         if (Array.isArray(result.data)) {
           result.data.forEach((item) => {
@@ -55,16 +56,16 @@ const DiseñadorCredencial = () => {
             };
           });
         }
-  
+
         setAsignaciones(asignacionesMap);
       } catch (error) {
         console.error("Error cargando diseño:", error);
       }
     };
-  
+
     fetchAsignaciones();
   }, [selectedFicha]);
-  
+
   // Obtener ubicaciones desde API
   useEffect(() => {
     const fetchUbicaciones = async () => {
@@ -82,6 +83,16 @@ const DiseñadorCredencial = () => {
     fetchUbicaciones();
   }, []);
 
+  const handlePrint = () => {
+  const printContents = printRef.current.innerHTML;
+  const originalContents = document.body.innerHTML;
+
+  document.body.innerHTML = printContents;
+  window.print();
+  document.body.innerHTML = originalContents;
+  window.location.reload(); // Recargar para volver al estado original
+};
+
   const handleVolver = () => {
     navigate("/AsignacionCampos", {
       state: {
@@ -97,13 +108,18 @@ const DiseñadorCredencial = () => {
         text="Regresar"
         onClick={handleVolver}
       />
-      
+
 
       {selectedFicha ? (
         <>
           <div className="text-center mb-4">
             <h3 className="fw-bold text-primary">
               Diseño de la credencial: {selectedFicha.title || "Sin título"}
+              <div className="text-center my-3">
+                <button className="btn btn-success" onClick={handlePrint}>
+                  Imprimir Credencial
+                </button>
+              </div>
             </h3>
 
             <Form.Check
@@ -121,52 +137,54 @@ const DiseñadorCredencial = () => {
 
 
           {/* Contenedor con fondo y cuadrícula superpuesta */}
-          <div
-            className="mx-auto position-relative"
-            style={{
-              width: "750px",
-              height: "450px",
-              backgroundImage: `url(${fondoCredencial})`,
-              backgroundSize: "cover",
-              backgroundRepeat: "no-repeat",
-              border: "3px solid black",
-              borderRadius: "8px",
-              overflow: "hidden",
-            }}
-          >
+          <div ref={printRef}>
             <div
-              className="position-absolute top-0 start-0 w-100 h-100 d-grid"
+              className="mx-auto position-relative"
               style={{
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gridTemplateRows: "repeat(3, 1fr)",
-                gap: "5px",
-                padding: "10px",
+                width: "750px",
+                height: "450px",
+                backgroundImage: `url(${fondoCredencial})`,
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                border: "3px solid black",
+                borderRadius: "8px",
+                overflow: "hidden",
               }}
             >
-              {ubicaciones.map((ubicacion) => {
-                const clave = `${previewSide}-${ubicacion.idUbicacionCampo}`;
-                const campo = asignaciones[clave];
+              <div
+                className="position-absolute top-0 start-0 w-100 h-100 d-grid"
+                style={{
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gridTemplateRows: "repeat(3, 1fr)",
+                  gap: "5px",
+                  padding: "10px",
+                }}
+              >
+                {ubicaciones.map((ubicacion) => {
+                  const clave = `${previewSide}-${ubicacion.idUbicacionCampo}`;
+                  const campo = asignaciones[clave];
 
-                return (
-                  <div
-                    key={ubicacion.idUbicacionCampo}
-                    className="p-2 border rounded text-center"
-                    style={{
-                      backgroundColor: campo ? "#cfe2ff" : "rgba(255,255,255,0.6)",
-                      color: campo ? "#084298" : "#6c757d",
-                      border: campo ? "2px solid #084298" : "1px dashed #ced4da",
-                      minHeight: "80px",
-                      fontWeight: campo ? "bold" : "normal",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "0.9rem",
-                    }}
-                  >
-                    {campo ? campo.descripcion : <small>{ubicacion.descripcion}</small>}
-                  </div>
-                );
-              })}
+                  return (
+                    <div
+                      key={ubicacion.idUbicacionCampo}
+                      className="p-2 border rounded text-center"
+                      style={{
+                        backgroundColor: campo ? "#cfe2ff" : "rgba(255,255,255,0.6)",
+                        color: campo ? "#084298" : "#6c757d",
+                        border: campo ? "2px solid #084298" : "1px dashed #ced4da",
+                        minHeight: "80px",
+                        fontWeight: campo ? "bold" : "normal",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "0.9rem",
+                      }}
+                    >
+                      {campo ? campo.descripcion : <small>{ubicacion.descripcion}</small>}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </>
