@@ -268,6 +268,39 @@
 
   color: #000;
 
+}
+  
+@media print {
+  @page {
+    margin: 0;
+    size: A4 landscape;
+  }
 
+  body {
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
 
+  .no-print,
+  .d-print-none {
+    display: none !important;
+  }
+
+  .d-print-block {
+    display: block !important;
+  }
+
+  .credencial-imprimible {
+    width: 22cm;
+    height: 12cm;
+    margin: auto;
+    page-break-after: always;
+    break-inside: avoid;
+  }
+
+  .credencial-frente {
+    margin-bottom: 3cm; /* Espacio entre frente y reverso */
+  }
 }
