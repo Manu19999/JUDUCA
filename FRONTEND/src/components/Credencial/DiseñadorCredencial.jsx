@@ -96,6 +96,7 @@ const DiseñadorCredencial = () => {
       },
     });
   };
+  
   return (
     <div className="container-fluid">
 
@@ -116,7 +117,7 @@ const DiseñadorCredencial = () => {
               label={`Vista ${previewSide === "frente" ? "Frontal" : "Trasera"}`}
               checked={previewSide === "trasero"}
               onChange={(e) => setPreviewSide(e.target.checked ? "trasero" : "frente")}
-              className="d-inline-block mt-2 no-print"
+              className="d-inline-block no-print mt-2"
               style={{ fontSize: "1rem" }}
             />
             <button   style={{ marginLeft: '50px', fontSize: '1rem', padding: '4px 10px' }} className="btn btn-success btn-sm no-print" onClick={handlePrint}>

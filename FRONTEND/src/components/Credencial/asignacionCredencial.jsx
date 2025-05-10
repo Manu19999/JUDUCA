@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Tabla from "../../components/Crud/Tabla.jsx";
 import Nav from "../../components/Dashboard/navDashboard.jsx";
-import { FaIdBadge } from "react-icons/fa";
-import ModalNuevo from "../../components/Crud/Modal/ModalNuevo.jsx";
+import ModalDetalles from "../../components/Crud/Modal/ModalDetalles";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito.jsx";
 import { Input, Select, Form, Row, Col, Spin, Alert } from "antd";
 import { Button } from "react-bootstrap";
@@ -16,14 +15,13 @@ function CrearCredenciales() {
   const navigate = useNavigate();
   const location = useLocation();
   const { selectedFicha } = location.state || {}; // Recibir la ficha seleccionada
-
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [fichaActual, setFichaActual] = useState(null);
   const [credenciales, setCredenciales] = useState([]); // Lista de credenciales generadas
+  const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
   const [participantes, setParticipantes] = useState([]); // Lista de participantes
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showModal, setShowModal] = useState(false); // Control del modal
-  const [participanteSeleccionado, setParticipanteSeleccionado] = useState(null); // Participante seleccionado
 
   const [form] = Form.useForm(); // Formulario Ant Design
 
@@ -83,13 +81,27 @@ function CrearCredenciales() {
     }
   };
 
+    const handleVolver = () => {
+    navigate("/OpcionCredencial", {
+      state: {
+        selectedFicha: selectedFicha,
+      },
+    });
+  };
+
+    const handleDetails = (id) => {
+    const registro = credenciales.find((d) => d.id === id);
+    setRegistroSeleccionado(registro);
+    setShowDetailsModal(true);
+  };
+
   // 🔹 Abrir el modal y seleccionar participante
   const handleAbrirModal = () => {
     setShowModal(true);
     form.resetFields();
   };
 
-  // 🔹 Guardar la credencial en la base de datos
+  /* 🔹 Guardar la credencial en la base de datos
   const handleGuardarCredencial = async () => {
     try {
       const values = await form.validateFields();
@@ -98,6 +110,7 @@ function CrearCredenciales() {
         throw new Error("Debe seleccionar un participante.");
       }
 
+      
       const credencial = {
         idEvento: fichaActual.idEvento,
         idRegistroParticipanteEvento: participanteSeleccionado,
@@ -133,17 +146,15 @@ function CrearCredenciales() {
       console.error("Error al asignar credencial:", err.message);
     }
   };
+*/
 
   return (
-    <div className="crud">
+    <div >
       <Nav />
-      <BotonRegresar to="/credencialView" text="Regresar" />
-      
-
+      <BotonRegresar to="/credencialView" text="Regresar" onClick={handleVolver}  />
       {fichaActual && (
-        <div className="credenciallisttitle" style={{ textAlign: "center", marginTop: "20px" }}>
-          <h2>Gestión de Credenciales para: {fichaActual.title}</h2>
-          <p>{fichaActual.description}</p>
+        <div className="credenciallisttitle text-center mt-3" style={{marginBottom:'30px'}}>
+          <h2>GESTION DE CREDENCIALES : {fichaActual.title}</h2>
         </div>
       )}
 
@@ -158,78 +169,25 @@ function CrearCredenciales() {
       ) : (
         <Tabla
           columnas={[
-            { nombre: "#", campo: "idCredencial", ancho: "5%" },
-            { nombre: "Nombre", campo: "nombreParticipante", ancho: "30%" },
-            { nombre: "Tipo de Acceso", campo: "tipoAcceso", ancho: "20%" },
-            { nombre: "Fecha Emisión", campo: "fechaEmision", ancho: "20%" },
-            { nombre: "Fecha Vencimiento", campo: "fechaVencimiento", ancho: "20%" },
-            { nombre: "Acción", campo: "accion", ancho: "20%" },
+            { nombre: "#", campo: "id", ancho: "5%" },
+            { nombre: "Nombre del participante", campo: "Participante", ancho: "70%" },
+            { nombre: "Acción", campo: "accion", ancho: "25%" },
           ]}
           datos={credenciales}
-          titulo="Credenciales Generadas"
-          icono={<FaIdBadge className="icono-titulo" />}
-          onNuevoRegistro={handleAbrirModal} // Agregar nueva credencial
+          onGenerarReporte={() => console.log("Generar reporte en PDF")}
+          onDetails={handleDetails} // Función para abrir el modal de detalles
+
+
         />
       )}
 
-      {/* 🔹 Modal para Asignar Credencial */}
-      <ModalNuevo
-        show={showModal}
-        onHide={() => setShowModal(false)}
-        titulo="Asignar Credencial"
-        onGuardar={handleGuardarCredencial}
-        form={form}
-        width={700}
-      >
-        <Form layout="vertical" form={form}>
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item
-                label="Participante"
-                name="participante"
-                rules={[{ required: true, message: "Seleccione un participante" }]}
-              >
-                <Select
-                  placeholder="Seleccione un participante"
-                  onChange={(value) => setParticipanteSeleccionado(value)}
-                >
-                  {participantes.map((p) => (
-                    <Option key={p.idRegistroParticipanteEvento} value={p.idRegistroParticipanteEvento}>
-                      {p.nombreParticipante}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                label="Tipo de Acceso"
-                name="tipoAcceso"
-                rules={[{ required: true, message: "Seleccione un tipo de acceso" }]}
-              >
-                <Select placeholder="Selecciona un tipo de acceso">
-                  <Option value="ATLETA">ATLETA</Option>
-                  <Option value="ENTRENADOR">ENTRENADOR</Option>
-                  <Option value="AUTORIDAD">AUTORIDAD</Option>
-                  <Option value="VOLUNTARIO">VOLUNTARIO</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={25}>
-            <Col span={10}>
-              <Form.Item label="Fecha de Emisión" name="fechaEmision">
-                <Input type="date" />
-              </Form.Item>
-            </Col>
-            <Col span={10}>
-              <Form.Item label="Fecha de Vencimiento" name="fechaVencimiento">
-                <Input type="date" />
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-      </ModalNuevo>
+      <ModalDetalles
+              show={showDetailsModal} // Controla la visibilidad del modal
+              onHide={() => setShowDetailsModal(false)} // Función para cerrar el modal
+              titulo="Detalles del participante" // Título del modal
+              detalles={registroSeleccionado || {}} // Detalles del usuario seleccionado
+              width={600} // Ancho personalizado
+            />
     </div>
   );
 }
