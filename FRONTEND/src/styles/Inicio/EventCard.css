@@ -40,7 +40,7 @@
   font-size: 1rem; /* Tamaño de fuente reducido */
   font-weight: bold;
   margin: 0; /* Eliminar márgenes superior e inferior */
-  color: #facc15; /* Color del título */
+  color: #333; /* Color del título */
   margin-bottom: 7px;
 }
 

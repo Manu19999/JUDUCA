@@ -182,7 +182,7 @@ const DiseñadorCredencial = () => {
               <div
                 key={lado}
                 className={`credencial-imprimible ${index === 0 ? "credencial-frente" : ""}`}
-                style={index === 1 ? { marginTop: "3cm" } : {}}
+                style={index === 1 ? { marginTop: "6cm" } : {}}
               >
                 <h5 className="text-center fw-bold mb-2">
                   {lado === "frente" ? "Frente de la credencial" : "Reverso de la credencial"}

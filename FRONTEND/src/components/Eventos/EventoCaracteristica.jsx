@@ -13,18 +13,19 @@ const EventoCaracteristica = ({
   showIcons, // Añadir esta prop
 }) => {
   return (
-    <div className="eventcard">
+    <div className="cardevent" style={{ cursor: "pointer" ,marginTop: '20px', }}>
       <img
         src={event.image}
         alt={event.title}
         className="eventimage"
         onClick={onImageClick}
-        style={{ cursor: "pointer" }} // Cambia el cursor para indicar que es clicable
+        loading="lazy"
+        style={{ cursor: "pointer", width: "100%",height: "250px",  }} // Cambia el cursor para indicar que es clicable
       />
-      <div className="eventcontent">
-        <h3 className="eventtitle">{event.title}</h3>
+      <div className="conteevent">
+        <h2 className="titleevent">{event.title}</h2>
         <p className="eventdate">{event.date}</p>
-        <p className="eventdescription">{event.description}</p>
+        <p className="descripevent">{event.description}</p>
         <div className="eventicons">
           {showIcons && (
             <>

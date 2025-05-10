@@ -3,6 +3,7 @@ import React, { Suspense } from "react";
 import Loader from "./components/Loader"; 
 // Importa el componente Breadcrumb
 import AppBreadcrumb from "./components/AppBreadcrumb";
+import "./styles/Credencial/credencial.css";
 
 
 //+++++++++++++++++++++++++ importación página de Inicio, Login, Dashboard +++++++++++++++++++++++++
@@ -71,7 +72,9 @@ function App() {
   return (
     <Router>
       {/* Breadcrumb */}
+      <div className="no-print">
       <AppBreadcrumb />
+      </div>
       {/* Suspense para manejar la carga de componentes */}
       <Suspense fallback={<Loader />}>
       <Routes>

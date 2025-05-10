@@ -386,7 +386,7 @@ const handleVolver = () => {
 
       {selectedFicha && (
         <div className="text-center my-3">
-          <h3>Ficha Seleccionada: {selectedFicha.title}</h3>
+          <h3>FICHA SELECCIONADA : {selectedFicha.title}</h3>
         </div>
       )}
 
@@ -394,7 +394,7 @@ const handleVolver = () => {
 
       <div className="row">
         <div className="col-md-4">
-          <div className="d-flex gap-3 mb-3">
+          <div className="d-flex gap-4 mb-4">
             <Button
               variant="success"
               onClick={guardarAsignaciones}>

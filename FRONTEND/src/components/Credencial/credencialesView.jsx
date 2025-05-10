@@ -98,16 +98,18 @@ const GestionCredenciales = () => {
   };
 
   return (
-    <section id="credenciales" className="eventlist">
       <Container>
 
         <BotonRegresar to="/gestion-evento" text="Regresar" />
 
 
         {/* 🔹 Mostrar el nombre y estado del evento */}
-        <h2 className="credenciallisttitle">
-          {evento ? `Fichas del Evento :  ${evento.title}` : "Cargando evento..."}
+        <div className="credenciallisttitle text-center mt-3">
+
+        <h2>
+          {evento ? `FICHAS DEL EVENTO :  ${evento.title}` : "Cargando evento..."}
         </h2>
+        </div>
 
         {loading ? (
           <p className="text-center">Cargando fichas...</p>
@@ -132,7 +134,7 @@ const GestionCredenciales = () => {
         )}
 
         {/* Modal con más información */}
-        <Modal size='lg' show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal  show={showModal} onHide={() => setShowModal(false)} centered>
           <div style={{ backgroundColor: "#e3f2fd", borderRadius: "10px" }}>
             <Modal.Header closeButton>
               <Modal.Title>Detalles de la Ficha</Modal.Title>
@@ -175,7 +177,6 @@ const GestionCredenciales = () => {
           </div>
         </Modal>
       </Container>
-    </section>
   );
 };
 

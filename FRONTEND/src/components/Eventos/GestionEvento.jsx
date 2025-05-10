@@ -41,7 +41,7 @@ const GestionEvento = () => {
       title: "Registro",
       image: EventImage3,
       description: "Fichas de registro e inscripciones.",
-      size: "small",
+      size: "medium",
     },
     {
       id: 3,
@@ -61,7 +61,7 @@ const GestionEvento = () => {
       id: 5,
       title: "Juegos",
       image: EventImage5,
-      description: "Creación de los equipos y competencias.",
+      description: "Configurador de equipos.",
       size: "medium",
     },
   ];
@@ -101,9 +101,9 @@ const GestionEvento = () => {
 
 
         {/* 🔹 Mostrar el nombre del evento seleccionado */}
-        <div style={{ paddingTop: "30px" }}>
-          <h2 className="credenciallisttitle">
-            {evento ? `Evento seleccionado : ${evento.title}` : "Cargando evento..."}
+        <div className="credenciallisttitle text-center mt-3" style={{ paddingTop: "30px" }}>
+          <h2>
+            {evento ? `EVENTO SELECCIONADO : ${evento.title}` : "Cargando evento..."}
           </h2>
        
         <Slider {...settings}>

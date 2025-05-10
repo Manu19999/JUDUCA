@@ -14,17 +14,22 @@ const TargetaEstado = ({ Estado, selectedFicha }) => {
   };
 
   return (
-    <div className="eventcard" onClick={handleClick} style={{ cursor: "pointer", marginTop: '20px', }}>
+    <div className="cardevent" onClick={handleClick} style={{ cursor: "pointer" ,marginTop: '20px', }}>
       <img
+        className="eventimage"
         src={Estado.image}
         alt={Estado.title}
-        className="eventimage"
-        loading="lazy" // Carga diferida para mejorar el rendimiento
-
+        loading="lazy"
+        style={{
+          width: "100%",
+          height: "250px",
+        }}
       />
-      <div className="eventcontent">
-        <h3 className="titleCredencial">{Estado.title}</h3>
-        <p className="eventdescription">{Estado.description}</p>
+
+      
+      <div className="conteevent">
+        <h3 className="titleevent">{Estado.title}</h3>
+        <p className="descripevent">{Estado.description}</p>
       </div>
     </div>
   );
