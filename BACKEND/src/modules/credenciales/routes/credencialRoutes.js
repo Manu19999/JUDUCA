@@ -15,7 +15,7 @@ router.get('/camposCredencial/:idFichaRegistro', ObtenerCamposCredencialPorFicha
 router.get('/diseCredencial/:idFichaRegistro', ObtenerDiseñoCredencialPorFicha);
 
 
-router.post('/insCredencial', InsertarCredencial);
+router.post('/insCredencial', checkAuth, InsertarCredencial);
 
 router.post('/campos', checkAuth, insertarCamposCredencial);
 

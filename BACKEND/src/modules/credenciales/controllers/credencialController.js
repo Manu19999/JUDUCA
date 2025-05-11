@@ -229,7 +229,7 @@ export const ObtenerUbicacionesCampos = async (req, res) => {
     // Filtrar en Node.js antes de enviar la respuesta
     const ubicacionesFiltradas = result.recordset.filter((ubicacion) => {
       return ubicacion.descripcion !== "Sin descripción" && // Excluir sin descripción
-             !(ubicacion.fila === 0 && ubicacion.columna === 0); // Excluir ubicación (0,0)
+        !(ubicacion.fila === 0 && ubicacion.columna === 0); // Excluir ubicación (0,0)
     });
 
     if (ubicacionesFiltradas.length === 0) {
@@ -408,38 +408,28 @@ export const eliminarCamposCredencial = async (req, res) => {
     return res.status(500).json(response.getResponse());
   }
 };
-
-
 // Controlador para insertar una credencial con código QR
 export const InsertarCredencial = async (req, res) => {
   const response = new apiResponse(); // Crear instancia de apiResponse
 
   try {
+    // Usar los datos del usuario directamente desde `req.usuario`
+    const { idUsuario, nombreUsuario } = req.usuario;
+
     const {
       idEvento,
-      tipoAcceso,
-      fechaEmision,
-      fechaVencimiento,
       activo,
-      usuarioRegistro,
-      fechaRegistro,
       idFicha,
-      idRegistroParticipanteEvento,
-      idUsuario,
       idObjeto,
     } = req.body; // Extraer datos desde el cuerpo de la solicitud
 
     // 🔹 Validaciones de datos requeridos
     if (
       !idEvento || isNaN(idEvento) ||
-      !tipoAcceso || 
-      !fechaEmision || !fechaVencimiento || 
-       activo === undefined || 
-      !usuarioRegistro || 
-      !fechaRegistro || 
-      !idFicha || isNaN(idFicha) || 
-      !idRegistroParticipanteEvento || isNaN(idRegistroParticipanteEvento) ||
-      !idUsuario || isNaN(idUsuario) || 
+      activo === undefined ||
+      !nombreUsuario ||
+      !idFicha || isNaN(idFicha) ||
+      !idUsuario || isNaN(idUsuario) ||
       !idObjeto || isNaN(idObjeto)
     ) {
       response.setHasError(true);
@@ -452,37 +442,29 @@ export const InsertarCredencial = async (req, res) => {
     // 🔹 Ejecutar el procedimiento almacenado para insertar la credencial
     const result = await pool
       .request()
-      .input("idEvento", parseInt(idEvento))
-      .input("tipoAcceso", tipoAcceso)
-      .input("fechaEmision", fechaEmision)
-      .input("fechaVencimiento", fechaVencimiento)
-      .input("activo", activo)
-      .input("usuarioRegistro", usuarioRegistro)
-      .input("fechaRegistro", fechaRegistro)
-      .input("idFicha", parseInt(idFicha))
-      .input("idRegistroParticipanteEvento", parseInt(idRegistroParticipanteEvento))
-      .input("idUsuario", parseInt(idUsuario))
-      .input("idObjeto", parseInt(idObjeto))
+      .input("idEvento", sql.Int, idEvento)
+      .input("activo", sql.Bit, activo)
+      .input("idFicha", sql.Int, idFicha)
+      .input("idUsuario", sql.Int, idUsuario)
+      .input("nombreUsuario", sql.NVarChar, nombreUsuario)
+      .input("idObjeto", sql.Int, idObjeto)
       .execute("Credenciales.splCredencialQrInsertar");
 
     // 🔹 Verificar si hubo un error en el procedimiento almacenado
-    if (result.recordset.length > 0 && result.recordset[0].codigoError) {
+    if (result.recordset[0].codigoError) {
       response.setHasError(true);
       response.setErrors([result.recordset[0].descripcion]);
       return res.status(400).json(response.getResponse());
     }
 
     // 🔹 Devolver la credencial insertada
-    response.setData(result.recordset);
+    response.setData(result.recordset[0]);
     res.status(201).json(response.getResponse());
   } catch (error) {
     console.error("Error en InsertarCredencial:", error.message);
 
-    // Manejo de error interno del servidor
     response.setHasError(true);
     response.setErrors(["Error interno del servidor", error.message]);
-
-    // Enviar respuesta con error
     res.status(500).json(response.getResponse());
   }
 };

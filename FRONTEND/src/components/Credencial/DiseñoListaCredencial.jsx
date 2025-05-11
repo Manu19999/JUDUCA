@@ -4,6 +4,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import TargetaEstado from "../Credencial/targetasEstadoCredencial";
 import agregarCredencial from "../../assets/FondosCredencial/agregarCredencial.jpg";
 import configCredencial from "../../assets/FondosCredencial/configCredencial.jpg";
+import { ToastContainer, toast } from "react-toastify";  // Importar toastify
+import "react-toastify/dist/ReactToastify.css"; // Importar los estilos de toastify
 import "../../styles/Inicio/EventCard.css";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 
@@ -12,7 +14,6 @@ const Seleccion = () => {
   const location = useLocation();
 
   const [selectedFicha, setSelectedFicha] = useState(() => {
-    // Intentar obtener desde location.state o localStorage
     const fichaFromState = location.state?.selectedFicha;
     const fichaFromStorage = localStorage.getItem("selectedFicha");
     return fichaFromState || (fichaFromStorage ? JSON.parse(fichaFromStorage) : null);
@@ -23,7 +24,6 @@ const Seleccion = () => {
       localStorage.setItem("selectedFicha", JSON.stringify(location.state.selectedFicha));
     }
 
-    // Redirigir si no hay ficha ni en state ni en localStorage
     if (!selectedFicha) {
       console.warn("No se ha recibido ninguna ficha seleccionada, redirigiendo...");
       navigate("/credencialView");
@@ -45,16 +45,68 @@ const Seleccion = () => {
     },
   ];
 
+ const handleInsertarCredencial = async () => {
+  if (!selectedFicha) {
+    toast.error("No se encontró la ficha seleccionada.");
+    return;
+  }
+
+  const { idEvento, id } = selectedFicha;
+
+  if (!idEvento || isNaN(idEvento) || !id || isNaN(id)) {
+    toast.error("Los datos de la ficha seleccionada no son válidos.");
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    toast.error("Token no disponible.");
+    return;
+  }
+
+  const credencial = {
+    idEvento,
+    activo: 1,
+    idFicha: id,
+    idObjeto: 1, // Este debe ser un número válido
+  };
+
+  console.log("Enviando credencial:", credencial);
+
+
+  try {
+    const response = await fetch("http://localhost:4000/api/credencial/insCredencial", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify(credencial),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || data.hasError) {
+      throw new Error(data.errors?.[0] || "Error al insertar la credencial");
+    }
+
+    toast.success("Credencial insertada correctamente.");
+    // await obtenerCredenciales(); // si tienes esta función
+  } catch (error) {
+    console.error("Error:", error);
+    toast.error(error.message || "Error al insertar la credencial.");
+  } 
+};
+
+
   return (
     <Container>
-      <BotonRegresar 
-        to="/credencialView" 
-        text="Regresar"
-      />
-
+      <BotonRegresar to="/credencialView" text="Regresar" />
+      
       {selectedFicha ? (
         <div className="credenciallisttitle text-center mt-3">
-          <h3>FICHA SELECCIONADA : {selectedFicha.title}</h3>
+          <h3>FICHA SELECCIONADA: {selectedFicha.title}</h3>
           <p>{selectedFicha.description}</p>
         </div>
       ) : (
@@ -69,10 +121,20 @@ const Seleccion = () => {
             <TargetaEstado
               Estado={Estado}
               selectedFicha={selectedFicha}
+              onClickEspecial={
+                Estado.id === 1
+                  ? async () => {
+                      await handleInsertarCredencial();
+                    }
+                  : null
+              }
             />
           </Col>
         ))}
       </Row>
+
+      {/* Aquí agregas el contenedor de Toast */}
+      <ToastContainer />
     </Container>
   );
 };
