@@ -19,7 +19,6 @@ router.post('/insCredencial', checkAuth, InsertarCredencial);
 
 router.post('/campos', checkAuth, insertarCamposCredencial);
 
-
 router.post('/deleteCampos', checkAuth, eliminarCamposCredencial);
 
 
