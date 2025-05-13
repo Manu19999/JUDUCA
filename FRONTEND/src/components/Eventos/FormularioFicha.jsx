@@ -8,8 +8,9 @@ export default function DynamicFichaForm() {
   const [tiposCampo, setTiposCampo] = useState([]);
   const [catalogoCaracteristicas, setCatalogoCaracteristicas] = useState([]);
   const [seccionesCatalogo, setSeccionesCatalogo] = useState([]);
-const fichaSeleccionada = JSON.parse(localStorage.getItem("fichaSeleccionada")) || {};
-const nombreFicha = fichaSeleccionada.nombreFicha || "Ficha sin nombre";
+  const fichaSeleccionada = JSON.parse(localStorage.getItem("fichaSeleccionada")) || {};
+  const idFichaRegistro = fichaSeleccionada.idFichaRegistro;
+  const nombreFicha = fichaSeleccionada.nombreFicha || "Ficha sin nombre";
   const [secciones, setSecciones] = useState([
     {
       id: Date.now(),
@@ -17,7 +18,7 @@ const nombreFicha = fichaSeleccionada.nombreFicha || "Ficha sin nombre";
       campos: [
         {
           id: Date.now() + 1,
-          idCatalogoCaracteristicas: "",
+          idCatalogoCaracteristica: "",
           idTipoCampo: "",
           nombreDelCampo: "",
           valorPorDefecto: "",
@@ -69,7 +70,7 @@ const nombreFicha = fichaSeleccionada.nombreFicha || "Ficha sin nombre";
               ...sec.campos,
               {
                 id: Date.now(),
-                idCatalogoCaracteristicas: "",
+                idCatalogoCaracteristica: "",
                 idTipoCampo: "",
                 nombreDelCampo: "",
                 valorPorDefecto: "",
@@ -119,35 +120,55 @@ const nombreFicha = fichaSeleccionada.nombreFicha || "Ficha sin nombre";
     );
 
   const handleSubmit = async () => {
-    const payload = [];
+  const payload = [];
 
-    secciones.forEach((sec) => {
-      sec.campos.forEach((campo) => {
-        payload.push({
-          idFichaRegistro,
-          idCatalogoCaracteristicas: parseInt(campo.idCatalogoCaracteristicas),
-          idSeccion: parseInt(sec.idSeccionCatalogo), // ahora toma la sección desde el catálogo
-          idTipoCampo: parseInt(campo.idTipoCampo),
-          nombreDelCampo: campo.nombreDelCampo,
-          valorPorDefecto: campo.valorPorDefecto || null,
-          valorRequerido: campo.valorRequerido,
-          valorPrincipal: campo.valorPrincipal,
-        });
+  secciones.forEach((sec) => {
+    sec.campos.forEach((campo) => {
+      payload.push({
+        idFichaRegistro,
+        idCatalogoCaracteristica: parseInt(campo.idCatalogoCaracteristica),
+        idSeccion: parseInt(sec.idSeccionCatalogo),
+        idTipoCampo: parseInt(campo.idTipoCampo),
+        nombreDelCampo: campo.nombreDelCampo,
+        valorPorDefecto: campo.valorPorDefecto || null,
+        valorRequerido: campo.valorRequerido,
+        valorPrincipal: campo.valorPrincipal,
       });
     });
+  });
 
-    try {
-      const res = await axios.post(
-        "http://localhost:4000/api/fichas/insFichaCaracteristicas",
-        { Caracteristicas: payload, idObjeto: 1 }
-      );
-      alert("✅ Campos guardados correctamente");
-      console.log(res.data);
-    } catch (err) {
-      console.error(err);
-      alert("❌ Error al guardar los campos");
-    }
+  const token = localStorage.getItem("token");
+
+  const body = {
+    Caracteristicas: payload,
+    idObjeto: 1
   };
+
+  // 👉 Ver lo que se enviará al servidor
+  console.log("🔍 Datos enviados al backend:");
+  console.log("Token:", token);
+  console.log("Cuerpo de la solicitud:", JSON.stringify(body, null, 2));
+
+  try {
+    const res = await axios.post(
+      "http://localhost:4000/api/fichas/insFichaCaracteristicas",
+      body,
+      {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+    alert("✅ Campos guardados correctamente");
+    console.log("📦 Respuesta del servidor:", res.data);
+  } catch (err) {
+    console.error("❌ Error al guardar los campos:", err);
+    alert("❌ Error al guardar los campos");
+  }
+};
+
+
 
   return (
     <div className="contenedor-principalD">
@@ -158,8 +179,10 @@ const nombreFicha = fichaSeleccionada.nombreFicha || "Ficha sin nombre";
       />
 
       <div className="form-containerD">
-        <h2>DISEÑADOR DE FICHA</h2>
-
+        
+     <div className="credenciallisttitle text-center mt-3">
+        <h2>DISEÑADOR DE FICHA : {fichaSeleccionada?.nombreFicha || "Ficha sin nombre"}</h2>
+      </div>
         <button className="btnD agregar-seccionD" onClick={agregarSeccion}>
           ➕ AGREGAR SECCION
         </button>
@@ -196,15 +219,15 @@ const nombreFicha = fichaSeleccionada.nombreFicha || "Ficha sin nombre";
               <div key={campo.id} className="campo-rowD">
 
                 <select
-                  value={campo.idCatalogoCaracteristicas}
+                  value={campo.idCatalogoCaracteristica}
                   className="select-campoD"
                   onChange={(e) =>
-                    actualizarCampo(sec.id, campo.id, "idCatalogoCaracteristicas", e.target.value)
+                    actualizarCampo(sec.id, campo.id, "idCatalogoCaracteristica", e.target.value)
                   }
                 >
                   <option value="">SELECCIONE CARACTERISTICA</option>
                   {catalogoCaracteristicas.map((tipo) => (
-                    <option key={tipo.idCatalogoCaracteristicas} value={tipo.idCatalogoCaracteristicas}>
+                    <option key={tipo.idCatalogoCaracteristica} value={tipo.idCatalogoCaracteristica}>
                       {tipo.caracteristica}
                     </option>
                   ))}
@@ -297,7 +320,7 @@ const nombreFicha = fichaSeleccionada.nombreFicha || "Ficha sin nombre";
               <h3>{seccionInfo?.descripcion || "Sin sección"}</h3>
               {sec.campos.map((campo) => {
                 const caracteristica = catalogoCaracteristicas.find(
-                  (c) => c.idCatalogoCaracteristicas === parseInt(campo.idCatalogoCaracteristicas)
+                  (c) => c.idCatalogoCaracteristica === parseInt(campo.idCatalogoCaracteristica)
                 );
                 return (
                   <div key={campo.id} className="preview-campoD">

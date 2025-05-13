@@ -39,11 +39,10 @@ const CajaFichas = () => {
 
         setFichas(
           data.data.map((ficha) => ({
+            ...ficha, // Incluye todos los campos originales como nombreFicha, idFichaRegistro, etc.
             id: ficha.idFicha,
             title: ficha.nombreFicha,
-            image: ficha.fotoFicha
-              ? `data:image/png;base64,${ficha.fotoFicha}`
-              : "default_ficha.jpg",
+            image: ficha.fotoFicha ? `data:image/png;base64,${ficha.fotoFicha}` : "default_ficha.jpg",
             description: ficha.descripcion,
             route: "/Formulario-fichas",
           }))

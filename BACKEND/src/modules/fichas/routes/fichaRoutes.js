@@ -1,5 +1,6 @@
 import express from "express";
 import { ObtenerFichas, insertarFichaRegistroCaracteristicas, obtenerCatalogosFichaRegistro } from "../controllers/fichaController.js";
+import checkAuth from "../../../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -8,7 +9,7 @@ router.get("/catalogo/CaracteristicasFicha", obtenerCatalogosFichaRegistro); // 
 
 
 
-router.post("/insFichaCaracteristicas", insertarFichaRegistroCaracteristicas); // Añadido idEvento aquí
+router.post("/insFichaCaracteristicas",checkAuth,  insertarFichaRegistroCaracteristicas); // Añadido idEvento aquí
 
 
 export default router;
