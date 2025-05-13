@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaEye, FaCog } from "react-icons/fa";
 import { useDropzone } from "react-dropzone";
 import Nav from "../components/Dashboard/navDashboard";
+import BotonRegresar from "../components/Dashboard/BotonRegresar";
+import "../styles/Inicio/EventCard.css";
+
 
 const CajaFichas = () => {
   const navigate = useNavigate();
@@ -17,6 +20,10 @@ const CajaFichas = () => {
   const [foto, setFoto] = useState(null);
 
   const eventoActivo = JSON.parse(localStorage.getItem("eventoActivo"));
+  const seleccionarFicha = (ficha) => {
+    localStorage.setItem("fichaSeleccionada", JSON.stringify(ficha));
+  };
+
 
   useEffect(() => {
     const fetchFichas = async () => {
@@ -72,18 +79,15 @@ const CajaFichas = () => {
       <Container>
         <Nav />
         <div className="crud">
-          <Button
-            variant="outline-warning"
-            onClick={() => navigate("/dashboard")}
-            className="d-flex align-items-center gap-2"
-            style={{ marginTop: "20px" }}
-          >
-            <FaArrowLeft size={20} /> Regresar
-          </Button>
-
-          <h2 className="caja-seguridad-title">
-            Fichas de {eventoActivo?.title || "Evento"}
-          </h2>
+          <BotonRegresar
+            to="/gestion-evento"
+            text="Regresar"
+          />
+          <div className="credenciallisttitle text-center mt-3">
+            <h2 className="caja-seguridad-title">
+              FICHAS DEL EVENTO : {eventoActivo?.title || "Evento"}
+            </h2>
+          </div>
 
           <div className="eventtabs">
             <button
@@ -121,8 +125,12 @@ const CajaFichas = () => {
                       src={ficha.image}
                       alt={ficha.title}
                       className="caja-seguridad-image"
-                      onClick={() => navigate(ficha.route)}
+                      onClick={() => {
+                        seleccionarFicha(ficha);
+                        navigate(ficha.route);
+                      }}
                     />
+
                     <h3>{ficha.title}</h3>
                     <p className="eventdescription">{ficha.description}</p>
                     <div className="eventicons">
@@ -132,7 +140,10 @@ const CajaFichas = () => {
                       />
                       <FaCog
                         className="eventicon"
-                        onClick={() => navigate("/Formulario-fichas")}
+                        onClick={() => {
+                          seleccionarFicha(ficha);
+                          navigate("/Formulario-fichas");
+                        }}
                       />
                     </div>
                   </div>
