@@ -8,6 +8,7 @@ import Delegados from "../../assets/Eventos/Delegados.jpg";
 import Voluntariados from "../../assets/Eventos/Voluntariado.jpg";
 import "../../styles/Credencial/credencial.css";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
+import "../../styles/Evento/Eventos.css";
 
 
 const GestionCredenciales = () => {
@@ -18,6 +19,8 @@ const GestionCredenciales = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [evento, setEvento] = useState(null);
+  const [activeTab, setActiveTab] = useState("upcoming");
+  
 
   // 🔹 Obtener el evento activo desde `localStorage`
   useEffect(() => {
@@ -110,6 +113,21 @@ const GestionCredenciales = () => {
           {evento ? `FICHAS DEL EVENTO :  ${evento.title}` : "Cargando evento..."}
         </h2>
         </div>
+
+         <div className="eventtabs">
+            <button
+              className={`eventtab ${activeTab === "past" ? "active" : ""}`}
+              onClick={() => setActiveTab("past")}
+            >
+              Inactivas
+            </button>
+            <button
+              className={`eventtab ${activeTab === "upcoming" ? "active" : ""}`}
+              onClick={() => setActiveTab("upcoming")}
+            >
+              Activas
+            </button>
+          </div>
 
         {loading ? (
           <p className="text-center">Cargando fichas...</p>

@@ -32,7 +32,7 @@ const TargetaCredencial = ({
                 icon={faEye}
                 onClick={handleVerInfo}
                 className="eventicon manage-btn-credencial"
-                style={{ marginBottom: '10px',marginInline: '10px' }} // Cambia el cursor para indicar que es clicable
+                style={{ marginBottom: '15px',marginInline: '10px' }} // Cambia el cursor para indicar que es clicable
 
               />
               {/* <FontAwesomeIcon

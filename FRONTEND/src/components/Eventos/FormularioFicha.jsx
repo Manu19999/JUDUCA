@@ -126,7 +126,7 @@ export default function DynamicFichaForm() {
     sec.campos.forEach((campo) => {
       payload.push({
         idFichaRegistro,
-        idCatalogoCaracteristica: parseInt(campo.idCatalogoCaracteristica),
+        idCatalogoCaracteristicas: parseInt(campo.idCatalogoCaracteristica),
         idSeccion: parseInt(sec.idSeccionCatalogo),
         idTipoCampo: parseInt(campo.idTipoCampo),
         nombreDelCampo: campo.nombreDelCampo,
@@ -143,11 +143,6 @@ export default function DynamicFichaForm() {
     Caracteristicas: payload,
     idObjeto: 1
   };
-
-  // 👉 Ver lo que se enviará al servidor
-  console.log("🔍 Datos enviados al backend:");
-  console.log("Token:", token);
-  console.log("Cuerpo de la solicitud:", JSON.stringify(body, null, 2));
 
   try {
     const res = await axios.post(
@@ -174,15 +169,15 @@ export default function DynamicFichaForm() {
     <div className="contenedor-principalD">
 
       <BotonRegresar
-        to="/lista-fichas"
+        to="/OpcionFicha"
         text="Regresar"
       />
+       <div className="credenciallisttitle text-center mt-3" style={{width: '100%' }}>
+        <h2>DISEÑADOR DE : {fichaSeleccionada?.nombreFicha || "Ficha sin nombre"}</h2>
+      </div>
 
       <div className="form-containerD">
         
-     <div className="credenciallisttitle text-center mt-3">
-        <h2>DISEÑADOR DE FICHA : {fichaSeleccionada?.nombreFicha || "Ficha sin nombre"}</h2>
-      </div>
         <button className="btnD agregar-seccionD" onClick={agregarSeccion}>
           ➕ AGREGAR SECCION
         </button>

@@ -1,66 +1,117 @@
 import React, { useState, useEffect } from "react";
-import { Container, Button, Modal, Spinner, Form } from "react-bootstrap";
+import { Container, Row, Col, Modal, Button, Alert, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import TargetaCredencial from "../components/Credencial/targetaCredencial";
+import Inscripciones from "../assets/Eventos/Inscripciones.jpg";
+import Delegados from "../assets/Eventos/Delegados.jpg";
+import Voluntariados from "../assets/Eventos/Voluntariado.jpg";
 import { FaArrowLeft, FaEye, FaCog } from "react-icons/fa";
 import { useDropzone } from "react-dropzone";
 import Nav from "../components/Dashboard/navDashboard";
+import "../styles/Credencial/credencial.css";
 import BotonRegresar from "../components/Dashboard/BotonRegresar";
-import "../styles/Inicio/EventCard.css";
+import "../styles/Evento/Eventos.css";
 
 
 const CajaFichas = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("upcoming");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [fichas, setFichas] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedFicha, setSelectedFicha] = useState(null);
+  const [fichasOptions, setFichasOptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [evento, setEvento] = useState(null);
+  const [activeTab, setActiveTab] = useState("upcoming");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [fichas, setFichas] = useState([]);
   const [nombreFicha, setNombreFicha] = useState("");
   const [comentarios, setComentarios] = useState("");
   const [foto, setFoto] = useState(null);
 
   const eventoActivo = JSON.parse(localStorage.getItem("eventoActivo"));
+
+
+  // 🔹 Obtener el evento activo desde `localStorage`
+  useEffect(() => {
+    const eventoGuardado = localStorage.getItem("eventoActivo");
+    if (eventoGuardado) {
+      setEvento(JSON.parse(eventoGuardado));
+    }
+  }, []);
+
   const seleccionarFicha = (ficha) => {
     localStorage.setItem("fichaSeleccionada", JSON.stringify(ficha));
   };
 
-
   useEffect(() => {
-    const fetchFichas = async () => {
+    const obtenerDatos = async () => {
+      const eventoGuardado = localStorage.getItem("eventoActivo");
+      if (!eventoGuardado) {
+        setError("No se encontró un evento activo en localStorage.");
+        setLoading(false);
+        return;
+      }
+
+      const eventoObj = JSON.parse(eventoGuardado);
+      setEvento(eventoObj);
+
       try {
-        const response = await fetch(
-          `http://localhost:4000/api/fichas/${eventoActivo.id}`
-        );
+        const response = await fetch("http://localhost:4000/api/credencial/fichas");
         const data = await response.json();
 
-        if (data.hasError) {
-          throw new Error(data.errors.join(", "));
+        if (data.hasError || !data.data) {
+          setError("No se pudieron obtener las fichas. Intente más tarde.");
+          setLoading(false);
+          return;
         }
 
-        setFichas(
-          data.data.map((ficha) => ({
-            ...ficha, // Incluye todos los campos originales como nombreFicha, idFichaRegistro, etc.
-            id: ficha.idFicha,
-            title: ficha.nombreFicha,
-            image: ficha.fotoFicha ? `data:image/png;base64,${ficha.fotoFicha}` : "default_ficha.jpg",
-            description: ficha.descripcion,
-            route: "/Formulario-fichas",
-          }))
-        );
-      } catch (err) {
-        setError("Error al cargar fichas.");
-      } finally {
+        const fichasFiltradas = data.data.filter(ficha => ficha.idEvento === eventoObj.id);
+
+        if (fichasFiltradas.length === 0) {
+          setError("No hay fichas disponibles para este evento.");
+          setLoading(false);
+          return;
+        }
+
+        const imagenesFichas = {
+          1: Inscripciones,
+          2: Delegados,
+          3: Voluntariados,
+        };
+
+        const fichasConDatos = fichasFiltradas.map((ficha) => ({
+          id: ficha.idFichaRegistro,
+          title: ficha.nombreFicha,
+          image: imagenesFichas[ficha.idFichaRegistro] || Inscripciones, // o imagen por defecto
+          description: ficha.comentarios || "Sin comentarios",
+          idEvento: ficha.idEvento,
+          activo: ficha.activo ? "Activo" : "Inactivo",
+        }));
+
+        setFichasOptions(fichasConDatos);
+        setLoading(false);
+      } catch (error) {
+        setError("Error al conectar con el servidor.");
         setLoading(false);
       }
     };
 
-    if (eventoActivo) {
-      fetchFichas();
-    } else {
-      setError("No hay un evento seleccionado.");
-      setLoading(false);
-    }
+    obtenerDatos();
   }, []);
+
+
+const handleImageClick = (ficha) => {
+  localStorage.setItem("fichaSeleccionada", JSON.stringify(ficha));
+  navigate(`/OpcionFicha`, { state: { selectedFicha: ficha } });
+};
+
+
+  const handleVerInfo = (ficha) => {
+    setSelectedFicha(ficha);
+    setShowModal(true);
+  };
+
 
   const closeModal = () => setIsModalOpen(false);
 
@@ -74,84 +125,57 @@ const CajaFichas = () => {
   });
 
   return (
-    <section id="caja-seguridad" className="caja-seguridad-container">
-      <Container>
-        <Nav />
-        <div className="crud">
-          <BotonRegresar
-            to="/gestion-evento"
-            text="Regresar"
-          />
-          <div className="credenciallisttitle text-center mt-3">
-            <h2 className="caja-seguridad-title">
-              FICHAS DEL EVENTO : {eventoActivo?.title || "Evento"}
-            </h2>
-          </div>
+    <Container>
+      <Nav />
+      <div className="container mx-auto p-4">
+        <BotonRegresar to="/gestion-evento" text="Regresar" />
 
-          <div className="eventtabs">
-            <button
-              className={`eventtab ${activeTab === "past" ? "active" : ""}`}
-              onClick={() => setActiveTab("past")}
-            >
-              Inactivas
-            </button>
-            <button
-              className={`eventtab ${activeTab === "upcoming" ? "active" : ""}`}
-              onClick={() => setActiveTab("upcoming")}
-            >
-              Activas
-            </button>
-            <button className="eventtab" onClick={() => setIsModalOpen(true)}>
-              Nuevo
-            </button>
-          </div>
-
-          {loading ? (
-            <div className="text-center">
-              <Spinner animation="border" variant="primary" />
-              <p>Cargando fichas...</p>
-            </div>
-          ) : error ? (
-            <p className="text-center text-danger">{error}</p>
-          ) : (
-            <div className="caja-seguridad-grid">
-              {fichas.length === 0 ? (
-                <p className="text-center">No hay fichas disponibles.</p>
-              ) : (
-                fichas.map((ficha) => (
-                  <div key={ficha.id} className="caja-seguridad-card">
-                    <img
-                      src={ficha.image}
-                      alt={ficha.title}
-                      className="caja-seguridad-image"
-                      onClick={() => {
-                        seleccionarFicha(ficha);
-                        navigate(ficha.route);
-                      }}
-                    />
-
-                    <h3>{ficha.title}</h3>
-                    <p className="eventdescription">{ficha.description}</p>
-                    <div className="eventicons">
-                      <FaEye
-                        className="eventicon"
-                        onClick={() => navigate("/ficha-participantes")}
-                      />
-                      <FaCog
-                        className="eventicon"
-                        onClick={() => {
-                          seleccionarFicha(ficha);
-                          navigate("/Formulario-fichas");
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
+        {/* 🔹 Mostrar el nombre y estado del evento */}
+        <div className="credenciallisttitle text-center mt-3">
+          <h2>
+            {evento ? `FICHAS DEL EVENTO :  ${evento.title}` : "Cargando evento..."}
+          </h2>
         </div>
-      </Container>
+
+        <div className="eventtabs">
+          <button
+            className={`eventtab ${activeTab === "past" ? "active" : ""}`}
+            onClick={() => setActiveTab("past")}
+          >
+            Inactivas
+          </button>
+          <button
+            className={`eventtab ${activeTab === "upcoming" ? "active" : ""}`}
+            onClick={() => setActiveTab("upcoming")}
+          >
+            Activas
+          </button>
+          <button className="eventtab" onClick={() => setIsModalOpen(true)}>
+            Nuevo
+          </button>
+        </div>
+
+        {loading ? (
+          <p className="text-center">Cargando fichas...</p>
+        ) : error ? (
+          <Alert variant="warning" className="text-center">
+            {error}
+          </Alert>
+        ) : (
+          <Row>
+            {fichasOptions.map((ficha) => (
+              <Col key={ficha.id} xs={12} sm={6} md={4} lg={3} xl={2}>
+                <TargetaCredencial
+                  event={ficha}
+                  onImageClick={() => handleImageClick(ficha)}
+                  handleVerInfo={() => handleVerInfo(ficha)}
+                  showIcons={true}
+                />
+              </Col>
+            ))}
+          </Row>
+        )}
+      </div>
 
       <Modal show={isModalOpen} onHide={closeModal} centered>
         <div
@@ -225,7 +249,52 @@ const CajaFichas = () => {
           </Modal.Footer>
         </div>
       </Modal>
-    </section>
+
+      {/* Modal con más información */}
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <div style={{ backgroundColor: "#e3f2fd", borderRadius: "10px" }}>
+          <Modal.Header closeButton>
+            <Modal.Title>Detalles de la Ficha</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="text-center">
+            {selectedFicha && (
+              <>
+                <img
+                  src={selectedFicha.image}
+                  alt={selectedFicha.title}
+                  className="shadow-sm"
+                  style={{
+                    width: "150px",
+                    height: "150px",
+                    objectFit: "cover",
+                    borderRadius: "50%",
+                    border: "4px solid #007bff",
+                    padding: "5px",
+                  }}
+                />
+                <h3 style={{ color: "#1f2e54", fontWeight: "bold", marginTop: "15px" }}>
+                  {selectedFicha.title}
+                </h3>
+                <p style={{ color: "#6c757d", fontSize: "1rem" }}>
+                  {selectedFicha.description}
+                </p>
+                <hr />
+                <div style={{ textAlign: "left", padding: "10px" }}>
+                  <p><strong>ID Evento:</strong> {selectedFicha.idEvento}</p>
+                  <p><strong>Estado:</strong> {selectedFicha.activo}</p>
+                </div>
+              </>
+            )}
+          </Modal.Body>
+          <Modal.Footer style={{ justifyContent: "center" }}>
+            <Button variant="outline-secondary" onClick={() => setShowModal(false)}>
+              Cerrar
+            </Button>
+          </Modal.Footer>
+        </div>
+      </Modal>
+    </Container>
+
   );
 };
 
