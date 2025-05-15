@@ -5,12 +5,18 @@ import "../../styles/Credencial/formularioDinamico.css";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Inicio/EventCard.css";
 
+
+
+
+
 export default function DynamicFichaForm() {
   const navigate = useNavigate();
   const location = useLocation();
   const [tiposCampo, setTiposCampo] = useState([]);
   const [catalogoCaracteristicas, setCatalogoCaracteristicas] = useState([]);
   const [seccionesCatalogo, setSeccionesCatalogo] = useState([]);
+  const [opcionesPorCampo, setOpcionesPorCampo] = useState({});
+
   const fichaSeleccionada = JSON.parse(localStorage.getItem("fichaSeleccionada")) || {};
   const idFichaRegistro = fichaSeleccionada.idFichaRegistro;
   const nombreFicha = fichaSeleccionada.nombreFicha || "Ficha sin nombre";
@@ -34,6 +40,80 @@ export default function DynamicFichaForm() {
       ],
     },
   ]);
+
+
+  const renderVistaPreviaCampo = (campo) => {
+    const tipoCampo = parseInt(campo.idTipoCampo);
+    const opciones = opcionesPorCampo?.[campo.id] || [];
+
+    switch (tipoCampo) {
+      case 6: // TEXTO
+        return <input type="text" placeholder={campo.valorPorDefecto || "Texto..."} disabled />;
+
+      case 7: // NÚMERO
+        return <input type="number" placeholder={campo.valorPorDefecto || "0"} disabled />;
+
+      case 8: // FECHA
+        return <input type="date" value={campo.valorPorDefecto || ""} disabled />;
+
+ case 9: // OPCIÓN MÚLTIPLE (radio buttons)
+  return opciones.length > 0 ? (
+    <div>
+      {opciones.map((opcion) => {
+        console.log(
+          "Comparando:",
+          "valorPorDefecto =>", campo.valorPorDefecto,
+          "| opcion.valor =>", opcion.valorOpcion,
+          "| Igual:", String(campo.valorPorDefecto) === String(opcion.valorOpcion)
+        );
+
+        return (
+          <label key={opcion.idOpcion} style={{ marginRight: "1rem" }}>
+            <input
+              type="radio"
+              name={`campo_${campo.id}`}
+              value={opcion.valorOpcion}
+              disabled
+              checked={String(campo.valorPorDefecto) === String(opcion.valorOpcion)}
+            />{" "}
+            {opcion.valorOpcion || opcion.valor}
+          </label>
+        );
+      })}
+    </div>
+  ) : (
+    <span>{campo.valorPorDefecto || "[valor vacío]"}</span>
+  );
+
+
+      case 10: // BOOLEANO (checkbox)
+        return (
+          <label>
+            <input type="checkbox" disabled checked={campo.valorPorDefecto === "true"} />{" "}
+            {campo.valorPorDefecto === "true" ? "Sí" : "No"}
+          </label>
+        );
+
+      case 11: // LISTA (select simple)
+        return opciones.length > 0 ? (
+          <select value={campo.valorPorDefecto}>
+            <option value="">SELECCIONE UNA OPCIÓN</option>
+            {opciones.map((opcion) => (
+              <option key={opcion.idOpcion} value={opcion.valor}>
+                {opcion.valorOpcion}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <span>{campo.valorPorDefecto || "[valor vacío]"}</span>
+        );
+
+      default:
+        return <span>{campo.valorPorDefecto || "[valor vacío]"}</span>;
+    }
+  };
+
+
 
   useEffect(() => {
     if (selectedFicha) {
@@ -59,6 +139,57 @@ export default function DynamicFichaForm() {
 
     fetchCatalogos();
   }, []);
+
+
+  // Función para cargar opciones para un campo específico según su característica
+  const fetchOpcionesParaCampo = async (idCampo, idCatalogoCaracteristica, idTipoCampo) => {
+    // Busca el tipoCampo por id para saber si es un tipo con opciones (ejemplo: dropdown)
+    const tipo = tiposCampo.find((t) => t.idTipoCampo === parseInt(idTipoCampo));
+
+    if (!tipo) return;
+
+    // Supongamos que el tipo que tiene opciones se llama "select" o "dropdown"
+    if (
+      idCatalogoCaracteristica &&
+      tipo.nombre_tipo.toUpperCase().includes("LISTA") // o usa un idTipoCampo específico si sabes cuál es
+    ) {
+      try {
+        const res = await axios.get(
+          `http://localhost:4000/api/fichas/catalogo/OpcionesCaracteristicas/${idCatalogoCaracteristica}`
+        );
+        // Guarda las opciones para este campo
+        setOpcionesPorCampo((prev) => ({
+          ...prev,
+          [idCampo]: res.data.data || [],
+        }));
+      } catch (err) {
+        console.error("Error al cargar opciones para campo", idCampo, err);
+        // Limpia las opciones si falla
+        setOpcionesPorCampo((prev) => ({
+          ...prev,
+          [idCampo]: [],
+        }));
+      }
+    } else {
+      // Si no es tipo con opciones, limpia las opciones para ese campo
+      setOpcionesPorCampo((prev) => ({
+        ...prev,
+        [idCampo]: [],
+      }));
+    }
+  };
+
+  // Cuando cambie el campo idCatalogoCaracteristica o idTipoCampo, recarga las opciones
+  useEffect(() => {
+    secciones.forEach((sec) => {
+      sec.campos.forEach((campo) => {
+        fetchOpcionesParaCampo(campo.id, campo.idCatalogoCaracteristica, campo.idTipoCampo);
+      });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [secciones, tiposCampo]);
+
+
 
   const agregarSeccion = () => {
     setSecciones([
@@ -332,7 +463,6 @@ export default function DynamicFichaForm() {
       </div>
 
       {/* Vista previa */}
-      {/* Vista previa */}
       <div className="preview-containerD">
         <h2>VISTA PREVIA</h2>
 
@@ -350,7 +480,7 @@ export default function DynamicFichaForm() {
                     <label>
                       <strong>{campo.nombreDelCampo || caracteristica?.caracteristica || "Sin nombre"}:</strong>
                     </label>
-                    <span>{campo.valorPorDefecto || "[valor vacío]"}</span>
+                    {renderVistaPreviaCampo(campo)}
 
                     {/* Mostrar si es requerido */}
                     {campo.valorRequerido && (
