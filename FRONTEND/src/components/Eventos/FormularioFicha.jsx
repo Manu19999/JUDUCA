@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "../../styles/Credencial/formularioDinamico.css";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Inicio/EventCard.css";
 
 export default function DynamicFichaForm() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [tiposCampo, setTiposCampo] = useState([]);
   const [catalogoCaracteristicas, setCatalogoCaracteristicas] = useState([]);
   const [seccionesCatalogo, setSeccionesCatalogo] = useState([]);
   const fichaSeleccionada = JSON.parse(localStorage.getItem("fichaSeleccionada")) || {};
   const idFichaRegistro = fichaSeleccionada.idFichaRegistro;
   const nombreFicha = fichaSeleccionada.nombreFicha || "Ficha sin nombre";
+  const [selectedFicha, setSelectedFicha] = useState(() => {
+    return location.state?.selectedFicha || JSON.parse(localStorage.getItem("selectedFicha"));
+  });
   const [secciones, setSecciones] = useState([
     {
       id: Date.now(),
@@ -28,6 +34,14 @@ export default function DynamicFichaForm() {
       ],
     },
   ]);
+
+  useEffect(() => {
+    if (selectedFicha) {
+      localStorage.setItem("selectedFicha", JSON.stringify(selectedFicha));
+    }
+  }, [selectedFicha]);
+
+
 
   useEffect(() => {
     const fetchCatalogos = async () => {
@@ -120,49 +134,61 @@ export default function DynamicFichaForm() {
     );
 
   const handleSubmit = async () => {
-  const payload = [];
+    const payload = [];
 
-  secciones.forEach((sec) => {
-    sec.campos.forEach((campo) => {
-      payload.push({
-        idFichaRegistro,
-        idCatalogoCaracteristicas: parseInt(campo.idCatalogoCaracteristica),
-        idSeccion: parseInt(sec.idSeccionCatalogo),
-        idTipoCampo: parseInt(campo.idTipoCampo),
-        nombreDelCampo: campo.nombreDelCampo,
-        valorPorDefecto: campo.valorPorDefecto || null,
-        valorRequerido: campo.valorRequerido,
-        valorPrincipal: campo.valorPrincipal,
+    secciones.forEach((sec) => {
+      sec.campos.forEach((campo) => {
+        payload.push({
+          idFichaRegistro,
+          idCatalogoCaracteristicas: parseInt(campo.idCatalogoCaracteristica),
+          idSeccion: parseInt(sec.idSeccionCatalogo),
+          idTipoCampo: parseInt(campo.idTipoCampo),
+          nombreDelCampo: campo.nombreDelCampo,
+          valorPorDefecto: campo.valorPorDefecto || null,
+          valorRequerido: campo.valorRequerido,
+          valorPrincipal: campo.valorPrincipal,
+        });
       });
     });
-  });
 
-  const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-  const body = {
-    Caracteristicas: payload,
-    idObjeto: 1
+    const body = {
+      Caracteristicas: payload,
+      idObjeto: 1
+    };
+
+    try {
+      const res = await axios.post(
+        "http://localhost:4000/api/fichas/insFichaCaracteristicas",
+        body,
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+      alert("✅ Campos guardados correctamente");
+      console.log("📦 Respuesta del servidor:", res.data);
+    } catch (err) {
+      console.error("❌ Error al guardar los campos:", err);
+      alert("❌ Error al guardar los campos");
+    }
   };
 
-  try {
-    const res = await axios.post(
-      "http://localhost:4000/api/fichas/insFichaCaracteristicas",
-      body,
-      {
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
-      }
-    );
-    alert("✅ Campos guardados correctamente");
-    console.log("📦 Respuesta del servidor:", res.data);
-  } catch (err) {
-    console.error("❌ Error al guardar los campos:", err);
-    alert("❌ Error al guardar los campos");
-  }
-};
 
+
+
+
+
+  const handleVolver = () => {
+    navigate("/OpcionFicha", {
+      state: {
+        selectedFicha: selectedFicha
+      },
+    });
+  };
 
 
   return (
@@ -171,13 +197,15 @@ export default function DynamicFichaForm() {
       <BotonRegresar
         to="/OpcionFicha"
         text="Regresar"
+        onClick={handleVolver}
+
       />
-       <div className="credenciallisttitle text-center mt-3" style={{width: '100%' }}>
-        <h2>DISEÑADOR DE : {fichaSeleccionada?.nombreFicha || "Ficha sin nombre"}</h2>
+      <div className="credenciallisttitle text-center mt-3" style={{ width: '100%' }}>
+        <h2>DISEÑADOR DE : {selectedFicha.title || "Ficha sin nombre"}</h2>
       </div>
 
       <div className="form-containerD">
-        
+
         <button className="btnD agregar-seccionD" onClick={agregarSeccion}>
           ➕ AGREGAR SECCION
         </button>

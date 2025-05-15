@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import TargetaEstado from "../components/Credencial/targetasEstadoCredencial";
-import agregarCredencial from "../assets/FondosCredencial/agregarCredencial.jpg";
-import configCredencial from "../assets/FondosCredencial/configCredencial.jpg";
+import agregarCredencial from "../assets/FondosCredencial/ListaFichas.jpg";
+import configCredencial from "../assets/FondosCredencial/DiseñoFicha.jpg";
 import { ToastContainer, toast } from "react-toastify";  // Importar toastify
 import "../styles/Inicio/EventCard.css";
 import BotonRegresar from "../components/Dashboard/BotonRegresar";
@@ -19,12 +19,16 @@ const Seleccion = () => {
     });
 
     useEffect(() => {
-        const fichaFromState = location.state?.selectedFicha;
-        if (fichaFromState && fichaFromState !== selectedFicha) {
-            setSelectedFicha(fichaFromState);
-            localStorage.setItem("selectedFicha", JSON.stringify(fichaFromState));
+        if (location.state?.selectedFicha) {
+            localStorage.setItem("selectedFicha", JSON.stringify(location.state.selectedFicha));
         }
-    }, [location.state]);
+
+        if (!selectedFicha) {
+            console.warn("No se ha recibido ninguna ficha seleccionada, redirigiendo...");
+            navigate("/credencialView");
+        }
+    }, [selectedFicha, location.state, navigate]);
+
 
     useEffect(() => {
         if (!selectedFicha) {
@@ -58,8 +62,8 @@ const Seleccion = () => {
 
                 {selectedFicha ? (
                     <div className="credenciallisttitle text-center mt-3">
-                        <h3>FICHA SELECCIONADA: {selectedFicha.title}</h3>
-                        <p>{selectedFicha.description}</p>
+                        <h3><strong>CONFIGURACION DE FICHA</strong></h3>
+                        <h3>FICHA SELECCIONADA : {selectedFicha.title}</h3>
                     </div>
                 ) : (
                     <p className="text-center text-danger mt-3">

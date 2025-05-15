@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import TargetaEstado from "../Credencial/targetasEstadoCredencial";
-import agregarCredencial from "../../assets/FondosCredencial/agregarCredencial.jpg";
-import configCredencial from "../../assets/FondosCredencial/configCredencial.jpg";
+import agregarCredencial from "../../assets/FondosCredencial/ListaCredenciales.jpg";
+import configCredencial from "../../assets/FondosCredencial/DiseñoCredencial.jpg";
 import { ToastContainer, toast } from "react-toastify";  // Importar toastify
 import "react-toastify/dist/ReactToastify.css"; // Importar los estilos de toastify
 import "../../styles/Inicio/EventCard.css";
@@ -45,69 +45,69 @@ const Seleccion = () => {
     },
   ];
 
- const handleInsertarCredencial = async () => {
-  if (!selectedFicha) {
-    toast.error("No se encontró la ficha seleccionada.");
-    return;
-  }
-
-  const { idEvento, id } = selectedFicha;
-
-  if (!idEvento || isNaN(idEvento) || !id || isNaN(id)) {
-    toast.error("Los datos de la ficha seleccionada no son válidos.");
-    return;
-  }
-
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    toast.error("Token no disponible.");
-    return;
-  }
-
-  const credencial = {
-    idEvento,
-    activo: 1,
-    idFicha: id,
-    idObjeto: 1, // Este debe ser un número válido
-  };
-
-  console.log("Enviando credencial:", credencial);
-
-
-  try {
-    const response = await fetch("http://localhost:4000/api/credencial/insCredencial", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-      body: JSON.stringify(credencial),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok || data.hasError) {
-      throw new Error(data.errors?.[0] || "Error al insertar la credencial");
+  const handleInsertarCredencial = async () => {
+    if (!selectedFicha) {
+      toast.error("No se encontró la ficha seleccionada.");
+      return;
     }
 
-    toast.success("Credencial insertada correctamente.");
-    // await obtenerCredenciales(); // si tienes esta función
-  } catch (error) {
-    console.error("Error:", error);
-    toast.error(error.message || "Error al insertar la credencial.");
-  } 
-};
+    const { idEvento, id } = selectedFicha;
+
+    if (!idEvento || isNaN(idEvento) || !id || isNaN(id)) {
+      toast.error("Los datos de la ficha seleccionada no son válidos.");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.error("Token no disponible.");
+      return;
+    }
+
+    const credencial = {
+      idEvento,
+      activo: 1,
+      idFicha: id,
+      idObjeto: 1, // Este debe ser un número válido
+    };
+
+    console.log("Enviando credencial:", credencial);
+
+
+    try {
+      const response = await fetch("http://localhost:4000/api/credencial/insCredencial", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(credencial),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || data.hasError) {
+        throw new Error(data.errors?.[0] || "Error al insertar la credencial");
+      }
+
+      toast.success("Credencial insertada correctamente.");
+      // await obtenerCredenciales(); // si tienes esta función
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.message || "Error al insertar la credencial.");
+    }
+  };
 
 
   return (
     <Container>
       <BotonRegresar to="/credencialView" text="Regresar" />
-      
+
       {selectedFicha ? (
         <div className="credenciallisttitle text-center mt-3">
-          <h3>FICHA SELECCIONADA: {selectedFicha.title}</h3>
-          <p>{selectedFicha.description}</p>
+          <h3><strong>CONFIGURACION DE CREDENCIAL</strong></h3>
+          <h3>FICHA SELECCIONADA : {selectedFicha.title}</h3>
         </div>
       ) : (
         <p className="text-center text-danger mt-3">
@@ -124,8 +124,8 @@ const Seleccion = () => {
               onClickEspecial={
                 Estado.id === 1
                   ? async () => {
-                      await handleInsertarCredencial();
-                    }
+                    await handleInsertarCredencial();
+                  }
                   : null
               }
             />

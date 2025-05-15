@@ -87,8 +87,8 @@ const GestionEvento = () => {
     autoplay: true,
     autoplaySpeed: 2500,
     responsive: [
-      { breakpoint: 768, settings: { slidesToShow: 2 } },
-      { breakpoint: 480, settings: { slidesToShow: 1 } },
+      { breakpoint: 768, settings: { slidesToShow: 3 } },
+      { breakpoint: 480, settings: { slidesToShow: 2 } },
     ],
   };
 
@@ -105,7 +105,9 @@ const GestionEvento = () => {
           <h2>
             {evento ? `EVENTO SELECCIONADO : ${evento.title}` : "Cargando evento..."}
           </h2>
-       
+        </div >
+
+
         <Slider {...settings}>
           {upcomingEvents.map((event) => (
             <div key={event.id}>
@@ -116,7 +118,6 @@ const GestionEvento = () => {
             </div>
           ))}
         </Slider>
-        </div >
       </Container>
     </section>
   );

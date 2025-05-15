@@ -21,7 +21,7 @@ const TargetaEstado = ({ Estado, selectedFicha, onClickEspecial }) => {
     <div
       className="cardevent"
       onClick={handleClick}
-      style={{ cursor: "pointer", marginTop: "20px" }}
+      style={{ cursor: "pointer", marginTop: "20px", }}
     >
       <img
         className="eventimage"
