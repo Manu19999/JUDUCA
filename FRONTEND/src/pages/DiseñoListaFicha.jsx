@@ -7,6 +7,7 @@ import configCredencial from "../assets/FondosCredencial/DiseñoFicha.jpg";
 import { ToastContainer, toast } from "react-toastify";  // Importar toastify
 import "../styles/Inicio/EventCard.css";
 import BotonRegresar from "../components/Dashboard/BotonRegresar";
+import Nav from "../components/Dashboard/navDashboard";
 
 const Seleccion = () => {
     const navigate = useNavigate();
@@ -55,7 +56,11 @@ const Seleccion = () => {
 
 
     return (
+
+
         <div className="container mx-auto p-4">
+            <Nav />
+
 
             <Container>
                 <BotonRegresar to="/lista-fichas" text="Regresar" />
@@ -77,7 +82,9 @@ const Seleccion = () => {
                             <TargetaEstado
                                 Estado={Estado}
                                 selectedFicha={selectedFicha}
-                            />
+                                onClickEspecial={
+                                Estado.url === 2}
+                                    />
                         </Col>
                     ))}
                 </Row>

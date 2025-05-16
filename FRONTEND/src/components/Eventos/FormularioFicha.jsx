@@ -4,10 +4,7 @@ import axios from "axios";
 import "../../styles/Credencial/formularioDinamico.css";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Inicio/EventCard.css";
-
-
-
-
+import Nav from "../../components/Dashboard/navDashboard";
 
 export default function DynamicFichaForm() {
   const navigate = useNavigate();
@@ -17,12 +14,11 @@ export default function DynamicFichaForm() {
   const [seccionesCatalogo, setSeccionesCatalogo] = useState([]);
   const [opcionesPorCampo, setOpcionesPorCampo] = useState({});
 
-  const fichaSeleccionada = JSON.parse(localStorage.getItem("fichaSeleccionada")) || {};
-  const idFichaRegistro = fichaSeleccionada.idFichaRegistro;
-  const nombreFicha = fichaSeleccionada.nombreFicha || "Ficha sin nombre";
   const [selectedFicha, setSelectedFicha] = useState(() => {
     return location.state?.selectedFicha || JSON.parse(localStorage.getItem("selectedFicha"));
   });
+  const idFichaRegistro = selectedFicha.id;
+
   const [secciones, setSecciones] = useState([
     {
       id: Date.now(),
@@ -41,77 +37,91 @@ export default function DynamicFichaForm() {
     },
   ]);
 
+const renderVistaPreviaCampo = (campo) => {
+  const tipoCampo = parseInt(campo.idTipoCampo);
+  const opciones = opcionesPorCampo?.[campo.id] || [];
 
-  const renderVistaPreviaCampo = (campo) => {
-    const tipoCampo = parseInt(campo.idTipoCampo);
-    const opciones = opcionesPorCampo?.[campo.id] || [];
-
-    switch (tipoCampo) {
-      case 6: // TEXTO
-        return <input type="text" placeholder={campo.valorPorDefecto || "Texto..."} disabled />;
-
-      case 7: // NÚMERO
-        return <input type="number" placeholder={campo.valorPorDefecto || "0"} disabled />;
-
-      case 8: // FECHA
-        return <input type="date" value={campo.valorPorDefecto || ""} disabled />;
-
- case 9: // OPCIÓN MÚLTIPLE (radio buttons)
-  return opciones.length > 0 ? (
-    <div>
-      {opciones.map((opcion) => {
-        console.log(
-          "Comparando:",
-          "valorPorDefecto =>", campo.valorPorDefecto,
-          "| opcion.valor =>", opcion.valorOpcion,
-          "| Igual:", String(campo.valorPorDefecto) === String(opcion.valorOpcion)
-        );
-
-        return (
-          <label key={opcion.idOpcion} style={{ marginRight: "1rem" }}>
-            <input
-              type="radio"
-              name={`campo_${campo.id}`}
-              value={opcion.valorOpcion}
-              disabled
-              checked={String(campo.valorPorDefecto) === String(opcion.valorOpcion)}
-            />{" "}
-            {opcion.valorOpcion || opcion.valor}
-          </label>
-        );
-      })}
-    </div>
-  ) : (
-    <span>{campo.valorPorDefecto || "[valor vacío]"}</span>
-  );
-
-
-      case 10: // BOOLEANO (checkbox)
-        return (
-          <label>
-            <input type="checkbox" disabled checked={campo.valorPorDefecto === "true"} />{" "}
-            {campo.valorPorDefecto === "true" ? "Sí" : "No"}
-          </label>
-        );
-
-      case 11: // LISTA (select simple)
-        return opciones.length > 0 ? (
-          <select value={campo.valorPorDefecto}>
-            <option value="">SELECCIONE UNA OPCIÓN</option>
-            {opciones.map((opcion) => (
-              <option key={opcion.idOpcion} value={opcion.valor}>
-                {opcion.valorOpcion}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <span>{campo.valorPorDefecto || "[valor vacío]"}</span>
-        );
-
-      default:
-        return <span>{campo.valorPorDefecto || "[valor vacío]"}</span>;
-    }
+  const inputStyle = {
+    padding: "6px 10px",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+    backgroundColor: "#f5f5f5",
+    fontSize: "13px",
+    width: "100%",
+    marginTop: "5px",
+    marginBottom: "5px",
   };
+
+  const radioContainerStyle = {
+    display: "flex",
+    gap: "10px",
+    marginTop: "5px",
+    fontSize: "13px",
+  };
+
+  const checkboxContainerStyle = {
+    display: "flex",
+    gap: "10px",
+    marginTop: "5px",
+    fontSize: "13px",
+  };
+
+  switch (tipoCampo) {
+    case 6: // TEXTO
+      return <input type="text" placeholder={campo.valorPorDefecto || "Texto..."} disabled style={inputStyle} />;
+
+    case 7: // NÚMERO
+      return <input type="number" placeholder={campo.valorPorDefecto || "0"} disabled style={inputStyle} />;
+
+    case 8: // FECHA
+      return <input type="date" value={campo.valorPorDefecto || ""} disabled style={inputStyle} />;
+
+    case 9: // OPCIÓN MÚLTIPLE (radio buttons)
+      return (
+        <div style={radioContainerStyle}>
+          <label>
+            <input type="radio" disabled /> Opción 1
+          </label>
+          <label>
+            <input type="radio" disabled /> Opción 2
+          </label>
+          <label>
+            <input type="radio" disabled /> Opción 3
+          </label>
+        </div>
+      );
+
+    case 10: // BOOLEANO (checkbox)
+      return (
+        <div style={checkboxContainerStyle}>
+          <label>
+            <input type="checkbox" disabled checked={campo.valorPorDefecto === "true"} /> Sí
+          </label>
+          <label>
+            <input type="checkbox" disabled checked={campo.valorPorDefecto === "false"} /> No
+          </label>
+        </div>
+      );
+
+    case 11: // LISTA (select simple)
+      return opciones.length > 0 ? (
+        <select value={campo.valorPorDefecto}  style={inputStyle}>
+          <option value="">SELECCIONE UNA OPCIÓN</option>
+          {opciones.map((opcion) => (
+            <option key={opcion.idOpcion} value={opcion.valor}>
+              {opcion.valorOpcion}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <span style={{ fontStyle: "italic", color: "#888" }}>{campo.valorPorDefecto || "[valor vacío]"}</span>
+      );
+
+    default:
+      return <span style={{ fontStyle: "italic", color: "#888" }}>{campo.valorPorDefecto || "[valor vacío]"}</span>;
+  }
+};
+
 
 
 
@@ -289,6 +299,11 @@ export default function DynamicFichaForm() {
       idObjeto: 1
     };
 
+      console.log("🔍 Datos enviados al backend:");
+  console.log("Token:", token);
+  console.log("Cuerpo de la solicitud:", JSON.stringify(body, null, 2));
+
+
     try {
       const res = await axios.post(
         "http://localhost:4000/api/fichas/insFichaCaracteristicas",
@@ -324,6 +339,8 @@ export default function DynamicFichaForm() {
 
   return (
     <div className="contenedor-principalD">
+      <Nav />
+      
 
       <BotonRegresar
         to="/OpcionFicha"
@@ -478,9 +495,10 @@ export default function DynamicFichaForm() {
                 return (
                   <div key={campo.id} className="preview-campoD">
                     <label>
-                      <strong>{campo.nombreDelCampo || caracteristica?.caracteristica || "Sin nombre"}:</strong>
+                      <strong>{campo.nombreDelCampo || caracteristica?.caracteristica || "Sin nombre"} :
+                      </strong>
+                      {renderVistaPreviaCampo(campo)}
                     </label>
-                    {renderVistaPreviaCampo(campo)}
 
                     {/* Mostrar si es requerido */}
                     {campo.valorRequerido && (
