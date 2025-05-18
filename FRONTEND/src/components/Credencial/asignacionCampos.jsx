@@ -394,7 +394,14 @@ const handleVolver = () => {
 
       <div className="row">
         <div className="col-md-4">
-          <div className="d-flex gap-4 mb-4">
+          <div className="d-flex gap-4 ">
+
+             <Button
+              style={{backgroundColor:'#253A69'}}
+              >
+
+              Omitir
+            </Button>
             <Button
               variant="success"
               onClick={guardarAsignaciones}>

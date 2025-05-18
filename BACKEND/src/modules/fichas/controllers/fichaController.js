@@ -64,6 +64,36 @@ export const ObtenerOpcionesCaracteristicas = async (req, res) => {
 
 };
 
+// Controlador para obtener las opciones para cada caracteristica seleccionada
+export const ObtenerCamposPorFicha = async (req, res) => {
+  const { idFichaRegistro } = req.params; 
+  const response = new apiResponse();
+
+  try {
+    const pool = await conexionbd();
+
+    const result = await pool
+      .request()
+      .input("idFichaRegistro", idFichaRegistro ? parseInt(idFichaRegistro) : null)
+      .execute("Registros.CamposPorFichaObtener");
+
+    if (result.recordset.length > 0 && result.recordset[0].codigoError) {
+      response.setHasError(true);
+      response.setErrors([result.recordset[0].descripcion]);
+      return res.status(400).json(response.getResponse());
+    }
+
+    response.setData(result.recordset);
+    res.status(200).json(response.getResponse());
+  } catch (error) {
+    console.error("Error en CamposFichas:", error.message);
+    response.setHasError(true);
+    response.setErrors(["Error interno del servidor", error.message]);
+    res.status(500).json(response.getResponse());
+  }
+};
+
+
 
 export const insertarFichaRegistroCaracteristicas = async (req, res) => {
   const response = new apiResponse();

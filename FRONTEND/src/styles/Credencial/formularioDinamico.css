@@ -184,3 +184,34 @@ h2 {
   padding: 2px 5px;
   border-radius: 5px;
 }
+
+
+.contenedor-principalDM{
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 20px;
+  flex-wrap: wrap; /* Permite que los elementos se ajusten en pantallas pequeñas */
+}
+
+
+.preview-containerDM{
+  width: 100%; /* ocupa el lado derecho */
+  padding: 20px;
+  background-color: #fafafa;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  overflow: hidden; /* Previene desbordamientos */
+}
+
+.preview-containerDM {
+  max-height: 80vh; /* Limita el alto máximo al 80% del alto de la ventana */
+  overflow-y: auto; /* Activa scroll vertical si hay desborde */
+}
+
+
+
+
+
+  

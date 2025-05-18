@@ -87,7 +87,7 @@ const LlenarFichas = () => {
   }, [evento]); // 🔹 Ejecutar cuando el evento cambie
 
   const handleImageClick = (ficha) => {
-    navigate(`/#`, { state: { selectedFicha: ficha } });
+    navigate(`/LlenadoFicha`, { state: { selectedFicha: ficha } });
   };
 
   const handleVerInfo = (ficha) => {

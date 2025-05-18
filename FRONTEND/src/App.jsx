@@ -35,6 +35,8 @@ const Formularios_Fichas =React.lazy(() => import("./pages/FormularioFicha"));
 const RegistroParticipante =React.lazy(() => import("./pages/RegistroParticipante"));
 const RegistroSalud =React.lazy(() => import("./pages/RegistroSalud"));
 const OpcionFicha =React.lazy(() => import("./pages/DiseñoListaFicha"));
+const LlenarFichas =React.lazy(() => import("./pages/LlenadoFormularioFicha"));
+
 
 
 //credenciales
@@ -104,6 +106,8 @@ function App() {
         <Route path="/ficha-participantes" element={<RegistroParticipante />} />
         <Route path="/ficha-salud" element={<RegistroSalud />} />
         <Route path="/OpcionFicha" element={<OpcionFicha />} />
+        <Route path="/LlenadoFicha" element={<LlenarFichas />} />
+
 
 
 

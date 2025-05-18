@@ -105,7 +105,7 @@ const renderVistaPreviaCampo = (campo) => {
 
     case 11: // LISTA (select simple)
       return opciones.length > 0 ? (
-        <select value={campo.valorPorDefecto}  style={inputStyle}>
+        <select value={campo.valorPorDefecto} disabled style={inputStyle}>
           <option value="">SELECCIONE UNA OPCIÓN</option>
           {opciones.map((opcion) => (
             <option key={opcion.idOpcion} value={opcion.valor}>
