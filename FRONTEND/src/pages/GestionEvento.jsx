@@ -5,7 +5,6 @@ const Eventos = () => {
     <div>
       <Nav />
       <GestionEvento />
-      <Nav />
     </div>
   );
 };

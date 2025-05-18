@@ -31,7 +31,7 @@ const GestionEvento = () => {
   const upcomingEvents = [
     {
       id: 1,
-      title: "Fichas",
+      title: "Configurador de Fichas",
       image: EventImage,
       description: "Creación y gestión de fichas.",
       size: "medium",

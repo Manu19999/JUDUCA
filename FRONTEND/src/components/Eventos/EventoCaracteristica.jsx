@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faCog } from "@fortawesome/free-solid-svg-icons";
+import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 
 import "../../styles/Inicio/EventCard.css";
 
