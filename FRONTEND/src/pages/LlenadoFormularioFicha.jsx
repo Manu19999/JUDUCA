@@ -1,48 +1,29 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import "../styles/Credencial/formularioDinamico.css";
+import "../styles/Credencial/LlenadoFicha.css";
 import BotonRegresar from "../components/Dashboard/BotonRegresar";
-import "../styles/Inicio/EventCard.css";
 import Nav from "../components/Dashboard/navDashboard";
 
+
 export default function LlenadoFicha() {
+    // ==================== HOOKS Y ESTADOS ====================
     const navigate = useNavigate();
     const location = useLocation();
+
     const [camposFicha, setCamposFicha] = useState([]);
     const [opcionesPorCampo, setOpcionesPorCampo] = useState({});
     const [loading, setLoading] = useState(true);
+    const [secciones, setSecciones] = useState([]);
 
     const [selectedFicha, setSelectedFicha] = useState(() => {
         return location.state?.selectedFicha || JSON.parse(localStorage.getItem("selectedFicha"));
     });
     const idFichaRegistro = selectedFicha.id;
 
-    const inputStyle = {
-        padding: "6px 10px",
-        borderRadius: "5px",
-        border: "1px solid #ccc",
-        backgroundColor: "#f5f5f5",
-        fontSize: "13px",
-        width: "100%",
-        marginTop: "5px",
-        marginBottom: "5px",
-    };
 
-    const radioContainerStyle = {
-        display: "flex",
-        gap: "10px",
-        marginTop: "5px",
-        fontSize: "13px",
-    };
 
-    const checkboxContainerStyle = {
-        display: "flex",
-        gap: "10px",
-        marginTop: "5px",
-        fontSize: "13px",
-    };
-
+    // ==================== EFECTOS ====================
     useEffect(() => {
         if (selectedFicha) {
             localStorage.setItem("selectedFicha", JSON.stringify(selectedFicha));
@@ -52,44 +33,42 @@ export default function LlenadoFicha() {
     useEffect(() => {
         const cargarDatos = async () => {
             try {
-                // Cargar campos de la ficha
-                const resCampos = await axios.get(`http://localhost:4000/api/fichas/camposFicha/${idFichaRegistro}`);
+                // 1. Cargar campos de la ficha
+                const resCampos = await axios.get(
+                    `http://localhost:4000/api/fichas/camposFicha/${idFichaRegistro}`
+                );
                 const campos = resCampos.data.data;
-                console.log(campos)
                 setCamposFicha(campos);
 
+                // Agrupar campos por secciones
+                const seccionesUnicas = [...new Set(campos.map(campo => campo.seccion || "General"))];
+                setSecciones(seccionesUnicas);
 
-                // Filtrar solo campos que son listas (idTipoCampo === 11)
+                // 2. Filtrar campos que son listas (idTipoCampo === 11)
                 const camposLista = campos.filter(campo => parseInt(campo.idTipoCampo) === 11);
-                // Dentro de cargarDatos, después de obtener los campos:
-                console.log("Todos los campos:", campos);
-                console.log("Campos de tipo lista:", campos.filter(campo => parseInt(campo.idTipoCampo) === 11));
-                // Crear un array de promesas para obtener las opciones de cada campo lista
+
+                // 3. Cargar opciones para cada campo de lista
                 const promesasOpciones = camposLista.map(campo =>
-                    axios.get(`http://localhost:4000/api/fichas/catalogo/OpcionesCaracteristicas/${campo.idCatalogoCaracteristica}`)
+                    axios.get(
+                        `http://localhost:4000/api/fichas/catalogo/OpcionesCaracteristicas/${campo.idCatalogoCaracteristica}`
+                    )
                         .then(res => ({
                             idCampo: campo.idCatalogoCaracteristica,
                             opciones: res.data.data || []
                         }))
                         .catch(err => {
                             console.error(`Error cargando opciones para campo ${campo.idCampo}:`, err);
-                            return {
-                                idCampo: campo.idCampo,
-                                opciones: []
-                            };
+                            return { idCampo: campo.idCampo, opciones: [] };
                         })
                 );
 
-                // Esperar a que todas las promesas se resuelvan
+                // 4. Procesar resultados
                 const resultados = await Promise.all(promesasOpciones);
-
-                // Crear el objeto de opciones por campo
                 const nuevasOpciones = {};
+
                 resultados.forEach(resultado => {
                     nuevasOpciones[resultado.idCampo] = resultado.opciones;
                 });
-                console.log("Resultados de opciones:", resultados);
-
 
                 setOpcionesPorCampo(nuevasOpciones);
                 setLoading(false);
@@ -99,25 +78,20 @@ export default function LlenadoFicha() {
             }
         };
 
-        if (idFichaRegistro) {
-            cargarDatos();
-        }
+        if (idFichaRegistro) cargarDatos();
     }, [idFichaRegistro]);
 
+    // ==================== MANEJADORES ====================
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const form = e.target;
         const formData = new FormData(form);
 
-        console.log("Entradas del formulario:");
-        for (let pair of formData.entries()) {
-            console.log(`${pair[0]}: ${pair[1]}`);
-        }
-
+        // Preparar datos de los campos
         const campos = camposFicha.map((campo) => {
             const tipoCampo = parseInt(campo.idTipoCampo);
             const nombreCampo = `campo_${campo.idFichaRegistroCaracteristica}`;
+
             const valor = tipoCampo === 10
                 ? (formData.get(nombreCampo) ? "true" : "false")
                 : formData.get(nombreCampo);
@@ -128,19 +102,34 @@ export default function LlenadoFicha() {
             };
         });
 
+        const camposInvalidos = camposFicha.filter(campo =>
+            campo.valorRequerido &&
+            !formData.get(`campo_${campo.idFichaRegistroCaracteristica}`)
+        );
+
+        if (camposInvalidos.length > 0) {
+            alert("Por favor complete todos los campos requeridos.");
+            return;
+        }
+
+        // Construir payload
         const payload = {
-            campos, // ✅ Nombre correcto según backend
+            campos,
             idObjeto: 1,
-            idEvento: Number(selectedFicha.idEvento),
-            idFichaRegistro: Number(idFichaRegistro)
+            idEvento: selectedFicha.idEvento,
+            idFichaRegistro: idFichaRegistro
         };
 
         try {
-            const res = await axios.post("http://localhost:4000/api/fichas/insParticipanteEventos", payload, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+            const res = await axios.post(
+                "http://localhost:4000/api/fichas/insParticipanteEventos",
+                payload,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    }
                 }
-            });
+            );
 
             if (!res.data.hasError) {
                 alert("Participante registrado con éxito.");
@@ -154,13 +143,78 @@ export default function LlenadoFicha() {
         }
     }
 
+    const handleVolver = () => {
+        navigate("/llenar-fichas", {
+            state: { selectedFicha: selectedFicha },
+        });
+    };
 
-
+    // ==================== RENDERIZADO DE CAMPOS ====================
     const renderCampo = (campo) => {
         const tipoCampo = parseInt(campo.idTipoCampo);
         const opciones = opcionesPorCampo[campo.idCatalogoCaracteristica] || [];
+        const nameInput = `campo_${campo.idFichaRegistroCaracteristica}`;
 
-        const nameInput = `campo_${campo.idFichaRegistroCaracteristica}`; // Usar id válido
+        // Definimos los estilos aquí mismo
+        const fieldStyles = {
+            input: {
+                padding: "0.8rem 1rem",
+                borderRadius: "6px",
+                border: "1px solid #ddd",
+                backgroundColor: "#f9f9f9",
+                fontSize: "0.95rem",
+                width: "100%",
+                marginTop: "0.5rem",
+                transition: "all 0.3s ease"
+            },
+            radioContainer: {
+                display: "flex",
+                gap: "1.0rem",
+            },
+            checkboxContainer: {
+                display: "flex",
+                gap: "0.5rem",
+                marginTop: "0.5rem",
+                alignItems: "center"
+            }
+        };
+
+        const CheckboxBool = ({ campo }) => {
+    const nameInput = `campo_${campo.idFichaRegistroCaracteristica}`;
+    const [checked, setChecked] = useState(campo.valorPorDefecto === true || campo.valorPorDefecto === "true");
+
+    const handleChange = (e) => {
+        setChecked(e.target.value === "true");
+    };
+
+    return (
+        <div style={fieldStyles.radioContainer} className="radio-group">
+            <label className="radio-option">
+                <input
+                    type="radio"
+                    name={nameInput}
+                    value="true"
+                    checked={checked === true}
+                    onChange={handleChange}
+                    className="radio-input"
+                />{" "}
+                Si
+            </label>
+            <label className="radio-option">
+                <input
+                    type="radio"
+                    name={nameInput}
+                    value="false"
+                    checked={checked === false}
+                    onChange={handleChange}
+                    className="radio-input"
+                />{" "}
+                No
+            </label>
+        </div>
+    );
+};
+
 
         switch (tipoCampo) {
             case 6: // Texto
@@ -169,8 +223,9 @@ export default function LlenadoFicha() {
                         type="text"
                         defaultValue={campo.valorPorDefecto || ""}
                         placeholder="Texto..."
-                        style={inputStyle}
+                        style={fieldStyles.input}
                         name={nameInput}
+                        className="form-input"
                     />
                 );
             case 7: // Número
@@ -179,8 +234,9 @@ export default function LlenadoFicha() {
                         type="number"
                         defaultValue={campo.valorPorDefecto || ""}
                         placeholder="0"
-                        style={inputStyle}
+                        style={fieldStyles.input}
                         name={nameInput}
+                        className="form-input"
                     />
                 );
             case 8: // Fecha
@@ -188,32 +244,34 @@ export default function LlenadoFicha() {
                     <input
                         type="date"
                         defaultValue={campo.valorPorDefecto || ""}
-                        style={inputStyle}
+                        style={fieldStyles.input}
                         name={nameInput}
+                        className="form-input"
                     />
                 );
             case 9: // Radio
                 return (
-                    <div style={radioContainerStyle}>
+                    <div style={fieldStyles.radioContainer} className="radio-group">
                         {opciones.length > 0 ? (
                             opciones.map((op, idx) => (
-                                <label key={idx}>
+                                <label key={idx} className="radio-option">
                                     <input
                                         type="radio"
                                         name={nameInput}
                                         value={op.valor}
                                         defaultChecked={campo.valorPorDefecto === op.valor}
+                                        className="radio-input"
                                     />{" "}
                                     {op.valorOpcion}
                                 </label>
                             ))
                         ) : (
                             <>
-                                <label>
-                                    <input type="radio" name={nameInput} /> Opción 1
+                                <label className="radio-option">
+                                    <input type="radio" name={nameInput} className="radio-input" /> Opción 1
                                 </label>
-                                <label>
-                                    <input type="radio" name={nameInput} /> Opción 2
+                                <label className="radio-option">
+                                    <input type="radio" name={nameInput} className="radio-input" /> Opción 2
                                 </label>
                             </>
                         )}
@@ -221,24 +279,15 @@ export default function LlenadoFicha() {
                 );
             case 10: // Checkbox (bool)
                 return (
-                    <div style={checkboxContainerStyle}>
-                        <label>
-                            <input
-                                type="checkbox"
-                                defaultChecked={campo.valorPorDefecto === "true"}
-                                name={nameInput}
-                                value="true"
-                            />{" "}
-                            Sí
-                        </label>
-                    </div>
+                    <CheckboxBool campo={campo} />
                 );
             case 11: // Lista desplegable
                 return (
                     <select
                         defaultValue={campo.valor || ""}
-                        style={inputStyle}
+                        style={fieldStyles.input}
                         name={nameInput}
+                        className="form-select"
                     >
                         <option value="">SELECCIONE UNA OPCIÓN</option>
                         {opciones.map((opcion) => (
@@ -250,60 +299,79 @@ export default function LlenadoFicha() {
                 );
             default:
                 return (
-                    <span style={{ fontStyle: "italic", color: "#888" }}>
+                    <span className="unknown-field">
                         {campo.valorPorDefecto || "[Tipo de campo no reconocido]"}
                     </span>
                 );
         }
     };
 
-
-
-    const handleVolver = () => {
-        navigate("/llenar-fichas", {
-            state: {
-                selectedFicha: selectedFicha
-            },
-        });
-    };
-
-    if (loading) {
-        return <div>Cargando...</div>;
-    }
+    // ==================== RENDER PRINCIPAL ====================
+    if (loading) return (
+        <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Cargando formulario...</p>
+        </div>
+    );
 
     return (
-        <div className="container mx-auto p-4">
-            <div className="contenedor-principalDM">
-                <Nav />
+        <div className="formulario-container">
+            <Nav />
+
+            <div className="formulario-header">
                 <BotonRegresar
                     to="/llenar-fichas"
                     text="Regresar"
                     onClick={handleVolver}
+                    className="back-button"
                 />
-                <div className="credenciallisttitle text-center mt-3" style={{ width: '100%' }}>
-                    <h2>FORMULARIO DE REGISTRO: {selectedFicha.title || "Ficha sin nombre"}</h2>
+
+                <div className="formulario-title">
+                    <h2>{selectedFicha.title || "Ficha sin nombre"}</h2>
                 </div>
+            </div>
 
-                <form onSubmit={handleSubmit} className="preview-containerDM">
-                    <h2>FORMULARIO</h2>
+            <div className="formulario-content">
+                <form onSubmit={handleSubmit} className="dynamic-form">
+                    {secciones.length > 0 ? (
+                        secciones.map((seccion, index) => {
+                            const camposSeccion = camposFicha.filter(campo =>
+                                (campo.seccion || "General") === seccion
+                            );
 
-                    {camposFicha.length > 0 ? (
-                        camposFicha.map((campo) => (
-                            <div key={campo.idCampo} className="mb-4">
-                                <label style={{ fontWeight: "bold" }}>
-                                    {campo.nombreDelCampo}
-                                    {campo.valorRequerido && <span style={{ color: "red" }}> *</span>}
-                                </label>
-                                {renderCampo(campo)}
-                            </div>
-                        ))
+                            return (
+                                <div key={index} className="form-section">
+                                    <div className="section-header">
+                                        <h3>{seccion}</h3>
+                                        <div className="section-divider"></div>
+                                    </div>
+
+                                    <div className="section-fields">
+                                        {camposSeccion.map((campo) => (
+                                            <div key={campo.idCampo} className="form-field">
+                                                <label className="field-label">
+                                                    {campo.nombreDelCampo}
+                                                    {campo.valorRequerido && <span className="required-asterisk"> *</span>}
+                                                </label>
+                                                {renderCampo(campo)}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        })
                     ) : (
-                        <p>No hay campos para mostrar.</p>
+                        <div className="no-fields-message">
+                            <p>No hay campos para mostrar en este formulario.</p>
+                        </div>
                     )}
 
-                    <button type="submit" className="btnD guardarD">
-                        Guardar Datos
-                    </button>
+                    <div className="form-actions">
+                        <button type="submit" className="submit-button">
+                            <span className="button-text">Guardar Datos</span>
+                            <span className="button-icon">✓</span>
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
