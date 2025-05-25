@@ -59,7 +59,7 @@ const AsignacionCampos = () => {
   const [selectedFicha, setSelectedFicha] = useState(() => {
     return location.state?.selectedFicha || JSON.parse(localStorage.getItem("selectedFicha"));
   });
-  
+
   const [asignaciones, setAsignaciones] = useState({});
 
   const camposPendientes = useMemo(() =>
@@ -67,11 +67,11 @@ const AsignacionCampos = () => {
       !Object.values(asignaciones).some(asignado => asignado.id === caracteristica.id)
     ), [caracteristicasFicha, asignaciones]);
 
-    useEffect(() => {
-      if (selectedFicha) {
-        localStorage.setItem("selectedFicha", JSON.stringify(selectedFicha));
-      }
-    }, [selectedFicha]);
+  useEffect(() => {
+    if (selectedFicha) {
+      localStorage.setItem("selectedFicha", JSON.stringify(selectedFicha));
+    }
+  }, [selectedFicha]);
 
 
 
@@ -194,186 +194,193 @@ const AsignacionCampos = () => {
 
 
   const guardarAsignaciones = async () => {
-  const asignacionesList = Object.entries(asignaciones).map(([key, campo]) => {
-    const [ladoTexto, idUbicacionCampo] = key.split("-");
-    const lado = ladoTexto === "frente";
+    const asignacionesList = Object.entries(asignaciones).map(([key, campo]) => {
+      const [ladoTexto, idUbicacionCampo] = key.split("-");
+      const lado = ladoTexto === "frente";
 
-    return {
-      idUbicacionCampo: parseInt(idUbicacionCampo),
-      lado,
-      caracteristica: campo.descripcion
-    };
-  });
-
-  const token = localStorage.getItem("token");
-
-  try {
-    const response = await fetch("http://localhost:4000/api/credencial/campos", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        idFichaRegistro: selectedFicha.id,
-        campos: asignacionesList,
-        fechaVigencia: new Date(),  // Ajusta si tienes un campo real
-        idObjeto: 1
-      }),
+      return {
+        idUbicacionCampo: parseInt(idUbicacionCampo),
+        lado,
+        caracteristica: campo.descripcion
+      };
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Error al guardar campos: ${response.status} - ${errorText}`);
-    }
+    const token = localStorage.getItem("token");
 
-    await Swal.fire({
-      icon: "success",
-      title: "¡Asignaciones guardadas!",
-      text: "Las asignaciones fueron registradas correctamente.",
-      confirmButtonColor: "#253A69",
-    });
-
-    navigate("/diseñadorCredencial", {
-      state: { fichaSeleccionada: selectedFicha }
-    });
-
-  } catch (err) {
-    console.error(err);
-
-    await Swal.fire({
-      icon: "error",
-      title: "Error al guardar",
-      text: err.message || "Ocurrió un problema al guardar las asignaciones.",
-      confirmButtonColor: "#d33",
-    });
-
-    setError(err.message);
-  }
-};
-
-
- const handleEliminarAsignacion = useCallback((cellId) => {
-  const key = `${previewSide}-${cellId}`;
-  const campo = asignaciones[key];  // Encuentra el campo asignado para la celda
-  if (!campo) return;
-
-  // Llamada al backend para eliminar el campo
-  const token = localStorage.getItem("token");
-
-  fetch("http://localhost:4000/api/credencial/deleteCampos", {
-    method: "POST", // O "DELETE" dependiendo de lo que requiera el backend
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
-    },
-    body: JSON.stringify({
-      idCampos : [campo.id],  // Envia el idCampoCredencial en lugar de idUbicacionCampo
-      idFichaRegistro: selectedFicha.id,
-      lado: previewSide === "frente",
-      idObjeto: 1 // O el valor que necesites
-    })
-  })
-    .then(response => response.json())
-    .then(data => {
-      if (data.hasError) {
-        console.error("Error al eliminar campo:", data.errors);
-        setError(data.errors.join(", "));
-      } else {
-        showNotification("Campo eliminado correctamente.");
-        // Eliminarlo del estado local si es necesario
-        setAsignaciones(prev => {
-          const updated = { ...prev };
-          delete updated[key];
-          return updated;
-        });
-      }
-    })
-    .catch(err => {
-      console.error("Error al eliminar campo:", err);
-      setError("Error al eliminar campo.");
-    });
-}, [previewSide, selectedFicha.id, asignaciones, showNotification]);
-
-
-const handleClearAll = useCallback(() => {
-  const camposAEliminar = Object.values(asignaciones).map(campo => campo.id);
-
-  // Si no hay asignaciones para limpiar
-  if (camposAEliminar.length === 0) {
-    showNotification({
-      message: "¡Ups! No hay asignaciones para limpiar.",
-      type: "warning",
-      duration: 3000,
-    });
-    return;
-  }
-
-  Swal.fire({
-    title: "¿Estás seguro?",
-    text: "Esto eliminará todas las asignaciones de esta credencial.",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#253A69",
-    cancelButtonColor: "#ffcc00",
-    confirmButtonText: "Sí, eliminar",
-    cancelButtonText: "Cancelar"
-  }).then((result) => {
-    if (result.isConfirmed) {
-      const token = localStorage.getItem("token");
-
-      fetch("http://localhost:4000/api/credencial/deleteCampos", {
+    try {
+      const response = await fetch("http://localhost:4000/api/credencial/campos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
-          idCampos: camposAEliminar,
           idFichaRegistro: selectedFicha.id,
-          lado: previewSide === "frente",
+          campos: asignacionesList,
+          fechaVigencia: new Date(),  // Ajusta si tienes un campo real
           idObjeto: 1
-        })
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error al guardar campos: ${response.status} - ${errorText}`);
+      }
+
+      await Swal.fire({
+        icon: "success",
+        title: "¡Asignaciones guardadas!",
+        text: "Las asignaciones fueron registradas correctamente.",
+        confirmButtonColor: "#253A69",
+      });
+
+      navigate("/diseñadorCredencial", {
+        state: { fichaSeleccionada: selectedFicha }
+      });
+
+    } catch (err) {
+      console.error(err);
+
+      await Swal.fire({
+        icon: "error",
+        title: "Error al guardar",
+        text: err.message || "Ocurrió un problema al guardar las asignaciones.",
+        confirmButtonColor: "#d33",
+      });
+
+      setError(err.message);
+    }
+  };
+
+  const OmitirInsercion = () => {
+    navigate("/diseñadorCredencial", {
+      state: {
+        selectedFicha: selectedFicha
+      },
+    });
+  };
+
+  const handleEliminarAsignacion = useCallback((cellId) => {
+    const key = `${previewSide}-${cellId}`;
+    const campo = asignaciones[key];  // Encuentra el campo asignado para la celda
+    if (!campo) return;
+
+    // Llamada al backend para eliminar el campo
+    const token = localStorage.getItem("token");
+
+    fetch("http://localhost:4000/api/credencial/deleteCampos", {
+      method: "POST", // O "DELETE" dependiendo de lo que requiera el backend
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        idCampos: [campo.id],  // Envia el idCampoCredencial en lugar de idUbicacionCampo
+        idFichaRegistro: selectedFicha.id,
+        lado: previewSide === "frente",
+        idObjeto: 1 // O el valor que necesites
       })
-        .then(response => response.json())
-        .then(data => {
-          if (data.hasError) {
-            console.error("Error al eliminar campos:", data.errors);
-            setError(data.errors.join(", "));
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.hasError) {
+          console.error("Error al eliminar campo:", data.errors);
+          setError(data.errors.join(", "));
+        } else {
+          showNotification("Campo eliminado correctamente.");
+          // Eliminarlo del estado local si es necesario
+          setAsignaciones(prev => {
+            const updated = { ...prev };
+            delete updated[key];
+            return updated;
+          });
+        }
+      })
+      .catch(err => {
+        console.error("Error al eliminar campo:", err);
+        setError("Error al eliminar campo.");
+      });
+  }, [previewSide, selectedFicha.id, asignaciones, showNotification]);
+
+
+  const handleClearAll = useCallback(() => {
+    const camposAEliminar = Object.values(asignaciones).map(campo => campo.id);
+
+    // Si no hay asignaciones para limpiar
+    if (camposAEliminar.length === 0) {
+      showNotification({
+        message: "¡Ups! No hay asignaciones para limpiar.",
+        type: "warning",
+        duration: 3000,
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esto eliminará todas las asignaciones de esta credencial.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#253A69",
+      cancelButtonColor: "#ffcc00",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const token = localStorage.getItem("token");
+
+        fetch("http://localhost:4000/api/credencial/deleteCampos", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            idCampos: camposAEliminar,
+            idFichaRegistro: selectedFicha.id,
+            lado: previewSide === "frente",
+            idObjeto: 1
+          })
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.hasError) {
+              console.error("Error al eliminar campos:", data.errors);
+              setError(data.errors.join(", "));
+              showNotification({
+                message: "Hubo un problema al intentar eliminar los campos. Por favor, intenta más tarde.",
+                type: "error",
+                duration: 3000,
+              });
+            } else {
+              showNotification({
+                message: "¡Las asignaciones han sido eliminadas exitosamente!",
+                type: "success",
+                duration: 3000,
+              });
+              setAsignaciones({});
+            }
+          })
+          .catch(err => {
+            console.error("Error al eliminar campos:", err);
+            setError("Error al eliminar campos.");
             showNotification({
-              message: "Hubo un problema al intentar eliminar los campos. Por favor, intenta más tarde.",
+              message: "¡Ocurrió un error inesperado! Por favor, intenta nuevamente.",
               type: "error",
               duration: 3000,
             });
-          } else {
-            showNotification({
-              message: "¡Las asignaciones han sido eliminadas exitosamente!",
-              type: "success",
-              duration: 3000,
-            });
-            setAsignaciones({});
-          }
-        })
-        .catch(err => {
-          console.error("Error al eliminar campos:", err);
-          setError("Error al eliminar campos.");
-          showNotification({
-            message: "¡Ocurrió un error inesperado! Por favor, intenta nuevamente.",
-            type: "error",
-            duration: 3000,
           });
-        });
-    }
-  });
-}, [asignaciones, showNotification, selectedFicha.id, previewSide]);
+      }
+    });
+  }, [asignaciones, showNotification, selectedFicha.id, previewSide]);
 
-const handleVolver = () => {
-  navigate("/OpcionCredencial", {
-    state: {
-      selectedFicha: selectedFicha
-    },
-  });
-};
+  const handleVolver = () => {
+    navigate("/OpcionCredencial", {
+      state: {
+        selectedFicha: selectedFicha
+      },
+    });
+  };
 
   return (
     <div className="container-fluid">
@@ -396,17 +403,13 @@ const handleVolver = () => {
         <div className="col-md-4">
           <div className="d-flex gap-4 ">
 
-             <Button
-              style={{backgroundColor:'#253A69'}}
-              >
+            <Button
+              style={{ backgroundColor: '#253A69' }}
+              onClick={OmitirInsercion}
+
+            >
 
               Omitir
-            </Button>
-            <Button
-              variant="success"
-              onClick={guardarAsignaciones}>
-
-              Terminar
             </Button>
             <Button
               variant="secondary"
@@ -414,6 +417,13 @@ const handleVolver = () => {
             >
               Limpiar
             </Button>
+            <Button
+              variant="success"
+              onClick={guardarAsignaciones}>
+
+              Terminar
+            </Button>
+
           </div>
 
           <h4 className="text-center my-3">Campos Disponibles</h4>
@@ -446,8 +456,8 @@ const handleVolver = () => {
             style={{
               backgroundImage: `url(${fondoCredencial})`,
               backgroundSize: "cover",
-              width: "750px",
-              height: "450px",
+              width: "700px",
+              height: "400px",
               display: "grid",
               gridTemplateColumns: "repeat(3, 1fr)",
               gap: "5px",

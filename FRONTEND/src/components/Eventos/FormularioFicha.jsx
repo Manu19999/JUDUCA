@@ -68,10 +68,10 @@ const renderVistaPreviaCampo = (campo) => {
 
   switch (tipoCampo) {
     case 6: // TEXTO
-      return <input type="text" placeholder={campo.valorPorDefecto || "Texto..."} disabled style={inputStyle} />;
+      return <input type="text" placeholder={campo.valorPorDefecto || "TEXTO"} disabled style={inputStyle} />;
 
     case 7: // NÚMERO
-      return <input type="number" placeholder={campo.valorPorDefecto || "0"} disabled style={inputStyle} />;
+      return <input type="number" placeholder={campo.valorPorDefecto || "NUMERO"} disabled style={inputStyle} />;
 
     case 8: // FECHA
       return <input type="date" value={campo.valorPorDefecto || ""} disabled style={inputStyle} />;
@@ -105,7 +105,7 @@ const renderVistaPreviaCampo = (campo) => {
 
     case 11: // LISTA (select simple)
       return opciones.length > 0 ? (
-        <select value={campo.valorPorDefecto} disabled style={inputStyle}>
+        <select value={campo.valorPorDefecto}  style={inputStyle}>
           <option value="">SELECCIONE UNA OPCIÓN</option>
           {opciones.map((opcion) => (
             <option key={opcion.idOpcion} value={opcion.valor}>

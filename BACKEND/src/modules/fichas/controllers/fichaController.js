@@ -95,6 +95,7 @@ export const ObtenerCamposPorFicha = async (req, res) => {
 
 
 
+
 export const insertarFichaRegistroCaracteristicas = async (req, res) => {
   const response = new apiResponse();
 
@@ -163,6 +164,62 @@ export const insertarFichaRegistroCaracteristicas = async (req, res) => {
     res.status(500).json(response.getResponse());
   }
 };
+
+export const InsertarParticipanteEvento = async (req, res) => {
+  const response = new apiResponse();
+
+  try {
+    const { idEvento, idFichaRegistro, campos, idObjeto } = req.body;
+
+    const idUsuario = req.usuario.idUsuario;
+    const nombreUsuario = req.usuario.nombreUsuario;
+
+    if (!idEvento || !idFichaRegistro || !Array.isArray(campos) || campos.length === 0) {
+      response.setHasError(true);
+      response.setErrors(["Debe proporcionar idEvento, idFichaRegistro y al menos un campo."]);
+      return res.status(400).json(response.getResponse());
+    }
+
+    const pool = await conexionbd();
+
+    // Crear el TVP para los campos del participante
+    const camposTable = new sql.Table("Registros.tvpParticipanteCampos");
+    camposTable.columns.add("idFichaRegistroCaracteristica", sql.Int);
+    camposTable.columns.add("valor", sql.NVarChar(sql.MAX));
+
+    campos.forEach(c => {
+      camposTable.rows.add(c.idFichaRegistroCaracteristica, c.valor);
+    });
+
+    const result = await pool
+      .request()
+      .input("idEvento", sql.Int, idEvento)
+      .input("idFichaRegistro", sql.Int, idFichaRegistro)
+      .input("idUsuario", sql.Int, idUsuario)
+      .input("nombreUsuario", sql.NVarChar(90), nombreUsuario)
+      .input("campos", camposTable)
+      .input("idObjeto", sql.Int, idObjeto)
+      .execute("Registros.splParticipanteEventoInsertar");
+
+    const resultadoSP = result.recordset?.[0];
+
+    if (resultadoSP?.codigoError !== 0) {
+      response.setHasError(true);
+      response.setErrors([resultadoSP.descripcion]);
+      return res.status(400).json(response.getResponse());
+    }
+
+    response.setData(result.recordset);
+    return res.status(201).json(response.getResponse());
+
+  } catch (error) {
+    console.error("Error al registrar participante:", error);
+    response.setHasError(true);
+    response.setErrors([error.message]);
+    return res.status(500).json(response.getResponse());
+  }
+};
+
 
 
 export const obtenerCatalogosFichaRegistro = async (req, res) => {
