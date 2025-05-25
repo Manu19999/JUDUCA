@@ -37,90 +37,87 @@ export default function DynamicFichaForm() {
     },
   ]);
 
-const renderVistaPreviaCampo = (campo) => {
-  const tipoCampo = parseInt(campo.idTipoCampo);
-  const opciones = opcionesPorCampo?.[campo.id] || [];
+  const renderVistaPreviaCampo = (campo) => {
+    const tipoCampo = parseInt(campo.idTipoCampo);
+    const opciones = opcionesPorCampo?.[campo.id] || [];
 
-  const inputStyle = {
-    padding: "6px 10px",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
-    backgroundColor: "#f5f5f5",
-    fontSize: "13px",
-    width: "100%",
-    marginTop: "5px",
-    marginBottom: "5px",
+    const inputStyle = {
+      padding: "6px 10px",
+      borderRadius: "5px",
+      border: "1px solid #ccc",
+      backgroundColor: "#f5f5f5",
+      fontSize: "13px",
+      width: "100%",
+      marginTop: "5px",
+      marginBottom: "5px",
+    };
+
+    const radioContainerStyle = {
+      display: "flex",
+      gap: "10px",
+      marginTop: "5px",
+      fontSize: "13px",
+    };
+
+    const checkboxContainerStyle = {
+      display: "flex",
+      gap: "10px",
+      marginTop: "5px",
+      fontSize: "15px",
+    };
+
+    switch (tipoCampo) {
+      case 6: // TEXTO
+        return <input type="text" placeholder={campo.valorPorDefecto || "TEXTO"} disabled style={inputStyle} />;
+
+      case 7: // NÚMERO
+        return <input type="number" placeholder={campo.valorPorDefecto || "NUMERO"} disabled style={inputStyle} />;
+
+      case 8: // FECHA
+        return <input type="date" value={campo.valorPorDefecto || ""} disabled style={inputStyle} />;
+
+      case 9: // OPCIÓN MÚLTIPLE (radio buttons)
+        return opciones.length > 0 ? (
+          <div style={radioContainerStyle}>
+            {opciones.map((opcion) => (
+              <label key={opcion.idOpcion}>
+                <input type="radio" name={`campo-${campo.id}`} disabled />
+                {opcion.valorOpcion}
+              </label>
+            ))}
+          </div>
+        ) : (
+          <span style={{ fontStyle: "italic", color: "#888" }}>{campo.valorPorDefecto || "[sin opciones]"}</span>
+        );
+
+      case 10: // BOOLEANO
+        return (
+          <div style={checkboxContainerStyle}>
+            <label>
+              <input type="checkbox" style={{ width: '20px', height: '11px' }} disabled checked={campo.valorPorDefecto === "true"} />
+              {"Sí / No"}
+            </label>
+          </div>
+        );
+
+      case 11: // LISTA (select simple)
+        return opciones.length > 0 ? (
+          <select value={campo.valorPorDefecto} style={inputStyle}>
+            <option value="">SELECCIONE UNA OPCIÓN</option>
+            {opciones.map((opcion) => (
+              <option key={opcion.idOpcion} value={opcion.valor}>
+                {opcion.valorOpcion}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <span style={{ fontStyle: "italic", color: "#888" }}>{campo.valorPorDefecto || "[valor vacío]"}</span>
+        );
+
+      default:
+        return <span style={{ fontStyle: "italic", color: "#888" }}>{campo.valorPorDefecto || "[valor vacío]"}</span>;
+    }
   };
-
-  const radioContainerStyle = {
-    display: "flex",
-    gap: "10px",
-    marginTop: "5px",
-    fontSize: "13px",
-  };
-
-  const checkboxContainerStyle = {
-    display: "flex",
-    gap: "10px",
-    marginTop: "5px",
-    fontSize: "13px",
-  };
-
-  switch (tipoCampo) {
-    case 6: // TEXTO
-      return <input type="text" placeholder={campo.valorPorDefecto || "TEXTO"} disabled style={inputStyle} />;
-
-    case 7: // NÚMERO
-      return <input type="number" placeholder={campo.valorPorDefecto || "NUMERO"} disabled style={inputStyle} />;
-
-    case 8: // FECHA
-      return <input type="date" value={campo.valorPorDefecto || ""} disabled style={inputStyle} />;
-
-    case 9: // OPCIÓN MÚLTIPLE (radio buttons)
-      return (
-        <div style={radioContainerStyle}>
-          <label>
-            <input type="radio" disabled /> Opción 1
-          </label>
-          <label>
-            <input type="radio" disabled /> Opción 2
-          </label>
-          <label>
-            <input type="radio" disabled /> Opción 3
-          </label>
-        </div>
-      );
-
-    case 10: // BOOLEANO (checkbox)
-      return (
-        <div style={checkboxContainerStyle}>
-          <label>
-            <input type="checkbox" disabled checked={campo.valorPorDefecto === "true"} /> Sí
-          </label>
-          <label>
-            <input type="checkbox" disabled checked={campo.valorPorDefecto === "false"} /> No
-          </label>
-        </div>
-      );
-
-    case 11: // LISTA (select simple)
-      return opciones.length > 0 ? (
-        <select value={campo.valorPorDefecto}  style={inputStyle}>
-          <option value="">SELECCIONE UNA OPCIÓN</option>
-          {opciones.map((opcion) => (
-            <option key={opcion.idOpcion} value={opcion.valor}>
-              {opcion.valorOpcion}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <span style={{ fontStyle: "italic", color: "#888" }}>{campo.valorPorDefecto || "[valor vacío]"}</span>
-      );
-
-    default:
-      return <span style={{ fontStyle: "italic", color: "#888" }}>{campo.valorPorDefecto || "[valor vacío]"}</span>;
-  }
-};
 
 
 
@@ -161,7 +158,8 @@ const renderVistaPreviaCampo = (campo) => {
     // Supongamos que el tipo que tiene opciones se llama "select" o "dropdown"
     if (
       idCatalogoCaracteristica &&
-      tipo.nombre_tipo.toUpperCase().includes("LISTA") // o usa un idTipoCampo específico si sabes cuál es
+      (tipo.nombre_tipo.toUpperCase().includes("LISTA") ||
+        tipo.nombre_tipo.toUpperCase().includes("OPCION MULTIPLE"))
     ) {
       try {
         const res = await axios.get(
@@ -299,9 +297,9 @@ const renderVistaPreviaCampo = (campo) => {
       idObjeto: 1
     };
 
-      console.log("🔍 Datos enviados al backend:");
-  console.log("Token:", token);
-  console.log("Cuerpo de la solicitud:", JSON.stringify(body, null, 2));
+    console.log("🔍 Datos enviados al backend:");
+    console.log("Token:", token);
+    console.log("Cuerpo de la solicitud:", JSON.stringify(body, null, 2));
 
 
     try {
@@ -340,7 +338,7 @@ const renderVistaPreviaCampo = (campo) => {
   return (
     <div className="contenedor-principalD">
       <Nav />
-      
+
 
       <BotonRegresar
         to="/OpcionFicha"
