@@ -5,6 +5,7 @@ import { FaUserShield } from 'react-icons/fa';
 import ModalNuevo from "../../components/Crud/Modal/ModalNuevo";
 import ModalEditar from "../../components/Crud/Modal/ModalEditar";
 import ModalConfirmacion from "../../components/Crud/Modal/ModalConfirmacion";
+import ModalDetalles from "../../components/Crud/Modal/ModalDetalles";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito";
 import { mostrarMensajeError } from "../../components/Crud/MensajeError"; // Importar el componente de mensaje de error
 import { Input, Form } from 'antd';
@@ -15,6 +16,7 @@ function Roles() {
   const [showNuevoModal, setShowNuevoModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
   const [formNuevo] = Form.useForm(); // Formulario para el modal de nuevo registro
   const [formEditar] = Form.useForm(); // Formulario para el modal de edición
@@ -23,15 +25,11 @@ function Roles() {
   //función reutilizable para obtener los roles
   const obtenerRoles = async () => {
     try {
-      const token = localStorage.getItem("token"); // Obtener el token del almacenamiento local
-      if (!token) {
-        throw new Error("No hay token disponible");
-      }
       const response = await fetch("http://localhost:4000/api/roles", {
         method: "GET",
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // Agregar el token en el encabezado
         }
       });
       if (!response.ok) {
@@ -83,23 +81,29 @@ function Roles() {
     setShowDeleteModal(true); // Abrir el modal de eliminación
   };
 
+    // Abrir modal de detalles
+    const handleDetails = (id) => {
+      const registro = roles.find((d) => d.idRol === id);
+      setRegistroSeleccionado(registro);
+      setShowDetailsModal(true);
+    };
+
   // Guardar nuevo registro
   const handleGuardarNuevo = async () => {
     formNuevo.validateFields()
     .then(async (values) => {
       try {
-        const token = localStorage.getItem("token"); // Obtener el token almacenado correctamente
 
         const response = await fetch("http://localhost:4000/api/roles", {
           method: "POST",
+          credentials: 'include',
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}` // Asegurar que se envía el token correctamente
           },
           body: JSON.stringify({
             nombre: values.nombre,
             descripcion: values.descripcion,
-            idObjeto: 7, // ID del objeto 
+            idObjeto: 2, // ID del objeto 
           }),
         });
 
@@ -130,23 +134,17 @@ function Roles() {
       // Validar los campos del formulario
       const values = await formEditar.validateFields();
 
-      // Obtener el token de autenticación
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("No hay token disponible");
-      }
-
       // Llamar a la API para actualizar el rol
       const response = await fetch(`http://localhost:4000/api/roles/${registroSeleccionado.idRol}`, {
         method: "PUT",
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({
           nombre: values.nombre,
           descripcion: values.descripcion,
-          idObjeto: 4, // ID del objeto 
+          idObjeto: 2, // ID del objeto 
         }),
       });
 
@@ -228,6 +226,7 @@ function Roles() {
         onGenerarReporte={() => console.log("Generar reporte en PDF")}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        onDetails={handleDetails} // Función para abrir el modal de detalles
       />
 
       {/* Modal para Nuevo Registro */}
@@ -279,6 +278,15 @@ function Roles() {
         onHide={() => setShowDeleteModal(false)}
         onConfirmar={handleConfirmarDelete}
         mensaje={`¿Estás seguro de que deseas eliminar el rol ${registroSeleccionado?.nombre}?`}
+      />
+
+<ModalDetalles
+        show={showDetailsModal} // Controla la visibilidad del modal
+        onHide={() => setShowDetailsModal(false)} // Función para cerrar el modal
+        titulo="Detalles del Usuario" // Título del modal
+        tipo="roles"
+        detalles={registroSeleccionado || {}} // Detalles del usuario seleccionado
+        width={600} // Ancho personalizado
       />
     </div>
   );

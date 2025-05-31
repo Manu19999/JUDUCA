@@ -1,3 +1,284 @@
+
+/* Estilos específicos para el modo usuario */
+
+.modal-usuario .ant-modal-body {
+  padding: 0;
+}
+
+.usuario-container {
+  padding: 15px;
+  margin-top: -20px;
+}
+
+.usuario-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.usuario-avatar {
+  border: 3px solid #f0f0f0;
+  background-color: #f5f5f5;
+  margin-bottom: 20px;
+}
+
+.usuario-titulo h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 14px;
+}
+
+.usuario-subtitulo {
+  margin: 8px 0 0;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 25px;
+}
+
+.usuario-seccion {
+  margin-bottom: 20px;
+}
+
+.usuario-seccion h3 {
+  color: #426a99;
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+/* Estilos para las descripciones */
+.ant-descriptions-item-label {
+  font-weight: 500;
+  background-color: #fafafa !important;
+  width: 40%;
+}
+
+.ant-descriptions-item-content {
+  width: 60%;
+}
+
+/* Estilos para el modo normal de detalles */
+.detalle-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.detalle-fila {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detalle-fila:last-child {
+  border-bottom: none;
+}
+
+.detalle-clave {
+  font-weight: 500;
+  color: #555;
+  min-width: 160px;
+  text-transform: capitalize;
+}
+
+.detalle-valor {
+  flex: 1;
+  color: #333;
+  word-break: break-word;
+}
+
+/* Estilos para las columnas de información */
+.informacion-columnas {
+  margin-top: -24px;
+}
+
+.informacion-seccion {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  height: 100%;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+}
+
+.informacion-titulo {
+  color: #2c3e50;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.informacion-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.informacion-item {
+  display: flex;
+  align-items: baseline;
+  padding: 6px 0;
+  border-bottom: 1px solid #f8f8f8;
+  line-height: 1.4;
+}
+
+.informacion-etiqueta {
+  color: #7f8c8d;
+  font-size: 13px;
+  font-weight: 500;
+  margin-right: 8px;
+  white-space: nowrap;
+}
+
+.informacion-valor {
+  color: #34495e;
+  font-size: 13px;
+  font-weight: 400;
+  word-break: break-word;
+}
+
+/* Efectos hover para mejor interactividad */
+.informacion-item:hover {
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+/* Estilos para el avatar ampliable */
+.avatar-container {
+  position: relative;
+  display: inline-block;
+}
+
+.usuario-avatar:hover {
+  opacity: 0.9;
+  transform: scale(1.03);
+  transition: all 0.2s ease;
+}
+
+/* Estilos para la previsualización de imagen */
+.image-preview-mask {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.mask-text {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.ant-image-preview-img {
+  max-width: 50vw !important;
+  max-height: 50vh !important;
+  object-fit: contain;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .usuario-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .usuario-seccion {
+    margin-bottom: 16px;
+  }
+
+  .ant-descriptions-item-label,
+  .ant-descriptions-item-content {
+    width: auto;
+    display: block;
+  }
+
+  .ant-descriptions-item-label {
+    padding-bottom: 4px;
+  }
+
+  .detalle-fila {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .detalle-clave {
+    min-width: auto;
+  }
+
+  .informacion-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .informacion-etiqueta {
+    margin-bottom: 2px;
+  }
+
+  .ant-image-preview-img {
+    max-width: 90vw !important;
+    max-height: 70vh !important;
+  }
+
+ 
+}
+
+
+/* Ajustes adicionales para pantallas muy pequeñas (<480px) */
+@media (max-width: 480px) {
+  .usuario-container {
+    padding: 0px;
+  }
+
+  .usuario-titulo h2 {
+    font-size: 20px;
+  }
+
+  .usuario-seccion h3 {
+    font-size: 16px;
+  }
+
+  .detalle-clave {
+    font-size: 14px;
+  }
+
+  .detalle-valor {
+    font-size: 14px;
+  }
+
+  .informacion-etiqueta,
+  .informacion-valor {
+    font-size: 12px;
+  }
+
+  .ant-image-preview-img {
+    max-width: 95vw !important;
+    max-height: 60vh !important;
+  }
+
+  .informacion-seccion {
+    padding: 15px;
+  }
+  
+  .informacion-titulo {
+    font-size: 12px;
+  }
+  .informacion-etiqueta {
+    font-size: 12px;
+  }
+  .informacion-valor {
+    font-size: 12px;
+  }
+  .informacion-seccion {
+    padding: 12px;
+  }
+}
+
 /* Estilos generales del modal */
 .custom-modal-card {
   border-radius: 12px;
@@ -59,20 +340,53 @@
   height: 35px !important; /* Ajusta la altura */
   width: 100px;
 }
+/* Input texto normal y autocomplete */
+.custom-modal-card .ant-input:-webkit-autofill,
+.custom-modal-card .ant-input:-webkit-autofill:hover,
+.custom-modal-card .ant-input:-webkit-autofill:focus,
+.custom-modal-card .ant-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important; /* Fondo transparente */
+  -webkit-text-fill-color: black !important; /* Texto negro */
+  caret-color: black !important; /* Cursor negro */
+}
+
+/* Para input password con autofill */
+.custom-modal-card .ant-input-password input:-webkit-autofill,
+.custom-modal-card .ant-input-password input:-webkit-autofill:hover,
+.custom-modal-card .ant-input-password input:-webkit-autofill:focus,
+.custom-modal-card .ant-input-password input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  -webkit-text-fill-color: black !important;
+  caret-color: black !important;
+}
+
 
 /* Estilos para los inputs */
-.custom-modal-card .ant-input {
-  height: 38px; /* Altura del input */
-  font-size: 14px; /* Tamaño de la fuente */
-  margin-bottom: -3px; /* Espacio entre el input y el footer */
-  
+.custom-modal-card .ant-input,
+.custom-modal-card .ant-select-selector,
+.custom-modal-card .ant-picker,
+.custom-modal-card .ant-input-password {
+  height: 35px !important;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  color: black !important; /* Color de letra negro */
 }
+
+
+.ant-input-affix-wrapper {
+  height: 35px !important;
+  display: flex !important;
+  align-items: center !important; /* Centra verticalmente */
+  padding: 0 11px !important;      /* Mantén padding horizontal */
+}
+
 
 /* Estilos para los labels */
 .custom-modal-card .ant-form-item-label > label {
   font-size: 14px; /* Tamaño de la fuente */
   color: #333; /* Color del texto */
-  margin-bottom: 8px; /* Espacio entre el label y el input */
+  margin-bottom: 2px !important; /* Espacio entre el label y el input */
 }
 
 /* Ajustar el espacio entre el header y el primer label */
@@ -133,47 +447,466 @@
 
 /* Reducir el margen superior de las pestañas */
 .custom-modal-card .ant-tabs {
-  margin-top: -30px; /* Ajusta este valor según sea necesario */
+  margin-top: -35px; /* Ajusta este valor según sea necesario */
   
 }
 /* Agregar margen superior al primer Form.Item de cada pestaña */
 .custom-modal-card .ant-tabs-tabpane .ant-form-item:first-child {
-  margin-top: 4px; /* Ajusta este valor según sea necesario */
+  margin-top: 2px; /* Ajusta este valor según sea necesario */
 }
 
 
 
-/* Contenedor de detalles */
+/* Contenedor principal - elegante y estable */
 .detalle-container {
   display: flex;
   flex-direction: column;
-  gap: 0; /* Sin espacio entre filas */
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.015);
 }
 
-/* Fila de detalles */
+/* Fila de detalles - limpia con feedback sutil */
 .detalle-fila {
   display: flex;
-  align-items: center;
-  gap: 16px; /* Espacio entre clave y valor */
-  padding: 10px 12px; /* Espaciado interno */
-  border-bottom: 1px solid #e8e8e8; /* Línea divisoria */
+  align-items: flex-start;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f5f5f5;
 }
 
 .detalle-fila:last-child {
-  border-bottom: none; /* Eliminar borde de la última fila */
+  border-bottom: none;
 }
 
-/* Clave (nombre del campo) */
+.detalle-fila:hover {
+  background-color: #fafafa;
+}
+
+/* Diseño de clave - distintivo pero sobrio */
 .detalle-clave {
-  font-weight: 500; /* Texto seminegrita */
-  color: #555; /* Color gris oscuro */
-  min-width: 140px; /* Ancho mínimo para alinear las claves */
-  text-transform: capitalize; /* Convertir la primera letra en mayúscula */
+  width: 160px;
+  font-weight: 500;
+  color: #444;
+  letter-spacing: 0.15px;
+  font-size: 0.86em;
+  text-transform: uppercase;
+  position: relative;
+  padding-left: 10px;
 }
 
-/* Valor (contenido del campo) */
+.detalle-clave::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #aaa;
+  font-weight: bold;
+}
+
+/* Valor - máxima legibilidad */
 .detalle-valor {
-  flex: 1; /* Ocupa el espacio restante */
-  color: #777; /* Color gris */
-  word-break: break-word; /* Romper palabras largas */
+  flex: 1;
+  color: #333;
+  line-height: 1.5;
+  font-size: 0.92em;
+  padding-right: 8px;
+}
+
+/* ============================= *
+   Responsive para Modal genérico
+   ============================= */
+
+/* 1) Para pantallas menores a 768px (tablets y móviles grandes) */
+@media (max-width: 768px) {
+  /* Si quisieras reducir el padding del body en pantallas medias */
+  .custom-modal-card .ant-modal-body {
+    padding: 16px;
+  }
+
+  /* Las filas de detalle pasan a vertical */
+  .detalle-fila {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  /* Ya no hace falta ancho fijo en la clave */
+  .detalle-clave {
+    min-width: auto;
+    font-size: 14px;
+  }
+
+  /* Reducir un poco el tamaño de fuente del valor */
+  .detalle-valor {
+    font-size: 14px;
+  }
+
+  /* Si tienes algún título o subtítulo dentro del modal genérico */
+  .custom-modal-card .ant-modal-header h4,
+  .custom-modal-card .ant-modal-header .ant-modal-title {
+    font-size: 16px;
+  }
+
+  /* Botones en el footer usan padding más ajustado */
+  .custom-modal-card .ant-modal-footer .ant-btn {
+    width: 80px;
+    font-size: 13px;
+  }
+}
+
+/* 2) Para pantallas muy pequeñas (<480px) */
+@media (max-width: 480px) {
+  /* Reducir aún más el padding del body */
+  .custom-modal-card .ant-modal-body {
+    padding: 12px;
+  }
+
+  /* Las filas de detalle usan aún menos espacio */
+  .detalle-fila {
+    padding: 6px 8px;
+    gap: 6px;
+  }
+
+  /* Clave y valor más pequeños */
+  .detalle-clave {
+    font-size: 13px;
+  }
+
+  .detalle-valor {
+    font-size: 13px;
+  }
+
+  /* Si dentro del modal genérico tienes etiquetas o inputs, ajusta su fuente */
+  .custom-modal-card .ant-form-item-label > label {
+    font-size: 13px;
+  }
+
+  .custom-modal-card .ant-input,
+  .custom-modal-card .ant-select-selector,
+  .custom-modal-card .ant-picker,
+  .custom-modal-card .ant-input-password {
+    font-size: 13px;
+    height: 32px !important;
+  }
+
+  /* Footer: botones aún más pequeños */
+  .custom-modal-card .ant-modal-footer .ant-btn {
+    width: 70px;
+    font-size: 12px;
+    height: 32px !important;
+  }
+}
+
+/* 3) Ajustes opcionales para mejorar scroll en pantallas estrechas */
+@media (max-width: 480px) {
+  .custom-modal-card .ant-modal-content {
+    max-height: 90vh; /* Permite algo más de altura total en móviles muy pequeños */
+  }
+}
+
+/* 4) Si dentro del modal genérico usas tablas o grids, puedes forzar overflow */
+@media (max-width: 768px) {
+  .custom-modal-card table,
+  .custom-modal-card .ant-table-wrapper {
+    overflow-x: auto;
+  }
+}
+/* ==============================================
+   Estilos Responsivos para Inputs, Tabs y Botones
+   ============================================== */
+
+/* Estilos base para inputs en todas las pantallas */
+.custom-modal-card .ant-input,
+.custom-modal-card .ant-select-selector,
+.custom-modal-card .ant-picker,
+.custom-modal-card .ant-input-password {
+  height: 35px !important;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  color: black !important;
+}
+
+.custom-modal-card .ant-input-affix-wrapper {
+  height: 35px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 11px !important;
+}
+
+/* Estilos para los tabs */
+.custom-modal-card .ant-tabs {
+  margin-top: -35px;
+}
+
+.custom-modal-card .ant-tabs-tab {
+  font-size: 14px;
+  padding: 12px 16px;
+}
+
+.custom-modal-card .ant-tabs-content {
+  padding-top: 16px;
+}
+
+/* Estilos para los botones dentro de inputs (como los de generar) */
+.custom-modal-card .ant-input-group-addon .ant-btn {
+  height: 32px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* =============================
+   Media Queries para Responsive
+   ============================= */
+
+/* 1. Pantallas medianas (tablets, 768px o menos) */
+@media (max-width: 768px) {
+  /* Ajustar el padding general del modal */
+  .custom-modal-card .ant-modal-body {
+    padding: 25px;
+  }
+  
+  /* Ajustar el layout de las columnas */
+  .custom-modal-card .ant-row {
+    flex-direction: column;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  .custom-modal-card .ant-col {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-bottom: 3px;
+  }
+  
+  /* Ajustar tamaño de fuente y altura de inputs */
+  .custom-modal-card .ant-input,
+  .custom-modal-card .ant-select-selector,
+  .custom-modal-card .ant-picker,
+  .custom-modal-card .ant-input-password {
+    height: 32px !important;
+    font-size: 13px;
+  }
+  
+  .custom-modal-card .ant-input-affix-wrapper {
+    height: 32px !important;
+  }
+  
+  /* Ajustar tabs */
+  .custom-modal-card .ant-tabs {
+    margin-top: -25px;
+  }
+  
+  .custom-modal-card .ant-tabs-tab {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+  
+  /* Ajustar botones en inputs */
+  .custom-modal-card .ant-input-group-addon .ant-btn {
+    height: 30px !important;
+    font-size: 12px;
+  }
+  
+  /* Ajustar selectores */
+  .custom-modal-card .ant-select-selection-item,
+  .custom-modal-card .ant-select-selection-placeholder {
+    font-size: 13px;
+  }
+}
+
+/* 2. Pantallas pequeñas (móviles, 480px o menos) */
+@media (max-width: 480px) {
+  /* Reducir aún más el padding */
+  .custom-modal-card .ant-modal-body {
+    padding: 25px;
+  }
+  
+  /* Ajustar tamaño de fuente y altura de inputs */
+  .custom-modal-card .ant-input,
+  .custom-modal-card .ant-select-selector,
+  .custom-modal-card .ant-picker,
+  .custom-modal-card .ant-input-password {
+    height: 30px !important;
+    font-size: 12px;
+  }
+  
+  .custom-modal-card .ant-input-affix-wrapper {
+    height: 30px !important;
+  }
+  
+  /* Ajustar tabs para pantallas muy pequeñas */
+  .custom-modal-card .ant-tabs {
+    margin-top: -25px;
+  }
+  
+  .custom-modal-card .ant-tabs-tab {
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+  
+  .custom-modal-card .ant-tabs-nav::before {
+    border-bottom: none;
+  }
+  
+  /* Ajustar botones en inputs */
+  .custom-modal-card .ant-input-group-addon .ant-btn {
+    height: 28px !important;
+    font-size: 12px;
+    padding: 0 8px;
+  }
+  
+  /* Ajustar datepicker */
+  .custom-modal-card .ant-picker-input input {
+    font-size: 12px;
+  }
+  
+  /* Ajustar labels */
+  .custom-modal-card .ant-form-item-label > label {
+    font-size: 13px;
+  }
+  
+  /* Ajustar botones de acción en el footer */
+  .custom-modal-card .ant-modal-footer .ant-btn {
+    height: 32px !important;
+    font-size: 13px;
+    padding: 0 12px;
+  }
+}
+
+/* 3. Ajustes específicos para el datepicker en móviles */
+@media (max-width: 480px) {
+  .custom-modal-card .ant-picker {
+    width: 100% !important;
+  }
+  
+  .custom-modal-card .ant-picker-input {
+    height: 30px;
+  }
+  
+  .custom-modal-card .ant-picker-suffix {
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* 4. Ajustes para selectores en móviles */
+@media (max-width: 768px) {
+  .custom-modal-card .ant-select-selector {
+    height: 32px !important;
+    display: flex;
+    align-items: center;
+  }
+  
+  .custom-modal-card .ant-select-selection-search-input {
+    height: 30px !important;
+  }
+  
+  .custom-modal-card .ant-select-selection-item {
+    line-height: 30px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .custom-modal-card .ant-select-selector {
+    height: 30px !important;
+  }
+  
+  .custom-modal-card .ant-select-selection-search-input {
+    height: 28px !important;
+  }
+  
+  .custom-modal-card .ant-select-selection-item {
+    line-height: 28px !important;
+    font-size: 12px;
+  }
+}
+
+/* 5. Ajustes para el contenedor de pestañas en móviles */
+@media (max-width: 768px) {
+  .custom-modal-card .ant-tabs-content-holder {
+    padding: 0;
+  }
+  
+  .custom-modal-card .ant-tabs-tabpane {
+    padding: 8px 0;
+  }
+}
+
+/* 6. Ajustes para los botones de generar usuario/contraseña */
+@media (max-width: 480px) {
+  .custom-modal-card .ant-input-group-addon {
+    padding: 0 6px;
+  }
+  
+  .custom-modal-card .ant-input-group-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .custom-modal-card .ant-input-group-addon .ant-btn {
+    margin-top: 0px;
+    width: 100%;
+  }
+}
+
+/* 7. Ajustes para el subir imagen en móviles */
+@media (max-width: 768px) {
+  .custom-modal-card .ant-upload.ant-upload-select {
+    width: 100% !important;
+  }
+  
+  .custom-modal-card .ant-upload-list-item {
+    width: 100% !important;
+  }
+}
+
+/* ==============================================
+   Ajuste de Espacio entre Primer Input y Tabs
+   ============================================== */
+
+/* Estilo base para reducir el espacio */
+.custom-modal-card .ant-tabs > .ant-tabs-nav {
+  margin-bottom: 8px; /* Reduce el margen inferior del contenedor de tabs */
+}
+
+.custom-modal-card .ant-tabs-tabpane .ant-form-item:first-child {
+  margin-top: -8px; /* Reduce el espacio superior del primer form-item */
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .custom-modal-card .ant-tabs > .ant-tabs-nav {
+    margin-bottom: 6px;
+  }
+  
+  .custom-modal-card .ant-tabs-tabpane .ant-form-item:first-child {
+    margin-top: -6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .custom-modal-card .ant-tabs > .ant-tabs-nav {
+    margin-bottom: 4px;
+  }
+  
+  .custom-modal-card .ant-tabs-tabpane .ant-form-item:first-child {
+    margin-top: -4px;
+  }
+}
+
+/* Ajuste adicional para el margen superior del modal */
+.custom-modal-card .ant-modal-body .ant-tabs {
+  margin-top: -25px; /* Ajusta este valor según necesites */
+}
+
+/* Ajuste específico para el primer form item en cada tab */
+.custom-modal-card .ant-tabs-tabpane-active .ant-form-item:first-child {
+  margin-top: 0; /* Puedes ajustar a negativo si necesitas más reducción */
 }

@@ -3,9 +3,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 780px;
+  min-height: 100vh; /* Cambiado a viewport height */
   background: linear-gradient(135deg, #021a32, #0d2848, #064b61);
   padding: 20px;
+  position: relative; /* Añadido para contexto de posicionamiento */
 }
 
 .error-message {
@@ -16,7 +17,28 @@
   margin-bottom: 20px;
   padding: 10px; 
 }
+/* Elimina el fondo blanco de las sugerencias de autocompletado */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px transparent inset !important;
+    -webkit-text-fill-color: #e0e1e1 !important;
+    caret-color: #e0e1e1 !important; /* Color del cursor */
+    transition: background-color 5000s ease-in-out 0s;
+}
 
+/* Estilo para el texto autocompletado */
+input:-webkit-autofill::first-line {
+    font-family: inherit;
+    font-size: inherit;
+    color: #e0e1e1 !important;
+}
+
+/* Asegurar que el cursor tenga el color correcto también en estado normal */
+input {
+    caret-color: #e0e1e1;
+}
 /* ===== Contenedor del input y mensaje de error ===== */
 .input-wrapper {
   display: flex;
@@ -418,7 +440,7 @@ input[type="password"] {
   border-bottom: 1.6px solid rgba(230, 230, 230, 0.4); /* Borde inferior */
   transition: border-color 0.3s ease;
   width: 100%;
-  margin: 0 auto 2rem; /* Centra el input y añade margen inferior */
+  margin: 0 auto 1rem; /* Centra el input y añade margen inferior */
 }
 
 .popup-container .input-group:hover {

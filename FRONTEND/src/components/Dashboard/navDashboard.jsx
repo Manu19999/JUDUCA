@@ -9,10 +9,31 @@ const NavDashboard = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleLogoutClick = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-    setMenuOpen(false);
+  const handleLogoutClick = async () => {
+    try {
+      // 1. Llamar al endpoint de logout del backend
+      const response = await fetch('http://localhost:4000/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include' // Importante para enviar la cookie
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error al cerrar sesión');
+      }
+  
+      // 2. Redirigir al login
+      navigate('/login');
+      
+      // 3. Cerrar menú si está abierto
+      setMenuOpen(false);
+      
+      // 4. Limpiar cualquier dato local si es necesario
+      localStorage.removeItem("usuarioEmail");
+      
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+      // Podrías mostrar un mensaje de error al usuario aquí
+    }
   };
 
   const handleInicioClick = () => {

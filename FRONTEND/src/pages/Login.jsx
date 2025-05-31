@@ -49,70 +49,67 @@ const Login = () => {
     setPasswordError(passwordValidation);
 
     if (emailValidation || passwordValidation) {
-      return;
+        return;
     }
 
     try {
-      const response = await fetch("http://localhost:4000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          contraseña: password,
-        }),
-      });
+        const response = await fetch("http://localhost:4000/api/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email,
+                contrasena: password,
+            }),
+            credentials: 'include' // Necesario para enviar/recibir cookies
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (!response.ok) {
-        setErrorMessage(data.errors?.[0] || "Credenciales inválidas");
-        return;
-      }
+        if (!response.ok) {
+            setErrorMessage(data.errors?.[0] || "Credenciales inválidas");
+            return;
+        }
 
-      // Solo guardar token si pasa 2FA luego
-      localStorage.setItem("usuarioEmail", email);
-      localStorage.setItem("tokenPending", data.data.token);
-
-      setShow2FAPopup(true);
+        // Guardar solo el email para el 2FA (no el token)
+        localStorage.setItem("usuarioEmail", email);
+        setShow2FAPopup(true);
 
     } catch (error) {
-      console.error("Error en la solicitud:", error);
-      setErrorMessage("Error en el servidor. Por favor, inténtalo de nuevo más tarde.");
+        console.error("Error en la solicitud:", error);
+        setErrorMessage("Error en el servidor. Por favor, inténtalo de nuevo más tarde.");
     }
-  };
+};
 
-  const handle2FASubmit = async (code) => {
+const handle2FASubmit = async (code) => {
     const email = localStorage.getItem("usuarioEmail");
 
     try {
-      const response = await fetch("http://localhost:4000/api/twofactor/verificarCodigo", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, codigo: code }),
-      });
+        const response = await fetch("http://localhost:4000/api/twofactor/verificarCodigo", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, codigo: code }),
+            credentials: 'include' // Necesario para cookies
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (response.ok && data.valido) {
-        console.log("✅ Código 2FA válido");
-        const token = localStorage.getItem("tokenPending");
-        localStorage.setItem("token", token);
-        localStorage.removeItem("usuarioEmail");
-        localStorage.removeItem("tokenPending");
-        setShow2FAPopup(false);
-        navigate("/dashboard");
-      } else {
-        setErrorMessage("Código inválido o expirado.");
-      }
+        if (response.ok && data.valido) {
+            console.log("✅ Código 2FA válido");
+            localStorage.removeItem("usuarioEmail");
+            setShow2FAPopup(false);
+            navigate("/dashboard");
+        } else {
+            setErrorMessage("Código inválido o expirado.");
+        }
     } catch (error) {
-      console.error("Error al verificar 2FA:", error);
-      setErrorMessage("Error al verificar el código.");
+        console.error("Error al verificar 2FA:", error);
+        setErrorMessage("Error al verificar el código.");
     }
-  };
+};
 
   return (
     <div className="login-container">

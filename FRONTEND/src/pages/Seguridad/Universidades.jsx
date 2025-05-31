@@ -7,7 +7,7 @@ import ModalEditar from "../../components/Crud/Modal/ModalEditar";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito";
 import { mostrarMensajeError } from "../../components/Crud/MensajeError"; // Importar el componente de mensaje de error
 import { Input, Form, Select, Switch } from 'antd';
-import SubirImagen from '../../components/SubirImagen'; // Ajusta la ruta según tu estructura de archivos
+import SubirImagen from '../../components/SubirImagen';
 import ValidatedInput from "../../utils/ValidatedInput"; 
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 
@@ -23,15 +23,11 @@ function Universidades() {
 
   const obtenerUniversidades = async () => {
     try {
-      const token = localStorage.getItem("token"); // Obtener el token del almacenamiento local
-      if (!token) {
-        throw new Error("No hay token disponible");
-      }
       const response = await fetch("http://localhost:4000/api/universidades", {
         method: "GET",
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // Agregar el token en el encabezado
         }
       });
       if (!response.ok) {
@@ -127,13 +123,11 @@ function Universidades() {
     formNuevo.validateFields()
     .then(async (values) => {
       try {
-        const token = localStorage.getItem("token"); // Obtener el token almacenado correctamente
-
         const response = await fetch("http://localhost:4000/api/universidades", {
           method: "POST",
+          credentials: 'include',
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}` // Asegurar que se envía el token correctamente
           },
           body: JSON.stringify({
             idCiudad: values.idCiudad, // ID de la ciudad
@@ -141,7 +135,7 @@ function Universidades() {
             fotoUrl: values.fotoUrl, // URL de la foto
             siglas: values.siglas, // Siglas de la universidad
             activo: values.activo, // Estado activo/inactivo
-            idObjeto: 4, // ID del objeto
+            idObjeto: 2, // ID del objeto
           }),
         });
 
@@ -173,18 +167,12 @@ function Universidades() {
       // Validar los campos del formulario
       const values = await formEditar.validateFields();
 
-      // Obtener el token de autenticación
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("No hay token disponible");
-      }
-
       // Llamar a la API para actualizar la universidad
       const response = await fetch(`http://localhost:4000/api/universidades/${registroSeleccionado.idUniversidad}`, {
         method: "PUT",
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({
           idCiudad: values.idCiudad,
@@ -192,7 +180,7 @@ function Universidades() {
           fotoUrl: values.fotoUrl,
           siglas: values.siglas,
           activo: values.activo,
-          idObjeto: 4, // ID del objeto (debe existir en Seguridad.tblObjetos)
+          idObjeto: 2, // ID del objeto (debe existir en Seguridad.tblObjetos)
         }),
       });
 

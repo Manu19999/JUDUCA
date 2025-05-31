@@ -7,28 +7,23 @@ import apiResponse from '../../../utils/apiResponse.js';
 dotenv.config();
 
 export const Login = async (req, res) => {
-    const { email, contraseña } = req.body;
-
-    // Crear una instancia de apiResponse
+    const { email, contrasena } = req.body;
     const response = new apiResponse();
 
     try {
         const pool = await conexionbd();
         const result = await pool.request()
             .input('email', sql.VarChar, email)
-            .input('contraseña', sql.VarChar, contraseña)
-            .execute('Usuarios.splUsuariosAutenticar'); // Llamar al procedimiento almacenado
+            .input('contrasena', sql.VarChar, contrasena)
+            .execute('Usuarios.splUsuariosAutenticar');
 
-        // Verificar si el procedimiento devolvió un código de error
         if (result.recordset && result.recordset.length > 0 && result.recordset[0].codigoError) {
             const error = result.recordset[0];
-            response.setErrors([error.descripcion]); // Usar el mensaje de error del procedimiento
+            response.setErrors([error.descripcion]);
             response.setHasError(true);
         } else if (result.recordset.length > 0) {
-            // Si no hay error, obtener los datos del usuario
             const user = result.recordset[0];
 
-            // Generar el token JWT con toda la información del usuario
             const token = jwt.sign(
                 {
                     idUsuario: user.idUsuario,
@@ -37,21 +32,57 @@ export const Login = async (req, res) => {
                     idRol: user.idRol
                 },
                 process.env.JWT_SECRET,
-                {
-                    expiresIn: '1h', // El token expira en 1 hora
-                }
+                { expiresIn: '1h' }
             );
 
-            // Establecer los datos en la respuesta
-            response.setData({ token });
+            // Configurar la cookie HttpOnly
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production', // Solo HTTPS en producción
+                sameSite: 'strict',
+                maxAge: 3600000 // 1 hora en milisegundos
+            });
+
+            response.setData({ message: 'Autenticación exitosa' });
         }
     } catch (err) {
-        console.error('Error en el login:', err); // Registrar el error en la consola
-        // Establecer errores en la respuesta
+        console.error('Error en el login:', err);
         response.setErrors(['Error en el servidor. Por favor, inténtalo de nuevo más tarde']);
         response.setHasError(true);
     }
 
-    // Enviar la respuesta estructurada
+    res.status(response.hasError ? 500 : 200).json(response.getResponse());
+};
+
+export const Logout = (req, res) => {
+    const response = new apiResponse();
+
+    try {
+        // Limpiar la cookie authToken
+        res.clearCookie('authToken', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict'
+        });
+        
+        // Opcional: Registrar el logout
+        if (req.usuario) {
+            console.log(`Usuario ${req.usuario.idUsuario} cerró sesión`);
+        }
+
+        response.setData({ 
+            message: 'Sesión cerrada correctamente',
+            usuario: req.usuario ? {
+                idUsuario: req.usuario.idUsuario,
+                email: req.usuario.email
+            } : null
+        });
+
+    } catch (err) {
+        console.error('Error en el logout:', err);
+        response.setErrors(['Error al cerrar sesión. Por favor, inténtalo de nuevo']);
+        response.setHasError(true);
+    }
+
     res.status(response.hasError ? 500 : 200).json(response.getResponse());
 };

@@ -255,6 +255,43 @@
     width: auto; /* Ajusta el ancho al contenido */
     text-align: center;
   }
+   .tabla-wrapper {
+    max-height: 500px !important; /* Ajusta la altura máxima según lo necesites */
+    height: auto;       /* Permite que el contenido se ajuste automáticamente */
+  }
+  /* Ajuste del tamaño de la fuente de la tabla */
+  .tabla {
+    font-size: 0.7rem; /* Fuente más pequeña */
+    min-width: 600px; /* Ancho mínimo para forzar el scroll horizontal */
+  }
+
+  /* Habilitar scroll horizontal en el contenedor de la tabla */
+  .tabla-wrapper {
+    overflow-x: auto; /* Scroll horizontal */
+    max-height: 380px; /* Mantener el scroll vertical */
+    scrollbar-width: thin; /* Estilo del scroll para Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Color del scroll */
+  }
+
+  /* Estilo del scroll horizontal para navegadores WebKit (Chrome, Safari, Edge) */
+  .tabla-wrapper::-webkit-scrollbar {
+    height: 8px; /* Altura del scroll horizontal */
+  }
+
+  .tabla-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color de fondo de la pista del scroll */
+    border-radius: 4px; /* Bordes redondeados */
+  }
+
+  .tabla-wrapper::-webkit-scrollbar-thumb {
+    background: #888; /* Color del thumb (la barra que se mueve) */
+    border-radius: 4px; /* Bordes redondeados */
+  }
+
+  .tabla-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color del thumb al pasar el mouse */
+  }
+
 }
 
 
@@ -293,6 +330,9 @@
   .paginacion button {
     padding: 5px 10px;
     font-size: 12px;
+  }
+  .tabla {
+    font-size: 0.65rem; /* Fuente más pequeña */
   }
 }
 
@@ -601,7 +641,7 @@
 .estado-activo {
   display: inline-block;
   padding: 2px 8px; /* 🔹 Reducir padding para evitar desbordamiento */
-  border-radius: 10px;
+  border-radius: 4px;
   font-size: 10px;
   text-align: center;
   text-transform: uppercase;
@@ -613,13 +653,34 @@
 }
 
 .estado-activo.activo {
-  background-color: #f0fdf4;
-  color: #15803d;
-  border-color: #bbf7d0;
+  background-color: #f6ffed;
+  color: #3fa115;
+  border-color: #b8eb91;
 }
 
 .estado-activo.inactivo {
-  background-color: #fff1f2;
-  color: #dc2626;
-  border-color: #fecdd3;
+  background-color: #fff1f0;
+  color: #d11e2d;
+  border-color: #ffa39e;
+}
+
+/* Estado Pendiente (nuevo) */
+.estado-activo.pendiente {
+  background-color: #fffbeb;
+  color: #b45309;
+  border-color: #fde68a;
+}
+
+/* Estado Bloqueado (nuevo) */
+.estado-activo.bloqueado {
+  background-color: #fff7e6;
+  color: #d57111;
+  border-color: #ffd898;
+}
+
+/* Estado por defecto (si no coincide con ninguno) */
+.estado-activo.default {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border-color: #e5e7eb;
 }

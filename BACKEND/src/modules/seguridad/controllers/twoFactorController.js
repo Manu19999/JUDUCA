@@ -37,14 +37,23 @@ export const verificarCodigo = (req, res) => {
   const { email, codigo } = req.body;
 
   if (!email || !codigo) {
-    return res.status(400).json({ mensaje: 'Debes proporcionar correo electrónico y código.' });
+      return res.status(400).json({ mensaje: 'Debes proporcionar correo electrónico y código.' });
   }
 
   const registro = codigosTemporales[email];
 
   if (registro && registro.codigo === codigo && Date.now() < registro.expira) {
-    delete codigosTemporales[email];  // Limpiar después de validación
-    return res.json({ valido: true, mensaje: 'Código correcto.' });
+      delete codigosTemporales[email];
+      
+      // Configurar cookie de autenticación completa
+      res.cookie('authComplete', 'true', {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 3600000 // 1 hora
+      });
+      
+      return res.json({ valido: true, mensaje: 'Código correcto.' });
   }
 
   return res.status(400).json({ valido: false, mensaje: 'Código inválido o expirado.' });

@@ -8,12 +8,18 @@ const ValidatedInput = ({
   rules = [],
   allowSpecialChars = false, // Prop para permitir caracteres especiales y números
   isTextArea = false, // Prop para indicar si es input tipo text
+  maxLength = null,
 }) => {
   const form = Form.useFormInstance(); // Obtiene el formulario automáticamente
 
   const handleChange = (e) => {
     let value = e.target.value; // Valor original
-
+// Validar longitud máxima primero
+if (maxLength && value.length > maxLength) {
+  value = value.substring(0, maxLength);
+  // Forzar actualización del valor
+  form.setFieldsValue({ [name]: value });
+}
     // Verificar si el valor contiene caracteres no permitidos (solo si allowSpecialChars es false)
     const contieneCaracteresNoPermitidos =
       !allowSpecialChars && /[^A-ZÁÉÍÓÚÑ\s]/gi.test(value);
@@ -54,14 +60,13 @@ const ValidatedInput = ({
       // Verifica si una letra se repite 5 o más veces (siempre aplica)
       errors.push("No se permite repetir una letra 5 veces consecutivamente");
     }
+    if (maxLength && finalValue.length >= maxLength) {
+      errors.push(`Máximo ${maxLength} caracteres permitidos`);
+    }
 
-    // Actualiza los errores en el formulario
-    form.setFields([
-      {
-        name,
-        errors,
-      },
-    ]);
+    // Actualizar formulario
+    form.setFields([{ name, errors }]);
+    form.setFieldsValue({ [name]: finalValue });
   };
 
   const handleCopy = (e) => {
@@ -92,6 +97,7 @@ const ValidatedInput = ({
           onChange={handleChange}
           onCopy={handleCopy}
           onPaste={handlePaste}
+          maxLength={maxLength}
         />
       ) : (
         <Input
@@ -99,6 +105,7 @@ const ValidatedInput = ({
           onChange={handleChange}
           onCopy={handleCopy}
           onPaste={handlePaste}
+          maxLength={maxLength}
         />
       )}
     </Form.Item>

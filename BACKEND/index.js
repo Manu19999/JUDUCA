@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors'; 
 import path from 'path';
 import uploadRoutes from './src/modules/seguridad/routes/uploadRoutes.js'; // Importar las rutas de subida de imágenes
-
+import cookieParser from 'cookie-parser';
 
 //++++++++++++++++++++++++++  Importaciones de rutas de credenciales  ++++++++++++++++++++++++++
 import CredencialRoutes from './src/modules/credenciales/routes/credencialRoutes.js';
@@ -48,7 +48,7 @@ const PORT = process.env.PORT || 4000;
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cookieParser());
 
 app.use(cors({
     origin: 'http://localhost:5173', // Permitir sólo desde el frontend
