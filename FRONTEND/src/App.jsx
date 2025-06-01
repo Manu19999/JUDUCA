@@ -28,7 +28,7 @@ const CreateEvent =React.lazy(() => import("./pages/Evento"));
 const Eventos =React.lazy(() => import("./pages/GestionEvento"));
 
 //Fichas
-const CajaFichas =React.lazy(() => import("./pages/CajaFichas"));
+const CajaFichas =React.lazy(() => import("./pages/CajaFichas.jsx"));
 const Llena_Fichas =React.lazy(() => import("./pages/LlenarFichas"));
 const GestionFicha =React.lazy(() => import("./pages/Eventos/GestionFichas"));
 const Formularios_Fichas =React.lazy(() => import("./pages/FormularioFicha"));

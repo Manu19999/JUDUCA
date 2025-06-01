@@ -493,7 +493,7 @@ export default function DynamicFichaForm() {
                 return (
                   <div key={campo.id} className="preview-campoD">
                     <label>
-                      <strong>{campo.nombreDelCampo || caracteristica?.caracteristica || "Sin nombre"} :
+                      <strong>{campo.nombreDelCampo ||  "Sin nombre"} :
                       </strong>
                       {renderVistaPreviaCampo(campo)}
                     </label>

@@ -304,7 +304,7 @@ export default function LlenadoFicha() {
                             name={fieldName}
                             value={value || ""}
                             onChange={handleInputChange}
-                            placeholder={campo.valorPorDefecto || "Ingrese texto..."}
+                            placeholder={campo.valorPorDefecto || "TEXTO"}
                             style={fieldStyles.input}
                             className="form-input"
                         />
@@ -319,7 +319,7 @@ export default function LlenadoFicha() {
                             name={fieldName}
                             value={value || ""}
                             onChange={handleInputChange}
-                            placeholder={campo.valorPorDefecto || "0"}
+                            placeholder={campo.valorPorDefecto || "NUMERO"}
                             style={fieldStyles.input}
                             className="form-input"
                         />
