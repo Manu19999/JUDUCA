@@ -9,17 +9,18 @@ const ValidatedInput = ({
   allowSpecialChars = false, // Prop para permitir caracteres especiales y números
   isTextArea = false, // Prop para indicar si es input tipo text
   maxLength = null,
+  convertToUpper = true,
 }) => {
   const form = Form.useFormInstance(); // Obtiene el formulario automáticamente
 
   const handleChange = (e) => {
     let value = e.target.value; // Valor original
-// Validar longitud máxima primero
-if (maxLength && value.length > maxLength) {
-  value = value.substring(0, maxLength);
-  // Forzar actualización del valor
-  form.setFieldsValue({ [name]: value });
-}
+    // Validar longitud máxima primero
+    if (maxLength && value.length > maxLength) {
+      value = value.substring(0, maxLength);
+      // Forzar actualización del valor
+      form.setFieldsValue({ [name]: value });
+    }
     // Verificar si el valor contiene caracteres no permitidos (solo si allowSpecialChars es false)
     const contieneCaracteresNoPermitidos =
       !allowSpecialChars && /[^A-ZÁÉÍÓÚÑ\s]/gi.test(value);
@@ -30,7 +31,9 @@ if (maxLength && value.length > maxLength) {
     }
 
     // **Siempre** convertir a mayúsculas
-    value = value.toUpperCase();
+    if (convertToUpper) {
+      value = value.toUpperCase();
+    }    
 
     // Eliminar espacios al inicio y normalizar múltiples espacios
     const trimmedValue = value.trimStart(); // Elimina espacios al inicio
@@ -98,6 +101,12 @@ if (maxLength && value.length > maxLength) {
           onCopy={handleCopy}
           onPaste={handlePaste}
           maxLength={maxLength}
+          style={{ 
+            resize: 'vertical',
+            minHeight: '100px', // Altura mínima inicial
+            maxHeight: '400px', // Altura máxima (opcional)
+            overflow: 'auto'    // Importante para que funcione
+        }}
         />
       ) : (
         <Input

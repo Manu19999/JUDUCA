@@ -5,7 +5,7 @@ import TargetaEstado from "../components/Credencial/targetasEstadoCredencial";
 import agregarCredencial from "../assets/FondosCredencial/ListaFichas.jpg";
 import configCredencial from "../assets/FondosCredencial/DiseñoFicha.jpg";
 import { ToastContainer, toast } from "react-toastify";  // Importar toastify
-import "../styles/Inicio/EventCard.css";
+import "../styles/Inicio/Caja-seguridad.css";
 import BotonRegresar from "../components/Dashboard/BotonRegresar";
 import Nav from "../components/Dashboard/navDashboard";
 
@@ -38,61 +38,72 @@ const Seleccion = () => {
             return;
         }
     }, [selectedFicha, navigate]);
+
     const mantenimientosOptions = [
         {
-            id: 1,
-            title: "Listado de participantes",
-            image: agregarCredencial,
-            url: "#"
+          id: 1,
+          title: "Listado de participantes",
+          image: agregarCredencial,
+          route: "#",
+          description: "Administra los participantes registrados"
         },
         {
-            id: 2,
-            title: "Diseñador de ficha",
-            image: configCredencial,
-            url: "/Formulario-fichas"
+          id: 2,
+          title: "Diseñador de ficha",
+          image: configCredencial,
+          route: "/Formulario-fichas",
+          description: "Personaliza las fichas"
         },
-    ];
+      ];
+      
 
+    const handleImageClick = (route) => {
+        navigate(route);
+      };
 
 
     return (
-
-
-        <div className="container mx-auto p-4">
+        <Container>
             <Nav />
-
-
-            <Container>
+            <div className="espaciotexto">
                 <BotonRegresar to="/lista-fichas" text="Regresar" />
-
                 {selectedFicha ? (
-                    <div className="credenciallisttitle text-center mt-3">
-                        <h3><strong>CONFIGURACION DE FICHA</strong></h3>
-                        <h3>FICHA SELECCIONADA : {selectedFicha.title}</h3>
-                    </div>
+                    <>
+                       <h2 className="caja-seguridad-title">
+                        <strong>Configuración de Ficha</strong> <br />
+                        Ficha Seleccionada: {selectedFicha.title}
+                        </h2>
+                    </>
                 ) : (
                     <p className="text-center text-danger mt-3">
                         No se ha seleccionado ninguna ficha. Redirigiendo...
                     </p>
                 )}
+                <div className="caja-seguridad-grid"></div>
 
-                <Row className="justify-content-center">
+                <div className="caja-seguridad-grid">
                     {mantenimientosOptions.map((Estado) => (
-                        <Col key={Estado.id} xs={12} sm={6} md={4} lg={3} xl={2}>
-                            <TargetaEstado
-                                Estado={Estado}
-                                selectedFicha={selectedFicha}
-                                onClickEspecial={
-                                Estado.url === 2}
-                                    />
-                        </Col>
+                        <div 
+                        key={Estado.id} 
+                        className="caja-seguridad-card"
+                        onClick={() => handleImageClick(Estado.route)}
+                        >
+                        <div className="caja-seguridad-image-container">
+                            <img 
+                            src={Estado.image} 
+                            alt={Estado.title} 
+                            className="caja-seguridad-image" 
+                            />
+                        </div>
+                        <h3>{Estado.title}</h3>
+                        <p className="card-seguridad-description">{Estado.description}</p>
+                        </div>
                     ))}
-                </Row>
-
-                {/* Aquí agregas el contenedor de Toast */}
-                <ToastContainer />
-            </Container>
-        </div>
+                    </div>
+            </div>
+               
+        </Container>
+        
 
     );
 };

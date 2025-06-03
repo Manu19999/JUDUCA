@@ -32,7 +32,8 @@ import Roles from './src/modules/seguridad/routes/rolesRoutes.js';
 import Universidades from './src/modules/seguridad/routes/universidadesRoutes.js';
 import Usuarios from './src/modules/seguridad/routes/usuariosRoutes.js';
 import twoFactorRoutes from './src/modules/seguridad/routes/twoFactorRoutes.js';
-
+import Objetos from './src/modules/seguridad/routes/objetosRoutes.js';
+import Bitacoras from './src/modules/seguridad/routes/bitacorasRoutes.js';
 
 //++++++++++++++++++++++++++  Importaciones de rutas de vouchers  ++++++++++++++++++++++++++
 import VoucherComidaRoutes   from './src/modules/vouchers/routes/voucherComidaRoutes.js';
@@ -88,7 +89,9 @@ app.use('/api/auth', AuthRoutes);
 app.use('/api/roles', Roles);
 app.use('/api/universidades', Universidades);
 app.use('/api/usuarios', Usuarios);
+app.use('/api/objetos', Objetos);
 app.use('/api/twofactor', twoFactorRoutes);
+app.use('/api/bitacoras', Bitacoras);
 
 
 //Vouchers

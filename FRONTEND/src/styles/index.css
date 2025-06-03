@@ -12,6 +12,7 @@ body {
   font-family: "Montserrat", sans-serif !important;
   color: var(--text-color) !important;
   line-height: 1.6;
+  background-color: #eef2f7 !important;
 }
 
 /* ===== Variables CSS ===== */
@@ -26,8 +27,9 @@ body {
 
 /* ===== espacio, centrado e ícono de titulo de la tabla para crud===== */
 .crud {
+  position: relative;
   text-align: center;
-  padding-top: 110px; /* Mueve el título un poco más abajo */
+  padding-top: 80px; /* Mueve el título un poco más abajo */
 }
 
 

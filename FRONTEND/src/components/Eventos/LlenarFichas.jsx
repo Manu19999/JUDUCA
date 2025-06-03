@@ -6,7 +6,7 @@ import EventImage6 from "../../assets/Credencial.jpg"; // Imagen de respaldo
 import Inscripciones from "../../assets/Eventos/Inscripciones.jpg";
 import Delegados from "../../assets/Eventos/Delegados.jpg";
 import Voluntariados from "../../assets/Eventos/Voluntariado.jpg";
-import "../../styles/Credencial/credencial.css";
+import "../../styles/Inicio/Caja-seguridad.css";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Evento/Eventos.css";
 
@@ -101,17 +101,12 @@ const LlenarFichas = () => {
 
   return (
     <Container>
-
+    <div className="espaciotexto">
       <BotonRegresar to="/gestion-evento" text="Regresar" />
-
-
       {/* 🔹 Mostrar el nombre y estado del evento */}
-      <div className="credenciallisttitle text-center mt-3">
-
-        <h2>
-          {evento ? `FICHAS DE REGISTRO PARA PARTICIPANTES : ${evento.title}` : "Cargando evento..."}
+        <h2 className="caja-seguridad-title">
+          {evento ? `Fichas de Registro para Participantes : ${evento.title}` : "Cargando evento..."}
         </h2>
-      </div>
 
       <div className="eventtabs">
         <button
@@ -193,6 +188,7 @@ const LlenarFichas = () => {
           </Modal.Footer>
         </div>
       </Modal>
+      </div>
     </Container>
   );
 };

@@ -6,11 +6,10 @@ import competencias from "../../assets/Mantenimientos/competencias.jpg";
 import disciplinas from "../../assets/Mantenimientos/disciplinas.jpg";
 import reglas from "../../assets/Mantenimientos/reglas.jpg";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
-
-
+import "../../styles/Inicio/Caja-seguridad.css";
 
 import "../../styles/Inicio/GestionAreas.css"; // Estilos de las cajas
-import "../../styles/Credencial/credencial.css";
+
 
 const GestionJuegos = () => {
   const navigate = useNavigate();
@@ -22,20 +21,22 @@ const GestionJuegos = () => {
       id: 1,
       title: "Competencias",
       image: competencias,
+      description: "Gestión de eventos o torneos escolares.",
     },
     {
       id: 2,
       title: "Disciplinas",
       image: disciplinas,
-
+      description: "Registro de áreas deportivas o académicas.",
     },
     {
       id: 3,
       title: "Reglas",
       image: reglas,
+      description: "Configuración de normas y criterios.",
     },
-
   ];
+  
 
   const handleImageClick = (id) => {
     navigate(`/asignarMantenimiento/${id}`);
@@ -47,26 +48,27 @@ const GestionJuegos = () => {
   };
 
   return (
-    <section id="mantenimientos" className="mantenimiento-list">
+    <section id="otrosmantenimientos" className="mantenimiento-list">
       <Container>
-
+      <div className="espaciotexto">
         <BotonRegresar to="/gestion-evento" text="Regresar" />
-
-        <div style={{ paddingTop: "30px" }}>
-
-         <h2 className="credenciallisttitle">JUEGOS</h2>
-        <Row>
-          {mantenimientosOptions.map((mantenimiento) => (
-            <Col key={mantenimiento.id} xs={12} sm={6} md={4} lg={3} xl={2}>
-              <TargetaMantenimiento
-                mantenimiento={mantenimiento}
-
-                showIcons={true}
-              />
-            </Col>
-          ))}
-        </Row>
-        </div >
+         <h2 className="caja-seguridad-title">Juegos</h2>
+         <div className="caja-seguridad-grid">
+            {mantenimientosOptions.map((mantenimiento) => (
+            <div key={mantenimiento.id} className="caja-seguridad-card">
+              <div className="caja-seguridad-image-container">
+                <img
+                  src={mantenimiento.image}
+                  alt={mantenimiento.title}
+                  className="caja-seguridad-image"
+                />
+                </div>
+              <h3>{mantenimiento.title}</h3>
+                <p className="card-seguridad-description">{mantenimiento.description}</p>
+              </div>
+            ))}
+          </div>
+        
 
 
         <Modal show={showModal} onHide={() => setShowModal(false)} centered>
@@ -106,6 +108,7 @@ const GestionJuegos = () => {
             </Modal.Footer>
           </div>
         </Modal>
+        </div >
       </Container>
     </section>
   );

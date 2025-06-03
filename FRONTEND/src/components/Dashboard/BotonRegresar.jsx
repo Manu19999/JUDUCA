@@ -1,40 +1,28 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import './BotonRegresar.css';
 
 const BotonRegresar = ({
   to = "/dashboard",
   text = "Regresar",
-  top = "100px",
-  right = "20px",
-  variant = "outline-secondary",
-  onClick // Agregar el onClick personalizado
+  onClick
 }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    if (onClick) {
-      onClick(); // Si se pasa una función, la ejecuta
-    } else {
-      navigate(to); // Si no, simplemente navega al 'to'
-    }
+    onClick ? onClick() : navigate(to);
   };
 
   return (
-    <Button
-      variant={variant}
-      onClick={handleClick} // Usar el handler personalizado
-      className="d-flex align-items-center gap-2"
-      style={{
-        position: 'fixed',
-        top: top,
-        right: right,
-        zIndex: 1000
-      }}
+    <button
+      onClick={handleClick}
+      className="boton-regresar"
+      aria-label={text}
     >
-      <FaArrowLeft size={20} /> {text}
-    </Button>
+      <FaArrowLeft size={16} />
+      <span>{text}</span>
+    </button>
   );
 };
 

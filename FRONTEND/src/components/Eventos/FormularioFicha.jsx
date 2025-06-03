@@ -347,7 +347,7 @@ export default function DynamicFichaForm() {
 
       />
       <div className="credenciallisttitle text-center mt-3" style={{ width: '100%' }}>
-        <h2>DISEÑADOR DE : {selectedFicha.title || "Ficha sin nombre"}</h2>
+        <h3>Diseñador de : {selectedFicha.title || "Ficha sin nombre"}</h3>
       </div>
 
       <div className="form-containerD">

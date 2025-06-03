@@ -18,6 +18,8 @@ const CajaSeguridad =React.lazy(() => import("./pages/CajaSeguridad"));
 const Usuarios =React.lazy(() => import("./pages/Seguridad/Usuarios"));
 const Roles =React.lazy(() => import("./pages/Seguridad/Roles"));
 const Universidades =React.lazy(() => import("./pages/Seguridad/Universidades"));
+const Objetos =React.lazy(() => import("./pages/Seguridad/Objetos"));
+const Bitacoras =React.lazy(() => import("./pages/Seguridad/Bitacoras"));
 
 
 
@@ -92,6 +94,8 @@ function App() {
         <Route path="/usuarios" element={<Usuarios />} />
         <Route path="/roles" element={<Roles />} />
         <Route path="/universidades" element={<Universidades />} />
+        <Route path="/objetos" element={<Objetos />} />
+        <Route path="/bitacoras" element={<Bitacoras />} />
 
         {/* ruta para eventos */}
         <Route path="/eventos" element={<CajaEvento />} />

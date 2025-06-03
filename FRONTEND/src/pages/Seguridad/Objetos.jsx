@@ -1,31 +1,29 @@
 import React, { useState, useEffect } from "react";
 import Tabla from "../../components/Crud/Tabla";
 import Nav from '../../components/Dashboard/navDashboard';
-import { FaUserShield } from 'react-icons/fa';
+import { FaBoxOpen } from 'react-icons/fa';
 import ModalNuevo from "../../components/Crud/Modal/ModalNuevo";
 import ModalEditar from "../../components/Crud/Modal/ModalEditar";
 import ModalConfirmacion from "../../components/Crud/Modal/ModalConfirmacion";
-import ModalDetalles from "../../components/Crud/Modal/ModalDetalles";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito";
 import { mostrarMensajeError } from "../../components/Crud/MensajeError"; // Importar el componente de mensaje de error
 import { Input, Form } from 'antd';
 import ValidatedInput from "../../utils/ValidatedInput"; 
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 
-function Roles() {
+function Objetos() {
   const [showNuevoModal, setShowNuevoModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
   const [formNuevo] = Form.useForm(); // Formulario para el modal de nuevo registro
   const [formEditar] = Form.useForm(); // Formulario para el modal de edición
-  const [roles, setRoles] = useState([]); // Estado para almacenar los roles
+  const [objetos, setObjetos] = useState([]); // Estado para almacenar los objetos
 
-  //función reutilizable para obtener los roles
-  const obtenerRoles = async () => {
+  //función reutilizable para obtener los objetos
+  const obtenerObjetos = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/roles", {
+      const response = await fetch("http://localhost:4000/api/objetos", {
         method: "GET",
         credentials: 'include',
         headers: {
@@ -33,28 +31,29 @@ function Roles() {
         }
       });
       if (!response.ok) {
-        throw new Error("Error al obtener los roles");
+        throw new Error("Error al obtener los objetos");
       }
 
       const data = await response.json();
-      setRoles(data.data); // Actualizar el estado con los roles obtenidos
+      setObjetos(data.data); // Actualizar el estado con los objetos obtenidos
     } catch (error) {
       console.error("Error:", error);
-      mostrarMensajeError("Error al cargar los roles. Inténtalo de nuevo más tarde.");
+      mostrarMensajeError("Error al cargar los objetos. Inténtalo de nuevo más tarde.");
     }
   };
 
-  // Llamar a la API para obtener los roles
+  // Llamar a la API para obtener los objetos
   useEffect(() => {
-    obtenerRoles();
+    obtenerObjetos();
   }, []); // El array vacío asegura que esto solo se ejecute una vez al montar el componente
 
   // Columnas de la tabla
   const columnas = [
     { nombre: '#', campo: 'indice', ancho: '5%' },
-    { nombre: 'Nombre', campo: 'nombre', ancho: '20%' },
+    { nombre: 'Nombre', campo: 'nombre', ancho: '30%' },
     { nombre: 'Descripción', campo: 'descripcion', ancho: '40%' },
-    { nombre: 'Acción', campo: 'accion', ancho: '15%' }
+    { nombre: 'Tipo de Objeto', campo: 'tipoObjeto', ancho: '30%' },
+    { nombre: 'Acción', campo: 'accion', ancho: '20%' }
   ];
 
   // Abrir modal de nuevo registro
@@ -64,7 +63,7 @@ function Roles() {
 
   // Abrir modal de edición
   const handleEdit = (id) => {
-    const registro = roles.find((d) => d.idRol === id);
+    const registro = objetos.find((d) => d.idObjeto === id);
     setRegistroSeleccionado(registro); // Actualizar el registro seleccionado
     setShowEditModal(true); // Abrir el modal de edición
   };
@@ -76,17 +75,10 @@ function Roles() {
   };
 
   const handleDelete = (id) => {
-    const registro = roles.find(d => d.idRol === id);
+    const registro = objetos.find(d => d.idObjeto === id);
     setRegistroSeleccionado(registro);
     setShowDeleteModal(true); // Abrir el modal de eliminación
   };
-
-    // Abrir modal de detalles
-    const handleDetails = (id) => {
-      const registro = roles.find((d) => d.idRol === id);
-      setRegistroSeleccionado(registro);
-      setShowDetailsModal(true);
-    };
 
   // Guardar nuevo registro
   const handleGuardarNuevo = async () => {
@@ -94,7 +86,7 @@ function Roles() {
     .then(async (values) => {
       try {
 
-        const response = await fetch("http://localhost:4000/api/roles", {
+        const response = await fetch("http://localhost:4000/api/objetos", {
           method: "POST",
           credentials: 'include',
           headers: {
@@ -103,8 +95,10 @@ function Roles() {
           body: JSON.stringify({
             nombre: values.nombre,
             descripcion: values.descripcion,
-            idObjeto: 3, // ID del objeto 
+            tipoObjeto: values.tipoObjeto,
+            idObjeto: 7,
           }),
+          
         });
 
         const data = await response.json();
@@ -113,11 +107,11 @@ function Roles() {
           throw new Error(data.errors?.[0] || "Error al insertar el rol");
         }
         // **Actualizar la tabla después de agregar un nuevo rol**
-        setRoles(prevRoles => [...prevRoles, data.data]);
+        setObjetos(prevObjetos => [...prevObjetos, data.data]);
 
         setShowNuevoModal(false);
         formNuevo.resetFields(); // Limpiar el formulario de nuevo registro
-        mostrarMensajeExito("El rol se ha registrado correctamente."); // Mensaje de éxito
+        mostrarMensajeExito("El objeto se ha registrado correctamente."); // Mensaje de éxito
       } catch (error) {
         console.error("Error:", error);
         mostrarMensajeError(error.message);
@@ -128,14 +122,14 @@ function Roles() {
     });
   };
 
-  // Guardar cambios en el registro editado (para roles)
+  // Guardar cambios en el registro editado (para objetos)
   const handleGuardarEdit = async () => {
     try {
       // Validar los campos del formulario
       const values = await formEditar.validateFields();
 
       // Llamar a la API para actualizar el rol
-      const response = await fetch(`http://localhost:4000/api/roles/${registroSeleccionado.idRol}`, {
+      const response = await fetch(`http://localhost:4000/api/objetos/${registroSeleccionado.idObjeto}`, {
         method: "PUT",
         credentials: 'include',
         headers: {
@@ -144,7 +138,8 @@ function Roles() {
         body: JSON.stringify({
           nombre: values.nombre,
           descripcion: values.descripcion,
-          idObjeto: 3, // ID del objeto 
+          tipoObjeto: values.tipoObjeto,
+          idObjeto: 7, // ID del objeto 
         }),
       });
 
@@ -162,8 +157,8 @@ function Roles() {
       setRegistroSeleccionado(null);
       formEditar.resetFields();
 
-      // Recargar los roles desde la API
-      await obtenerRoles();
+      // Recargar los objetos desde la API
+      await obtenerObjetos();
     } catch (error) {
       // Mostrar mensaje de error
       mostrarMensajeError(error.message);
@@ -175,14 +170,14 @@ function Roles() {
     try {
       if (!registroSeleccionado) return;
 
-      const response = await fetch(`http://localhost:4000/api/roles/${registroSeleccionado.idRol}`, {
+      const response = await fetch(`http://localhost:4000/api/objetos/${registroSeleccionado.idObjeto}`, {
         method: "DELETE",
         credentials: 'include',
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          idObjeto: 3, // ID del objeto según el sistema de seguridad
+          idObjeto: 7, // ID del objeto según el sistema de seguridad
         }),
       });
 
@@ -192,8 +187,8 @@ function Roles() {
         throw new Error(data.errors?.[0] || "Error al eliminar el rol");
       }
 
-      // Actualizar la lista de roles sin el rol eliminado
-      setRoles(prevRoles => prevRoles.filter(rol => rol.idRol !== registroSeleccionado.idRol));
+      // Actualizar la lista de objetos sin el rol eliminado
+      setObjetos(prevObjetos => prevObjetos.filter(objeto => objeto.idObjeto !== registroSeleccionado.idObjeto));
 
       // Cerrar el modal de confirmación
       setShowDeleteModal(false);
@@ -214,35 +209,41 @@ function Roles() {
       <BotonRegresar to="/seguridad" text="Regresar" />
       <Tabla
         columnas={columnas}
-        datos={roles.map((rol) => ({ ...rol, id: rol.idRol }))}  // Usar los roles obtenidos de la API
-        titulo="Gestión de Roles"
-        icono={<FaUserShield className="icono-titulo" />}
+        datos={objetos.map((objeto) => ({ ...objeto, id: objeto.idObjeto }))}  // Usar los objetos obtenidos de la API
+        titulo="Gestión de Objetos"
+        icono={<FaBoxOpen className="icono-titulo" />}
         onNuevoRegistro={handleNuevoRegistro}
         onGenerarReporte={() => console.log("Generar reporte en PDF")}
-        onPermisos={() => console.log("Generar reporte en PDF")}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        onDetails={handleDetails} // Función para abrir el modal de detalles
       />
 
       {/* Modal para Nuevo Registro */}
       <ModalNuevo
         show={showNuevoModal}
         onHide={() => setShowNuevoModal(false)}
-        titulo="Nuevo Rol"
+        titulo="Nuevo Objeto"
         onGuardar={handleGuardarNuevo}
         form={formNuevo} // Pasar el formulario al modal
         width={500}
       >
         <Form layout="vertical" form={formNuevo}>
-          <ValidatedInput name="nombre" label="Nombre" placeholder="Ingresa el nombre del rol"
+          <ValidatedInput name="nombre" label="Nombre" placeholder="Ingresa el nombre del objeto"
           rules={[{ required: true, message: "El nombre es obligatorio" }]}
-          allowSpecialChars={false} />
+          allowSpecialChars={false}  convertToUpper={false} />
 
           <ValidatedInput name="descripcion" label="Descripción" placeholder="Descripción del rol" 
           rules={[{ required: true, message: "La descripción es obligatoria" }]}
           allowSpecialChars={false} 
           isTextArea={true} />
+
+          <ValidatedInput
+          name="tipoObjeto"
+          label="Tipo de Objeto"
+          placeholder="Ingrese el tipo de objeto"
+          rules={[{ required: true, message: "El tipo de objeto es obligatorio" }]}
+          />
+
         </Form>
       </ModalNuevo>
 
@@ -250,7 +251,7 @@ function Roles() {
       <ModalEditar
         show={showEditModal}
         onHide={handleCerrarEditModal}
-        titulo="Editar Rol"
+        titulo="Editar Objeto"
         onGuardar={handleGuardarEdit}
         form={formEditar}
         registroSeleccionado={registroSeleccionado}
@@ -259,12 +260,19 @@ function Roles() {
         <Form layout="vertical" form={formEditar} initialValues={registroSeleccionado || {}}>
           <ValidatedInput name="nombre" label="Nombre" placeholder="Ingresa el nombre del rol"
           rules={[{ required: true, message: "El nombre es obligatorio" }]}
-          allowSpecialChars={false} />
+          allowSpecialChars={false} convertToUpper={false} />
 
           <ValidatedInput name="descripcion" label="Descripción" placeholder="Descripción del rol" 
           rules={[{ required: true, message: "La descripción es obligatoria" }]}
           allowSpecialChars={false} 
           isTextArea={true} />
+
+          <ValidatedInput
+          name="tipoObjeto"
+          label="Tipo de Objeto"
+          placeholder="Ingrese el tipo de objeto"
+          rules={[{ required: true, message: "El tipo de objeto es obligatorio" }]}
+          />
         </Form>
       </ModalEditar>
 
@@ -273,19 +281,10 @@ function Roles() {
         show={showDeleteModal}
         onHide={() => setShowDeleteModal(false)}
         onConfirmar={handleConfirmarDelete}
-        mensaje={`¿Estás seguro de que deseas eliminar el rol ${registroSeleccionado?.nombre}?`}
-      />
-
-<ModalDetalles
-        show={showDetailsModal} // Controla la visibilidad del modal
-        onHide={() => setShowDetailsModal(false)} // Función para cerrar el modal
-        titulo="Detalles del Usuario" // Título del modal
-        tipo="roles"
-        detalles={registroSeleccionado || {}} // Detalles del usuario seleccionado
-        width={600} // Ancho personalizado
+        mensaje={`¿Estás seguro de que deseas eliminar el objeto ${registroSeleccionado?.nombre}?`}
       />
     </div>
   );
 }
 
-export default Roles;
+export default Objetos;

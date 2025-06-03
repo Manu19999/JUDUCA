@@ -1,0 +1,84 @@
+.boton-regresar {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 100;
+  padding: 0;
+  background: #4682B4;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 3.5rem;
+  height: 3.5rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 
+    0 4px 14px rgba(70, 130, 180, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  transition: 
+    transform 0.2s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+  /* Reset estilos button */
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.boton-regresar:hover {
+  background: #3B6A9C;
+  box-shadow: 0 8px 25px rgba(70, 130, 180, 0.35);
+}
+
+.boton-regresar span {
+  position: absolute;
+  right: calc(100% + 0.75rem);
+  top: 50%;
+  transform: translateY(-50%);
+  background: #3B6A9C;
+  color: #fff;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.4rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.boton-regresar:hover span {
+  opacity: 1;
+}
+
+/* Flechita del tooltip */
+.boton-regresar span::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-left-color: #3B6A9C;
+}
+
+/* Eliminar efectos no deseados */
+.boton-regresar:active {
+  background: #4682B4 !important;
+  transform: none !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .boton-regresar {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 3rem;
+    height: 3rem;
+  }
+  
+  .boton-regresar svg {
+    width: 14px;
+    height: 14px;
+  }
+}

@@ -408,13 +408,13 @@
 
 /* Estilos para el botón "Guardar" */
 .custom-modal-card .ant-modal-footer .ant-btn-primary {
-  background-color: #426a99 !important; /* Azul */
+  background-color: #005577 !important; /* Azul */
   border-color: #2c5584 !important; /* Borde azul */
   color: white !important; /* Texto blanco */
 }
 
 .custom-modal-card .ant-modal-footer .ant-btn-primary:hover {
-  background-color: #325880 !important; /* Azul más oscuro al pasar el mouse */
+  background-color: #003F5E !important; /* Azul más oscuro al pasar el mouse */
   border-color: #2c5584 !important;
 }
 

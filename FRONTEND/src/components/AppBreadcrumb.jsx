@@ -11,6 +11,8 @@ const routeNames = {
   usuarios: "Usuarios",
   roles: "Roles",
   universidades: "Universidades",
+  objetos: "Objetos",
+  bitacoras: "Bitacoras",
 
   //Eventos
   eventos: "Eventos",
@@ -22,6 +24,8 @@ const routeNames = {
   "Formulario-fichas": "Formulario-Ficha",
   "llenar-fichas": "Registro-Ficha",
   credencialView: "Credenciales",
+  OpcionFicha:"Opción-Ficha",
+  LLenadoFicha:"LLenado-Ficha",
 
   //Mantenimientos
   mantenimientoView: "Mantenimientos",
@@ -30,6 +34,9 @@ const routeNames = {
   MantenimientoInstalaciones: "Instalaciones",
   MantenimientoGeneros: "Géneros",
   MantenimientoApiMap: "ApiMap",
+
+  //Juegos
+  JuegoView:"Juegos",
 
 };
 
@@ -49,6 +56,12 @@ const getHierarchy = (pathname) => {
   }
   if (pathnames.includes("universidades")) {
     return ["dashboard", "seguridad", "universidades"];
+  }
+  if (pathnames.includes("objetos")) {
+    return ["dashboard", "seguridad", "objetos"];
+  }
+  if (pathnames.includes("bitacoras")) {
+    return ["dashboard", "seguridad", "bitacoras"];
   }
   
   // Mapeo manual de la jerarquía eventos
@@ -70,18 +83,25 @@ const getHierarchy = (pathname) => {
   if (pathnames.includes("nuevo-voucher")){
     return ["dashboard", "eventos","gestion-evento","vouchers","nuevo-voucher"];
   }
-  /*
-  if (pathnames.includes("Formulario-fichas")) {
-    return ["dashboard", "eventos","gestion-evento","lista-fichas","Formulario-fichas"];
+  if (pathnames.includes("JuegoView")) {
+    return ["dashboard", "eventos","gestion-evento","JuegoView"];
   }
-  */
-
+  if (pathnames.includes("OpcionFicha")) {
+    return ["dashboard", "eventos","gestion-evento","lista-fichas","OpcionFicha"];
+  }
+  if (pathnames.includes("Formulario-fichas")) {
+    return ["dashboard", "eventos","gestion-evento","lista-fichas","OpcionFicha","Formulario-fichas"];
+  }
   if (pathnames.includes("llenar-fichas")) {
     return ["dashboard", "eventos","gestion-evento","llenar-fichas"];
+  }
+  if (pathnames.includes("LlenadoFicha")) {
+    return ["dashboard", "eventos","gestion-evento","llenar-fichas","LlenadoFicha"];
   }
   if (pathnames.includes("credencialView")) {
     return ["dashboard", "eventos","gestion-evento","credencialView"];
   }
+
   // Mapeo manual de la jerarquía mantenimientos
   if (pathnames.includes("mantenimientoView")) {
     return ["dashboard", "mantenimientoView"];
@@ -101,8 +121,11 @@ const getHierarchy = (pathname) => {
   if (pathnames.includes("MantenimientoApiMap")) {
     return ["dashboard", "mantenimientoView","MantenimientoApiMap"];
   }
+
   return pathnames;
 };
+
+  
 
 //componente 
 const AppBreadcrumb = () => {
@@ -116,6 +139,11 @@ const AppBreadcrumb = () => {
   if (rutasExcluidas.includes(location.pathname)) {
     return null; // No renderiza nada si la ruta está en la lista
   }
+
+  // Función para manejar el clic en "Dashboard"
+  const handleDashboardClick = () => {
+    navigate("/dashboard"); // Navega a la ruta del dashboard
+  };
 
   // Función para manejar el clic en "Seguridad"
   const handleSeguridadClick = () => {
@@ -133,6 +161,22 @@ const AppBreadcrumb = () => {
   const handleGestionEventoClick = () => {
     navigate("/gestion-evento"); // navega a la ruta seguridad cuando se hace clic en el item "Seguridad"
   };
+
+  const handleVouchersClick = () => {
+    navigate("/vouchers"); // navega a la ruta seguridad cuando se hace clic en el item "Seguridad"
+  };
+
+  const handleFichaClick = () => {
+    navigate("/lista-fichas"); // navega a la ruta seguridad cuando se hace clic en el item "Seguridad"
+  };
+
+  const handleOpcionFichaClick = () => {
+    navigate("/OpcionFicha"); // navega a la ruta seguridad cuando se hace clic en el item "Seguridad"
+  };
+
+  const handleLLenarFichaClick = () => {
+    navigate("/llenar-fichas"); // navega a la ruta seguridad cuando se hace clic en el item "Seguridad"
+  };
   return (
     <div className="breadcrumb-container">
       <Breadcrumb separator=">" style={{ margin: "16px 0" }}>
@@ -141,6 +185,20 @@ const AppBreadcrumb = () => {
           const isLast = index === hierarchy.length - 1;
           const displayName = routeNames[name] || name;
 
+          // Si es el Dashboard, lo hacemos clickeable
+          if (name === "dashboard") {
+            return (
+              <Breadcrumb.Item key={name}>
+                <span
+                  onClick={handleDashboardClick}
+                  className="breadcrumb-item clickable"
+                >
+                  {displayName}
+                </span>
+              </Breadcrumb.Item>
+            );
+          }
+          
           // Si el ítem es "Seguridad", redirige a /seguridad
           if (name === "seguridad") {
             return (
@@ -183,6 +241,54 @@ const AppBreadcrumb = () => {
               <Breadcrumb.Item key={name}>
                 <span
                   onClick={handleGestionEventoClick}
+                  className="breadcrumb-item clickable"
+                >
+                  {displayName}
+                </span>
+              </Breadcrumb.Item>
+            );
+          }
+          if (name === "vouchers") {
+            return (
+              <Breadcrumb.Item key={name}>
+                <span
+                  onClick={handleVouchersClick}
+                  className="breadcrumb-item clickable"
+                >
+                  {displayName}
+                </span>
+              </Breadcrumb.Item>
+            );
+          }
+          if (name === "lista-fichas") {
+            return (
+              <Breadcrumb.Item key={name}>
+                <span
+                  onClick={handleFichaClick}
+                  className="breadcrumb-item clickable"
+                >
+                  {displayName}
+                </span>
+              </Breadcrumb.Item>
+            );
+          }
+          if (name === "OpcionFicha") {
+            return (
+              <Breadcrumb.Item key={name}>
+                <span
+                  onClick={handleOpcionFichaClick}
+                  className="breadcrumb-item clickable"
+                >
+                  {displayName}
+                </span>
+              </Breadcrumb.Item>
+            );
+          }
+          if (name === "llenar-fichas") {
+            return (
+              <Breadcrumb.Item key={name}>
+                <span
+                  onClick={handleLLenarFichaClick}
                   className="breadcrumb-item clickable"
                 >
                   {displayName}
