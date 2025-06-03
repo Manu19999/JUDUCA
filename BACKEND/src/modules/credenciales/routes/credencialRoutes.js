@@ -5,8 +5,8 @@ import checkAuth from "../../../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get('/', ObtenerEventos);
-router.get('/fichas', ObtenerFichas);
+router.get('/',checkAuth, ObtenerEventos);
+router.get('/fichas',checkAuth, ObtenerFichas);
 router.get('/fichaCaracteristica/:idFichaRegistro', ObtenerCarateristicaFicha);
 router.get('/participantes/:idEvento/:idFichaRegistro', ObtenerParticipantesPorFicha);
 router.get('/credenciales/:idEvento/:idFichaRegistro', ObtenerCredencialesPorFicha);

@@ -35,7 +35,14 @@ const CajaEventos = () => {
   useEffect(() => {
     const fetchEventos = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/credencial/");
+        const response = await fetch("http://localhost:4000/api/credencial/", {
+          method: "GET",
+          credentials: 'include',
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+        
         const data = await response.json();
 
         console.log("Datos de eventos recibidos:", data); // 🔹 Verifica los datos en la consola

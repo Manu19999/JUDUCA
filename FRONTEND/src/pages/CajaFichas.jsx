@@ -57,7 +57,14 @@ const CajaFichas = () => {
       setEvento(eventoObj);
 
       try {
-        const response = await fetch("http://localhost:4000/api/credencial/fichas");
+        const response = await fetch("http://localhost:4000/api/credencial/fichas", {
+          method: "GET",
+          credentials: 'include',
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+
         const data = await response.json();
 
         if (data.hasError || !data.data) {
