@@ -305,10 +305,10 @@ export default function DynamicFichaForm() {
     try {
       const res = await axios.post(
         "http://localhost:4000/api/fichas/insFichaCaracteristicas",
-        body,
+        body, // 👈 Aquí va el cuerpo de la petición (no en headers)
         {
+          withCredentials: true, // 👈 Esto es lo correcto para enviar cookies de sesión
           headers: {
-            "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
           }
         }
@@ -320,10 +320,6 @@ export default function DynamicFichaForm() {
       alert("❌ Error al guardar los campos");
     }
   };
-
-
-
-
 
 
   const handleVolver = () => {
@@ -493,7 +489,7 @@ export default function DynamicFichaForm() {
                 return (
                   <div key={campo.id} className="preview-campoD">
                     <label>
-                      <strong>{campo.nombreDelCampo || caracteristica?.caracteristica || "Sin nombre"} :
+                      <strong>{campo.nombreDelCampo || "Sin nombre"} :
                       </strong>
                       {renderVistaPreviaCampo(campo)}
                     </label>

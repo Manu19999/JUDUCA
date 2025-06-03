@@ -190,9 +190,9 @@ export default function LlenadoFicha() {
                 "http://localhost:4000/api/fichas/insParticipanteEventos",
                 payload,
                 {
+                    withCredentials: true, // 👈 Esto es lo correcto para enviar cookies de sesión
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem("token")}`,
-                        'Content-Type': 'application/json'
+                        "Content-Type": "application/json"
                     }
                 }
             );
