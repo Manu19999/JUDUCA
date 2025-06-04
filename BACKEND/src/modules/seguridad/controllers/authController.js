@@ -20,11 +20,13 @@ export const Login = async (req, res) => {
             .execute('Usuarios.splUsuariosAutenticar');
 
         // 2. Manejar errores
-        if (result.recordset?.length === 0) {
-            response.setErrors(['El correo electrónico o la contraseña son incorrectos']);
+        if (result.returnValue === 1 || result.returnValue === 2) {
+            const error = result.recordset[0]?.descripcion || 'El correo electrónico o la contraseña son incorrectos';
+            response.setErrors([error]);
             response.setHasError(true);
             return res.status(401).json(response.getResponse());
         }
+        
 
         const user = result.recordset[0];
         

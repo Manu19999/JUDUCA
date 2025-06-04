@@ -5,7 +5,7 @@ import BotonesAccionFila from "./BotonesAccionFila"; // Importa el componente de
 import Paginacion from './Paginacion';
 import Filtros from './Filtros';
 
-const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarReporte, onPermisos, onEdit, onDelete, onDetails }) => {
+const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarReporte, onPermisos,onEstados, onEdit, onDelete, onDetails }) => {
   const [paginaActual, setPaginaActual] = useState(1);
   const [registrosPorPagina, setRegistrosPorPagina] = useState(8);
   const [busqueda, setBusqueda] = useState('');
@@ -54,6 +54,7 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
             onNuevoRegistro={onNuevoRegistro}
             onGenerarReporte={onGenerarReporte}
             onPermisos={onPermisos}
+            onEstados={onEstados}
           />
         )}
       </div>

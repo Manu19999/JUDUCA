@@ -424,6 +424,7 @@ function Usuarios() {
         onGenerarReporte={() => console.log("Generar reporte en PDF")} // Función para generar reporte
         onEdit={handleEdit} // Función para abrir el modal de edición
         onDetails={handleDetails} // Función para abrir el modal de detalles
+        onEstados={() => console.log("Generar reporte en PDF")} // boton para estados de usuario
       />
 
       {/* Modal para Nuevo Registro */}

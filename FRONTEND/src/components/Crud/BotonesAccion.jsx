@@ -1,10 +1,11 @@
 import React from "react";
-import { FaPlus, FaFilePdf, FaUserShield } from "react-icons/fa";
+import { FaPlus, FaFilePdf, FaUserShield,FaToggleOn } from "react-icons/fa";
 
 const BotonesAccion = ({ 
   onNuevoRegistro, 
   onGenerarReporte,
-  onPermisos // Nueva prop para el botón de permisos
+  onPermisos,
+  onEstados
 }) => {
   return (
     <div className="botones-accion">
@@ -18,6 +19,12 @@ const BotonesAccion = ({
         <button onClick={onPermisos} className="btn-permisos">
           <FaUserShield />
           <span>Permisos</span>
+        </button>
+      )}
+      {onEstados && (
+        <button onClick={onEstados} className="btn-permisos">
+          <FaToggleOn />
+          <span>Estados</span>
         </button>
       )}
       {onGenerarReporte && (

@@ -139,7 +139,7 @@ function Objetos() {
           nombre: values.nombre,
           descripcion: values.descripcion,
           tipoObjeto: values.tipoObjeto,
-          idObjeto: 7, // ID del objeto 
+          idObjetoBitacora: 7, // ID del objeto 
         }),
       });
 
@@ -177,7 +177,7 @@ function Objetos() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          idObjeto: 7, // ID del objeto según el sistema de seguridad
+          idObjetoBitacora: 7, // ID del objeto según el sistema de seguridad
         }),
       });
 
