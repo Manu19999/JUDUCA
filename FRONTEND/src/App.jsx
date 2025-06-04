@@ -71,7 +71,7 @@ const MantenimientoCiudades =React.lazy(() => import("./pages/Mantenimientos/Man
 const MantenimientoInstalaciones =React.lazy(() => import("./pages/Mantenimientos/MantenimientoInstalaciones"));
 const MantenimientoGeneros =React.lazy(() => import("./pages/Mantenimientos/MantenimientoGeneros"));
 const MantenimientoApiMap =React.lazy(() => import("./pages/Mantenimientos/MantenimientoApiMap"));
-
+const MantenimientoEventos =React.lazy(() => import("./pages/Eventos/Eventos"));
 
 
 function App() {
@@ -101,6 +101,7 @@ function App() {
         <Route path="/eventos" element={<CajaEvento />} />
         <Route path="/crear-evento" element={<CreateEvent />} />
         <Route path="/gestion-evento" element={<Eventos />} />
+        
 
         {/* ruta para fichas */}
         <Route path="/lista-fichas" element={<CajaFichas />} />
@@ -145,6 +146,7 @@ function App() {
         <Route path="/MantenimientoInstalaciones" element={<MantenimientoInstalaciones />}/>
         <Route path="/MantenimientoGeneros" element={<MantenimientoGeneros />} />
         <Route path="/MantenimientoApiMap" element={<MantenimientoApiMap />} />
+        <Route path="/MantenimientoEventos" element={<MantenimientoEventos />} />
 
       </Routes>
       </Suspense>
