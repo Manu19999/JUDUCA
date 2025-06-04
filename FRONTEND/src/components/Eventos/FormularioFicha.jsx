@@ -5,6 +5,7 @@ import "../../styles/Credencial/formularioDinamico.css";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Inicio/EventCard.css";
 import Nav from "../../components/Dashboard/navDashboard";
+import Swal from "sweetalert2";
 
 export default function DynamicFichaForm() {
   const navigate = useNavigate();
@@ -313,11 +314,21 @@ export default function DynamicFichaForm() {
           }
         }
       );
-      alert("✅ Campos guardados correctamente");
+      await Swal.fire({
+        icon: "success",
+        title: "¡Formulario registrado!",
+        text: "Los campos del formulario fueron registrados correctamente.",
+        confirmButtonColor: "#253A69",
+      });
       console.log("📦 Respuesta del servidor:", res.data);
     } catch (err) {
       console.error("❌ Error al guardar los campos:", err);
-      alert("❌ Error al guardar los campos");
+      await Swal.fire({
+        icon: "error",
+        title: "Error al guardar",
+        text: err.message || "Ocurrió un problema al crear el formulario.",
+        confirmButtonColor: "#d33",
+      });
     }
   };
 
@@ -489,11 +500,7 @@ export default function DynamicFichaForm() {
                 return (
                   <div key={campo.id} className="preview-campoD">
                     <label>
-<<<<<<< HEAD
-                      <strong>{campo.nombreDelCampo ||  "Sin nombre"} :
-=======
                       <strong>{campo.nombreDelCampo || "Sin nombre"} :
->>>>>>> main
                       </strong>
                       {renderVistaPreviaCampo(campo)}
                     </label>

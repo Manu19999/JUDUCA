@@ -4,6 +4,7 @@ import axios from "axios";
 import "../styles/Credencial/LlenadoFicha.css";
 import BotonRegresar from "../components/Dashboard/BotonRegresar";
 import Nav from "../components/Dashboard/navDashboard";
+import Swal from "sweetalert2";
 
 export default function LlenadoFicha() {
     const navigate = useNavigate();
@@ -198,14 +199,25 @@ export default function LlenadoFicha() {
             );
 
             if (res.data && !res.data.hasError) {
-                alert('¡Registro guardado exitosamente!');
+                await Swal.fire({
+                    icon: "success",
+                    title: "¡Participante registrado!",
+                    text: "Participante registrado correctamente.",
+                    confirmButtonColor: "#253A69",
+                });
                 navigate("/llenar-fichas");
             } else {
                 throw new Error(res.data?.errors?.join(', ') || 'Error desconocido');
             }
         } catch (error) {
             console.error('Error en el envío:', error);
-            alert(`Error al guardar: ${error.message}`);
+
+            await Swal.fire({
+                icon: "error",
+                title: "Error al guardar",
+                text: err.message || "Ocurrió un problema al registrar al participante.",
+                confirmButtonColor: "#d33",
+            });
         }
     };
 
