@@ -84,35 +84,40 @@ export const Login = async (req, res) => {
     }
 };
 
-export const Logout = (req, res) => {
+export const Logout = async (req, res) => {
     const response = new apiResponse();
 
     try {
-        // Limpiar la cookie authToken
-        res.clearCookie('authToken', {
+        // 1. Limpiar la cookie (usando el mismo nombre que en login)
+        res.clearCookie('token', {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict'
+            sameSite: 'strict',
+            path: '/'  // Asegurar mismo path que la cookie original
         });
         
-        // Opcional: Registrar el logout
-        if (req.usuario) {
-            console.log(`Usuario ${req.usuario.idUsuario} cerró sesión`);
+        // 2. Registrar el logout si hay usuario autenticado
+        if (req.usuario && req.usuario.idUsuario) {
+            const pool = await conexionbd();
+            
+            await pool.request()
+                .input('idUsuario', sql.Int, req.usuario.idUsuario)
+                .input('nombreUsuario', sql.NVarChar, req.usuario.nombreUsuario || 'Sistema')
+                .execute('Usuarios.splRegistrarLogout');
         }
 
+        // 3. Preparar respuesta exitosa
         response.setData({ 
-            message: 'Sesión cerrada correctamente',
-            usuario: req.usuario ? {
-                idUsuario: req.usuario.idUsuario,
-                email: req.usuario.email
-            } : null
+            message: 'Sesión cerrada correctamente'
         });
+
+        // 4. Enviar respuesta inmediatamente
+        return res.status(200).json(response.getResponse());
 
     } catch (err) {
         console.error('Error en el logout:', err);
-        response.setErrors(['Error al cerrar sesión. Por favor, inténtalo de nuevo']);
+        response.setErrors(['Error al cerrar sesión']);
         response.setHasError(true);
+        return res.status(500).json(response.getResponse());
     }
-
-    res.status(response.hasError ? 500 : 200).json(response.getResponse());
 };
