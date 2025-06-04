@@ -77,6 +77,11 @@ const CajaEventos = () => {
     navigate("/gestion-evento");
   };
 
+    const handleMantenimientoEvento = () => {
+    navigate("/MantenimientoEventos", {
+    });
+  };
+
   return (
     <section id="caja-seguridad" className="caja-seguridad-container">
       <Container>
@@ -99,7 +104,7 @@ const CajaEventos = () => {
             >
               Próximos
             </button>
-            <button className="eventtab" onClick={() => setIsModalOpen(true)}>
+            <button className="eventtab"  onClick={() => handleMantenimientoEvento()}>
               Nuevo
             </button>
           </div>
