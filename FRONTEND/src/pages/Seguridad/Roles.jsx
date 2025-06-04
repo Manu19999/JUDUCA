@@ -103,7 +103,7 @@ function Roles() {
           body: JSON.stringify({
             nombre: values.nombre,
             descripcion: values.descripcion,
-            idObjeto: 2, // ID del objeto 
+            idObjeto: 3, // ID del objeto 
           }),
         });
 
@@ -144,7 +144,7 @@ function Roles() {
         body: JSON.stringify({
           nombre: values.nombre,
           descripcion: values.descripcion,
-          idObjeto: 2, // ID del objeto 
+          idObjeto: 3, // ID del objeto 
         }),
       });
 
@@ -175,19 +175,14 @@ function Roles() {
     try {
       if (!registroSeleccionado) return;
 
-      const token = localStorage.getItem("token"); // Obtener el token
-      if (!token) {
-        throw new Error("No hay token disponible");
-      }
-
       const response = await fetch(`http://localhost:4000/api/roles/${registroSeleccionado.idRol}`, {
         method: "DELETE",
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
-          idObjeto: 7, // ID del objeto según el sistema de seguridad
+          idObjeto: 3, // ID del objeto según el sistema de seguridad
         }),
       });
 
@@ -224,6 +219,7 @@ function Roles() {
         icono={<FaUserShield className="icono-titulo" />}
         onNuevoRegistro={handleNuevoRegistro}
         onGenerarReporte={() => console.log("Generar reporte en PDF")}
+        onPermisos={() => console.log("Generar reporte en PDF")}
         onEdit={handleEdit}
         onDelete={handleDelete}
         onDetails={handleDetails} // Función para abrir el modal de detalles

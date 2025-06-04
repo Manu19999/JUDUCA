@@ -8,7 +8,7 @@ import Voluntariados from "../assets/Eventos/Voluntariado.jpg";
 import { FaArrowLeft, FaEye, FaCog } from "react-icons/fa";
 import { useDropzone } from "react-dropzone";
 import Nav from "../components/Dashboard/navDashboard";
-import "../styles/Credencial/credencial.css";
+import "../styles/Inicio/Caja-seguridad.css";
 import BotonRegresar from "../components/Dashboard/BotonRegresar";
 import "../styles/Evento/Eventos.css";
 
@@ -57,7 +57,14 @@ const CajaFichas = () => {
       setEvento(eventoObj);
 
       try {
-        const response = await fetch("http://localhost:4000/api/credencial/fichas");
+        const response = await fetch("http://localhost:4000/api/credencial/fichas", {
+          method: "GET",
+          credentials: 'include',
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+
         const data = await response.json();
 
         if (data.hasError || !data.data) {
@@ -127,15 +134,12 @@ const handleImageClick = (ficha) => {
   return (
     <Container>
       <Nav />
-      <div className="container mx-auto p-4">
+      <div className="espaciotexto">
         <BotonRegresar to="/gestion-evento" text="Regresar" />
-
         {/* 🔹 Mostrar el nombre y estado del evento */}
-        <div className="credenciallisttitle text-center mt-3">
-          <h2>
-            {evento ? `FICHAS DEL EVENTO :  ${evento.title}` : "Cargando evento..."}
+          <h2 className="caja-seguridad-title">
+            {evento ? `Fichas del Evento :  ${evento.title}` : "Cargando evento..."}
           </h2>
-        </div>
 
         <div className="eventtabs">
           <button
@@ -162,18 +166,26 @@ const handleImageClick = (ficha) => {
             {error}
           </Alert>
         ) : (
-          <Row>
-            {fichasOptions.map((ficha) => (
-              <Col key={ficha.id} xs={12} sm={6} md={4} lg={3} xl={2}>
-                <TargetaCredencial
-                  event={ficha}
-                  onImageClick={() => handleImageClick(ficha)}
-                  handleVerInfo={() => handleVerInfo(ficha)}
-                  showIcons={true}
+          <div className="caja-seguridad-grid">
+          {fichasOptions.map((ficha) => (
+            <div key={ficha.id} className="caja-seguridad-card" 
+            >
+              <div className="caja-seguridad-image-container">
+                <img
+                  src={ficha.image}
+                  alt={ficha.title}
+                  className="caja-seguridad-image"
+                  onClick={() => handleImageClick(ficha.route)}
                 />
-              </Col>
-            ))}
-          </Row>
+              </div>
+              <h3>{ficha.title}</h3>
+              <p className="card-seguridad-description">{ficha.description}</p>
+               <div className="eventicons">
+               <FaEye className="eventicon" onClick={() => handleVerInfo(ficha)} />
+                </div>
+            </div>
+          ))}
+        </div>
         )}
       </div>
 

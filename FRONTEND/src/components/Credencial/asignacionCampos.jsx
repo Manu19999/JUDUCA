@@ -210,9 +210,9 @@ const AsignacionCampos = () => {
     try {
       const response = await fetch("http://localhost:4000/api/credencial/campos", {
         method: "POST",
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
           idFichaRegistro: selectedFicha.id,
@@ -270,9 +270,9 @@ const AsignacionCampos = () => {
 
     fetch("http://localhost:4000/api/credencial/deleteCampos", {
       method: "POST", // O "DELETE" dependiendo de lo que requiera el backend
+      credentials: 'include',
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify({
         idCampos: [campo.id],  // Envia el idCampoCredencial en lugar de idUbicacionCampo
@@ -331,9 +331,9 @@ const AsignacionCampos = () => {
 
         fetch("http://localhost:4000/api/credencial/deleteCampos", {
           method: "POST",
+          credentials: 'include',
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
           },
           body: JSON.stringify({
             idCampos: camposAEliminar,

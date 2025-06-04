@@ -175,15 +175,24 @@ function Usuarios() {
       }
     };
   
-    const obtenerUniversidades = async () => {
+   const obtenerUniversidades = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/universidades");
-        if (!response.ok) throw new Error("Error al obtener las universidades");
+        const response = await fetch("http://localhost:4000/api/universidades", {
+          method: "GET",
+          credentials: 'include',
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+        if (!response.ok) {
+          throw new Error("Error al obtener las universidades");
+        }
         const data = await response.json();
-        setUniversidades(data.data);
+        console.log("Datos de universidades recibidos:", data.data); // Para depuración
+        setUniversidades(data.data); // Actualizar el estado con las universidades obtenidas
       } catch (error) {
         console.error("Error:", error);
-        mostrarMensajeError("Error al cargar las universidades.");
+        mostrarMensajeError("Error al cargar las universidades. Inténtalo de nuevo más tarde.");
       }
     };
   
@@ -301,7 +310,7 @@ function Usuarios() {
             telefonoContactoEmergencia: values.telefonoContactoEmergencia,
             fechaNacimiento: values.fechaNacimiento ? values.fechaNacimiento.format('YYYY-MM-DD') : null,
             fotoUrl: values.fotoUrl || null,
-            idObjeto: 2, // ID del objeto según tu sistema
+            idObjeto: 4, // ID del objeto según tu sistema
           };
 
           const response = await fetch("http://localhost:4000/api/usuarios", {
@@ -356,7 +365,7 @@ function Usuarios() {
         telefonoContactoEmergencia: values.telefonoContactoEmergencia,
         fechaNacimiento: values.fechaNacimiento ? values.fechaNacimiento.format('YYYY-MM-DD') : null,
         fotoUrl: values.fotoUrl || null,
-        idObjeto: 2, // ID del objeto según tu sistema
+        idObjeto: 4, // ID del objeto según tu sistema
         // La contraseña solo se envía si se modificó
         contrasena: values.contrasena || undefined
       };

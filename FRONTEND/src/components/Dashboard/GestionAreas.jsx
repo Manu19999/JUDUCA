@@ -1,10 +1,9 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
-import SeguridadImage from "../../assets/seguridad.jpg"; // Imagen para Seguridad
+import SeguridadImage from "../../assets/Seguridad/seguridad.jpg"; // Imagen para Seguridad
 import EventosImage from "../../assets/eventos.jpg"; // Imagen para Eventos
 import MantenimientosImage from "../../assets/mantenimientos.jpg"; // Imagen para Mantenimientos
-
 
 import "../../styles/Inicio/GestionAreas.css"; // Estilos de las cajas
 
@@ -42,48 +41,23 @@ const GestionAreas = () => {
     navigate(route); // Navega a la ruta especificada
   };
 
-  // Función para regresar a la página anterior
-  const handleGoBack = () => {
-    navigate(-1); // Navega a la página anterior
-  };
-
   return (
     <section id="areas" className="eventlist">
       <Container>
-        
+      <div className="crud">
         {/* Encabezado con la ubicación actual */}
         <h2 className="eventlist-title">Áreas de Gestión</h2>
-        
-
-     {/* Botón de regresar a la par de las cajas */}
-        <div className="d-flex align-items-start">
-        {/*  <button
-            onClick={handleGoBack}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              marginRight: "1rem",
-            }}
-          >
-            <img
-              src={IzquierdaIcon} // Usa el ícono de regresar
-              alt="Regresar"
-              style={{ width: "100px", height: "100px",marginTop:"500" }} // Ajusta el tamaño del ícono
-            />
-          </button>*/}
-
           <div className="eventgrid">
             {areas.map((area) => (
-              <div key={area.id} className="eventcard">
-                <img
-                  src={area.image}
-                  alt={area.title}
-                  className="eventimage"
-                  onClick={() => handleImageClick(area.route)} // Redirige al hacer clic
-                  style={{ cursor: "pointer" }} // Cambia el cursor a pointer
-                />
-                <h3 className="eventtitle">{area.title}</h3>
+              <div key={area.id} className="eventcard" onClick={() => handleImageClick(area.route)}>
+                <div className="caja-areas-image-container">
+                  <img
+                    src={area.image}
+                    alt={area.title}
+                    className="eventimage"
+                  />
+                </div>
+                <h3>{area.title}</h3>
                 <p className="eventdescription">{area.description}</p>
               </div>
             ))}

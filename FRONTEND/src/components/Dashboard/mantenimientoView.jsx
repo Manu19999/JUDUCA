@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Container, Row, Col, Modal, Button } from "react-bootstrap";
+
+import { Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import TargetaMantenimiento from "../Dashboard/TargetaMantenimientos";
 import paises from "../../assets/Mantenimientos/paises.jpg";
@@ -11,122 +11,77 @@ import reglas from "../../assets/Mantenimientos/reglas.jpg";
 import apiMapping from "../../assets/Mantenimientos/apiMapping.jpg";
 import generos from "../../assets/Mantenimientos/generos.jpg";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
-import "../../styles/Inicio/GestionAreas.css"; // Estilos de las cajas
-
-
-
-import "../../styles/Credencial/credencial.css";
-import { FaArrowLeft } from "react-icons/fa";
+import "../../styles/Inicio/Caja-seguridad.css";
 
 const GestionMantenimiento = () => {
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
-  const [selectedMantenimiento, setSelectedMantenimiento] = useState(null);
 
   const mantenimientosOptions = [
     {
       id: 1,
-      title: "Mantenimiento de Paises",
+      title: "Paises",
       image: paises,
-      url: "/MantenimientoPaises"
+      route: "/MantenimientoPaises",
+      description: "Registrar y editar países del sistema."
     },
     {
       id: 2,
-      title: "Mantenimiento de Ciudades",
+      title: "Ciudades",
       image: ciudades,
-      url: "/MantenimientoCiudades"
-
+      route: "/MantenimientoCiudades",
+      description: "Gestionar ciudades según su país."
     },
     {
       id: 3,
-      title: "Mantenimiento de Instalaciones",
+      title: "Instalaciones",
       image: instalaciones,
-      url: "/MantenimientoInstalaciones"
+      route: "/MantenimientoInstalaciones",
+      description: "Administrar las instalaciones disponibles."
     },
-
     {
       id: 4,
-      title: "Mantenimiento de Generos",
+      title: "Géneros",
       image: generos,
-      url: "/MantenimientoGeneros"
-
+      route: "/MantenimientoGeneros",
+      description: "Configurar opciones de género para usuarios."
     },
-
     {
       id: 5,
-      title: "Mantenimiento Mapeo de Data",
+      title: "Mapeo de Data",
       image: apiMapping,
-      url: "/MantenimientoApiMap"
-
-    },
- 
+      route: "/MantenimientoApiMap",
+      description: "Relacionar campos internos con datos externos."
+    }
   ];
+  
 
-  const handleImageClick = (id) => {
-    navigate(`/asignarMantenimiento/${id}`);
-  };
-
-  const handleVerInfo = (mantenimiento) => {
-    setSelectedMantenimiento(mantenimiento);
-    setShowModal(true);
+  const handleImageClick = (route) => {
+    navigate(route);
   };
 
   return (
-    <section id="mantenimientos" className="mantenimiento-list">
+    <section id="mantenimientos" className="caja-seguridad-container">
       <Container>
-
-      <FaArrowLeft size={20} /> Regresar
+      <div className="espaciotexto">
       <BotonRegresar to="/dashboard" text="Regresar"  />
-       <h2 className="credenciallisttitle">MANTENIMIENTOS</h2>
-        <Row>
+       <h2 className="caja-seguridad-title">Mantenimientos</h2>
+       <div className="caja-seguridad-grid">
           {mantenimientosOptions.map((mantenimiento) => (
-            <Col key={mantenimiento.id} xs={12} sm={6} md={4} lg={3} xl={2}>
-              <TargetaMantenimiento
-                mantenimiento={mantenimiento}
-
-                showIcons={true}
-              />
-            </Col>
+            <div key={mantenimiento.id} className="caja-seguridad-card" 
+            onClick={() => handleImageClick(mantenimiento.route)}>
+            <div className="caja-seguridad-image-container">
+                <img
+                  src={mantenimiento.image}
+                  alt={mantenimiento.title}
+                  className="caja-seguridad-image"
+                />
+              </div>
+              <h3>{mantenimiento.title}</h3>
+              <p className="card-seguridad-description">{mantenimiento.description}</p>
+            </div>
           ))}
-        </Row>
-
-        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-          <div style={{ backgroundColor: "#e3f2fd", borderRadius: "10px", padding: "20px" }}>
-            <Modal.Header closeButton>
-              <Modal.Title>Detalles del Mantenimiento</Modal.Title>
-            </Modal.Header>
-            <Modal.Body className="text-center">
-              {selectedMantenimiento && (
-                <>
-                  <img
-                    src={selectedMantenimiento.image}
-                    alt={selectedMantenimiento.title}
-                    className="shadow-sm"
-                    style={{
-                      width: "150px",
-                      height: "150px",
-                      objectFit: "cover",
-                      borderRadius: "50%",
-                      border: "4px solid #007bff",
-                      padding: "5px",
-                    }}
-                  />
-                  <h3 style={{ color: "#1f2e54", fontWeight: "bold", marginTop: "15px" }}>
-                    {selectedMantenimiento.title}
-                  </h3>
-                  <p style={{ color: "#6c757d", fontSize: "1rem" }}>
-                    {selectedMantenimiento.description}
-                  </p>
-                </>
-              )}
-            </Modal.Body>
-            <Modal.Footer style={{ justifyContent: "center" }}>
-              <Button variant="outline-secondary" onClick={() => setShowModal(false)}>
-                Cerrar
-              </Button>
-            </Modal.Footer>
-          </div>
-        </Modal>
+        </div>
+        </div>
       </Container>
     </section>
   );

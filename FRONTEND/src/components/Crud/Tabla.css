@@ -1,64 +1,77 @@
 /* Estilos base para .tabla-container y sus elementos */
 .tabla-container {
   font-size: 0.8rem;
-  margin: auto;
+  margin: 0.7rem auto;
   width: 90%;
   max-width: 1100px;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
-  padding: 20px;
-  overflow-y: auto; /* Permite el scroll si el contenido excede el alto */
-  justify-content: flex-start;
-  box-shadow: 0 0 5px rgba(58, 54, 54, 0.4);
-  max-height: 800px; /* Alternativamente, un máximo */
+  background-color: #ffffff; /* Cambiado a un azul muy suave */
+  padding: 1.5rem;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
+  border-radius: 10px; /* Bordes más redondeados */
+  max-height: 1000px;
+  border: 1px solid #e0e6ed; /* Borde sutil */
 }
-
 
 .filtros {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap; /* Permite que los elementos se ajusten mejor en pantallas pequeñas */
-  gap: 10px;
-  margin-bottom: 15px;
-  
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: -0.7rem;
+  margin-bottom: 0.7rem;
+  padding: 0.8rem;
+  border-radius: 8px;
 }
 
 .filtros select,
 .filtros input {
-  padding: 5px;
-  font-size: 12px;
-  border: 1px solid #cccccc;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  border: 1px solid #d1d9e6; /* Borde más oscuro */
   border-radius: 6px;
   outline: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
   flex: 1;
-  max-width: 180px;
-}
-
-.filtros select {
-  width: 60px;
-  background-color: white;
-  color: #346397;
-}
-
-.filtros input {
-  width: 260px;
-  background-color: white;
-  color: #346397;
+  max-width: 200px;
+  background-color: #fff;
+  color: #4a5568; /* Color de texto más oscuro */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Sombra interior */
 }
 
 .filtros select:focus,
 .filtros input:focus {
-  border-color: #346397;
-  box-shadow: 0 0 5px rgba(0, 51, 102, 0.5);
+  border-color: #667eea; /* Azul más vibrante para el focus */
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .tabla-wrapper {
-  max-height: 550px;
+  max-height: 850px;
   overflow-y: auto;
-  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e0 #edf2f7; /* Colores de scrollbar más definidos */
+  border: 1px solid #e2e8f0; /* Borde para el contenedor */
+  border-radius: 8px;
+  background-color: white; /* Fondo blanco para contrastar */
+}
+
+/* Estilos para la barra de scroll */
+.tabla-wrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.tabla-wrapper::-webkit-scrollbar-track {
+  background: #edf2f7;
+  border-radius: 0 8px 8px 0;
+}
+
+.tabla-wrapper::-webkit-scrollbar-thumb {
+  background-color: #cbd5e0;
+  border-radius: 10px;
 }
 
 .tabla {
@@ -70,81 +83,105 @@
 
 .tabla th,
 .tabla td {
-  padding: 7px;
+  padding: 12px 15px;
   text-align: left;
-  border-bottom: 1px solid #dddddd;
-  color: #333333;
-  border-right: 1px solid #dddddd;
+  border-bottom: 1px solid #e2e8f0; /* Borde más suave */
+  color: #2d3748; /* Texto más oscuro */
 }
 
 .tabla th {
-  background-color: #426a99;
-  color: white;
-  font-weight: normal;
+  background-color: #e6e9ee; /* Fondo más oscuro para headers */
+  color: #2d3748; /* Texto más oscuro */
+  font-weight: 600;
   position: sticky;
   top: 0;
+  border-bottom: 2px solid #cbd5e0;
+  text-transform: uppercase; /* Headers en mayúsculas */
+  font-size: 0.72rem;
+  letter-spacing: 0.5px;
 }
 
+.tabla tr:hover {
+  background-color: #f7fafc; /* Color de hover más suave */
+}
+
+.tabla tr:nth-child(even) {
+  background-color: #f8fafc; /* Color alterno muy sutil */
+}
 
 .paginacion {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 8px;
+  margin-top: 0.7rem;
+  padding: 0.8rem;
+  border-radius: 8px;
 }
 
 .paginacion button {
-  padding: 6px 12px;
-  font-size: 13px;
-  border: 1px solid #426A99;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  border: 1px solid #cbd5e0;
   border-radius: 6px;
   background-color: white;
-  color: #1a4271;
+  color: #4a5568;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.2s ease;
+  min-width: 36px;
+  font-weight: 500;
+  margin-top: -0.2rem;
+  margin-bottom: -0.9rem;
 }
 
 .paginacion button:hover {
-  background-color: #426a99;
-  color: white;
+  background-color: #e2e8f0;
+  color: #2d3748;
+  border-color: #a0aec0;
 }
 
 .paginacion button.activo {
-  background-color: #426A99;
+  background-color: #4a5568;
   color: white;
-  border-color: #0d3f6d;
-  pointer-events: none;
+  border-color: #2d3748;
 }
-
-/* --- titulo y botones  --- */
 
 /* Contenedor del título y botones */
 .titulo-contenedor {
   display: flex;
-  justify-content: space-between; /* Pega los elementos a los extremos */
-  align-items: center; /* Centra verticalmente los elementos */
-  width: 90%; /* Mismo ancho que el contenedor de la tabla */
-  max-width: 1100px; /* Mismo ancho máximo que el contenedor de la tabla */
-  margin: 0 auto 15px; /* Centra horizontalmente y añade margen inferior */
-  padding: 0px; /* Añade un padding horizontal si es necesario */
-  padding-left: 5px;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
 }
 
 /* Estilos para el título */
 .titulo-tabla {
-  color: #5b5b5b; /* Color del texto */
-  margin: 0; /* Elimina el margen por defecto del h2 */
-  font-size: 1.5rem; /* Tamaño de fuente ajustado */
+  color: #2d3748; /* Texto más oscuro */
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700; /* Más negrita */
   display: flex;
-  align-items: center; /* Alinea el ícono y el texto verticalmente */
+  align-items: center;
 }
 
 /* Estilos para el ícono del título */
 .icono-titulo {
-  font-size: 1.2rem; /* Tamaño del ícono */
-  color: #545252; /* Color del ícono */
-  margin-right: 6px; /* Espacio entre el ícono y el texto */
+  font-size: 1.3rem;
+  color: #4a5568; /* Color más oscuro */
+  margin-right: 12px;
+}
+
+/* Efectos adicionales para mejor interactividad */
+button, select, input {
+  transition: all 0.25s ease;
+}
+
+button:active {
+  transform: scale(0.98);
 }
 
 /* Estilos para los botones de acción */
@@ -154,35 +191,121 @@
 }
 
 .btn-nuevo-registro,
-.btn-generar-reporte {
-  padding: 8px 8px;
+.btn-generar-reporte,
+.btn-permisos {
+  padding: 8px 12px; /* Aumenté un poco el padding horizontal */
   font-size: 13px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease; /* Cambiado a 'all' para animar múltiples propiedades */
   display: flex;
-  align-items: center; /* Centra el texto verticalmente dentro del botón */
-  justify-content: center; /* Centra el texto horizontalmente dentro del botón */
-  gap: 3px; /* Espacio entre el ícono y el texto */
+  align-items: center;
+  justify-content: center;
+  gap: 5px; /* Aumenté el espacio entre icono y texto */
+  color: white;
+  position: relative;
+  overflow: hidden; /* Para efectos de pseudo-elementos */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombra sutil */
+  transform: translateY(0);
 }
 
+/* Efecto de "pulsación" al hacer clic */
+.btn-nuevo-registro:active,
+.btn-generar-reporte:active,
+.btn-permisos:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Efecto de "resplandor" al hacer hover */
+.btn-nuevo-registro:hover,
+.btn-generar-reporte:hover,
+.btn-permisos:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Efecto de onda al hacer clic */
+.btn-nuevo-registro::after,
+.btn-generar-reporte::after,
+.btn-permisos::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
+}
+
+.btn-nuevo-registro:active::after,
+.btn-generar-reporte:active::after,
+.btn-permisos:active::after {
+  animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(20, 20);
+    opacity: 0;
+  }
+}
+
+/* Botón azul - con gradiente y borde interno */
 .btn-nuevo-registro {
-  background-color: #426a99;
-  color: white;
-}
-
-.btn-generar-reporte {
-  background-color: #28a745;
-  color: white;
+  background: linear-gradient(to bottom, #006688, #005577);
+  border-bottom: 2px solid #003F5E;
 }
 
 .btn-nuevo-registro:hover {
-  background-color: #2a4f7a;
+  background: linear-gradient(to bottom, #005577, #004466);
+}
+
+/* Botón vino oscuro - con efecto de profundidad */
+.btn-generar-reporte {
+  background: linear-gradient(to bottom, #a54d49, #994642);
+  border-bottom: 2px solid #7f3a37;
 }
 
 .btn-generar-reporte:hover {
-  background-color: #218838;
+  background: linear-gradient(to bottom, #994642, #883d3a);
+}
+
+/* Botón verde oliva - con efecto de brillo */
+.btn-permisos {
+  background: linear-gradient(to bottom, #a1a34a, #969942);
+  border-bottom: 2px solid #7f8138;
+  position: relative;
+}
+
+.btn-permisos:hover {
+  background: linear-gradient(to bottom, #969942, #868838);
+}
+.btn-nuevo-registro:active,
+.btn-generar-reporte:active,
+.btn-permisos:active {
+  animation: jump 0.4s ease;
+}
+
+@keyframes jump {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+
+/* Íconos */
+.btn-nuevo-registro svg,
+.btn-generar-reporte svg,
+.btn-permisos svg {
+  font-size: 13px;
 }
 
 
@@ -265,6 +388,13 @@
     min-width: 600px; /* Ancho mínimo para forzar el scroll horizontal */
   }
 
+  .titulo-tabla {
+    font-size: 1.3rem;
+  }
+
+  .tabla th {
+    font-size: 0.65rem;
+  }
   /* Habilitar scroll horizontal en el contenedor de la tabla */
   .tabla-wrapper {
     overflow-x: auto; /* Scroll horizontal */
@@ -297,50 +427,84 @@
 
 
 /* Móviles (menos de 768px) */
-@media (max-width: 768px) {
+@media (max-width: 800px) {
   .tabla-wrapper {
     max-height: 500px !important; /* Ajusta la altura máxima según lo necesites */
     height: auto;       /* Permite que el contenido se ajuste automáticamente */
   }
   .tabla-container {
     width: 90%;
-    padding: 10px;
+    padding: 20px;
     font-size: 0.75rem;
   }
 
-  .filtros { /* Permite que los elementos se ajusten mejor en pantallas pequeñas */
-    gap: 10px;
-    margin-bottom: 15px;
-  }
-
-  .filtros select,
-  .filtros input {
-    max-width: 180px;
-  }
-
-  .tabla-wrapper {
-    max-height: 250px;
-  }
-
-  .tabla th,
-  .tabla td {
-    padding: 5px;
-  }
-
   .paginacion button {
-    padding: 5px 10px;
+    padding: 6px 12px;
     font-size: 12px;
-  }
-  .tabla {
-    font-size: 0.65rem; /* Fuente más pequeña */
   }
 }
 
+/* Scroll horizontal específico para 783px */
+@media (max-width: 784px) {
+  .tabla-wrapper {
+    overflow-x: auto; /* Habilita scroll horizontal */
+    max-height: 500px;
+    -webkit-overflow-scrolling: touch; /* Mejor comportamiento en dispositivos táctiles */
+  }
+  
+  .tabla {
+    min-width: 750px; /* Fuerza el scroll horizontal */
+    width: 100%;
+  }
+  
+  /* Estilos para la barra de scroll horizontal */
+  .tabla-wrapper::-webkit-scrollbar {
+    height: 10px; /* Más gruesa para mejor usabilidad */
+  }
+  
+  .tabla-wrapper::-webkit-scrollbar-thumb {
+    background-color: #a0aec0;
+    border-radius: 5px;
+  }
+  
+  .tabla-wrapper::-webkit-scrollbar-track {
+    background: #edf2f7;
+    border-radius: 5px;
+  }
+  
+}
 
 @media (max-width: 730px) {
   .estado-activo {
     font-size: 9px !important; /* 🔹 Reducir la fuente */
     padding: 1px 6px !important; /* 🔹 Ajustar el padding */
+  }
+}
+
+/* Ajuste para pantallas menores a 670px */
+@media (max-width: 620px) {
+  .titulo-contenedor {
+    flex-direction: column; /* Apila verticalmente */
+    align-items: center; /* Alinea a la izquierda */
+    gap: 15px; /* Espacio entre título y botones */
+    padding: 0.8rem;
+  }
+
+  .botones-accion {
+    width: 65%; /* Ocupa todo el ancho */
+    justify-content: center; /* Alinea los botones a la izquierda */
+    padding-top: 5px;
+    
+  }
+
+  /* Ajustes adicionales para los botones en móvil */
+  .btn-nuevo-registro,
+  .btn-generar-reporte,
+  .btn-permisos {
+    font-size: 12px;
+    padding: 10px 8px;
+    flex-grow: 1; /* Hace que los botones ocupen espacio disponible */
+    text-align: center;
   }
 }
 
@@ -351,10 +515,7 @@
 }
 
 @media (max-width: 646px) {
-  .tabla-wrapper {
-    max-height: 500px !important; /* Ajusta la altura máxima según lo necesites */
-    height: auto;       /* Permite que el contenido se ajuste automáticamente */
-  }
+ 
   /* Ajuste del título */
 .titulo-tabla {
   font-size: 1.2rem; /* Reducido de 1.5rem a 1rem */
@@ -362,63 +523,32 @@
 
 /* Ajuste del tamaño de los botones */
 .btn-nuevo-registro,
-.btn-generar-reporte {
+.btn-generar-reporte,
+.btn-permisos {
   font-size: 12.5px; /* Reducido */
   padding: 6px 8px; /* Botones más pequeños */
 }
 
-/* Ajuste del tamaño de la fuente de la tabla */
-.tabla {
-  font-size: 0.68rem; /* Fuente más pequeña */
-}
 
 .tabla th, .tabla td {
-  padding: 5px; /* Ajuste del espaciado */
+  padding: 10px; /* Ajuste del espaciado */
 }
 
-/* Ajuste del tamaño de los botones de la paginación */
-.paginacion button {
-  font-size: 11px;
-  padding: 5px 10px;
+.tabla th {
+  font-size: 0.6rem;
 }
 
-/* Ajuste del tamaño de los botones de actualizar/eliminar */
-.btn-actualizar, .btn-eliminar {
-  width: 30px;  /* Más pequeños */
-  height: 30px;
-  font-size: 12px;
-  padding: 4px;
-}
-
-.filtros { /* Permite que los elementos se ajusten mejor en pantallas pequeñas */
-  gap: 10px;
-  margin-bottom: 15px;
-}
 
 .filtros select,
 .filtros input {
-  max-width: 160px;
-  padding: 4px;
-  font-size: 10px;
+  max-width: 170px;
+  padding: 8px;
+  font-size: 12px;
 }
 
 .filtros select {
   width: 50px;
-  background-color: white;
-  color: #346397;
 }
-}
-
-@media (max-width: 676px) {
-  .estado-activo {
-    font-size: 8px !important; /* 🔹 Reducir la fuente */
-  }
-}
-
-@media (max-width: 610px) {
-  .estado-activo {
-    font-size: 7.5px !important; /* 🔹 Reducir la fuente */
-  }
 }
 
 @media (max-width: 590px) {
@@ -429,9 +559,11 @@
   /* Ajuste del tamaño de la fuente de la tabla */
   .tabla {
     font-size: 0.65rem; /* Fuente más pequeña */
-    min-width: 600px; /* Ancho mínimo para forzar el scroll horizontal */
+    min-width: 700px; /* Ancho mínimo para forzar el scroll horizontal */
   }
-
+  .tabla th {
+    font-size: 0.55rem;
+  }
   /* Habilitar scroll horizontal en el contenedor de la tabla */
   .tabla-wrapper {
     overflow-x: auto; /* Scroll horizontal */
@@ -458,6 +590,12 @@
   .tabla-wrapper::-webkit-scrollbar-thumb:hover {
     background: #555; /* Color del thumb al pasar el mouse */
   }
+
+.filtros select,
+.filtros input {
+  padding: 7px;
+  max-width: 160px;
+}
 }
 
 @media (max-width: 540px) {
@@ -470,8 +608,9 @@
 }
 
 .btn-nuevo-registro,
-.btn-generar-reporte{
-  font-size: 12px;
+.btn-generar-reporte,
+.btn-permisos{
+  font-size: 13px;
   padding: 5px 6px;
 }
  
@@ -486,25 +625,22 @@
 
   .filtros select,
   .filtros input {
-    padding: 3px;
-    max-width: 120px;
+    padding: 5px;
+    max-width: 150px;
   }
 
-  .filtros select{
-    width: 50px;
-  }
   .tabla-wrapper {
      max-height: 200px;
   }
 
   .tabla th,
   .tabla td {
-    padding: 4px;
+    padding: 8px;
   }
 
   .paginacion button {
-    padding: 3px 7px;
-    font-size: 10px;
+    padding: 5px 10px;
+    font-size: 12px;
   }
 }
 
@@ -514,22 +650,11 @@
     height: auto;       /* Permite que el contenido se ajuste automáticamente */
   }
   .titulo-tabla{
-    font-size: 0.9rem;
-  }
-  
-  .btn-nuevo-registro,
-  .btn-generar-reporte{
-    font-size: 11px;
-    padding: 4px 5px;
-  }
-  .titulo-contenedor {
-    flex-direction: column; /* Apila los elementos en columna */
-    align-items: center; /* Alinea el título a la izquierda */
-    gap: 10px; /* Espacio entre el título y los botones */
+    font-size: 1rem;
   }
 
   .botones-accion {
-    width: 100%; /* Ocupar todo el ancho disponible */
+    width: 80%; /* Ocupar todo el ancho disponible */
     justify-content: center; /* Alinear botones a la izquierda */
   }
 }
@@ -584,24 +709,16 @@
   border-color: #9c780e;
 }
 
+.btn-actualizar:active, 
+.btn-eliminar:active, 
+.btn-detalles:active {
+  animation: pulse 0.3s ease;
+}
 
-
-/* Ajustar el tamaño en pantallas menores a 647px */
-@media (max-width: 647px) {
-  .btn-actualizar, .btn-eliminar, .btn-detalles {
-    width: 28px;  /* Reducir ancho */
-    height: 28px; /* Reducir altura */
-    padding: 2px 4px; /* Reducir padding */
-    font-size: 11px; /* Reducir tamaño de fuente */
-  }
-
-  .btn-actualizar svg, 
-  .btn-eliminar svg,
-  .btn-detalles svg {
-    font-size: 11px;
-    width: 11px;
-    height: 11px;
-  }
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
 }
 
 /* x dentro del input del buscador*/
@@ -684,3 +801,5 @@
   color: #4b5563;
   border-color: #e5e7eb;
 }
+
+

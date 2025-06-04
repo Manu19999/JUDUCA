@@ -89,14 +89,7 @@ const NavDashboard = () => {
 
         {/* Menú de navegación */}
         <nav className={`custom-menu ${menuOpen ? "show" : ""}`}>
-          {/* Enlace de inicio */}
-          <a
-            
-            className="navlinkcustom"
-            onClick={handleInicioClick} // Redirige a /dashboard
-          >
-            Inicio
-          </a>
+         
         
          {/*  <a
             

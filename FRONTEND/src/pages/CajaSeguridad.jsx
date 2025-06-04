@@ -1,15 +1,14 @@
 import React from "react";
-import { Container, Button } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
 
 import Nav from '../components/Dashboard/navDashboard';
-
-import UsuariosImage from "../../src/assets/usuarios.jpg";
-import RolesImage from "../../src/assets/roles.jpg";
-import UniversidadesImage from "../../src/assets/Universidad.jpg";
-import ParametrosImage from "../../src/assets/parametros.jpg";
-import BitacoraImage from "../../src/assets/bitacora.jpg";
+import UsuariosImage from "../../src/assets/Seguridad/usuarios.jpg";
+import RolesImage from "../../src/assets/Seguridad/roles.jpg";
+import UniversidadesImage from "../../src/assets/Seguridad/Universidad.jpg";
+import ParametrosImage from "../../src/assets/Seguridad/parametros.jpg";
+import BitacoraImage from "../../src/assets/Seguridad/bitacora.jpg";
+import ObjetosImage from "../../src/assets/Seguridad/objetos.jpg";
 import BotonRegresar from "../components/Dashboard/BotonRegresar";
 import "../styles/Inicio/Caja-seguridad.css";
 
@@ -47,10 +46,17 @@ const CajaSeguridad = () => {
     },
     {
       id: 5,
-      title: "Bitácora",
+      title: "Bitácoras",
       image: BitacoraImage,
       description: "Registro y auditoría de acciones.",
-      route: "/bitacora",
+      route: "/bitacoras",
+    },
+    {
+      id: 6,
+      title: "Objetos",
+      image: ObjetosImage,
+      description: "Gestión de Objetos.",
+      route: "/objetos",
     },
   ];
 
@@ -59,39 +65,32 @@ const CajaSeguridad = () => {
   };
 
   return (
-
-
     <section id="caja-seguridad" className="caja-seguridad-container">
       <Container>
         <Nav />
-        {/* Botón para añadir un nuevo voucher */}
-        <div className="crud">
-
+        <div className="espaciotexto">
           <BotonRegresar to="/dashboard" text="Regresar" />
-          
-          <h2 className="caja-seguridad-title">Géstion de seguridad</h2>
+          <h2 className="caja-seguridad-title">Gestión de seguridad</h2>
           <div className="caja-seguridad-grid">
-
             {items.map((item) => (
-              <div key={item.id} className="caja-seguridad-card">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="caja-seguridad-image"
-                  onClick={() => handleImageClick(item.route)}
-                />
+              <div key={item.id} className="caja-seguridad-card" 
+              onClick={() => handleImageClick(item.route)}>
+                <div className="caja-seguridad-image-container">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="caja-seguridad-image"
+                  />
+                </div>
                 <h3>{item.title}</h3>
-                <p className="eventdescription">{item.description}</p>
+                <p className="card-seguridad-description">{item.description}</p>
               </div>
             ))}
           </div>
         </div>
       </Container>
-
     </section>
-
   );
-
 };
 
 export default CajaSeguridad;

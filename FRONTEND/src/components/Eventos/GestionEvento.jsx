@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Container, Button } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
-import Slider from "react-slick";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
-import EventoCaracteristica from "./EventoCaracteristica";
 
 import EventImage from "../../assets/Eventos/Fichas.jpg";
 import EventImage3 from "../../assets/FichaInscripcion.jpg";
@@ -12,15 +9,12 @@ import EventImage4 from "../../assets/FichaMedica.jpg";
 import EventImage5 from "../../assets/CrearEquipo.jpg";
 import EventImage6 from "../../assets/Credencial.jpg";
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import "../../styles/Credencial/credencial.css";
+import "../../styles/Inicio/Caja-seguridad.css"; // Importar los mismos estilos
 
 const GestionEvento = () => {
   const navigate = useNavigate();
-  const [evento, setEvento] = useState(null); // Estado para el evento seleccionado
+  const [evento, setEvento] = useState(null);
 
-  // 🔹 Cargar el evento seleccionado desde localStorage
   useEffect(() => {
     const eventoGuardado = localStorage.getItem("eventoActivo");
     if (eventoGuardado) {
@@ -28,96 +22,77 @@ const GestionEvento = () => {
     }
   }, []);
 
-  const upcomingEvents = [
+  const features = [
     {
       id: 1,
       title: "Configurador de Fichas",
       image: EventImage,
       description: "Creación y gestión de fichas.",
-      size: "medium",
+      route: "/lista-fichas"
     },
     {
       id: 2,
       title: "Registro",
       image: EventImage3,
       description: "Fichas de registro e inscripciones.",
-      size: "medium",
+      route: "/llenar-fichas"
     },
     {
       id: 3,
       title: "Vouchers",
       image: EventImage4,
       description: "Control de tickets y vouchers.",
-      size: "medium",
+      route: "/vouchers"
     },
     {
       id: 4,
       title: "Diseñador de Credenciales",
       image: EventImage6,
       description: "Asignar credenciales.",
-      size: "medium",
+      route: "/credencialView"
     },
     {
       id: 5,
       title: "Juegos",
       image: EventImage5,
       description: "Configurador de equipos.",
-      size: "medium",
-    },
+      route: "/JuegoView"
+    }
   ];
 
-  const handleImageClick = (id) => {
-    const routes = {
-      1: "/lista-fichas",
-      2: "/llenar-fichas",
-      3: "/vouchers",
-      4: "/credencialView",
-      5: "/JuegoView",
-    };
-    navigate(routes[id] || "/gestion-evento");
-  };
-
-  // Configuración del carrusel
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 300,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2500,
-    responsive: [
-      { breakpoint: 768, settings: { slidesToShow: 3 } },
-      { breakpoint: 480, settings: { slidesToShow: 2 } },
-    ],
+  const handleImageClick = (route) => {
+    navigate(route);
   };
 
   return (
-
-    <section id="events" className="eventlist">
-
+    <section id="caja-seguridad" className="caja-seguridad-container">
       <Container>
-        <BotonRegresar to="/eventos" text="Regresar" />
-
-
-        {/* 🔹 Mostrar el nombre del evento seleccionado */}
-        <div className="credenciallisttitle text-center mt-3" style={{ paddingTop: "30px" }}>
-          <h2>
-            {evento ? `EVENTO SELECCIONADO : ${evento.title}` : "Cargando evento..."}
+        <div className="espaciotexto">
+          <BotonRegresar to="/eventos" text="Regresar" />
+          <h2 className="caja-seguridad-title">
+            {evento ? `Evento Seleccionado: ${evento.title}` : "Cargando evento..."}
           </h2>
-        </div >
 
-
-        <Slider {...settings}>
-          {upcomingEvents.map((event) => (
-            <div key={event.id}>
-              <EventoCaracteristica
-                event={event}
-                onImageClick={() => handleImageClick(event.id)}
-              />
-            </div>
-          ))}
-        </Slider>
+          <div className="caja-seguridad-grid">
+            {features.map((feature) => (
+              <div 
+                key={feature.id} 
+                className="caja-seguridad-card"
+                onClick={() => handleImageClick(feature.route)}
+              >
+                <div className="caja-seguridad-image-container">
+                  <img
+                    src={feature.image}
+                    alt={feature.title}
+                    className="caja-seguridad-image"
+                  />
+                </div>
+                <h3>{feature.title}</h3>
+                <p className="card-seguridad-description">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </Container>
     </section>
   );

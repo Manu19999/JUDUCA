@@ -4,7 +4,7 @@ import checkAuth from "../../../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get('/', obtenerUniversidades);
+router.get('/', checkAuth,obtenerUniversidades);
 router.post('/', checkAuth, insertarUniversidad);// Insertar una nueva universidad
 router.put('/:idUniversidad', checkAuth, actualizarUniversidad);// Actualizar una universidad por su ID (requiere autenticación)
 

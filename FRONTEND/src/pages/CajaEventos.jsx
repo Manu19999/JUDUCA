@@ -35,7 +35,14 @@ const CajaEventos = () => {
   useEffect(() => {
     const fetchEventos = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/credencial/");
+        const response = await fetch("http://localhost:4000/api/credencial/", {
+          method: "GET",
+          credentials: 'include',
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+        
         const data = await response.json();
 
         console.log("Datos de eventos recibidos:", data); // 🔹 Verifica los datos en la consola
@@ -75,11 +82,8 @@ const CajaEventos = () => {
       <Container>
         <Nav />
 
-        <div className="crud">
-
+        <div className="espaciotexto">
           <BotonRegresar to="/dashboard" text="Regresar" />
-          
-
           <h2 className="caja-seguridad-title">Gestión de Eventos</h2>
 
           <div className="eventtabs">
@@ -115,14 +119,16 @@ const CajaEventos = () => {
               ) : (
                 eventos.map((evento) => (
                   <div key={evento.id} className="caja-seguridad-card">
-                    <img
-                      src={evento.image}
-                      alt={evento.title}
-                      className="caja-seguridad-image"
-                      onClick={() => seleccionarEvento(evento)}
-                    />
+                    <div className="caja-seguridad-image-container">
+                      <img
+                        src={evento.image}
+                        alt={evento.title}
+                        className="caja-seguridad-image"
+                        onClick={() => seleccionarEvento(evento)}
+                      />
+                    </div>
                     <h3>{evento.title}</h3>
-                    <p className="eventdescription">{evento.description}</p>
+                    <p className="card-seguridad-description">{evento.description}</p>
                     <div className="eventicons">
                       <FaEye className="eventicon" />
                       <FaCog className="eventicon" />

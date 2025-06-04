@@ -5,7 +5,7 @@ import BotonesAccionFila from "./BotonesAccionFila"; // Importa el componente de
 import Paginacion from './Paginacion';
 import Filtros from './Filtros';
 
-const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarReporte, onEdit, onDelete, onDetails }) => {
+const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarReporte, onPermisos, onEdit, onDelete, onDetails }) => {
   const [paginaActual, setPaginaActual] = useState(1);
   const [registrosPorPagina, setRegistrosPorPagina] = useState(8);
   const [busqueda, setBusqueda] = useState('');
@@ -15,6 +15,8 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
   useEffect(() => {
     const datosFiltrados = datos.filter((fila) =>
       Object.values(fila).some((valor) =>
+        valor !== null && 
+        valor !== undefined &&
         valor.toString().toLowerCase().includes(busqueda.toLowerCase())
       )
     );
@@ -47,10 +49,13 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
       {/* Título y botones de acción */}
       <div className="titulo-contenedor">
         <h2 className="titulo-tabla">{icono} {titulo}</h2>
-        <BotonesAccion
-          onNuevoRegistro={onNuevoRegistro}
-          onGenerarReporte={onGenerarReporte}
-        />
+        {(onNuevoRegistro || onGenerarReporte) && (
+          <BotonesAccion
+            onNuevoRegistro={onNuevoRegistro}
+            onGenerarReporte={onGenerarReporte}
+            onPermisos={onPermisos}
+          />
+        )}
       </div>
 
       {/* Contenedor de la tabla */}
