@@ -121,11 +121,13 @@ function Eventos() {
                     const eventoData = {
                         nombre: values.nombre,
                         descripcion: values.descripcion,
+                        ubicacion: values.ubicacion,
                         fechaInicio: values.fechaInicio ? values.fechaInicio.format('YYYY-MM-DD') : null,
                         fechaFin: values.fechaFin ? values.fechaFin.format('YYYY-MM-DD') : null,
                         activo: values.activo,
-                        idObjeto: 3 // ID del objeto para auditoría si aplica
+                        idObjeto: 1 // ID del objeto para auditoría si aplica
                     };
+                    console.log(eventoData)
 
                     const response = await fetch("http://localhost:4000/api/eventos/insEventos", {
                         method: "POST",
@@ -263,7 +265,7 @@ function Eventos() {
                                     />
                                 </Col>
 
-                                 <Col span={11}>
+                                <Col span={11}>
                                     <ValidatedInput
                                         label="Ubicacion del evento"
                                         name="ubicacion"
