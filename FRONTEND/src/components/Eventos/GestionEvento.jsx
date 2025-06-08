@@ -15,12 +15,17 @@ const GestionEvento = () => {
   const navigate = useNavigate();
   const [evento, setEvento] = useState(null);
 
-  useEffect(() => {
-    const eventoGuardado = localStorage.getItem("eventoActivo");
-    if (eventoGuardado) {
-      setEvento(JSON.parse(eventoGuardado));
-    }
-  }, []);
+useEffect(() => {
+  const eventoGuardado = localStorage.getItem("eventoActivo");
+  if (eventoGuardado) {
+    const evento = JSON.parse(eventoGuardado);
+    // Normalizar el objeto para tener siempre idEvento
+    const eventoNormalizado = evento.id && !evento.idEvento ? 
+      {...evento, idEvento: evento.id} : 
+      evento;
+    setEvento(eventoNormalizado);
+  }
+}, []);
 
   const features = [
     {
