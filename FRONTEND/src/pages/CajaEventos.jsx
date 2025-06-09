@@ -12,228 +12,289 @@ import ModalNuevo from "../components/Crud/Modal/ModalNuevo";
 import ModalEditar from "../components/Crud/Modal/ModalEditar";
 import ModalDetalles from "../components/Crud/Modal/ModalDetalles";
 import { mostrarMensajeExito } from "../components/Crud/MensajeExito";
-import { mostrarMensajeError } from "../components/Crud/MensajeError"; // Importar el componente de mensaje de error
+import { mostrarMensajeError } from "../components/Crud/MensajeError";
 import ValidatedInput from "../utils/ValidatedInput";
 import SubirImagen from '../components/SubirImagen';
-const { Option } = Select;
-const { TabPane } = Tabs;
 import BotonRegresar from "../components/Dashboard/BotonRegresar";
 
+const { Option } = Select;
+const { TabPane } = Tabs;
+
+// Constantes para URLs de API
+const API_URL = "http://localhost:4000/api";
+const EVENTOS_ENDPOINT = `${API_URL}/eventos/eventosActivos`;
+const INSERTAR_EVENTO_ENDPOINT = `${API_URL}/eventos/insEventos`;
+const ACTUALIZAR_EVENTO_ENDPOINT = `${API_URL}/eventos/updEventos`;
 
 const CajaEventos = () => {
+  const [activo, setActivo] = useState(1);  // o null para todos
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("upcoming");
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [eventos, setEventos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // Estados para controlar la visibilidad de los modales
   const [showNuevoModal, setShowNuevoModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  // Estado para almacenar el usuario seleccionado (para editar, eliminar o ver detalles)
   const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
-  // Hooks de Ant Design para gestionar formularios
-  const [formNuevo] = Form.useForm(); // Formulario para el modal de nuevo registro
-  const [formEditar] = Form.useForm(); // Formulario para el modal de edición
+  const [formNuevo] = Form.useForm();
+  const [formEditar] = Form.useForm();
 
-
+  // Función para mapear datos del evento
+  const mapearDatosEvento = (evento) => ({
+    id: evento.idEvento,
+    idEvento: evento.idEvento,
+    title: evento.nombreEvento || "Evento sin nombre",
+    image: evento.fotoEvento,
+    description: evento.descripcion || "Sin descripción",
+    ubicacion: evento.ubicacion,
+    fechaInicio: evento.fechaInicio,
+    fechaFin: evento.fechaFin,
+    activo: evento.activo,
+    route: "/gestion-evento",
+  });
 
   const fetchEventos = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/credencial/", {
+      setLoading(true);
+      let url = `${EVENTOS_ENDPOINT}`;
+      if (activo !== null && activo !== undefined) {
+        url += `/${activo}`; // pasamos 1 o 0 para activo/inactivo
+      }
+      const response = await fetch(url, {
         method: "GET",
         credentials: 'include',
-        headers: {
-          "Content-Type": "application/json",
-        }
+        headers: { "Content-Type": "application/json" }
       });
 
+      if (!response.ok) throw new Error("Error al obtener eventos");
+
       const data = await response.json();
-      console.log("Datos de eventos recibidos:", data);
 
       if (data.hasError) {
-        throw new Error(data.errors.join(", "));
+        throw new Error(data.errors?.join(", ") || "Error desconocido");
       }
 
-      const eventosConDatos = data.data.map((evento) => ({
-        id: evento.idEvento,
-        idEvento: evento.idEvento, // incluye el idEvento original por si lo necesitas más adelante
-        title: evento.nombreEvento || "Evento sin nombre",
-        image: evento.fotoEvento,
-        description: evento.descripcion || "Sin descripción",
-        ubicacion: evento.ubicacion,
-        FechaInicio: evento.fechaInicio,
-        FechaFin: evento.fechaFin,
-        Activo: evento.activo,
-        route: "/gestion-evento",
-      }));
-
-      setEventos(eventosConDatos);
+      setEventos(data.data.map(mapearDatosEvento));
     } catch (err) {
-      console.error("Error al obtener eventos:", err.message);
-      setError("Error al conectar con el servidor.");
+      console.error("Error al obtener eventos:", err);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
-  // Luego en el useEffect solo la llamas:
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    if (tab === "past") {
+      setActivo(0);  // eventos inactivos
+    } else if (tab === "upcoming") {
+      setActivo(1);  // eventos activos
+    } else {
+      setActivo(null); // si tienes otro caso, muestra todos
+    }
+  };
+
   useEffect(() => {
     fetchEventos();
-  }, []);
+  }, [activo]);
 
   useEffect(() => {
-  if (registroSeleccionado && showEditModal) {
-    formEditar.setFieldsValue({
-      nombre: registroSeleccionado.title,
-      descripcion: registroSeleccionado.description,
-      ubicacion: registroSeleccionado.ubicacion, // si tienes este campo
-      fechaInicio: registroSeleccionado.FechaInicio ? moment(registroSeleccionado.fechaInicio) : null,
-      fechaFin: registroSeleccionado.FechaFin ? moment(registroSeleccionado.fechaFin) : null,
-      activo: registroSeleccionado.Activo,
-      fotoEvento: registroSeleccionado.image || null,
-    });
-  }
-}, [registroSeleccionado, showEditModal]);
+    if (registroSeleccionado && showEditModal) {
+      formEditar.setFieldsValue({
+        nombre: registroSeleccionado.title,
+        descripcion: registroSeleccionado.description,
+        ubicacion: registroSeleccionado.ubicacion,
+        fechaInicio: registroSeleccionado.fechaInicio ? moment(registroSeleccionado.fechaInicio) : null,
+        fechaFin: registroSeleccionado.fechaFin ? moment(registroSeleccionado.fechaFin) : null,
+        activo: registroSeleccionado.activo,
+        fotoEvento: registroSeleccionado.image || null,
+      });
+    }
+  }, [registroSeleccionado, showEditModal]);
 
   const seleccionarEvento = (evento) => {
-    localStorage.setItem("eventoActivo", JSON.stringify(evento)); // Guardar evento en localStorage
+    localStorage.setItem("eventoActivo", JSON.stringify(evento));
     navigate("/gestion-evento");
   };
 
+  const handleNuevoRegistro = () => setShowNuevoModal(true);
 
-  // Abrir modal de nuevo registro
-  const handleNuevoRegistro = () => {
-    setShowNuevoModal(true);
-  };
-
-  // Abrir modal de edición
   const handleEdit = (id) => {
     const registro = eventos.find((d) => d.id === id);
-    setRegistroSeleccionado({
-      ...registro
-    });
+    setRegistroSeleccionado({ ...registro });
     setShowEditModal(true);
   };
 
-  // Abrir modal de detalles
   const handleDetails = (id) => {
     const registro = eventos.find((d) => d.id === id);
     setRegistroSeleccionado(registro);
     setShowDetailsModal(true);
   };
 
-  // Cerrar el modal de edición y reiniciar el formulario
   const handleCerrarEditModal = () => {
     setShowEditModal(false);
-    setRegistroSeleccionado(null); // Limpiar el registro seleccionado
-    formEditar.resetFields(); // Reiniciar el formulario
+    setRegistroSeleccionado(null);
+    formEditar.resetFields();
   };
 
   const handleCerrarNuevoModal = () => {
     setShowNuevoModal(false);
-    formNuevo.resetFields(); // Esto limpiará todos los campos del formulario
+    formNuevo.resetFields();
   };
 
+  const handleGuardarEvento = async (values, esEdicion = false) => {
+    try {
+      const eventoData = {
+        nombre: values.nombre,
+        descripcion: values.descripcion,
+        ubicacion: values.ubicacion,
+        fechaInicio: values.fechaInicio?.format('YYYY-MM-DD') || null,
+        fechaFin: values.fechaFin?.format('YYYY-MM-DD') || null,
+        activo: esEdicion ? values.activo : 1,
+        fotoEvento: values.fotoEvento || null,
+        idObjeto: 1
+      };
 
+      if (esEdicion) {
+        eventoData.idEvento = registroSeleccionado.idEvento;
+      }
 
-  // Guardar nuevo registro de usuario
-  const handleGuardarNuevo = async () => {
-    formNuevo.validateFields()
-      .then(async (values) => {
-        try {
-          // Preparar los datos del evento
-          const eventoData = {
-            nombre: values.nombre,
-            descripcion: values.descripcion,
-            ubicacion: values.ubicacion,
-            fechaInicio: values.fechaInicio ? values.fechaInicio.format('YYYY-MM-DD') : null,
-            fechaFin: values.fechaFin ? values.fechaFin.format('YYYY-MM-DD') : null,
-            activo: 1,
-            fotoEvento: values.fotoEvento || null,
-            idObjeto: 1 // ID del objeto para auditoría si aplica
-          };
-          console.log(eventoData)
+      const endpoint = esEdicion ? ACTUALIZAR_EVENTO_ENDPOINT : INSERTAR_EVENTO_ENDPOINT;
+      const method = esEdicion ? "PUT" : "POST";
 
-          const response = await fetch("http://localhost:4000/api/eventos/insEventos", {
-            method: "POST",
-            credentials: 'include',
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(eventoData),
-          });
-
-          const data = await response.json();
-
-          if (!response.ok) {
-            throw new Error(data.errors?.[0] || "Error al registrar el evento");
-          }
-
-          fetchEventos();
-          setShowNuevoModal(false);
-          formNuevo.resetFields();
-          mostrarMensajeExito("El evento se ha registrado correctamente.");
-        } catch (error) {
-          console.error("Error:", error);
-          mostrarMensajeError(error.message);
-        }
-      })
-      .catch((error) => {
-        console.error("Error al validar el formulario:", error);
+      const response = await fetch(endpoint, {
+        method,
+        credentials: 'include',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(eventoData),
       });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.errors?.[0] || `Error al ${esEdicion ? 'actualizar' : 'registrar'} el evento`);
+      }
+
+      fetchEventos();
+      esEdicion ? setShowEditModal(false) : setShowNuevoModal(false);
+      formEditar.resetFields();
+      formNuevo.resetFields();
+      mostrarMensajeExito(`El evento se ha ${esEdicion ? 'actualizado' : 'registrado'} correctamente.`);
+    } catch (error) {
+      console.error("Error:", error);
+      mostrarMensajeError(error.message);
+    }
+  };
+
+  const handleGuardarNuevo = async () => {
+    try {
+      const values = await formNuevo.validateFields();
+      await handleGuardarEvento(values, false);
+    } catch (error) {
+      console.error("Error al validar el formulario:", error);
+    }
   };
 
   const handleGuardarEdit = async () => {
-    formEditar.validateFields()
-      .then(async (values) => {
-        try {
-          const eventoData = {
-            idEvento: registroSeleccionado.idEvento, // Asegúrate que este campo esté presente
-            nombre: values.nombre,
-            descripcion: values.descripcion,
-            ubicacion: values.ubicacion,
-            fechaInicio: values.fechaInicio ? values.fechaInicio.format('YYYY-MM-DD') : null,
-            fechaFin: values.fechaFin ? values.fechaFin.format('YYYY-MM-DD') : null,
-            activo: values.activo, // O podrías permitir editar este campo también si es necesario
-            fotoEvento: values.fotoEvento || null,
-            idObjeto: 1 // El mismo ID del objeto para auditoría
-          };
-
-          const response = await fetch("http://localhost:4000/api/eventos/updEventos", {
-            method: "PUT",
-            credentials: 'include',
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(eventoData),
-          });
-
-          const data = await response.json();
-
-          if (!response.ok) {
-            throw new Error(data.errors?.[0] || "Error al actualizar el evento");
-          }
-
-          fetchEventos(); // Recarga la lista de eventos
-          setShowEditModal(false); // Cierra el modal
-          formEditar.resetFields(); // Limpia el formulario
-          mostrarMensajeExito("El evento se ha actualizado correctamente.");
-        } catch (error) {
-          console.error("Error:", error);
-          mostrarMensajeError(error.message);
-        }
-      })
-      .catch((error) => {
-        console.error("Error al validar el formulario de edición:", error);
-      });
+    try {
+      const values = await formEditar.validateFields();
+      await handleGuardarEvento(values, true);
+    } catch (error) {
+      console.error("Error al validar el formulario de edición:", error);
+    }
   };
 
-  const handleMantenimientoEvento = () => {
-    navigate("/MantenimientoEventos", {
-    });
-  };
+  const renderFormularioEvento = (form, esEdicion = false) => (
+    <Form layout="vertical" form={form}>
+      <Tabs defaultActiveKey="1">
+        <TabPane tab="Datos del Evento" key="1">
+          <Row gutter={40}>
+            <Col span={13}>
+              <ValidatedInput
+                label="Nombre del evento"
+                name="nombre"
+                placeholder="Ingresa el nombre del evento"
+                rules={[{ required: true, message: "El nombre del evento es obligatorio" }]}
+                allowSpecialChars={true}
+                maxLength={100}
+              />
+            </Col>
+            <Col span={11}>
+              <ValidatedInput
+                label="Ubicación del evento"
+                name="ubicacion"
+                placeholder="Ingresa la ubicación"
+                rules={[{ required: true, message: "La ubicación es obligatoria" }]}
+                allowSpecialChars={true}
+                maxLength={100}
+              />
+            </Col>
+          </Row>
+
+          <Row gutter={40}>
+            <Col span={24}>
+              <ValidatedInput
+                label="Descripción del evento"
+                name="descripcion"
+                placeholder="Ingresa la descripción"
+                rules={[{ required: true, message: "La descripción es obligatoria" }]}
+                allowSpecialChars={true}
+                maxLength={500}
+                textarea
+              />
+            </Col>
+          </Row>
+
+          <Row gutter={40}>
+            <Col span={12}>
+              <Form.Item
+                label="Fecha de Inicio"
+                name="fechaInicio"
+                rules={[{ required: true, message: "La fecha de inicio es obligatoria" }]}
+              >
+                <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Fecha Final"
+                name="fechaFin"
+                rules={[{ required: true, message: "La fecha final es obligatoria" }]}
+              >
+                <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={40}>
+            <Col span={10}>
+              <Form.Item label="Imagen del Evento" name="fotoEvento">
+                <SubirImagen
+                  onImagenSubida={(url) => form.setFieldsValue({ fotoEvento: url })}
+                  imagenActual={esEdicion ? registroSeleccionado?.image : null}
+                  form={form}
+                  key={esEdicion ? 'edit' : 'new'}
+                />
+              </Form.Item>
+            </Col>
+
+            {esEdicion && (
+              <Col span={10}>
+                <Form.Item
+                  name="activo"
+                  valuePropName="checked"
+                  rules={[{ required: true, message: "Debes seleccionar si el evento está activo" }]}
+                >
+                  <Checkbox>Evento activo</Checkbox>
+                </Form.Item>
+              </Col>
+            )}
+          </Row>
+        </TabPane>
+      </Tabs>
+    </Form>
+  );
 
   return (
     <section id="caja-seguridad" className="caja-seguridad-container">
@@ -247,22 +308,21 @@ const CajaEventos = () => {
           <div className="eventtabs">
             <button
               className={`eventtab ${activeTab === "past" ? "active" : ""}`}
-              onClick={() => setActiveTab("past")}
+              onClick={() => handleTabChange("past")}
             >
               Pasados
             </button>
             <button
               className={`eventtab ${activeTab === "upcoming" ? "active" : ""}`}
-              onClick={() => setActiveTab("upcoming")}
+              onClick={() => handleTabChange("upcoming")}
             >
               Próximos
             </button>
-            <button className="eventtab" onClick={() => handleNuevoRegistro()}>
+            <button className="eventtab" onClick={handleNuevoRegistro}>
               Nuevo
             </button>
           </div>
 
-          {/* Tarjetas de eventos */}
           {loading ? (
             <div className="text-center">
               <Spinner animation="border" variant="primary" />
@@ -289,12 +349,15 @@ const CajaEventos = () => {
                     <p className="card-seguridad-description">{evento.description}</p>
                     <div className="eventicons">
                       <FaEye
+                        style={{ marginTop: '10px', marginRight: '10px' }}
                         className="eventicon"
-                        onClick={() => handleDetails(evento.id)} // Pasas el objeto completo
+                        onClick={() => handleDetails(evento.id)}
                       />
-
-                      <FaCog className="eventicon"
-                        onClick={() => handleEdit(evento.id)} />
+                      <FaCog
+                        style={{ marginTop: '10px', marginRight: '5px' }}
+                        className="eventicon"
+                        onClick={() => handleEdit(evento.id)}
+                      />
                     </div>
                   </div>
                 ))
@@ -304,94 +367,16 @@ const CajaEventos = () => {
         </div>
 
         <ModalNuevo
-          show={showNuevoModal} // Controla la visibilidad del modal
-          onHide={handleCerrarNuevoModal} // Función para cerrar el modal
-          titulo="Nuevo Evento" // Título del modal
-          onGuardar={handleGuardarNuevo} // Función para guardar el nuevo registro
-          form={formNuevo} // Pasar el formulario al modal
-          width={800} // Ancho del modal
+          show={showNuevoModal}
+          onHide={handleCerrarNuevoModal}
+          titulo="Nuevo Evento"
+          onGuardar={handleGuardarNuevo}
+          form={formNuevo}
+          width={800}
         >
-          <Form layout="vertical" form={formNuevo}>
-            <Tabs defaultActiveKey="1">
-              <TabPane tab="Datos del Evento" key="1">
-                <Row gutter={40}>
-                  <Col span={13}>
-                    <ValidatedInput
-                      label="Nombre del evento"
-                      name="nombre"
-                      placeholder="Ingresa el nombre del evento"
-                      rules={[{ required: true, message: "El nombre del evento es obligatorio" }]}
-                      allowSpecialChars={true}  // Según si permites o no
-                      maxLength={100}
-                    />
-                  </Col>
-
-                  <Col span={11}>
-                    <ValidatedInput
-                      label="Ubicacion del evento"
-                      name="ubicacion"
-                      placeholder="Ingresa la ubicacion"
-                      rules={[{ required: true, message: "La ubicacion es obligatoria" }]}
-                      allowSpecialChars={true}
-                      maxLength={100}
-                    />
-                  </Col>
-                </Row>
-
-                <Row gutter={40}>
-                  <Col span={24}>
-                    <ValidatedInput
-                      label="Descripción del evento"
-                      name="descripcion"
-                      placeholder="Ingresa la descripción"
-                      rules={[{ required: true, message: "La descripción es obligatoria" }]}
-                      allowSpecialChars={true}
-                      maxLength={500}
-                      textarea  // Si tu ValidatedInput soporta textarea
-                    />
-                  </Col>
-                </Row>
-
-                <Row gutter={40}>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Fecha de Inicio"
-                      name="fechaInicio"
-                      rules={[{ required: true, message: "La fecha de inicio es obligatoria" }]}
-                    >
-                      <DatePicker format="YYYY-MM-DD" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Fecha Final"
-                      name="fechaFin"
-                      rules={[{ required: true, message: "La fecha final es obligatoria" }]}
-                    >
-                      <DatePicker format="YYYY-MM-DD" />
-                    </Form.Item>
-                  </Col>
-                </Row>
-
-                <Row gutter={40}>
-                  <Col span={10}>
-                    <Form.Item label="Imagen del Evento" name="fotoEvento">
-                      <SubirImagen
-                        onImagenSubida={(url) => formNuevo.setFieldsValue({ fotoEvento: url })}
-                        imagenActual={null}
-                        form={formNuevo}
-                        key={showNuevoModal ? 'open' : 'closed'}
-                      />
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </TabPane>
-            </Tabs>
-          </Form>
+          {renderFormularioEvento(formNuevo)}
         </ModalNuevo>
 
-
-        {/* Modal para Editar Registro */}
         <ModalEditar
           show={showEditModal}
           onHide={handleCerrarEditModal}
@@ -401,118 +386,19 @@ const CajaEventos = () => {
           registroSeleccionado={registroSeleccionado}
           width={800}
         >
-          <Form
-            layout="vertical"
-            form={formEditar}
-            initialValues={{ ...registroSeleccionado }}
-          >
-            <Tabs defaultActiveKey="1">
-              <TabPane tab="Datos del Evento" key="1">
-                <Row gutter={40}>
-                  <Col span={13}>
-                    <ValidatedInput
-                      label="Nombre del evento"
-                      name="nombre"
-                      placeholder="Ingresa el nombre del evento"
-                      rules={[{ required: true, message: "El nombre del evento es obligatorio" }]}
-                      allowSpecialChars={true}  // Según si permites o no
-                      maxLength={100}
-                    />
-                  </Col>
-
-                  <Col span={11}>
-                    <ValidatedInput
-                      label="Ubicacion del evento"
-                      name="ubicacion"
-                      placeholder="Ingresa la ubicacion"
-                      rules={[{ required: true, message: "La ubicacion es obligatoria" }]}
-                      allowSpecialChars={true}
-                      maxLength={100}
-                    />
-                  </Col>
-                </Row>
-
-                <Row gutter={40}>
-                  <Col span={24}>
-                    <ValidatedInput
-                      label="Descripción del evento"
-                      name="descripcion"
-                      placeholder="Ingresa la descripción"
-                      rules={[{ required: true, message: "La descripción es obligatoria" }]}
-                      allowSpecialChars={true}
-                      maxLength={500}
-                      textarea  // Si tu ValidatedInput soporta textarea
-                    />
-                  </Col>
-                </Row>
-
-                <Row gutter={40}>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Fecha de Inicio"
-                      name="fechaInicio"
-                      rules={[{ required: true, message: "La fecha de inicio es obligatoria" }]}
-                    >
-                      <DatePicker format="YYYY-MM-DD" />
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Fecha Final"
-                      name="fechaFin"
-                      rules={[{ required: true, message: "La fecha final es obligatoria" }]}
-                    >
-                      <DatePicker format="YYYY-MM-DD" />
-                    </Form.Item>
-                  </Col>
-                </Row>
-
-                <Row gutter={40}>
-                  <Col span={10}>
-                    <Form.Item label="Imagen del Evento" name="fotoEvento">
-                      <SubirImagen
-                        onImagenSubida={(url) => formEditar.setFieldsValue({ fotoEvento: url })}
-                        imagenActual={registroSeleccionado?.fotoEvento}
-                        form={formEditar}
-                      />
-                    </Form.Item>
-                  </Col>
-
-                  <Col span={10}>
-                    <Form.Item
-                      name="activo"
-                      valuePropName="checked"
-                      rules={[{ required: true, message: "Debes seleccionar si el evento está activo" }]}
-                    >
-                      <Checkbox>Evento activo</Checkbox>
-                    </Form.Item>
-                  </Col>
-
-                </Row>
-              </TabPane>
-            </Tabs>
-
-          </Form>
+          {renderFormularioEvento(formEditar, true)}
         </ModalEditar>
 
-
-        {/* Modal para detalles */}
         <ModalDetalles
           show={showDetailsModal}
           onHide={() => setShowDetailsModal(false)}
           titulo="Detalles del Evento"
           detalles={registroSeleccionado || {}}
           width={800}
-          tipo="evento" // <-- esta línea es clave
+          tipo="evento"
         />
-
       </Container>
     </section>
-
-
-
-
-
   );
 };
 

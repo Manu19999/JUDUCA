@@ -1,11 +1,10 @@
 import express from 'express';
-import { ObtenerFichas, ObtenerCamposCredencialPorFicha, ObtenerCarateristicaFicha, ObtenerParticipantesPorFicha, ObtenerCredencialesPorFicha,ObtenerDiseñoCredencialPorFicha, ObtenerUbicacionesCampos ,ObtenerEventos, InsertarCredencial, insertarCamposCredencial, eliminarCamposCredencial  } from '../controllers/credencialController.js';
+import { ObtenerFichas, ObtenerCamposCredencialPorFicha, ObtenerCarateristicaFicha, ObtenerParticipantesPorFicha, ObtenerCredencialesPorFicha,ObtenerDiseñoCredencialPorFicha, ObtenerUbicacionesCampos , InsertarCredencial, insertarCamposCredencial, eliminarCamposCredencial  } from '../controllers/credencialController.js';
 import checkAuth from "../../../middleware/authMiddleware.js";
 
 
 const router = express.Router();
 
-router.get('/',checkAuth, ObtenerEventos);
 router.get('/fichas',checkAuth, ObtenerFichas);
 router.get('/fichaCaracteristica/:idFichaRegistro', ObtenerCarateristicaFicha);
 router.get('/participantes/:idEvento/:idFichaRegistro', ObtenerParticipantesPorFicha);
