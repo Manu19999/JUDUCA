@@ -1,13 +1,13 @@
 import React from "react";
 import { Container, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"; // Importa useNavigate
-import { FaArrowLeft, FaEdit, FaTrashAlt, FaReceipt } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 import Nav from "../../components/Dashboard/navDashboard";
 
 // Importa las imágenes que usarás para las cajas
 import VoucherImage from "../../../src/assets/Voucher.jpg"; 
 import NuevoVoucherImage from "../../../src/assets/Vouchernuevo.jpg"; 
-import BotonRegresar from "../../components/Dashboard/BotonRegresar";
+
 import "../../styles/Vouchers/CajaVoucher.css";
 
 const CajaVouchers = () => {
@@ -29,13 +29,6 @@ const CajaVouchers = () => {
       description: "Crear un nuevo voucher.",
       route: "/nuevo-voucher", 
     },
-     {
-      id: 3,
-      title: "Mantenimiento Vouchers",
-      image: NuevoVoucherImage,
-      description: "tablas Mantenimiento de vouchers.",
-      route: "/manteVouchers", 
-    },
   ];
 
   // Función para manejar el clic en una imagen
@@ -47,11 +40,17 @@ const CajaVouchers = () => {
     <section id="caja-voucher" className="caja-vouchers-container">
       <Container>
         <Nav />
-        <BotonRegresar to="/gestion-evento" text="Regresar"  />
         {/* Botón para regresar al dashboard */}
         <div className="crud">
-        
-           <h2><FaReceipt className="icono-titulo" /> Gestión de Vouchers</h2>
+          <Button
+            variant="outline-warning"
+            onClick={() => navigate("/gestion-evento")} // Navega a la gestión de eventos
+            className="d-flex align-items-center gap-2"
+            style={{ marginTop: '55px' }}
+          >
+            <FaArrowLeft size={20} /> Regresar
+          </Button>
+          <h2 className="caja-vouchers-title">Gestión de Vouchers</h2>
           <div className="caja-vouchers-grid">
             {/* Mapea las cajas */}
             {items.map((item) => (
@@ -62,11 +61,9 @@ const CajaVouchers = () => {
                   className="caja-vouchers-image"
                   onClick={() => handleImageClick(item.route)} // Navega al hacer clic
                 />
-                
                 <h3>{item.title}</h3>
                 <p className="eventdescription">{item.description}</p>
               </div>
-              
             ))}
           </div>
         </div>

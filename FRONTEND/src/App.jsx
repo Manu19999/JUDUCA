@@ -55,15 +55,10 @@ const AsignacionCredencial =React.lazy(() => import("./pages/Credenciales/Asigna
 //vouchers y tickets
 const Vouchers =React.lazy(() => import("./pages/voucher"));
 const CajaVouchers =React.lazy(() => import("./pages/Vouchers/CajaVouchers"));
-const ManteVoucher =React.lazy(() => import("./pages/Vouchers/ManteVoucher"));
 const ConsumosVouchers =React.lazy(() => import("./pages/ConsumoVoucher"));
 const Comedores =React.lazy(() => import("./pages/Comedores"));
 const Tickets =React.lazy(() => import("./pages/tickets"));
 const NuevoVoucher =React.lazy(() => import("./pages/Vouchers/Nuevo-Voucher"));
-
-
-
-
 
 //Juegos
 const JuegoView =React.lazy(() => import("./pages/Juegos/juegosView"));
@@ -139,7 +134,6 @@ function App() {
         <Route path="/comedor" element={<Comedores />} />
         <Route path="/Ticket" element={<Tickets />} />
         <Route path="/nuevo-voucher" element={<NuevoVoucher />} />
-        <Route path="/manteVouchers" element={<ManteVoucher />} />
 
 
         {/* ruta para juegos */}

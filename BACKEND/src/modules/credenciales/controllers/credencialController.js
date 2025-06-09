@@ -428,36 +428,3 @@ export const InsertarCredencial = async (req, res) => {
     res.status(500).json(response.getResponse());
   }
 };
-// Obtener diseños de credenciales
-export const ObtenerDiseniosCredencialesTodas = async (req, res) => {
-  const response = new apiResponse(); // Crear instancia de apiResponse
-
-  try {
-    const pool = await conexionbd(); // Obtener la conexión a la BD
-
-    // Ejecutar el procedimiento almacenado para obtener los diseños
-    const result = await pool.request().execute("Credenciales.splDiseñosCredencialesObtenerTodos");
-
-    // Verificar si hubo un error en el procedimiento almacenado
-    if (result.recordset.length > 0 && result.recordset[0].codigoError) {
-      response.setHasError(true);
-      response.setErrors([result.recordset[0].descripcion]);
-      return res.status(400).json(response.getResponse());
-    }
-
-    // Asignar los datos de los diseños a la respuesta
-    response.setData(result.recordset);
-
-    // Enviar respuesta exitosa con los datos
-    res.status(200).json(response.getResponse());
-  } catch (error) {
-    console.error("Error en ObtenerDiseniosCredenciales:", error.message);
-
-    // Manejo de error interno del servidor
-    response.setHasError(true);
-    response.setErrors(["Error interno del servidor", error.message]);
-
-    // Enviar respuesta con error
-    res.status(500).json(response.getResponse());
-  }
-};
