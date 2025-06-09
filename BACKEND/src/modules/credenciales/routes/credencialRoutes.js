@@ -1,8 +1,6 @@
 import express from 'express';
-import { ObtenerFichas, ObtenerCamposCredencialPorFicha, ObtenerCarateristicaFicha, ObtenerParticipantesPorFicha, ObtenerCredencialesPorFicha,ObtenerDiseñoCredencialPorFicha, ObtenerUbicacionesCampos , InsertarCredencial, insertarCamposCredencial, eliminarCamposCredencial  } from '../controllers/credencialController.js';
+import { ObtenerFichas, ObtenerCamposCredencialPorFicha, ObtenerCarateristicaFicha, ObtenerParticipantesPorFicha, ObtenerCredencialesPorFicha,ObtenerDiseñoCredencialPorFicha, ObtenerUbicacionesCampos , InsertarCredencial, insertarCamposCredencial, eliminarCamposCredencial,ObtenerDiseniosCredencialesTodas  } from '../controllers/credencialController.js';
 import checkAuth from "../../../middleware/authMiddleware.js";
-
-
 const router = express.Router();
 
 router.get('/fichas',checkAuth, ObtenerFichas);
@@ -12,7 +10,7 @@ router.get('/credenciales/:idEvento/:idFichaRegistro', ObtenerCredencialesPorFic
 router.get('/ubicacionCampos', ObtenerUbicacionesCampos);
 router.get('/camposCredencial/:idFichaRegistro', ObtenerCamposCredencialPorFicha);
 router.get('/diseCredencial/:idFichaRegistro', ObtenerDiseñoCredencialPorFicha);
-
+router.get('/diseniosCredenciales', ObtenerDiseniosCredencialesTodas);
 
 router.post('/insCredencial', checkAuth, InsertarCredencial);
 

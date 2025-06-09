@@ -169,3 +169,30 @@ export const actualizarEvento = async (req, res) => {
         return res.status(500).json(response.getResponse());
     }
 };
+
+
+
+export const obtenerEventos = async (req, res) => {
+    const response = new apiResponse();
+
+    try {
+        const pool = await conexionbd();
+        const result = await pool.request().execute("Eventos.splEventosObtener");
+
+        if (result.recordset.length === 0) {
+            response.setHasError(true);
+            response.setErrors(["No se encontraron eventos"]);
+            return res.status(404).json(response.getResponse());
+        }
+
+        response.setData(result.recordset);
+        return res.status(200).json(response.getResponse());
+
+    } catch (error) {
+        console.error("Error en obtenerEventos:", error);
+
+        response.setHasError(true);
+        response.setErrors(["Error al procesar la solicitud"]);
+        return res.status(500).json(response.getResponse());
+    }
+}
