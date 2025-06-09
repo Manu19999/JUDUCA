@@ -22,11 +22,12 @@ const { TabPane } = Tabs;
 
 // Constantes para URLs de API
 const API_URL = "http://localhost:4000/api";
-const EVENTOS_ENDPOINT = `${API_URL}/credencial/`;
+const EVENTOS_ENDPOINT = `${API_URL}/eventos/eventosActivos`;
 const INSERTAR_EVENTO_ENDPOINT = `${API_URL}/eventos/insEventos`;
 const ACTUALIZAR_EVENTO_ENDPOINT = `${API_URL}/eventos/updEventos`;
 
 const CajaEventos = () => {
+  const [activo, setActivo] = useState(1);  // o null para todos
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("upcoming");
   const [eventos, setEventos] = useState([]);
@@ -55,7 +56,12 @@ const CajaEventos = () => {
 
   const fetchEventos = async () => {
     try {
-      const response = await fetch(EVENTOS_ENDPOINT, {
+      setLoading(true);
+      let url = `${EVENTOS_ENDPOINT}`;
+      if (activo !== null && activo !== undefined) {
+        url += `/${activo}`; // pasamos 1 o 0 para activo/inactivo
+      }
+      const response = await fetch(url, {
         method: "GET",
         credentials: 'include',
         headers: { "Content-Type": "application/json" }
@@ -64,7 +70,7 @@ const CajaEventos = () => {
       if (!response.ok) throw new Error("Error al obtener eventos");
 
       const data = await response.json();
-      
+
       if (data.hasError) {
         throw new Error(data.errors?.join(", ") || "Error desconocido");
       }
@@ -78,9 +84,20 @@ const CajaEventos = () => {
     }
   };
 
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    if (tab === "past") {
+      setActivo(0);  // eventos inactivos
+    } else if (tab === "upcoming") {
+      setActivo(1);  // eventos activos
+    } else {
+      setActivo(null); // si tienes otro caso, muestra todos
+    }
+  };
+
   useEffect(() => {
     fetchEventos();
-  }, []);
+  }, [activo]);
 
   useEffect(() => {
     if (registroSeleccionado && showEditModal) {
@@ -102,7 +119,7 @@ const CajaEventos = () => {
   };
 
   const handleNuevoRegistro = () => setShowNuevoModal(true);
-  
+
   const handleEdit = (id) => {
     const registro = eventos.find((d) => d.id === id);
     setRegistroSeleccionado({ ...registro });
@@ -261,7 +278,7 @@ const CajaEventos = () => {
                 />
               </Form.Item>
             </Col>
-            
+
             {esEdicion && (
               <Col span={10}>
                 <Form.Item
@@ -291,13 +308,13 @@ const CajaEventos = () => {
           <div className="eventtabs">
             <button
               className={`eventtab ${activeTab === "past" ? "active" : ""}`}
-              onClick={() => setActiveTab("past")}
+              onClick={() => handleTabChange("past")}
             >
               Pasados
             </button>
             <button
               className={`eventtab ${activeTab === "upcoming" ? "active" : ""}`}
-              onClick={() => setActiveTab("upcoming")}
+              onClick={() => handleTabChange("upcoming")}
             >
               Próximos
             </button>
