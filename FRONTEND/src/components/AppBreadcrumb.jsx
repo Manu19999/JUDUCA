@@ -13,6 +13,7 @@ const routeNames = {
   universidades: "Universidades",
   objetos: "Objetos",
   bitacoras: "Bitacoras",
+  "estados-usuario": "Estados-Usuario",
 
   //Eventos
   eventos: "Eventos",
@@ -47,6 +48,9 @@ const getHierarchy = (pathname) => {
   // Mapeo manual de la jerarquía seguridad, dependiendo de la ruta actual devuelve una jerarquía específica
   if (pathnames.includes("seguridad")) {
     return ["dashboard", "seguridad"];
+  }
+  if (pathnames.includes("estados-usuario")) {
+    return ["dashboard", "seguridad", "usuarios", "estados-usuario"];
   }
   if (pathnames.includes("usuarios")) {
     return ["dashboard", "seguridad", "usuarios"];
@@ -148,6 +152,10 @@ const AppBreadcrumb = () => {
   // Función para manejar el clic en "Seguridad"
   const handleSeguridadClick = () => {
     navigate("/seguridad"); // navega a la ruta seguridad cuando se hace clic en el item "Seguridad"
+  };
+
+  const handleUsuariosClick = () => {
+    navigate("/usuarios"); // navega a la ruta seguridad cuando se hace clic en el item "Seguridad"
   };
 
   const handleMantenimientoClick = () => {
@@ -289,6 +297,18 @@ const AppBreadcrumb = () => {
               <Breadcrumb.Item key={name}>
                 <span
                   onClick={handleLLenarFichaClick}
+                  className="breadcrumb-item clickable"
+                >
+                  {displayName}
+                </span>
+              </Breadcrumb.Item>
+            );
+          }
+          if (name === "usuarios") {
+            return (
+              <Breadcrumb.Item key={name}>
+                <span
+                  onClick={handleUsuariosClick}
                   className="breadcrumb-item clickable"
                 >
                   {displayName}

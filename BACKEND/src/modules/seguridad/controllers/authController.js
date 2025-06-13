@@ -4,9 +4,7 @@ import conexionbd from '../../../config/db.js';
 import sql from 'mssql'; // Asegúrate de importar sql
 import apiResponse from '../../../utils/apiResponse.js';
 import bcrypt from 'bcrypt';// encriptado de contraseña
-
 dotenv.config();
-
 export const Login = async (req, res) => {
     const { email, contrasena } = req.body;
     const response = new apiResponse();
@@ -120,4 +118,88 @@ export const Logout = async (req, res) => {
         response.setHasError(true);
         return res.status(500).json(response.getResponse());
     }
+};
+
+
+export const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+    const response = new apiResponse();
+  
+    try {
+      const pool = await conexionbd();
+      const result = await pool.request()
+        .input('email', sql.VarChar, email)
+        .execute('[Usuarios].[splVerificarCorreoRecuperacion]');
+  
+      // Verificar si el SP retornó resultados
+      if (result.recordset.length === 0) {
+        response.setErrors(['Error inesperado al verificar el email']);
+        return res.status(500).json(response.getResponse());
+      }
+      
+      const spResult = result.recordset[0];
+      
+      if (spResult.exito === 0) {
+        // Email no existe o usuario inactivo
+        response.setData({
+          success: false,
+          message: spResult.mensaje,
+          emailExists: false
+        });
+      } else {
+        // Email existe y usuario activo
+        response.setData({
+          success: true,
+          message: spResult.mensaje,
+          emailExists: true,
+          userId: spResult.idUsuario
+        });
+      }
+      
+      return res.status(200).json(response.getResponse());
+  
+    } catch (err) {
+      console.error('Error en forgotPassword:', err);
+      response.setErrors(['Error al procesar la solicitud']);
+      return res.status(500).json(response.getResponse());
+    }
+};
+
+export const resetPassword = async (req, res) => {
+  const { email, newPassword } = req.body;
+  const response = new apiResponse();
+
+  try {
+    const pool = await conexionbd();
+    
+    // Hashear nueva contraseña
+    const salt = await bcrypt.genSalt(12);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    // Actualizar contraseña en BD
+    const result = await pool.request()
+      .input('email', sql.VarChar, email)
+      .input('contrasena', sql.VarChar, hashedPassword)
+      .execute('Usuarios.splActualizarContrasena');
+
+    // Verificar si el SP retornó error
+    if (result.returnValue === -1) {
+      const error = result.recordset[0]?.descripcion || 'Error al actualizar la contraseña';
+      response.setErrors([error]);
+      return res.status(400).json(response.getResponse());
+    }
+
+    // Incluir el email en la respuesta para que el frontend pueda usarlo
+    response.setData({ 
+      message: 'Contraseña actualizada exitosamente',
+      email: email
+    });
+    return res.status(200).json(response.getResponse());
+
+  } catch (err) {
+    console.error('Error en resetPassword:', err);
+    response.setErrors(['Error al actualizar la contraseña']);
+    response.setHasError(true);
+    return res.status(500).json(response.getResponse());
+  }
 };

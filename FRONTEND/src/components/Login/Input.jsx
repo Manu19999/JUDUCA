@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Input = ({
@@ -11,26 +11,40 @@ const Input = ({
   onBlur,
   isFocused,
   error,
-  maxLength, // <-- Prop para definir el máximo de caracteres
-  
+  maxLength,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+
+  // Actualiza el estado activo cuando cambia el valor o el foco
+  useEffect(() => {
+    setIsActive(isFocused || !!value);
+  }, [isFocused, value]);
+
+  const handleFocus = (e) => {
+    setIsActive(true);
+    if (onFocus) onFocus(e);
+  };
+
+  const handleBlur = (e) => {
+    setIsActive(!!e.target.value);
+    if (onBlur) onBlur(e);
+  };
 
   return (
-    <div className="input-wrapper"> {/* Contenedor para input y mensaje de error */}
-      <div className="input-group">
+    <div className="input-wrapper">
+      <div className={`input-group ${isActive ? 'active' : ''}`}>
         {icon}
         <input
           type={isPassword && !showPassword ? "password" : "text"}
-          required
-          onFocus={onFocus}
-          onBlur={onBlur}
-          className={isFocused ? "input-focused" : ""}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          className={`input-login ${isFocused ? "input-focused" : ""}`}
           value={value}
           onChange={onChange}
-          maxLength={maxLength} // <-- Aplica la restricción de caracteres
+          maxLength={maxLength}
         />
-        <label className={`floating-label ${isFocused ? "active" : ""}`}>
+        <label className={`floating-label ${isActive ? "active" : ""}`}>
           {placeholder}
         </label>
         {isPassword && (
@@ -43,7 +57,6 @@ const Input = ({
           </span>
         )}
       </div>
-      {/* Mensaje de error colocado fuera de .input-group para que aparezca debajo */}
       {error && <span className="input-error-message">{error}</span>}
     </div>
   );

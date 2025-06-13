@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-
-const TwoFA = ({ onClose, onSubmit }) => {
+import { FaKey, FaShieldAlt, FaMobileAlt, FaLock } from 'react-icons/fa';
+const TwoFA = ({ onClose, onSubmit,mensajeError,isPasswordReset = false }) => {
   const [twoFACode, setTwoFACode] = useState("");
   const [estado, setEstado] = useState({
     cargando: true,
@@ -9,7 +9,9 @@ const TwoFA = ({ onClose, onSubmit }) => {
   });
 
   useEffect(() => {
-    const email = localStorage.getItem("usuarioEmail");
+    const email = isPasswordReset 
+      ? localStorage.getItem("resetPasswordEmail")
+      : localStorage.getItem("usuarioEmail");
 
     if (!email) {
       setEstado({
@@ -19,7 +21,7 @@ const TwoFA = ({ onClose, onSubmit }) => {
       });
       return;
     }
-
+    if (!isPasswordReset) {
     fetch("http://localhost:4000/api/twofactor/enviarCodigo", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -43,7 +45,15 @@ const TwoFA = ({ onClose, onSubmit }) => {
           error: true
         });
       });
-  }, []);
+    } else {
+      // Para recuperación, solo cambia el mensaje (el código ya fue enviado)
+      setEstado({
+        cargando: false,
+        mensaje: "Ingresa el código de recuperación que recibiste",
+        error: false
+      });
+    }
+  }, [isPasswordReset]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -58,17 +68,29 @@ const TwoFA = ({ onClose, onSubmit }) => {
         <p className={`login-subtitle ${estado.error ? "texto-error" : ""}`}>
           {estado.mensaje}
         </p>
+        {mensajeError && (
+          <div className="error-message">
+            {mensajeError}
+          </div>
+        )}
 
         {!estado.error && (
           <form onSubmit={handleSubmit}>
             <div className="input-group">
+            <FaKey className="input-icon" />
               <input
                 type="text"
                 className="input-login"
-                placeholder= "Ingresa el código"
+                placeholder= "Ingresa el código de verificación"
                 value={twoFACode}
-                onChange={(e) => setTwoFACode(e.target.value)}
+                onChange={(e) => {
+                  // Validación para permitir solo números
+                  const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                  setTwoFACode(value);
+                }}
                 required
+                style={{ paddingLeft: '2.5rem' }}
+                maxLength={6}
               />
             </div>
 

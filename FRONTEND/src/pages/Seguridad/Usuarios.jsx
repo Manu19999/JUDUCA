@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import Tabla from "../../components/Crud/Tabla";
 import Nav from '../../components/Dashboard/navDashboard';
 import { FaUser } from 'react-icons/fa';
@@ -31,8 +32,10 @@ function Usuarios() {
   const [generos, setGeneros] = useState([]);
   const [universidades, setUniversidades] = useState([]);
   const [roles, setRoles] = useState([]);
+  const [estadosusuario,setEstadosUsuario]=useState([]);
   const [passwordGenerada, setPasswordGenerada] = useState("");
   const tiposSangre = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+  const navigate = useNavigate();
 
   // Función para generar una contraseña aleatoria
   const generarContrasena = () => {
@@ -217,9 +220,31 @@ function Usuarios() {
       }
     };
   
+    const obtenerEstadosUsuarios = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/api/estados-usuario", {
+          method: "GET",
+          credentials: 'include',
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+        if (!response.ok) {
+          throw new Error("Error al obtener los estados");
+        }
+  
+        const data = await response.json();
+        setEstadosUsuario(data.data); // Actualizar el estado con los estados obtenidos
+      } catch (error) {
+        console.error("Error:", error);
+        mostrarMensajeError("Error al cargar los estados. Inténtalo de nuevo más tarde.");
+      }
+    };
+
     obtenerGeneros();
     obtenerUniversidades();
     obtenerRoles();
+    obtenerEstadosUsuarios();
   }, []);
   
 
@@ -424,7 +449,7 @@ function Usuarios() {
         onGenerarReporte={() => console.log("Generar reporte en PDF")} // Función para generar reporte
         onEdit={handleEdit} // Función para abrir el modal de edición
         onDetails={handleDetails} // Función para abrir el modal de detalles
-        onEstados={() => console.log("Generar reporte en PDF")} // boton para estados de usuario
+        onEstados={() => navigate('/estados-usuario')} // boton para estados de usuario
       />
 
       {/* Modal para Nuevo Registro */}
@@ -656,10 +681,11 @@ function Usuarios() {
                     rules={[{ required: true, message: "El estado es obligatorio" }]}
                   >
                     <Select placeholder="Selecciona el estado">
-                      <Option value={1}>Activo</Option>
-                      <Option value={2}>Inactivo</Option>
-                      <Option value={3}>Pendiente</Option>
-                      <Option value={4}>Bloqueado</Option>
+                      {estadosusuario.map((estados) => (
+                        <Option key={estados.idEstadoUsuario} value ={estados.idEstadoUsuario}>
+                          {estados.estado}
+                        </Option>
+                      ))}
                     </Select>
                   </Form.Item>
                 </Col>
@@ -908,10 +934,11 @@ function Usuarios() {
                   rules={[{ required: true, message: "El estado es obligatorio" }]}
                 >
                   <Select placeholder="Selecciona el estado">
-                    <Option value={1}>Activo</Option>
-                    <Option value={2}>Inactivo</Option>
-                    <Option value={3}>Pendiente</Option>
-                    <Option value={4}>Bloqueado</Option>
+                  {estadosusuario.map((estados) => (
+                      <Option key={estados.idEstadoUsuario} value={estados.idEstadoUsuario}>
+                        {estados.estado}
+                      </Option>
+                    ))}
                   </Select>
                 </Form.Item>
               </Col>

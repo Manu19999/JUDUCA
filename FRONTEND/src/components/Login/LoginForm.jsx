@@ -7,54 +7,79 @@ const LoginForm = ({
   showForgotPassword,
   handleForgotPasswordClick,
   handleLoginSubmit,
-  handleFocus,
-  handleBlur,
-  isFocused,
-  email,
-  setEmail,
-  password,
-  setPassword,
+  handleForgotPasswordSubmit,
+  
+  // Props para login
+  loginEmail,
+  setLoginEmail,
+  setLoginEmailError,
+  loginPassword,
+  setLoginPassword,
+  setLoginPasswordError,
+  loginIsFocused,
+  handleLoginFocus,
+  handleLoginBlur,
+  loginEmailError,
+  loginPasswordError,
+  
+  // Props para recuperación
+  recoveryEmail,
+  setRecoveryEmail,
+  setRecoveryEmailError,
+  recoveryIsFocused,
+  handleRecoveryFocus,
+  handleRecoveryBlur,
+  recoveryEmailError,
+  
+  // Props compartidos
   showPassword,
   setShowPassword,
 }) => {
-  // Estados para errores de validación
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
   return (
-    <form className="login-form" onSubmit={handleLoginSubmit}>
+    <form className="login-form" onSubmit={showForgotPassword ? handleForgotPasswordSubmit : handleLoginSubmit}>
       {!showForgotPassword ? (
         <>
           <Input
             type="text"
             placeholder="Correo electrónico"
             icon={<FaUser className="input-icon" />}
-            value={email}
+            value={loginEmail}
             onChange={(e) => {
-              setEmail(e.target.value);
-              setEmailError(validateEmail(e.target.value)); // Validación en tiempo real
+              setLoginEmail(e.target.value);
+              // Solo validar formato cuando hay contenido
+              setLoginEmailError(e.target.value ? validateEmail(e.target.value) : "");
             }}
-            onFocus={() => handleFocus("email")}
-            onBlur={(e) => setEmailError(validateEmail(e.target.value))}
-            isFocused={isFocused.email}
-            error={emailError}
-            maxLength={50} // <-- Restringe a 50 caracteres
+            onFocus={() => handleLoginFocus("email")}
+            onBlur={(e) => {
+              // Solo validar formato al salir si hay contenido
+              handleLoginBlur("email", e); // Asegúrate de pasar el evento
+              setLoginEmailError(e.target.value ? validateEmail(e.target.value) : "");
+            }}
+            isFocused={loginIsFocused.email}
+            error={loginEmailError}
+            maxLength={50}
           />
           <Input
             type="password"
             placeholder="Contraseña"
             icon={<FaLock className="input-icon" />}
             isPassword
-            value={password}
+            value={loginPassword}
             onChange={(e) => {
-              setPassword(e.target.value);
-              setPasswordError(validatePassword(e.target.value)); // Validación en tiempo real
+              setLoginPassword(e.target.value);
+              // Solo validar formato cuando hay contenido
+              setLoginPasswordError(e.target.value ? validatePassword(e.target.value) : "");
             }}
-            onFocus={() => handleFocus("password")}
-            onBlur={(e) => setPasswordError(validatePassword(e.target.value))}
-            isFocused={isFocused.password}
+            onFocus={() => handleLoginFocus("password")}
+            onBlur={(e) => {
+              handleLoginBlur("password", e);
+              // Solo validar formato al salir si hay contenido
+              setLoginPasswordError(e.target.value ? validatePassword(e.target.value) : "");
+            }}
+            isFocused={loginIsFocused.password}
             showPassword={showPassword}
             setShowPassword={setShowPassword}
-            error={passwordError}
+            error={loginPasswordError}
             maxLength={20}
           />
           <a href="#forgot-password" className="forgot-password" onClick={handleForgotPasswordClick}>
@@ -70,15 +95,20 @@ const LoginForm = ({
             type="email"
             placeholder="Correo electrónico"
             icon={<FaUser className="input-icon" />}
-            value={email}
+            value={recoveryEmail}
             onChange={(e) => {
-              setEmail(e.target.value);
-              setEmailError(validateEmail(e.target.value));
+              setRecoveryEmail(e.target.value);
+              // Solo validar formato cuando hay contenido
+              setRecoveryEmailError(e.target.value ? validateEmail(e.target.value) : "");
             }}
-            onFocus={() => handleFocus("email")}
-            onBlur={(e) => setEmailError(validateEmail(e.target.value))}
-            isFocused={isFocused.email}
-            error={emailError}
+            onFocus={handleRecoveryFocus}
+            onBlur={(e) => {
+              handleRecoveryBlur(e);
+              // Solo validar formato al salir si hay contenido
+              setRecoveryEmailError(e.target.value ? validateEmail(e.target.value) : "");
+            }}
+            isFocused={recoveryIsFocused}
+            error={recoveryEmailError}
           />
           <button type="submit" className="login-button">
             Recuperar Contraseña
