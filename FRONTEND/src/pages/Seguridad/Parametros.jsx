@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Tabla from "../../components/Crud/Tabla";
 import Nav from '../../components/Dashboard/navDashboard';
-import { FaUserShield } from 'react-icons/fa';
+import { FaCog } from 'react-icons/fa';
 import ModalEditar from "../../components/Crud/Modal/ModalEditar";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito";
 import { mostrarMensajeError } from "../../components/Crud/MensajeError"; // Importar el componente de mensaje de error
@@ -118,7 +118,7 @@ function Parametros() {
         columnas={columnas}
         datos={parametros.map((parametro) => ({ ...parametro, id: parametro.idParametro }))}  // Usar los parametros obtenidos de la API
         titulo="Gestión de Parámetros"
-        icono={<FaUserShield className="icono-titulo" />}
+        icono={<FaCog className="icono-titulo" />}
         onGenerarReporte={() => console.log("Generar reporte en PDF")}
         onEdit={handleEdit}
       />
