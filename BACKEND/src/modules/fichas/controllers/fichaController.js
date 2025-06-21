@@ -3,34 +3,64 @@ import apiResponse from "../../../utils/apiResponse.js";
 import sql from 'mssql'; // Importar sql para acceder a los tipos de datos
 
 
-// Controlador para obtener las fichas (uno específico o todos)
-export const ObtenerFichas = async (req, res) => {
-  const { idEvento } = req.params; // Aquí usa idEvento
+export const ObtenerFichasPorEvento = async (req, res) => {
+  const { idEvento, activo } = req.params;
   const response = new apiResponse();
 
   try {
     const pool = await conexionbd();
+    const request = pool.request();
 
-    const result = await pool
-      .request()
-      .input("idEvento", idEvento ? parseInt(idEvento) : null)
-      .execute("Registros.splFichasPorEventoObtener");
-
-    if (result.recordset.length > 0 && result.recordset[0].codigoError) {
-      response.setHasError(true);
-      response.setErrors([result.recordset[0].descripcion]);
-      return res.status(400).json(response.getResponse());
+    // Validar y enviar idEvento si existe
+    if (idEvento !== undefined && idEvento !== null) {
+      const idEventoParsed = parseInt(idEvento);
+      if (!isNaN(idEventoParsed)) {
+        request.input("idEvento", sql.Int, idEventoParsed);
+      } else {
+        response.setHasError(true);
+        response.setErrors(["El parámetro 'idEvento' debe ser un número."]);
+        return res.status(400).json(response.getResponse());
+      }
+    } else {
+      request.input("idEvento", sql.Int, null);
     }
 
-    response.setData(result.recordset);
-    res.status(200).json(response.getResponse());
-  } catch (error) {
-    console.error("Error en ObtenerFichas:", error.message);
-    response.setHasError(true);
-    response.setErrors(["Error interno del servidor", error.message]);
-    res.status(500).json(response.getResponse());
-  }
+    // Validar y enviar 'activo' si existe
+    if (activo !== undefined && activo !== null) {
+      const activoParsed = parseInt(activo);
+      if (!isNaN(activoParsed)) {
+        request.input("activo", sql.TinyInt, activoParsed);
+      } else {
+        response.setHasError(true);
+        response.setErrors(["El parámetro 'activo' debe ser un número (1 o 0)."]);
+        return res.status(400).json(response.getResponse());
+      }
+    } else {
+      request.input("activo", sql.TinyInt, null);
+    }
 
+    // Ejecutar el procedimiento almacenado
+    const result = await request.execute("Registros.splFichasPorEventoObtener");
+
+    const data = result.recordset;
+
+    // Validar si hay un mensaje de error desde SQL
+    if (data.length === 1 && data[0].codigoError) {
+      response.setHasError(true);
+      response.setErrors([data[0].descripcion]);
+      response.setData([]);
+    } else {
+      response.setData(data);
+    }
+
+    return res.json(response.getResponse());
+
+  } catch (error) {
+    console.error("Error en ObtenerFichasPorEvento:", error);
+    response.setHasError(true);
+    response.setErrors(["Error del servidor", error.message]);
+    return res.status(500).json(response.getResponse());
+  }
 };
 
 
@@ -91,6 +121,106 @@ export const ObtenerCamposPorFicha = async (req, res) => {
     response.setErrors(["Error interno del servidor", error.message]);
     res.status(500).json(response.getResponse());
   }
+};
+
+
+export const insertarFichaRegistro = async (req, res) => {
+    const {
+        idEvento,
+        nombreFicha,
+        activo,
+        comentarios,
+        fotoFicha,
+        idObjeto
+    } = req.body;
+
+    const response = new apiResponse();
+
+    try {
+        const idUsuario = req.usuario.idUsuario;
+        const nombreUsuario = req.usuario.nombreUsuario;
+
+        const pool = await conexionbd();
+
+        const result = await pool
+            .request()
+            .input("idEvento", sql.Int, idEvento)
+            .input("nombreFicha", sql.NVarChar(50), nombreFicha)
+            .input("activo", sql.Bit, activo)
+            .input("comentarios", sql.Text, comentarios || null)
+            .input("usuarioRegistro", sql.NVarChar(90), nombreUsuario)
+            .input("fotoFicha", sql.NVarChar(255), fotoFicha || null)
+            .input("idUsuario", sql.Int, idUsuario)
+            .input("idObjeto", sql.Int, idObjeto)
+            .execute("Registros.splFichaRegistroInsertar");
+
+        // Validación de errores personalizados del SP
+        if (result.recordset.length > 0 && result.recordset[0].codigoError) {
+            response.setHasError(true);
+            response.setErrors([result.recordset[0].descripcion]);
+            return res.status(400).json(response.getResponse());
+        }
+
+        response.setData(result.recordset[0]);
+        return res.status(201).json(response.getResponse());
+
+    } catch (error) {
+        console.error("Error en insertarFichaRegistro:", error);
+
+        response.setHasError(true);
+        response.setErrors(["Error al procesar la solicitud"]);
+        return res.status(500).json(response.getResponse());
+    }
+};
+
+export const actualizarFichaRegistro = async (req, res) => {
+    const {
+        idFichaRegistro,
+        idEvento,
+        nombreFicha,
+        activo,
+        comentarios,
+        fotoFicha,
+        idObjeto
+    } = req.body;
+
+    const response = new apiResponse();
+
+    try {
+        const idUsuario = req.usuario.idUsuario;
+        const nombreUsuario = req.usuario.nombreUsuario;
+
+        const pool = await conexionbd();
+
+        const result = await pool
+            .request()
+            .input("idFichaRegistro", sql.Int, idFichaRegistro)
+            .input("idEvento", sql.Int, idEvento)
+            .input("nombreFicha", sql.NVarChar(50), nombreFicha)
+            .input("activo", sql.Bit, activo)
+            .input("comentarios", sql.Text, comentarios || null)
+            .input("fotoFicha", sql.NVarChar(255), fotoFicha || null)
+            .input("idUsuario", sql.Int, idUsuario)
+            .input("nombreUsuario", sql.NVarChar(90), nombreUsuario)
+            .input("idObjeto", sql.Int, idObjeto)
+            .execute("Registros.splFichaRegistroActualizar");
+
+        if (result.recordset.length > 0 && result.recordset[0].codigoError) {
+            response.setHasError(true);
+            response.setErrors([result.recordset[0].descripcion]);
+            return res.status(400).json(response.getResponse());
+        }
+
+        response.setData(result.recordset[0]);
+        return res.status(200).json(response.getResponse());
+
+    } catch (error) {
+        console.error("Error en actualizarFichaRegistro:", error);
+
+        response.setHasError(true);
+        response.setErrors(["Error al procesar la solicitud"]);
+        return res.status(500).json(response.getResponse());
+    }
 };
 
 
