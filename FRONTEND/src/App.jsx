@@ -71,7 +71,7 @@ const MantenimientoCiudades =React.lazy(() => import("./pages/Mantenimientos/Man
 const MantenimientoInstalaciones =React.lazy(() => import("./pages/Mantenimientos/MantenimientoInstalaciones"));
 const MantenimientoGeneros =React.lazy(() => import("./pages/Mantenimientos/MantenimientoGeneros"));
 const MantenimientoApiMap =React.lazy(() => import("./pages/Mantenimientos/MantenimientoApiMap"));
-const MantenimientoEventos =React.lazy(() => import("./pages/Eventos/Eventos"));
+const ParticipantesRegistrados =React.lazy(() => import("./pages/Eventos/ListaParticipantes.jsx"));
 
 
 function App() {
@@ -113,6 +113,7 @@ function App() {
         <Route path="/ficha-salud" element={<RegistroSalud />} />
         <Route path="/OpcionFicha" element={<OpcionFicha />} />
         <Route path="/LlenadoFicha" element={<LlenarFichas />} />
+        <Route path="/ListaPartticipantes" element={<ParticipantesRegistrados />} />
 
 
 
@@ -147,7 +148,6 @@ function App() {
         <Route path="/MantenimientoInstalaciones" element={<MantenimientoInstalaciones />}/>
         <Route path="/MantenimientoGeneros" element={<MantenimientoGeneros />} />
         <Route path="/MantenimientoApiMap" element={<MantenimientoApiMap />} />
-        <Route path="/MantenimientoEventos" element={<MantenimientoEventos />} />
 
       </Routes>
       </Suspense>

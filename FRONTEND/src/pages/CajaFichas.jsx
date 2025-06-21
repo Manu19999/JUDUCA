@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Input, Select, Form, Card, Row, Col, DatePicker, Tabs, Button, Checkbox } from 'antd';
 import { FaEye, FaCog } from "react-icons/fa";
 import moment from "moment";
+import EventImage6 from "../assets/Credencial.jpg";
 
 import Nav from "../components/Dashboard/navDashboard";
 import "../styles/Inicio/Caja-seguridad.css";
@@ -94,7 +95,7 @@ const CajaFichas = () => {
       const fichasConDatos = fichasFiltradas.map((ficha) => ({
         id: ficha.idFichaRegistro,
         title: ficha.nombreFicha,
-        image: ficha.fotoFicha,
+        image: ficha.fotoFicha || EventImage6,
         description: ficha.comentarios || "Sin comentarios",
         idEvento: ficha.idEvento,
         activo: ficha.activo ? "Activo" : "Inactivo",

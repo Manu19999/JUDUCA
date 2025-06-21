@@ -44,7 +44,7 @@ const Seleccion = () => {
           id: 1,
           title: "Listado de participantes",
           image: agregarCredencial,
-          route: "#",
+          route: "/ListaPartticipantes",
           description: "Administra los participantes registrados"
         },
         {
