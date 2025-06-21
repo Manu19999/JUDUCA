@@ -35,6 +35,8 @@ import twoFactorRoutes from './src/modules/seguridad/routes/twoFactorRoutes.js';
 import Objetos from './src/modules/seguridad/routes/objetosRoutes.js';
 import Bitacoras from './src/modules/seguridad/routes/bitacorasRoutes.js';
 import EstadosUsuario from './src/modules/seguridad/routes/estadoUsuarioRoute.js';
+import Permisos from './src/modules/seguridad/routes/permisosRoutes.js';
+import Parametros from './src/modules/seguridad/routes/parametrosRoutes.js';
 
 //++++++++++++++++++++++++++  Importaciones de rutas de vouchers  ++++++++++++++++++++++++++
 import VoucherComidaRoutes   from './src/modules/vouchers/routes/voucherComidaRoutes.js';
@@ -94,6 +96,8 @@ app.use('/api/objetos', Objetos);
 app.use('/api/twofactor', twoFactorRoutes);
 app.use('/api/bitacoras', Bitacoras);
 app.use('/api/estados-usuario', EstadosUsuario);
+app.use('/api/permisos', Permisos);
+app.use('/api/parametros', Parametros);
 
 
 //Vouchers

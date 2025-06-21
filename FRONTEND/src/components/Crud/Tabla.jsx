@@ -32,6 +32,7 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
   const indicePrimerRegistro = indiceUltimoRegistro - registrosPorPagina;
   const registrosActuales = datosFiltrados.slice(indicePrimerRegistro, indiceUltimoRegistro);
   const totalPaginas = Math.ceil(datosFiltrados.length / registrosPorPagina);
+  const mostrarMensajeVacio = datosFiltrados.length === 0;
 
   const cambiarPagina = (numeroPagina) => setPaginaActual(numeroPagina);
   const cambiarRegistrosPorPagina = (e) => {
@@ -79,7 +80,16 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
               </tr>
             </thead>
             <tbody>
-              {registrosActuales.map((fila, index) => (
+            {mostrarMensajeVacio ? (
+                <tr>
+                  <td colSpan={columnas.length} className="mensaje-vacio">
+                    <div className="contenido-mensaje-vacio">
+                      <p>{busqueda ? "No se encontraron resultados" : "No hay registros disponibles"}</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+              registrosActuales.map((fila, index) => (
                 <tr key={index}>
                   {columnas.map((col, i) => (
                     <td key={i}>
@@ -100,15 +110,18 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
                     </td>
                   ))}
                 </tr>
-              ))}
+              ))
+            )}
             </tbody>
           </table>
         </div>
-        <Paginacion
-          paginaActual={paginaActual}
-          totalPaginas={totalPaginas}
-          cambiarPagina={cambiarPagina}
-        />
+        {!mostrarMensajeVacio && totalPaginas > 1 && (
+          <Paginacion
+            paginaActual={paginaActual}
+            totalPaginas={totalPaginas}
+            cambiarPagina={cambiarPagina}
+          />
+        )}
       </div>
     </>
   );

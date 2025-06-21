@@ -14,6 +14,8 @@ const routeNames = {
   objetos: "Objetos",
   bitacoras: "Bitacoras",
   "estados-usuario": "Estados-Usuario",
+  permisos:"Permisos",
+  parametros:"Parametros",
 
   //Eventos
   eventos: "Eventos",
@@ -58,6 +60,9 @@ const getHierarchy = (pathname) => {
   if (pathnames.includes("roles")) {
     return ["dashboard", "seguridad", "roles"];
   }
+  if (pathnames.includes("permisos")) {
+    return ["dashboard", "seguridad", "roles", "permisos"];
+  }
   if (pathnames.includes("universidades")) {
     return ["dashboard", "seguridad", "universidades"];
   }
@@ -66,6 +71,9 @@ const getHierarchy = (pathname) => {
   }
   if (pathnames.includes("bitacoras")) {
     return ["dashboard", "seguridad", "bitacoras"];
+  }
+  if (pathnames.includes("parametros")) {
+    return ["dashboard", "seguridad", "parametros"];
   }
   
   // Mapeo manual de la jerarquía eventos
@@ -184,6 +192,10 @@ const AppBreadcrumb = () => {
 
   const handleLLenarFichaClick = () => {
     navigate("/llenar-fichas"); // navega a la ruta seguridad cuando se hace clic en el item "Seguridad"
+  };
+
+  const handleRolesClick = () => {
+    navigate("/roles"); // navega a la ruta seguridad cuando se hace clic en el item "Seguridad"
   };
   return (
     <div className="breadcrumb-container">
@@ -309,6 +321,18 @@ const AppBreadcrumb = () => {
               <Breadcrumb.Item key={name}>
                 <span
                   onClick={handleUsuariosClick}
+                  className="breadcrumb-item clickable"
+                >
+                  {displayName}
+                </span>
+              </Breadcrumb.Item>
+            );
+          }
+          if (name === "roles") {
+            return (
+              <Breadcrumb.Item key={name}>
+                <span
+                  onClick={handleRolesClick}
                   className="breadcrumb-item clickable"
                 >
                   {displayName}

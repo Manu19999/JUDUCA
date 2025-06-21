@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import Tabla from "../../components/Crud/Tabla";
 import Nav from '../../components/Dashboard/navDashboard';
 import { FaUserShield } from 'react-icons/fa';
@@ -21,7 +22,8 @@ function Roles() {
   const [formNuevo] = Form.useForm(); // Formulario para el modal de nuevo registro
   const [formEditar] = Form.useForm(); // Formulario para el modal de edición
   const [roles, setRoles] = useState([]); // Estado para almacenar los roles
-
+  const navigate = useNavigate();
+  
   //función reutilizable para obtener los roles
   const obtenerRoles = async () => {
     try {
@@ -219,7 +221,7 @@ function Roles() {
         icono={<FaUserShield className="icono-titulo" />}
         onNuevoRegistro={handleNuevoRegistro}
         onGenerarReporte={() => console.log("Generar reporte en PDF")}
-        onPermisos={() => console.log("Generar reporte en PDF")}
+        onPermisos={() => navigate('/permisos')}
         onEdit={handleEdit}
         onDelete={handleDelete}
         onDetails={handleDetails} // Función para abrir el modal de detalles

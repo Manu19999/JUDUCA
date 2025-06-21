@@ -150,7 +150,7 @@ function Objetos() {
       }
 
       // Mostrar mensaje de éxito
-      mostrarMensajeExito("El rol se ha actualizado correctamente.");
+      mostrarMensajeExito("El objeto se ha actualizado correctamente.");
 
       // Cerrar el modal de edición
       setShowEditModal(false);
@@ -195,7 +195,7 @@ function Objetos() {
       setRegistroSeleccionado(null);
 
       // Mostrar mensaje de éxito
-      mostrarMensajeExito("El rol se ha eliminado correctamente.");
+      mostrarMensajeExito("El objeto se ha eliminado correctamente.");
     } catch (error) {
       console.error("Error:", error);
       mostrarMensajeError(error.message);

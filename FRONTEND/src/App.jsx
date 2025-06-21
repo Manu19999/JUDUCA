@@ -20,8 +20,9 @@ const Roles =React.lazy(() => import("./pages/Seguridad/Roles"));
 const Universidades =React.lazy(() => import("./pages/Seguridad/Universidades"));
 const Objetos =React.lazy(() => import("./pages/Seguridad/Objetos"));
 const Bitacoras =React.lazy(() => import("./pages/Seguridad/Bitacoras"));
-const EstadosUsuario =React.lazy(() => import("./pages/Seguridad/EstadosUsuario.jsx"));
-
+const EstadosUsuario =React.lazy(() => import("./pages/Seguridad/EstadosUsuario"));
+const Permisos =React.lazy(() => import("./pages/Seguridad/Permisos"));
+const Parametros =React.lazy(() => import("./pages/Seguridad/Parametros"));
 
 //+++++++++++++++++++++++++ importación caja de eventos y sus elementos +++++++++++++++++++++++++
 const CajaEvento =React.lazy(() => import("./pages/CajaEventos"));
@@ -97,6 +98,8 @@ function App() {
         <Route path="/objetos" element={<Objetos />} />
         <Route path="/bitacoras" element={<Bitacoras />} />
         <Route path="/estados-usuario" element={<EstadosUsuario />} />
+        <Route path="/permisos" element={<Permisos />} />
+        <Route path="/parametros" element={<Parametros />} />
 
         {/* ruta para eventos */}
         <Route path="/eventos" element={<CajaEvento />} />

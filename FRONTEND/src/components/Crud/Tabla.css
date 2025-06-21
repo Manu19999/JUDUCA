@@ -101,6 +101,21 @@
   letter-spacing: 0.5px;
 }
 
+/* Mensaje cuando la tabla está vacía */
+.mensaje-vacio {
+  text-align: center;
+  padding: 2rem;
+  background-color: #fafcfc;
+}
+
+.contenido-mensaje-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+}
+
 .tabla tr:hover {
   background-color: #f7fafc; /* Color de hover más suave */
 }
