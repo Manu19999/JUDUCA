@@ -159,3 +159,45 @@ export const updateVoucherComida = async (req, res) => {
     res.status(500).json({ error: 'Error interno', details: err.message });
   }
 };
+
+
+// Eliminar un voucher por ID
+
+
+
+export const deleteVoucherComida = async (req, res) => {
+  if (!req.usuario) {
+    return res.status(401).json({ error: 'Usuario no autenticado' });
+  }
+
+  const { id } = req.params;
+  const { idUsuario, nombreUsuario, idObjeto } = req.usuario;
+
+  const idVoucher = parseInt(id, 10);
+  if (isNaN(idVoucher)) {
+    return res.status(400).json({ error: 'ID de voucher inválido' });
+  }
+
+  try {
+    const pool = await conexionbd();
+    const request = pool.request();
+    request
+      .input('idVoucherComida', sql.Int, idVoucher)
+      .input('idUsuario', sql.Int, idUsuario)
+      .input('nombreUsuario', sql.NVarChar(90), nombreUsuario)
+      .input('idObjeto', sql.Int, idObjeto);
+
+    const result = await request.execute('Comedores.splVouchersComidasEliminar');
+    const record = result.recordset?.[0] || {};
+
+    if (record.codigoError) {
+      return res.status(400).json({ error: record.descripcion });
+    }
+
+    res.status(200).json({ message: 'Voucher eliminado correctamente' });
+  } catch (err) {
+    console.error('Error al eliminar voucher:', err);
+    res.status(500).json({ error: 'Error interno', details: err.message });
+  }
+};
+//------------------------------------------------------------------------------------------------------------------------------

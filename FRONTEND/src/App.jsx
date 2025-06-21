@@ -59,6 +59,9 @@ const ConsumosVouchers =React.lazy(() => import("./pages/ConsumoVoucher"));
 const Comedores =React.lazy(() => import("./pages/Comedores"));
 const Tickets =React.lazy(() => import("./pages/tickets"));
 const NuevoVoucher =React.lazy(() => import("./pages/Vouchers/Nuevo-Voucher"));
+const Mantenimientosvoucher =React.lazy(() => import("./pages/Vouchers/ManteVoucher"));
+const CajaComedor =React.lazy(() => import("./pages/Vouchers/CajaComedor.jsx"));
+const UbicacionComedores =React.lazy(() => import("./pages/Vouchers/UbicacionComedores"));
 
 //Juegos
 const JuegoView =React.lazy(() => import("./pages/Juegos/juegosView"));
@@ -134,7 +137,10 @@ function App() {
         <Route path="/comedor" element={<Comedores />} />
         <Route path="/Ticket" element={<Tickets />} />
         <Route path="/nuevo-voucher" element={<NuevoVoucher />} />
-
+        <Route path="/Mantenimientosvoucher" element={<Mantenimientosvoucher />} /> 
+        <Route path="/CajaComedor" element={<CajaComedor/>} /> 
+        <Route path="/ubicacionComedores" element={<UbicacionComedores />} />
+        
 
         {/* ruta para juegos */}
         <Route path="/JuegoView" element={<JuegoView />} />

@@ -37,6 +37,8 @@ import Bitacoras from './src/modules/seguridad/routes/bitacorasRoutes.js';
 
 //++++++++++++++++++++++++++  Importaciones de rutas de vouchers  ++++++++++++++++++++++++++
 import VoucherComidaRoutes   from './src/modules/vouchers/routes/voucherComidaRoutes.js';
+import UbicacionComedores from './src/modules/vouchers/routes/ubicacionesComedorRoutes.js'; // Asegúrate de que esta ruta sea correcta
+
 
 
 
@@ -96,6 +98,7 @@ app.use('/api/bitacoras', Bitacoras);
 
 //Vouchers
 app.use('/api/voucherComida', VoucherComidaRoutes); 
+app.use('/api/ubicacionComedores', UbicacionComedores); // Asegúrate de que esta ruta sea correcta
 
 
 //++++++++++++++++++++++++++ Inicialización del servidor ++++++++++++++++++++++++++ 

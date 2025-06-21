@@ -10,37 +10,42 @@ import NuevoVoucherImage from "../../../src/assets/Vouchernuevo.jpg";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Vouchers/CajaVoucher.css";
 
-const Mantenimientosvoucher = () => {
+const CajaComedor = () => {
   const navigate = useNavigate(); // Hook para la navegación
 
   // Define las cajas que se mostrarán
   const items = [
     {
       id: 1,
-      title: "Asignación de Vouchers",
-      image: VoucherImage,
-      description: "Gestionar los comedores.",
-      route: "/voucher", 
-    },
-    {
-      id: 2,
-      title: "Consumo de Vouchers",
+      title: "Ubicación de comedor",
       image: NuevoVoucherImage,
-      description: "Crear un nuevo voucher.",
-      route: "/nuevo-voucher", 
+      description: "tablas Mantenimiento de vouchers.",
+      route: "/UbicacionComedores", // Ruta a la que navegará al hacer clic
     },
-        
 {
-      id: 5,
+      id: 2,
       title: "Comedores",
       image: NuevoVoucherImage,
       description: "tablas Mantenimiento de vouchers.",
-      route: "/CajaComedor", 
+      route: "/Mantenimientosvoucher", 
     },
-
+    {
+      id: 3,
+      title: "Tipo de comida",
+      image: NuevoVoucherImage,
+      description: "tablas Mantenimiento de vouchers.",
+      route: "/Mantenimientosvoucher", 
+    },
+ {
+      id: 4,
+      title: "Comedor ficha",
+      image: NuevoVoucherImage,
+      description: "tablas Mantenimiento de vouchers.",
+      route: "/Mantenimientosvoucher", 
+    },
   ];
 
-   // Función para manejar el clic en una imagen
+  // Función para manejar el clic en una imagen
   const handleImageClick = (route) => {
     navigate(route); // Navega a la ruta especificada
   };
@@ -49,7 +54,7 @@ const Mantenimientosvoucher = () => {
     <section id="caja-voucher" className="caja-vouchers-container">
       <Container>
         <Nav />
-        <BotonRegresar to="/Vouchers" text="Regresar"  />
+        <BotonRegresar to="/Mantenimientosvoucher" text="Regresar"  />
         {/* Botón para regresar al dashboard */}
         <div className="crud">
         
@@ -77,19 +82,4 @@ const Mantenimientosvoucher = () => {
   );
 };
 
-export default Mantenimientosvoucher;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
+export default CajaComedor ;

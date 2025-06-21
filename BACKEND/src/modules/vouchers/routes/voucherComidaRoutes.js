@@ -1,5 +1,5 @@
 import express from "express";
-import { getVouchersComidas, insertVoucherComida, updateVoucherComida } from "../controllers/voucherComidaController.js";
+import { getVouchersComidas, insertVoucherComida, updateVoucherComida, deleteVoucherComida } from "../controllers/voucherComidaController.js";
 import checkAuth from "../../../middleware/authMiddleware.js";
 const router = express.Router();
 
@@ -10,5 +10,7 @@ router.get("/", getVouchersComidas);
 router.post("/insVoucher", checkAuth, insertVoucherComida);  // Asegúrate de que esta línea esté correctamente escrita
 // Nueva ruta para actualizar un voucher
 router.put('/actuVoucher', checkAuth, updateVoucherComida);
+
+router.delete('/:id', checkAuth, deleteVoucherComida);
 
 export default router;

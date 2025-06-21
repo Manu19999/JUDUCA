@@ -31,10 +31,10 @@ const CajaVouchers = () => {
     },
      {
       id: 3,
-      title: "Mantenimiento Vouchers",
+      title: "Mantenimiento",
       image: NuevoVoucherImage,
-      description: "tablas Mantenimiento de vouchers.",
-      route: "/manteVouchers", 
+      description: "Comedores, comidas, ubicaciones, etc.",
+      route: "/Mantenimientosvoucher", 
     },
   ];
 
