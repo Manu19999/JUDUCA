@@ -10,7 +10,7 @@ import { mostrarMensajeError } from "../../components/Crud/MensajeError"; // Imp
 import { Input, Form } from 'antd';
 import ValidatedInput from "../../utils/ValidatedInput"; 
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
-
+import { fetchWithAuth } from '../../utils/api';
 function EstadosUsuario() {
   const [showNuevoModal, setShowNuevoModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -23,7 +23,7 @@ function EstadosUsuario() {
   //función reutilizable para obtener los estados-usuario
   const obtenerEstadosUsuarios = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/estados-usuario", {
+      const response = await fetchWithAuth("http://localhost:4000/api/estados-usuario", {
         method: "GET",
         credentials: 'include',
         headers: {
@@ -86,7 +86,7 @@ function EstadosUsuario() {
     .then(async (values) => {
       try {
 
-        const response = await fetch("http://localhost:4000/api/estados-usuario", {
+        const response = await fetchWithAuth("http://localhost:4000/api/estados-usuario", {
           method: "POST",
           credentials: 'include',
           headers: {
@@ -127,7 +127,7 @@ function EstadosUsuario() {
       const values = await formEditar.validateFields();
 
       // Llamar a la API para actualizar el estado-usuario
-      const response = await fetch(`http://localhost:4000/api/estados-usuario/${registroSeleccionado.idEstadoUsuario}`, {
+      const response = await fetchWithAuth(`http://localhost:4000/api/estados-usuario/${registroSeleccionado.idEstadoUsuario}`, {
         method: "PUT",
         credentials: 'include',
         headers: {
@@ -167,7 +167,7 @@ function EstadosUsuario() {
     try {
       if (!registroSeleccionado) return;
 
-      const response = await fetch(`http://localhost:4000/api/estados-usuario/${registroSeleccionado.idEstadoUsuario}`, {
+      const response = await fetchWithAuth(`http://localhost:4000/api/estados-usuario/${registroSeleccionado.idEstadoUsuario}`, {
         method: "DELETE",
         credentials: 'include',
         headers: {

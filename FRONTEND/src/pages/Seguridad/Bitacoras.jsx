@@ -4,6 +4,7 @@ import Nav from '../../components/Dashboard/navDashboard';
 import { FaHistory } from 'react-icons/fa';
 import { mostrarMensajeError } from "../../components/Crud/MensajeError"; // Importar el componente de mensaje de error
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
+import { fetchWithAuth } from '../../utils/api';
 
 function Bitacora() {
   const [Bitacoras, setBitacora] = useState([]); // Estado para almacenar los bitacora
@@ -11,7 +12,7 @@ function Bitacora() {
   //función reutilizable para obtener los bitacora
   const obtenerBitacoras = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/bitacoras", {
+      const response = await fetchWithAuth("http://localhost:4000/api/bitacoras", {
         method: "GET",
         credentials: 'include',
         headers: {

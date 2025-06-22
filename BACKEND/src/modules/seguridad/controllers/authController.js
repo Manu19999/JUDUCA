@@ -5,6 +5,32 @@ import sql from 'mssql'; // Asegúrate de importar sql
 import apiResponse from '../../../utils/apiResponse.js';
 import bcrypt from 'bcrypt';// encriptado de contraseña
 dotenv.config();
+
+// Generar tokens
+const generateTokens = (user) => {
+  const accessToken = jwt.sign(
+      {
+          idUsuario: user.idUsuario,
+          email: user.email,
+          nombreUsuario: user.nombreUsuario,
+          idRol: user.idRol
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '30m' } // Access token corto
+  );
+
+  const refreshToken = jwt.sign(
+      {
+          idUsuario: user.idUsuario,
+          tokenVersion: user.tokenVersion || 0 // Puedes usar un campo para invalidar tokens
+      },
+      process.env.JWT_REFRESH_SECRET,
+      { expiresIn: '7d' } // Refresh token largo
+  );
+
+  return { accessToken, refreshToken };
+};
+
 export const Login = async (req, res) => {
     const { email, contrasena } = req.body;
     const response = new apiResponse();
@@ -42,25 +68,24 @@ export const Login = async (req, res) => {
             .input('idUsuario', sql.Int, user.idUsuario)
             .execute('Usuarios.splActualizarUltimaConexion');
 
-        // 5. Generar token JWT
-        const token = jwt.sign(
-            {
-                idUsuario: user.idUsuario,
-                email: user.email,
-                nombreUsuario: user.nombreUsuario,
-                idRol: user.idRol
-            },
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }
-        );
+        // 5. Generar tokens
+        const { accessToken, refreshToken } = generateTokens(user);
 
-        // 6. Configurar cookie segura
-        res.cookie('token', token, {
+        // 6. Configurar cookies seguras
+        res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
-            maxAge: 3600000,
+            maxAge: 1800000, // 30 minutos
             path: '/'
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 604800000, // 7 días
+            path: '/api/auth/refresh' // Solo accesible en la ruta de refresh
         });
 
         // 7. Limpiar datos sensibles en respuesta
@@ -82,17 +107,95 @@ export const Login = async (req, res) => {
     }
 };
 
+export const RefreshToken = async (req, res) => {
+  const response = new apiResponse();
+  const refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken) {
+      response.setErrors(['Refresh token no proporcionado']);
+      response.setHasError(true);
+      return res.status(401).json(response.getResponse());
+  }
+
+  try {
+      // Verificar el refresh token
+      const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+      
+      // Obtener información del usuario (sin almacenar en BD)
+      const pool = await conexionbd();
+      const result = await pool.request()
+          .input('idUsuario', sql.Int, decoded.idUsuario)
+          .execute('Usuarios.splObtenerUsuarioPorId');
+
+      if (result.recordset.length === 0) {
+          response.setErrors(['Usuario no encontrado']);
+          response.setHasError(true);
+          return res.status(404).json(response.getResponse());
+      }
+
+      const user = result.recordset[0];
+      
+      // Verificar versión del token si implementas invalidación
+      if (decoded.tokenVersion !== (user.tokenVersion || 0)) {
+          response.setErrors(['Token inválido']);
+          response.setHasError(true);
+          return res.status(401).json(response.getResponse());
+      }
+
+      // Generar nuevo access token
+      const newAccessToken = jwt.sign(
+          {
+              idUsuario: user.idUsuario,
+              email: user.email,
+              nombreUsuario: user.nombreUsuario,
+              idRol: user.idRol
+          },
+          process.env.JWT_SECRET,
+          { expiresIn: '30m' }
+      );
+
+      // Configurar nueva cookie de access token
+      res.cookie('accessToken', newAccessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 1800000, // 30 minutos
+          path: '/'
+      });
+
+      response.setData({ 
+          message: 'Token actualizado exitosamente'
+      });
+      
+      return res.status(200).json(response.getResponse());
+
+  } catch (err) {
+      console.error('Error al refrescar token:', err);
+      
+      // Limpiar cookies inválidas
+      res.clearCookie('accessToken');
+      res.clearCookie('refreshToken');
+      
+      let mensaje = 'Error al refrescar el token';
+      if (err.name === 'TokenExpiredError') {
+          mensaje = 'Sesión expirada. Por favor inicie sesión nuevamente';
+      } else if (err.name === 'JsonWebTokenError') {
+          mensaje = 'Token inválido';
+      }
+      
+      response.setErrors([mensaje]);
+      response.setHasError(true);
+      return res.status(401).json(response.getResponse());
+  }
+};
+
 export const Logout = async (req, res) => {
     const response = new apiResponse();
 
     try {
         // 1. Limpiar la cookie (usando el mismo nombre que en login)
-        res.clearCookie('token', {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            path: '/'  // Asegurar mismo path que la cookie original
-        });
+        res.clearCookie('accessToken');
+        res.clearCookie('refreshToken');
         
         // 2. Registrar el logout si hay usuario autenticado
         if (req.usuario && req.usuario.idUsuario) {

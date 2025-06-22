@@ -18,8 +18,8 @@
 
 /* Contenedor principal */
 .navbar-container {
-  width: 90%;
-  max-width: 1200px;
+  width: 85%;
+  max-width: 1300px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -82,7 +82,7 @@
 /* Menú de navegación */
 .custom-menu {
   display: flex;
-  gap: 25px;
+  gap: 30px;
   align-items: center;
 }
 
@@ -119,6 +119,38 @@
   width: 100%; /* El subrayado crece hasta el 100% del ancho del enlace */
 }
 
+.navlink {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  position: relative;
+  padding: 6px 10px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.navlink::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 1px solid transparent;
+  border-radius: 50px;
+  top: 0;
+  left: 0;
+  transition: all 0.3s;
+  box-sizing: border-box;
+  transform: scale(0.9);
+  opacity: 0;
+}
+
+.navlink:hover::after {
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1);
+  opacity: 1;
+}
 
 /* Botón Acceder */
 .btn-acceder {
@@ -196,6 +228,9 @@
 
   .mobile-only {
     display: block; /* Muestra el botón acceder solo en móviles */
+  }
+  .navlink {
+    margin-top: 13px;
   }
 }
 

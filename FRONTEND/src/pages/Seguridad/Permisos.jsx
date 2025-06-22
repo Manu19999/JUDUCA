@@ -11,7 +11,7 @@ import { Input, Form, Switch, Select , Row, Col} from 'antd';
 import ValidatedInput from "../../utils/ValidatedInput"; 
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-
+import { fetchWithAuth } from '../../utils/api';
 function Permisos() {
   const [showNuevoModal, setShowNuevoModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -25,7 +25,7 @@ function Permisos() {
   //función reutilizable para obtener los permisos
   const obtenerPermisos = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/permisos", {
+      const response = await fetchWithAuth("http://localhost:4000/api/permisos", {
         method: "GET",
         credentials: 'include',
         headers: {
@@ -53,7 +53,7 @@ function Permisos() {
     // Obtener lista de objetos
     const obtenerObjetos = async () => {
         try {
-          const response = await fetch("http://localhost:4000/api/objetos", {
+          const response = await fetchWithAuth("http://localhost:4000/api/objetos", {
             method: "GET",
             credentials: 'include',
             headers: {
@@ -72,7 +72,7 @@ function Permisos() {
       // Obtener lista de roles
       const obtenerRoles = async () => {
         try {
-          const response = await fetch("http://localhost:4000/api/roles", {
+          const response = await fetchWithAuth("http://localhost:4000/api/roles", {
             method: "GET",
             credentials: 'include',
             headers: {
@@ -147,7 +147,7 @@ function Permisos() {
     .then(async (values) => {
       try {
 
-        const response = await fetch("http://localhost:4000/api/permisos", {
+        const response = await fetchWithAuth("http://localhost:4000/api/permisos", {
           method: "POST",
           credentials: 'include',
           headers: {
@@ -193,7 +193,7 @@ function Permisos() {
       const values = await formEditar.validateFields();
 
       // Llamar a la API para actualizar el rol
-      const response = await fetch(`http://localhost:4000/api/permisos/${registroSeleccionado.idPermiso}`, {
+      const response = await fetchWithAuth(`http://localhost:4000/api/permisos/${registroSeleccionado.idPermiso}`, {
         method: "PUT",
         credentials: 'include',
         headers: {

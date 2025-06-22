@@ -101,7 +101,7 @@ const NavDashboard = () => {
  */}
           {/* Menú desplegable de perfil con ícono */}
           <Dropdown overlay={profileMenu} trigger={["click"]}>
-            <a className="navlinkcustom" onClick={(e) => e.preventDefault()} style={{ cursor: "pointer" }}>
+            <a className="navlink" onClick={(e) => e.preventDefault()} style={{ cursor: "pointer" }}>
               <UserOutlined style={{ fontSize: "20px" }} /> <CaretDownFilled />
             </a>
           </Dropdown>

@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import conexionbd from '../config/db.js';
+import sql from 'mssql';
 
 dotenv.config();
 
@@ -8,51 +10,106 @@ dotenv.config();
  * Si el token es válido, adjunta los datos del usuario al objeto `req`
  * Si el token es inválido o no se proporciona, devuelve un error
  */
-export const checkAuth = (req, res, next) => {
-  // 1. Obtener el token de las cookies en lugar del header
-  const token = req.cookies.token;
-  
-  if (!token) {
-    console.error('Error: Cookie de autenticación no encontrada');
-    return res.status(403).json({
-      success: false,
-      mensaje: 'Acceso denegado. No autenticado.',
-    });
+
+export const checkAuth = async (req, res, next) => {
+  // 1. Verificar si es una ruta pública (login, refresh, etc.)
+  const publicRoutes = ['/api/auth/login', '/api/auth/refresh', '/api/auth/forgot-password', '/api/auth/reset-password'];
+  if (publicRoutes.includes(req.path)) {
+    return next();
   }
 
-  // 2. Verificar y decodificar el token
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('Usuario autenticado:', decoded);
-
-    // 3. Adjuntar los datos del usuario al objeto `req`
-    req.usuario = decoded;
-
-    // 4. Continuar con la siguiente función middleware o controlador
-    next();
-  } catch (error) {
-    console.error('Error al verificar el token:', error.message);
-
-    // 5. Manejar errores específicos del token
-    let mensajeError = 'Token inválido o ha expirado.';
-    if (error.name === 'TokenExpiredError') {
-      mensajeError = 'La sesión ha expirado. Por favor, inicia sesión nuevamente.';
-    } else if (error.name === 'JsonWebTokenError') {
-      mensajeError = 'Token de autenticación inválido.';
-    }
-
-    // 6. Limpiar la cookie inválida
-    res.clearCookie('token', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict'
-    });
-
+  // 2. Intentar obtener el access token
+  let token = req.cookies.accessToken;
+  
+  // 3. Si no hay token, denegar acceso inmediatamente
+  if (!token) {
     return res.status(401).json({
       success: false,
-      mensaje: mensajeError,
+      message: 'Acceso no autorizado. Por favor inicie sesión.'
     });
   }
+
+  // 4. Verificar el token
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.usuario = decoded;
+    return next();
+  } catch (err) {
+    // 5. Manejar token expirado
+    if (err.name === 'TokenExpiredError') {
+      try {
+        // Intentar refrescar el token
+        const newToken = await refreshAccessToken(req, res);
+        if (newToken) {
+          // Adjuntar el nuevo token a la respuesta
+          res.cookie('accessToken', newToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 1800000, // 30 minutos
+            path: '/'
+          });
+          
+          // Decodificar el nuevo token y continuar
+          const decoded = jwt.verify(newToken, process.env.JWT_SECRET);
+          req.usuario = decoded;
+          return next();
+        }
+      } catch (refreshError) {
+        console.error('Error al refrescar token:', refreshError);
+      }
+    }
+    
+    // 6. Cualquier otro error, limpiar cookies y denegar acceso
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+    
+    return res.status(401).json({
+      success: false,
+      message: 'Sesión inválida. Por favor inicie sesión nuevamente.'
+    });
+  }
+};
+
+// Función auxiliar para refrescar el token
+const refreshAccessToken = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  
+  if (!refreshToken) {
+    throw new Error('No hay refresh token disponible');
+  }
+
+  // Verificar el refresh token
+  const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+  
+  // Obtener información del usuario
+  const pool = await conexionbd();
+  const result = await pool.request()
+    .input('idUsuario', sql.Int, decoded.idUsuario)
+    .execute('Usuarios.splObtenerUsuarioPorId');
+
+  if (result.recordset.length === 0) {
+    throw new Error('Usuario no encontrado');
+  }
+
+  const user = result.recordset[0];
+  
+  // Verificar versión del token
+  if (decoded.tokenVersion !== (user.tokenVersion || 0)) {
+    throw new Error('Token inválido');
+  }
+
+  // Generar nuevo access token
+  return jwt.sign(
+    {
+      idUsuario: user.idUsuario,
+      email: user.email,
+      nombreUsuario: user.nombreUsuario,
+      idRol: user.idRol
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: '30m' }
+  );
 };
 
 export default checkAuth;
