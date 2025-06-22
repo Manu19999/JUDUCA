@@ -4,6 +4,8 @@ import { Form } from "react-bootstrap";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Credencial/credencial.css";
+import { FaCreditCard } from "react-icons/fa";
+import Tabla from "../../components/Crud/Tabla.jsx";
 
 
 const DiseñadorCredencial = () => {
@@ -96,7 +98,7 @@ const DiseñadorCredencial = () => {
       },
     });
   };
-  
+
   return (
     <div className="container-fluid">
 
@@ -108,7 +110,7 @@ const DiseñadorCredencial = () => {
       {selectedFicha ? (
         <>
           <div className="text-center mb-4">
-            <h3 className="fw-bold text-primary">
+            <h3>
               FORMATO DE LA CREDENCIAL : {selectedFicha.title || "Sin título"}
             </h3>
             <Form.Check
@@ -120,8 +122,9 @@ const DiseñadorCredencial = () => {
               className="d-inline-block no-print mt-2"
               style={{ fontSize: "1rem" }}
             />
-            <button   style={{ marginLeft: '50px', fontSize: '1rem', padding: '4px 10px' }} className="btn btn-success btn-sm no-print" onClick={handlePrint}>
-              Imprimir
+            <button style={{  display: "inline-flex", marginLeft: '40px'}} className="btn-nuevo-registro btn-sm no-print" onClick={handlePrint}>
+              <FaCreditCard  />
+              <span>Imprimir Diseño</span>
             </button>
           </div>
 

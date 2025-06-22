@@ -5,7 +5,7 @@ import BotonesAccionFila from "./BotonesAccionFila"; // Importa el componente de
 import Paginacion from './Paginacion';
 import Filtros from './Filtros';
 
-const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarReporte, onPermisos,onEstados, onEdit, onDelete, onDetails }) => {
+const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarReporte, onPermisos, onEstados, onEdit, onDelete, onDetails, onDiseñoCredencial}) => {
   const [paginaActual, setPaginaActual] = useState(1);
   const [registrosPorPagina, setRegistrosPorPagina] = useState(8);
   const [busqueda, setBusqueda] = useState('');
@@ -15,13 +15,13 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
   useEffect(() => {
     const datosFiltrados = datos.filter((fila) =>
       Object.values(fila).some((valor) =>
-        valor !== null && 
+        valor !== null &&
         valor !== undefined &&
         valor.toString().toLowerCase().includes(busqueda.toLowerCase())
       )
     );
     setDatosFiltrados(datosFiltrados);
-   // Reiniciar la página solo si la búsqueda ha cambiado
+    // Reiniciar la página solo si la búsqueda ha cambiado
     if (busquedaCambiada) {
       setPaginaActual(1);
       setBusquedaCambiada(false); // Restablecer el estado de búsqueda cambiada
@@ -56,6 +56,7 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
             onGenerarReporte={onGenerarReporte}
             onPermisos={onPermisos}
             onEstados={onEstados}
+            onDiseñoCredencial={onDiseñoCredencial}
           />
         )}
       </div>
@@ -80,7 +81,7 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
               </tr>
             </thead>
             <tbody>
-            {mostrarMensajeVacio ? (
+              {mostrarMensajeVacio ? (
                 <tr>
                   <td colSpan={columnas.length} className="mensaje-vacio">
                     <div className="contenido-mensaje-vacio">
@@ -89,29 +90,29 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
                   </td>
                 </tr>
               ) : (
-              registrosActuales.map((fila, index) => (
-                <tr key={index}>
-                  {columnas.map((col, i) => (
-                    <td key={i}>
-                      {col.campo === "accion" ? ( // Si la columna es "accion", mostramos botones
-                        <BotonesAccionFila
-                          id={fila.id}
-                          onEdit={onEdit}
-                          onDelete={onDelete}
-                          onDetails={onDetails} // Pasamos onDetails solo si está definido
-                        />
-                      ) : col.campo === "indice" ? (
-                        datos.findIndex(d => d.id === fila.id) + 1 // Encuentra el índice original
-                      ) : col.render ? ( // Si la columna tiene un render personalizado, lo usamos
-                        col.render(fila[col.campo], fila) // Pasamos el valor y la fila completa
-                      ) : (
-                        fila[col.campo] // Si no, mostramos el valor directamente
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))
-            )}
+                registrosActuales.map((fila, index) => (
+                  <tr key={index}>
+                    {columnas.map((col, i) => (
+                      <td key={i}>
+                        {col.campo === "accion" ? ( // Si la columna es "accion", mostramos botones
+                          <BotonesAccionFila
+                            id={fila.id}
+                            onEdit={onEdit}
+                            onDelete={onDelete}
+                            onDetails={onDetails} // Pasamos onDetails solo si está definido
+                          />
+                        ) : col.campo === "indice" ? (
+                          datos.findIndex(d => d.id === fila.id) + 1 // Encuentra el índice original
+                        ) : col.render ? ( // Si la columna tiene un render personalizado, lo usamos
+                          col.render(fila[col.campo], fila) // Pasamos el valor y la fila completa
+                        ) : (
+                          fila[col.campo] // Si no, mostramos el valor directamente
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

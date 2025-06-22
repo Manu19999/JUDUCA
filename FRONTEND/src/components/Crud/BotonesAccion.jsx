@@ -1,11 +1,12 @@
 import React from "react";
-import { FaPlus, FaFilePdf, FaUserShield,FaToggleOn } from "react-icons/fa";
+import { FaPlus, FaFilePdf, FaUserShield, FaToggleOn, FaCreditCard  } from "react-icons/fa";
 
 const BotonesAccion = ({ 
   onNuevoRegistro, 
   onGenerarReporte,
   onPermisos,
-  onEstados
+  onEstados,
+  onDiseñoCredencial
 }) => {
   return (
     <div className="botones-accion">
@@ -31,6 +32,12 @@ const BotonesAccion = ({
         <button onClick={onGenerarReporte} className="btn-generar-reporte">
           <FaFilePdf />
           <span>Generar Reporte</span>
+        </button>
+      )}
+      {onDiseñoCredencial && (
+        <button onClick={onDiseñoCredencial} className="btn-nuevo-registro">
+          <FaCreditCard />
+          <span>Imprimir Diseño</span>
         </button>
       )}
       

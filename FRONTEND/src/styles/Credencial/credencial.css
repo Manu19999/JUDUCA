@@ -302,3 +302,32 @@
     margin-bottom: 3cm; /* Espacio entre frente y reverso */
   }
 }
+
+.modal-credencial {
+  max-width: 95vw;
+}
+
+.modal-credencial .modal-content {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.modal-credencial .modal-header {
+  border-bottom: 2px solid rgba(255,255,255,0.2);
+}
+
+.modal-credencial .modal-footer {
+  border-top: 1px solid #eee;
+}
+
+/* Efectos para los campos de la credencial */
+.campo-credencial {
+  transition: all 0.2s ease;
+}
+
+.campo-credencial:hover {
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 1;
+}
