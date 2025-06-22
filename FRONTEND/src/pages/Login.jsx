@@ -240,7 +240,7 @@ const handleResetPasswordSubmit = async (newPassword) => {
     setIsPasswordReset(false);
     
     // Mostrar mensaje de éxito y resetear el formulario de login
-    setErrorMessage('Contraseña cambiada exitosamente. Puedes iniciar sesión ahora.');
+    setErrorMessage('Tu contraseña ha sido actualizada correctamente. Ahora puedes iniciar sesión."');
     setLoginEmail(resetPasswordEmail); // Autorellenar el email
     setLoginPassword(''); // Limpiar contraseña
     
