@@ -121,6 +121,56 @@ export default function DynamicFichaForm() {
   };
 
 
+  // Cargar campos ya configurados para la ficha seleccionada
+  useEffect(() => {
+    const fetchCamposFicha = async () => {
+      try {
+        const res = await axios.get(`http://localhost:4000/api/fichas/formularioFicha/${idFichaRegistro}`);
+        const camposDesdeBD = res.data.data;
+
+        if (!camposDesdeBD || camposDesdeBD.length === 0) return;
+
+        // Agrupar los campos por sección
+        const seccionesAgrupadas = {};
+
+        camposDesdeBD.forEach((campo) => {
+          const seccionId = campo.idSeccion || 0;
+          if (!seccionesAgrupadas[seccionId]) {
+            seccionesAgrupadas[seccionId] = {
+              id: Date.now() + seccionId,
+              idSeccionCatalogo: campo.idSeccion,
+              campos: [],
+            };
+          }
+
+          const campoNuevo = {
+            id: Date.now() + campo.idCatalogoCaracteristicas,
+            idCatalogoCaracteristica: campo.idCatalogoCaracteristicas,
+            idTipoCampo: campo.idTipoCampo,
+            nombreDelCampo: campo.nombreDelCampo,
+            valorPorDefecto: campo.valorPorDefecto,
+            valorRequerido: campo.valorRequerido,
+            valorPrincipal: campo.valorPrincipal,
+            idFichaRegistroCaracteristica: campo.idFichaRegistroCaracteristica // <<--- Asegúrate que venga con ese nombre desde backend
+
+          };
+
+          seccionesAgrupadas[seccionId].campos.push(campoNuevo);
+        });
+
+        // Convertir el objeto a array y actualizar el estado
+        const seccionesFinal = Object.values(seccionesAgrupadas);
+        setSecciones(seccionesFinal);
+      } catch (err) {
+        console.error("Error al cargar campos de ficha:", err);
+      }
+    };
+
+    if (idFichaRegistro) {
+      fetchCamposFicha();
+    }
+  }, [idFichaRegistro]);
+
 
 
   useEffect(() => {
@@ -273,7 +323,7 @@ export default function DynamicFichaForm() {
       )
     );
 
-  const handleSubmit = async () => {
+  const insertarCamposFichas = async () => {
     const payload = [];
 
     secciones.forEach((sec) => {
@@ -323,12 +373,69 @@ export default function DynamicFichaForm() {
       console.log("📦 Respuesta del servidor:", res.data);
     } catch (err) {
       console.error("❌ Error al guardar los campos:", err);
+
+      // Intenta extraer los errores del backend
+      const errores = err.response?.data?.errors || [err.message || "Error desconocido"];
+
       await Swal.fire({
         icon: "error",
         title: "Error al guardar",
-        text: err.message || "Ocurrió un problema al crear el formulario.",
+        html: errores.map(e => `<p>${e}</p>`).join(""), // Mostrar múltiples errores
         confirmButtonColor: "#d33",
       });
+    }
+  };
+
+  const eliminarCampoFicha = async (idFichaRegistroCaracteristica) => {
+    const token = localStorage.getItem("token");
+
+    const body = {
+      idFichaRegistroCaracteristica,
+      idObjeto: 1 // Cambia si tienes otro idObjeto para bitácora
+    };
+
+    console.log("🔍 Datos enviados para eliminar campo:");
+    console.log("Token:", token);
+    console.log("Cuerpo de la solicitud:", JSON.stringify(body, null, 2));
+
+    try {
+      const res = await axios.post(
+        "http://localhost:4000/api/fichas/delFichasCaracteristicas",
+        body,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      console.log("Respuesta eliminar campo:", res.data);
+
+      if (res.data?.data?.codigoError === 0) {
+        await Swal.fire({
+          icon: "success",
+          title: "¡Campo eliminado!",
+          text: "El campo fue eliminado correctamente.",
+          confirmButtonColor: "#253A69",
+        });
+        return true;
+      } else {
+        throw new Error(res.data?.data?.descripcion || "Error al eliminar el campo");
+      }
+    } catch (err) {
+      console.error("❌ Error al eliminar campo:", err);
+
+      const errores = err.response?.data?.errors || [err.message || "Error desconocido"];
+
+      await Swal.fire({
+        icon: "error",
+        title: "Error al eliminar",
+        html: errores.map(e => `<p>${e}</p>`).join(""),
+        confirmButtonColor: "#d33",
+      });
+
+      return false;
     }
   };
 
@@ -468,7 +575,13 @@ export default function DynamicFichaForm() {
 
                 <button
                   className="btn-eliminar-campoD"
-                  onClick={() => eliminarCampo(sec.id, campo.id)}
+                  onClick={async () => {
+                    const eliminado = await eliminarCampoFicha(campo.idFichaRegistroCaracteristica);
+                    if (eliminado) {
+                      eliminarCampo(sec.id, campo.id); // Actualiza UI local eliminando el campo
+                    }
+                  }}
+                  disabled={!campo.idFichaRegistroCaracteristica} // solo eliminar campos guardados
                 >
                   ❌ELIMINAR CAMPO
                 </button>
@@ -479,7 +592,7 @@ export default function DynamicFichaForm() {
 
 
 
-        <button className="btnD guardarD" onClick={handleSubmit}>
+        <button className="btnD guardarD" onClick={insertarCamposFichas}>
           Guardar
         </button>
       </div>

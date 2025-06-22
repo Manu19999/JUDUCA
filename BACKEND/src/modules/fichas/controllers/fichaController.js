@@ -94,6 +94,153 @@ export const ObtenerOpcionesCaracteristicas = async (req, res) => {
 
 };
 
+// Controlador para obtener los campos de una ficha de registro
+export const ObtenerFormularioFicha = async (req, res) => {
+  const { idFichaRegistro } = req.params;
+  const response = new apiResponse();
+
+  if (!idFichaRegistro || isNaN(idFichaRegistro)) {
+    response.setHasError(true);
+    response.setErrors(["Parámetro 'idFichaRegistro' inválido o no proporcionado."]);
+    return res.status(400).json(response.getResponse());
+  }
+
+  try {
+    const pool = await conexionbd();
+
+    const result = await pool
+      .request()
+      .input("idFichaRegistro", parseInt(idFichaRegistro))
+      .execute("Registros.splRegistroFichaCaracteristicaObtener"); 
+    response.setData(result.recordset);
+    res.status(200).json(response.getResponse());
+  } catch (error) {
+    console.error("Error en Obtener el formulario:", error.message);
+    response.setHasError(true);
+    response.setErrors(["Error interno del servidor", error.message]);
+    res.status(500).json(response.getResponse());
+  }
+};
+
+
+export const insertarFichaRegistroCaracteristicas = async (req, res) => {
+  const response = new apiResponse();
+
+  try {
+    const { Caracteristicas, idObjeto } = req.body;
+
+    // Usuario autenticado desde el middleware
+    const idUsuario = req.usuario.idUsuario;
+    const nombreUsuario = req.usuario.nombreUsuario;
+
+    if (!Caracteristicas || !Array.isArray(Caracteristicas) || Caracteristicas.length === 0) {
+      response.setHasError(true);
+      response.setErrors(["Debe proporcionar al menos una característica."]);
+      return res.status(400).json(response.getResponse());
+    }
+
+    const pool = await conexionbd();
+
+    // Crear el parámetro tipo tabla
+    const caracteristicasTable = new sql.Table("Registros.tvpFichaRegistroCaracteristicas");
+    caracteristicasTable.columns.add("idFichaRegistro", sql.Int);
+    caracteristicasTable.columns.add("idCatalogoCaracteristicas", sql.Int);
+    caracteristicasTable.columns.add("idSeccion", sql.Int);
+    caracteristicasTable.columns.add("idTipoCampo", sql.Int);
+    caracteristicasTable.columns.add("nombreDelCampo", sql.NVarChar(70));
+    caracteristicasTable.columns.add("valorPorDefecto", sql.Text);
+    caracteristicasTable.columns.add("valorRequerido", sql.Bit);
+    caracteristicasTable.columns.add("valorPrincipal", sql.Bit);
+    caracteristicasTable.columns.add("usuarioRegistro", sql.NVarChar(90));
+
+    Caracteristicas.forEach(c => {
+      caracteristicasTable.rows.add(
+        c.idFichaRegistro,
+        c.idCatalogoCaracteristicas,
+        c.idSeccion,
+        c.idTipoCampo,
+        c.nombreDelCampo,
+        c.valorPorDefecto || null,
+        c.valorRequerido,
+        c.valorPrincipal,
+        nombreUsuario // o c.usuarioRegistro si lo mandas desde el frontend
+      );
+    });
+
+    const result = await pool
+      .request()
+      .input("Caracteristicas", caracteristicasTable)
+      .input("idUsuario", sql.Int, idUsuario)
+      .input("nombreUsuario", sql.NVarChar, nombreUsuario)
+      .input("idObjeto", sql.Int, idObjeto)
+      .execute("Registros.splFichaRegistroCaracteristicasInsertar");
+
+    if (result.recordset?.[0]?.codigoError !== 0) {
+      response.setHasError(true);
+      response.setErrors([result.recordset[0].descripcion]);
+      return res.status(400).json(response.getResponse());
+    }
+
+    response.setData(result.recordset);
+    return res.status(201).json(response.getResponse());
+
+  } catch (error) {
+    console.error("Error al insertar características:", error);
+    response.setHasError(true);
+    response.setErrors([error.message]);
+    res.status(500).json(response.getResponse());
+  }
+};
+
+
+export const eliminarCampoFormulario = async (req, res) => {
+    const { idFichaRegistroCaracteristica, idObjeto } = req.body;
+
+    const response = new apiResponse();
+
+    try {
+        const idUsuario = req.usuario.idUsuario;
+        const nombreUsuario = req.usuario.nombreUsuario;
+
+        if (!idFichaRegistroCaracteristica) {
+            response.setHasError(true);
+            response.setErrors(["Debe proporcionar el ID de la característica a eliminar."]);
+            return res.status(400).json(response.getResponse());
+        }
+
+        const pool = await conexionbd();
+
+        const result = await pool
+            .request()
+            .input("idFichaRegistroCaracteristica", sql.Int, idFichaRegistroCaracteristica)
+            .input("idUsuario", sql.Int, idUsuario)
+            .input("nombreUsuario", sql.NVarChar(90), nombreUsuario)
+            .input("idObjeto", sql.Int, idObjeto)
+            .execute("Registros.splFichaRegistroCaracteristicasEliminar");
+
+        const resultado = result.recordset[0];
+
+        if (resultado.codigoError !== 0) {
+            response.setHasError(true);
+            response.setErrors([resultado.descripcion]);
+            return res.status(400).json(response.getResponse());
+        }
+
+        response.setData(resultado);
+        return res.status(200).json(response.getResponse());
+
+    } catch (error) {
+        console.error("Error en eliminarFichaRegistroCaracteristica:", error);
+
+        response.setHasError(true);
+        response.setErrors(["Error interno al procesar la solicitud"]);
+        return res.status(500).json(response.getResponse());
+    }
+};
+
+
+
+
 // Controlador para obtener las opciones para cada caracteristica seleccionada
 export const ObtenerCamposPorFicha = async (req, res) => {
   const { idFichaRegistro } = req.params; 
@@ -223,77 +370,6 @@ export const actualizarFichaRegistro = async (req, res) => {
     }
 };
 
-
-
-
-export const insertarFichaRegistroCaracteristicas = async (req, res) => {
-  const response = new apiResponse();
-
-  try {
-    const { Caracteristicas, idObjeto } = req.body;
-
-    // Usuario autenticado desde el middleware
-    const idUsuario = req.usuario.idUsuario;
-    const nombreUsuario = req.usuario.nombreUsuario;
-
-    if (!Caracteristicas || !Array.isArray(Caracteristicas) || Caracteristicas.length === 0) {
-      response.setHasError(true);
-      response.setErrors(["Debe proporcionar al menos una característica."]);
-      return res.status(400).json(response.getResponse());
-    }
-
-    const pool = await conexionbd();
-
-    // Crear el parámetro tipo tabla
-    const caracteristicasTable = new sql.Table("Registros.tvpFichaRegistroCaracteristicas");
-    caracteristicasTable.columns.add("idFichaRegistro", sql.Int);
-    caracteristicasTable.columns.add("idCatalogoCaracteristicas", sql.Int);
-    caracteristicasTable.columns.add("idSeccion", sql.Int);
-    caracteristicasTable.columns.add("idTipoCampo", sql.Int);
-    caracteristicasTable.columns.add("nombreDelCampo", sql.NVarChar(70));
-    caracteristicasTable.columns.add("valorPorDefecto", sql.Text);
-    caracteristicasTable.columns.add("valorRequerido", sql.Bit);
-    caracteristicasTable.columns.add("valorPrincipal", sql.Bit);
-    caracteristicasTable.columns.add("usuarioRegistro", sql.NVarChar(90));
-
-    Caracteristicas.forEach(c => {
-      caracteristicasTable.rows.add(
-        c.idFichaRegistro,
-        c.idCatalogoCaracteristicas,
-        c.idSeccion,
-        c.idTipoCampo,
-        c.nombreDelCampo,
-        c.valorPorDefecto || null,
-        c.valorRequerido,
-        c.valorPrincipal,
-        nombreUsuario // o c.usuarioRegistro si lo mandas desde el frontend
-      );
-    });
-
-    const result = await pool
-      .request()
-      .input("Caracteristicas", caracteristicasTable)
-      .input("idUsuario", sql.Int, idUsuario)
-      .input("nombreUsuario", sql.NVarChar, nombreUsuario)
-      .input("idObjeto", sql.Int, idObjeto)
-      .execute("Registros.splFichaRegistroCaracteristicasInsertar");
-
-    if (result.recordset?.[0]?.codigoError !== 0) {
-      response.setHasError(true);
-      response.setErrors([result.recordset[0].descripcion]);
-      return res.status(400).json(response.getResponse());
-    }
-
-    response.setData(result.recordset);
-    return res.status(201).json(response.getResponse());
-
-  } catch (error) {
-    console.error("Error al insertar características:", error);
-    response.setHasError(true);
-    response.setErrors([error.message]);
-    res.status(500).json(response.getResponse());
-  }
-};
 
 export const InsertarParticipanteEvento = async (req, res) => {
   const response = new apiResponse();
