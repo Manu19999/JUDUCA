@@ -8,10 +8,15 @@ import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Credencial/credencial.css";
 
 function ListaParticipantes() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { selectedFicha } = location.state || {};
+ const navigate = useNavigate();
+    const location = useLocation();
 
+    const [selectedFicha, setSelectedFicha] = useState(() => {
+        const fichaFromState = location.state?.selectedFicha;
+        const fichaFromStorage = localStorage.getItem("selectedFicha");
+        return fichaFromState || (fichaFromStorage ? JSON.parse(fichaFromStorage) : null);
+    });
+    
   const [credenciales, setCredenciales] = useState([]);
   const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
