@@ -10,6 +10,7 @@ import "../../styles/Inicio/Caja-seguridad.css";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Evento/Eventos.css";
 import ModalDetalles from "../../components/Crud/Modal/ModalDetalles";
+import { fetchWithAuth } from '../../utils/api';
 
 const LlenarFichas = () => {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ const LlenarFichas = () => {
       if (!evento) return;
 
       try {
-        const response = await fetch("http://localhost:4000/api/fichas/fichasActivas", {
+        const response = await fetchWithAuth("http://localhost:4000/api/fichas/fichasActivas", {
           method: "GET",
           credentials: 'include',
           headers: {

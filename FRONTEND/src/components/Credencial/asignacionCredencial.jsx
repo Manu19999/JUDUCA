@@ -8,6 +8,7 @@ import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Credencial/credencial.css";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 import { FaCreditCard } from "react-icons/fa";
+import { fetchWithAuth } from '../../utils/api';
 
 
 function CrearCredenciales() {
@@ -45,7 +46,7 @@ function CrearCredenciales() {
   const cargarCredenciales = async (idEvento, idFichaRegistro) => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:4000/api/credencial/credenciales/${idEvento}/${idFichaRegistro}`);
+      const response = await fetchWithAuth(`http://localhost:4000/api/credencial/credenciales/${idEvento}/${idFichaRegistro}`);
       const data = await response.json();
       if (data.hasError) {
         throw new Error(data.errors.join(", "));
@@ -64,7 +65,7 @@ function CrearCredenciales() {
       try {
         if (!selectedFicha?.id) return;
 
-        const response = await fetch(
+        const response = await fetchWithAuth(
           `http://localhost:4000/api/credencial/diseCredencial/${selectedFicha.id}`
         );
 
@@ -96,7 +97,7 @@ function CrearCredenciales() {
   useEffect(() => {
     const fetchUbicaciones = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/credencial/ubicacionCampos");
+        const response = await fetchWithAuth("http://localhost:4000/api/credencial/ubicacionCampos");
         if (!response.ok) throw new Error("Error al obtener ubicaciones");
         const data = await response.json();
         if (Array.isArray(data.data)) {
@@ -410,7 +411,7 @@ function CrearCredenciales() {
         <Tabla
           columnas={[
             { nombre: "#", campo: "id", ancho: "5%" },
-            { nombre: "Nombre del participante", campo: "Participante", ancho: "70%" },
+            { nombre: "Participante", campo: "Participante", ancho: "70%" },
             { nombre: "Acción", campo: "accion", ancho: "25%" },
           ]}
           datos={credenciales}

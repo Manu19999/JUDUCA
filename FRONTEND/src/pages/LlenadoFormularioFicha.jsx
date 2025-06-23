@@ -5,6 +5,7 @@ import "../styles/Credencial/LlenadoFicha.css";
 import BotonRegresar from "../components/Dashboard/BotonRegresar";
 import Nav from "../components/Dashboard/navDashboard";
 import Swal from "sweetalert2";
+import { fetchWithAuth } from '../utils/api';
 
 export default function LlenadoFicha() {
     const navigate = useNavigate();
@@ -30,64 +31,90 @@ export default function LlenadoFicha() {
         }
     }, [selectedFicha]);
 
-    // Efecto para cargar los datos iniciales
-    useEffect(() => {
-        const cargarDatos = async () => {
-            try {
-                setLoading(true);
+  useEffect(() => {
+  const cargarDatos = async () => {
+    try {
+      setLoading(true);
 
-                // 1. Obtener campos de la ficha
-                const { data: { data: campos } } = await axios.get(
-                    `http://localhost:4000/api/fichas/camposFicha/${idFichaRegistro}`
-                );
-                setCamposFicha(campos);
+      // 1. Obtener campos de la ficha
+      const camposResponse = await fetchWithAuth(
+        `http://localhost:4000/api/fichas/camposFicha/${idFichaRegistro}`
+      );
+      
+      if (!camposResponse.ok) {
+        throw new Error(`Error al cargar campos: ${camposResponse.status}`);
+      }
+      
+      const camposData = await camposResponse.json();
+      const campos = camposData.data || [];
+      setCamposFicha(campos);
 
-                // 2. Inicializar valores por defecto para campos tipo radio (idTipoCampo === 9)
-                // En el useEffect de carga de datos, cambia esto:
-                const valoresInicialesRadio = campos.reduce((acc, campo) => {
-                    if (parseInt(campo.idTipoCampo) === 9) {
-                        const fieldName = `campo_${campo.idFichaRegistroCaracteristica}`;
-                        acc[fieldName] = campo.valorPorDefecto || ''; // Usar valor por defecto si existe
-                    }
-                    return acc;
-                }, {});
+      // 2. Inicializar valores por defecto para campos tipo radio (idTipoCampo === 9)
+      const valoresInicialesRadio = campos.reduce((acc, campo) => {
+        if (parseInt(campo.idTipoCampo) === 9) {
+          const fieldName = `campo_${campo.idFichaRegistroCaracteristica}`;
+          acc[fieldName] = campo.valorPorDefecto || '';
+        }
+        return acc;
+      }, {});
 
-                setRadioValues(valoresInicialesRadio);
-                // 3. Agrupar campos por secciones (usa "General" como fallback)
-                const secciones = [...new Set(campos.map(campo => campo.seccion || "General"))];
-                setSecciones(secciones);
+      setRadioValues(valoresInicialesRadio);
 
-                // 4. Cargar opciones para campos tipo radio o lista
-                const camposConOpciones = campos.filter(campo =>
-                    [9, 11].includes(parseInt(campo.idTipoCampo))
-                );
+      // 3. Agrupar campos por secciones (usa "General" como fallback)
+      const secciones = [...new Set(campos.map(campo => campo.seccion || "General"))];
+      setSecciones(secciones);
 
-                const promesasOpciones = camposConOpciones.map(campo =>
-                    axios
-                        .get(`http://localhost:4000/api/fichas/catalogo/OpcionesCaracteristicas/${campo.idCatalogoCaracteristica}`)
-                        .then(res => ({
-                            idCampo: campo.idCatalogoCaracteristica,
-                            opciones: res.data.data || []
-                        }))
-                );
+      // 4. Cargar opciones para campos tipo radio o lista
+      const camposConOpciones = campos.filter(campo =>
+        [9, 11].includes(parseInt(campo.idTipoCampo))
+      );
 
-                const resultados = await Promise.all(promesasOpciones);
+      const promesasOpciones = camposConOpciones.map(async campo => {
+        try {
+          const opcionesResponse = await fetchWithAuth(
+            `http://localhost:4000/api/fichas/catalogo/OpcionesCaracteristicas/${campo.idCatalogoCaracteristica}`
+          );
+          
+          if (!opcionesResponse.ok) {
+            console.warn(`Error al cargar opciones para campo ${campo.idCatalogoCaracteristica}`);
+            return {
+              idCampo: campo.idCatalogoCaracteristica,
+              opciones: []
+            };
+          }
+          
+          const opcionesData = await opcionesResponse.json();
+          return {
+            idCampo: campo.idCatalogoCaracteristica,
+            opciones: opcionesData.data || []
+          };
+        } catch (error) {
+          console.error(`Error al cargar opciones para campo ${campo.idCatalogoCaracteristica}:`, error);
+          return {
+            idCampo: campo.idCatalogoCaracteristica,
+            opciones: []
+          };
+        }
+      });
 
-                const opcionesAgrupadas = resultados.reduce((acc, { idCampo, opciones }) => {
-                    acc[idCampo] = opciones;
-                    return acc;
-                }, {});
-                setOpcionesPorCampo(opcionesAgrupadas);
+      const resultados = await Promise.all(promesasOpciones);
+      const opcionesAgrupadas = resultados.reduce((acc, { idCampo, opciones }) => {
+        acc[idCampo] = opciones;
+        return acc;
+      }, {});
 
-                setLoading(false);
-            } catch (err) {
-                console.error('Error al cargar datos:', err);
-                setLoading(false);
-            }
-        };
+      setOpcionesPorCampo(opcionesAgrupadas);
 
-        if (idFichaRegistro) cargarDatos();
-    }, [idFichaRegistro]);
+    } catch (err) {
+      console.error('Error al cargar datos:', err);
+      setError('Error al cargar los datos iniciales');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (idFichaRegistro) cargarDatos();
+}, [idFichaRegistro]);
 
 
     useEffect(() => {
@@ -155,71 +182,74 @@ export default function LlenadoFicha() {
 
 
     // Manejar el envío del formulario
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    // Manejar el envío del formulario
+const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        if (!validateForm()) {
-            // Scroll al primer error
-            const firstError = Object.keys(errors)[0];
-            if (firstError) {
-                document.getElementById(firstError)?.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-            }
-            return;
-        }
-
-        // Preparar datos para enviar
-        const campos = camposFicha.map(campo => ({
-            idFichaRegistroCaracteristica: campo.idFichaRegistroCaracteristica,
-            valor: campo.idTipoCampo === 9
-                ? radioValues[`campo_${campo.idFichaRegistroCaracteristica}`]
-                : formValues[`campo_${campo.idFichaRegistroCaracteristica}`]
-        }));
-
-
-        const payload = {
-            campos,
-            idObjeto: 1,
-            idEvento: selectedFicha.idEvento,
-            idFichaRegistro: idFichaRegistro
-        };
-
-        try {
-            const res = await axios.post(
-                "http://localhost:4000/api/fichas/insParticipanteEventos",
-                payload,
-                {
-                    withCredentials: true, // 👈 Esto es lo correcto para enviar cookies de sesión
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                }
-            );
-
-            if (res.data && !res.data.hasError) {
-                await Swal.fire({
-                    icon: "success",
-                    title: "¡Participante registrado!",
-                    text: "Participante registrado correctamente.",
-                    confirmButtonColor: "#253A69",
-                });
-                navigate("/llenar-fichas");
-            } else {
-                throw new Error(res.data?.errors?.join(', ') || 'Error desconocido');
-            }
-        } catch (error) {
-            console.error('Error en el envío:', error);
-
-            await Swal.fire({
-                icon: "error",
-                title: "Error al guardar",
-                text: err.message || "Ocurrió un problema al registrar al participante.",
-                confirmButtonColor: "#d33",
+    if (!validateForm()) {
+        // Scroll al primer error
+        const firstError = Object.keys(errors)[0];
+        if (firstError) {
+            document.getElementById(firstError)?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
             });
         }
+        return;
+    }
+
+    // Preparar datos para enviar
+    const campos = camposFicha.map(campo => ({
+        idFichaRegistroCaracteristica: campo.idFichaRegistroCaracteristica,
+        valor: campo.idTipoCampo === 9
+            ? radioValues[`campo_${campo.idFichaRegistroCaracteristica}`]
+            : formValues[`campo_${campo.idFichaRegistroCaracteristica}`]
+    }));
+
+    const payload = {
+        campos,
+        idObjeto: 1,
+        idEvento: selectedFicha.idEvento,
+        idFichaRegistro: idFichaRegistro
     };
+
+    try {
+        const res = await fetchWithAuth(
+            "http://localhost:4000/api/fichas/insParticipanteEventos",
+            {
+                method: "POST",
+                credentials: "include", // equivalente a withCredentials: true
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            }
+        );
+
+        const data = await res.json();
+
+        if (data && !data.hasError) {
+            await Swal.fire({
+                icon: "success",
+                title: "¡Participante registrado!",
+                text: "Participante registrado correctamente.",
+                confirmButtonColor: "#253A69",
+            });
+            navigate("/llenar-fichas");
+        } else {
+            throw new Error(data?.errors?.join(', ') || 'Error desconocido');
+        }
+    } catch (error) {
+        console.error('Error en el envío:', error);
+
+        await Swal.fire({
+            icon: "error",
+            title: "Error al guardar",
+            text: error.message || "Ocurrió un problema al registrar al participante.",
+            confirmButtonColor: "#d33",
+        });
+    }
+};
 
     const handleVolver = () => {
         navigate("/llenar-fichas", {

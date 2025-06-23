@@ -7,6 +7,8 @@ import ModalDetalles from "../../components/Crud/Modal/ModalDetalles";
 import "../../styles/Credencial/credencial.css";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Evento/Eventos.css";
+import { fetchWithAuth } from '../../utils/api';
+
 
 const GestionCredenciales = () => {
   const navigate = useNavigate();
@@ -47,7 +49,7 @@ const GestionCredenciales = () => {
       if (!evento) return;
 
       try {
-        const response = await fetch("http://localhost:4000/api/fichas/fichasActivas", {
+        const response = await fetchWithAuth("http://localhost:4000/api/fichas/fichasActivas", {
           method: "GET",
           credentials: 'include',
           headers: {

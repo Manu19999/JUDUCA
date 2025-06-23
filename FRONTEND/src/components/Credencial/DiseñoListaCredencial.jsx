@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";  // Importar toastify
 import "react-toastify/dist/ReactToastify.css"; // Importar los estilos de toastify
 import "../../styles/Inicio/EventCard.css";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
+import { fetchWithAuth } from '../../utils/api';
 
 const Seleccion = () => {
   const navigate = useNavigate();
@@ -76,7 +77,7 @@ const Seleccion = () => {
 
 
     try {
-      const response = await fetch("http://localhost:4000/api/credencial/insCredencial", {
+      const response = await fetchWithAuth("http://localhost:4000/api/credencial/insCredencial", {
         method: "POST",
         credentials: 'include',
         headers: { "Content-Type": "application/json" },

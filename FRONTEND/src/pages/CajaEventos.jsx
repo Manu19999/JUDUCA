@@ -16,6 +16,7 @@ import { mostrarMensajeError } from "../components/Crud/MensajeError";
 import ValidatedInput from "../utils/ValidatedInput";
 import SubirImagen from '../components/SubirImagen';
 import BotonRegresar from "../components/Dashboard/BotonRegresar";
+import { fetchWithAuth } from '../utils/api';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -61,7 +62,7 @@ const CajaEventos = () => {
       if (activo !== null && activo !== undefined) {
         url += `/${activo}`; // pasamos 1 o 0 para activo/inactivo
       }
-      const response = await fetch(url, {
+      const response = await fetchWithAuth(url, {
         method: "GET",
         credentials: 'include',
         headers: { "Content-Type": "application/json" }
@@ -163,7 +164,7 @@ const CajaEventos = () => {
       const endpoint = esEdicion ? ACTUALIZAR_EVENTO_ENDPOINT : INSERTAR_EVENTO_ENDPOINT;
       const method = esEdicion ? "PUT" : "POST";
 
-      const response = await fetch(endpoint, {
+      const response = await fetchWithAuth(endpoint, {
         method,
         credentials: 'include',
         headers: { "Content-Type": "application/json" },

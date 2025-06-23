@@ -17,6 +17,8 @@ import ValidatedInput from "../utils/ValidatedInput";
 import SubirImagen from '../components/SubirImagen';
 import BotonRegresar from "../components/Dashboard/BotonRegresar";
 import "../styles/Evento/Eventos.css";
+import { fetchWithAuth } from '../utils/api';
+
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -74,7 +76,7 @@ const CajaFichas = () => {
     setEvento(eventoObj);
 
     try {
-      const response = await fetch(FICHAS_ENDPOINT, {
+      const response = await fetchWithAuth(FICHAS_ENDPOINT, {
         method: "GET",
         credentials: 'include',
         headers: {
@@ -187,7 +189,7 @@ const CajaFichas = () => {
       const endpoint = esEdicion ? ACTUALIZAR_FICHAS_ENDPOINT : INSERTAR_FICHAS_ENDPOINT;
       const method = esEdicion ? "PUT" : "POST";
 
-      const response = await fetch(endpoint, {
+      const response = await fetchWithAuth(endpoint, {
         method,
         credentials: 'include',
         headers: { "Content-Type": "application/json" },

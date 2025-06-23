@@ -6,12 +6,12 @@ import checkAuth from "../../../middleware/authMiddleware.js";
 const router = express.Router();
 
 router.get('/fichas',checkAuth, ObtenerFichas);
-router.get('/fichaCaracteristica/:idFichaRegistro', ObtenerCarateristicaFicha);
-router.get('/participantes/:idEvento/:idFichaRegistro', ObtenerParticipantesPorFicha);
-router.get('/credenciales/:idEvento/:idFichaRegistro', ObtenerCredencialesPorFicha);
-router.get('/ubicacionCampos', ObtenerUbicacionesCampos);
-router.get('/camposCredencial/:idFichaRegistro', ObtenerCamposCredencialPorFicha);
-router.get('/diseCredencial/:idFichaRegistro', ObtenerDiseñoCredencialPorFicha);
+router.get('/fichaCaracteristica/:idFichaRegistro',checkAuth, ObtenerCarateristicaFicha);
+router.get('/participantes/:idEvento/:idFichaRegistro',checkAuth, ObtenerParticipantesPorFicha);
+router.get('/credenciales/:idEvento/:idFichaRegistro',checkAuth, ObtenerCredencialesPorFicha);
+router.get('/ubicacionCampos',checkAuth,ObtenerUbicacionesCampos);
+router.get('/camposCredencial/:idFichaRegistro',checkAuth, ObtenerCamposCredencialPorFicha);
+router.get('/diseCredencial/:idFichaRegistro',checkAuth, ObtenerDiseñoCredencialPorFicha);
 
 
 router.post('/insCredencial', checkAuth, InsertarCredencial);

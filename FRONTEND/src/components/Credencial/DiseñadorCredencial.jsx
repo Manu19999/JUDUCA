@@ -6,6 +6,7 @@ import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Credencial/credencial.css";
 import { FaCreditCard } from "react-icons/fa";
 import Tabla from "../../components/Crud/Tabla.jsx";
+import { fetchWithAuth } from '../../utils/api';
 
 
 const DiseñadorCredencial = () => {
@@ -39,7 +40,7 @@ const DiseñadorCredencial = () => {
       try {
         if (!selectedFicha?.id) return;
 
-        const response = await fetch(
+        const response = await fetchWithAuth(
           `http://localhost:4000/api/credencial/diseCredencial/${selectedFicha.id}`
         );
 
@@ -74,7 +75,7 @@ const DiseñadorCredencial = () => {
   useEffect(() => {
     const fetchUbicaciones = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/credencial/ubicacionCampos");
+        const response = await fetchWithAuth("http://localhost:4000/api/credencial/ubicacionCampos");
         if (!response.ok) throw new Error("Error al obtener ubicaciones");
         const data = await response.json();
         if (Array.isArray(data.data)) {

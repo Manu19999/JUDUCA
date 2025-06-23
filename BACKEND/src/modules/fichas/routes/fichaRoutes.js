@@ -5,10 +5,10 @@ import checkAuth from "../../../middleware/authMiddleware.js";
 const router = express.Router();
 
 router.get("/fichasActivas/:activo?", checkAuth, ObtenerFichasPorEvento);
-router.get("/catalogo/CaracteristicasFicha", obtenerCatalogosFichaRegistro); // Añadido idEvento aquí
-router.get("/catalogo/OpcionesCaracteristicas/:idCatalogoCaracteristica", ObtenerOpcionesCaracteristicas); 
-router.get("/camposFicha/:idFichaRegistro", ObtenerCamposPorFicha); 
-router.get("/formularioFicha/:idFichaRegistro", ObtenerFormularioFicha); 
+router.get("/catalogo/CaracteristicasFicha",checkAuth, obtenerCatalogosFichaRegistro); // Añadido idEvento aquí
+router.get("/catalogo/OpcionesCaracteristicas/:idCatalogoCaracteristica",checkAuth, ObtenerOpcionesCaracteristicas); 
+router.get("/camposFicha/:idFichaRegistro",checkAuth, ObtenerCamposPorFicha); 
+router.get("/formularioFicha/:idFichaRegistro",checkAuth, ObtenerFormularioFicha); 
 
 
 router.post("/insFichaRegistros",checkAuth,  insertarFichaRegistro); 

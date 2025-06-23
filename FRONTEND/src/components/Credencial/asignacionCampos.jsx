@@ -4,6 +4,7 @@ import { Button, Alert, Form, Toast, Card } from "react-bootstrap";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import fondoCredencial from "../../assets/FondosCredencial/circulitos.png";
 import Swal from "sweetalert2";
+import { fetchWithAuth } from '../../utils/api';
 
 
 const FieldCard = ({ campo, onDragStart }) => (
@@ -78,7 +79,7 @@ const AsignacionCampos = () => {
   useEffect(() => {
     const obtenerUbicaciones = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/credencial/ubicacionCampos");
+        const response = await fetchWithAuth("http://localhost:4000/api/credencial/ubicacionCampos");
         if (!response.ok) throw new Error("Error al obtener ubicaciones");
         setUbicaciones((await response.json()).data);
       } catch (error) {
@@ -97,7 +98,7 @@ const AsignacionCampos = () => {
           return;
         }
 
-        const response = await fetch(
+        const response = await fetchWithAuth(
           `http://localhost:4000/api/credencial/fichaCaracteristica/${selectedFicha.id}`
         );
 
@@ -130,7 +131,7 @@ const AsignacionCampos = () => {
       try {
         if (!selectedFicha?.id) return;
 
-        const response = await fetch(`http://localhost:4000/api/credencial/CamposCredencial/${selectedFicha.id}`);
+        const response = await fetchWithAuth(`http://localhost:4000/api/credencial/CamposCredencial/${selectedFicha.id}`);
         if (!response.ok) throw new Error(`Error al obtener asignaciones: ${response.status}`);
 
         const { data } = await response.json();
@@ -208,7 +209,7 @@ const AsignacionCampos = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch("http://localhost:4000/api/credencial/campos", {
+      const response = await fetchWithAuth("http://localhost:4000/api/credencial/campos", {
         method: "POST",
         credentials: 'include',
         headers: {
@@ -260,53 +261,52 @@ const AsignacionCampos = () => {
     });
   };
 
-  const handleEliminarAsignacion = useCallback((cellId) => {
+  const handleEliminarAsignacion = useCallback(async (cellId) => {
     const key = `${previewSide}-${cellId}`;
-    const campo = asignaciones[key];  // Encuentra el campo asignado para la celda
+    const campo = asignaciones[key];
     if (!campo) return;
 
-    // Llamada al backend para eliminar el campo
-    const token = localStorage.getItem("token");
-
-    fetch("http://localhost:4000/api/credencial/deleteCampos", {
-      method: "POST", // O "DELETE" dependiendo de lo que requiera el backend
-      credentials: 'include',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        idCampos: [campo.id],  // Envia el idCampoCredencial en lugar de idUbicacionCampo
-        idFichaRegistro: selectedFicha.id,
-        lado: previewSide === "frente",
-        idObjeto: 1 // O el valor que necesites
-      })
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.hasError) {
-          console.error("Error al eliminar campo:", data.errors);
-          setError(data.errors.join(", "));
-        } else {
-          showNotification("Campo eliminado correctamente.");
-          // Eliminarlo del estado local si es necesario
-          setAsignaciones(prev => {
-            const updated = { ...prev };
-            delete updated[key];
-            return updated;
-          });
-        }
-      })
-      .catch(err => {
-        console.error("Error al eliminar campo:", err);
-        setError("Error al eliminar campo.");
+    try {
+      const response = await fetchWithAuth("http://localhost:4000/api/credencial/deleteCampos", {
+        method: "POST",
+        credentials: 'include',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          idCampos: [campo.id],
+          idFichaRegistro: selectedFicha.id,
+          lado: previewSide === "frente",
+          idObjeto: 1
+        })
       });
+
+      const data = await response.json();
+
+      if (data.hasError) {
+        throw new Error(data.errors.join(", "));
+      }
+
+      showNotification("Campo eliminado correctamente.");
+      setAsignaciones(prev => {
+        const updated = { ...prev };
+        delete updated[key];
+        return updated;
+      });
+    } catch (err) {
+      console.error("Error al eliminar campo:", err);
+      setError(err.message);
+      showNotification({
+        message: "Error al eliminar campo",
+        type: "error",
+        duration: 3000
+      });
+    }
   }, [previewSide, selectedFicha.id, asignaciones, showNotification]);
 
-
-  const handleClearAll = useCallback(() => {
+  const handleClearAll = useCallback(async () => {
     const camposAEliminar = Object.values(asignaciones).map(campo => campo.id);
 
-    // Si no hay asignaciones para limpiar
     if (camposAEliminar.length === 0) {
       showNotification({
         message: "¡Ups! No hay asignaciones para limpiar.",
@@ -316,7 +316,7 @@ const AsignacionCampos = () => {
       return;
     }
 
-    Swal.fire({
+    const result = await Swal.fire({
       title: "¿Estás seguro?",
       text: "Esto eliminará todas las asignaciones de esta credencial.",
       icon: "warning",
@@ -325,55 +325,47 @@ const AsignacionCampos = () => {
       cancelButtonColor: "#ffcc00",
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const token = localStorage.getItem("token");
-
-        fetch("http://localhost:4000/api/credencial/deleteCampos", {
-          method: "POST",
-          credentials: 'include',
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            idCampos: camposAEliminar,
-            idFichaRegistro: selectedFicha.id,
-            lado: previewSide === "frente",
-            idObjeto: 1
-          })
-        })
-          .then(response => response.json())
-          .then(data => {
-            if (data.hasError) {
-              console.error("Error al eliminar campos:", data.errors);
-              setError(data.errors.join(", "));
-              showNotification({
-                message: "Hubo un problema al intentar eliminar los campos. Por favor, intenta más tarde.",
-                type: "error",
-                duration: 3000,
-              });
-            } else {
-              showNotification({
-                message: "¡Las asignaciones han sido eliminadas exitosamente!",
-                type: "success",
-                duration: 3000,
-              });
-              setAsignaciones({});
-            }
-          })
-          .catch(err => {
-            console.error("Error al eliminar campos:", err);
-            setError("Error al eliminar campos.");
-            showNotification({
-              message: "¡Ocurrió un error inesperado! Por favor, intenta nuevamente.",
-              type: "error",
-              duration: 3000,
-            });
-          });
-      }
     });
-  }, [asignaciones, showNotification, selectedFicha.id, previewSide]);
 
+    if (!result.isConfirmed) return;
+
+    try {
+      const response = await fetchWithAuth("http://localhost:4000/api/credencial/deleteCampos", {
+        method: "POST",
+        credentials: 'include',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          idCampos: camposAEliminar,
+          idFichaRegistro: selectedFicha.id,
+          lado: previewSide === "frente",
+          idObjeto: 1
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.hasError) {
+        throw new Error(data.errors.join(", "));
+      }
+
+      showNotification({
+        message: "¡Las asignaciones han sido eliminadas exitosamente!",
+        type: "success",
+        duration: 3000,
+      });
+      setAsignaciones({});
+    } catch (err) {
+      console.error("Error al eliminar campos:", err);
+      setError(err.message);
+      showNotification({
+        message: "¡Ocurrió un error inesperado! Por favor, intenta nuevamente.",
+        type: "error",
+        duration: 3000,
+      });
+    }
+  }, [asignaciones, showNotification, selectedFicha.id, previewSide]);
   const handleVolver = () => {
     navigate("/OpcionCredencial", {
       state: {

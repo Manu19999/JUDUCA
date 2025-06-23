@@ -7,6 +7,8 @@ import { Modal } from "react-bootstrap";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Credencial/credencial.css";
 import { FaUserCheck } from "react-icons/fa";
+import { fetchWithAuth } from '../../utils/api';
+
 
  
 function ListaParticipantes() {
@@ -43,7 +45,7 @@ function ListaParticipantes() {
   const cargarCredenciales = async (idEvento, idFichaRegistro) => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:4000/api/credencial/credenciales/${idEvento}/${idFichaRegistro}`);
+      const response = await fetchWithAuth(`http://localhost:4000/api/credencial/credenciales/${idEvento}/${idFichaRegistro}`);
       const data = await response.json();
       if (data.hasError) {
         throw new Error(data.errors.join(", "));
@@ -117,7 +119,7 @@ function ListaParticipantes() {
           <Tabla
             columnas={[
               { nombre: "#", campo: "id", ancho: "5%" },
-              { nombre: "Nombre del participante", campo: "Participante", ancho: "70%" },
+              { nombre: "Participante", campo: "Participante", ancho: "70%" },
               { nombre: "Acción", campo: "accion", ancho: "25%" },
             ]}
             titulo="Gestión de participantes" // Título de la tabla

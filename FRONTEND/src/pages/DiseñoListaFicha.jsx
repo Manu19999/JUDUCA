@@ -9,6 +9,7 @@ import "../styles/Inicio/Caja-seguridad.css";
 import BotonRegresar from "../components/Dashboard/BotonRegresar";
 import Nav from "../components/Dashboard/navDashboard";
 
+
 const Seleccion = () => {
     const navigate = useNavigate();
     const location = useLocation();

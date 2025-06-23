@@ -6,6 +6,7 @@ import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Inicio/EventCard.css";
 import Nav from "../../components/Dashboard/navDashboard";
 import Swal from "sweetalert2";
+import { fetchWithAuth } from '../../utils/api';
 
 export default function DynamicFichaForm() {
   const navigate = useNavigate();
@@ -120,56 +121,69 @@ export default function DynamicFichaForm() {
     }
   };
 
-
-  // Cargar campos ya configurados para la ficha seleccionada
-  useEffect(() => {
-    const fetchCamposFicha = async () => {
-      try {
-        const res = await axios.get(`http://localhost:4000/api/fichas/formularioFicha/${idFichaRegistro}`);
-        const camposDesdeBD = res.data.data;
-
-        if (!camposDesdeBD || camposDesdeBD.length === 0) return;
-
-        // Agrupar los campos por sección
-        const seccionesAgrupadas = {};
-
-        camposDesdeBD.forEach((campo) => {
-          const seccionId = campo.idSeccion || 0;
-          if (!seccionesAgrupadas[seccionId]) {
-            seccionesAgrupadas[seccionId] = {
-              id: Date.now() + seccionId,
-              idSeccionCatalogo: campo.idSeccion,
-              campos: [],
-            };
-          }
-
-          const campoNuevo = {
-            id: Date.now() + campo.idCatalogoCaracteristicas,
-            idCatalogoCaracteristica: campo.idCatalogoCaracteristicas,
-            idTipoCampo: campo.idTipoCampo,
-            nombreDelCampo: campo.nombreDelCampo,
-            valorPorDefecto: campo.valorPorDefecto,
-            valorRequerido: campo.valorRequerido,
-            valorPrincipal: campo.valorPrincipal,
-            idFichaRegistroCaracteristica: campo.idFichaRegistroCaracteristica // <<--- Asegúrate que venga con ese nombre desde backend
-
-          };
-
-          seccionesAgrupadas[seccionId].campos.push(campoNuevo);
-        });
-
-        // Convertir el objeto a array y actualizar el estado
-        const seccionesFinal = Object.values(seccionesAgrupadas);
-        setSecciones(seccionesFinal);
-      } catch (err) {
-        console.error("Error al cargar campos de ficha:", err);
+// Cargar campos ya configurados para la ficha seleccionada
+useEffect(() => {
+  const fetchCamposFicha = async () => {
+    if (!idFichaRegistro) return;
+    
+    try {
+      const response = await fetchWithAuth(`http://localhost:4000/api/fichas/formularioFicha/${idFichaRegistro}`);
+      
+      // Verifica primero si la respuesta es válida
+      if (!response || !response.ok) {
+        throw new Error('Respuesta inválida del servidor');
       }
-    };
+      
+      // Parsea la respuesta JSON (fetchWithAuth probablemente no lo hace automáticamente)
+      const data = await response.json();
+      
+      // Accede a los datos según la estructura real de tu API
+      const camposDesdeBD = data.data; // o simplemente data, dependiendo de tu API
+      
+      if (!camposDesdeBD || !Array.isArray(camposDesdeBD) || camposDesdeBD.length === 0) {
+        setSecciones([]); // Limpiar el estado si no hay datos
+        return;
+      }
 
-    if (idFichaRegistro) {
-      fetchCamposFicha();
+      // Agrupar los campos por sección
+      const seccionesAgrupadas = {};
+
+      camposDesdeBD.forEach((campo) => {
+        const seccionId = campo.idSeccion || 0;
+        if (!seccionesAgrupadas[seccionId]) {
+          seccionesAgrupadas[seccionId] = {
+            id: `seccion-${seccionId}-${Date.now()}`,
+            idSeccionCatalogo: campo.idSeccion,
+            campos: [],
+          };
+        }
+
+        const campoNuevo = {
+          id: `campo-${campo.idCatalogoCaracteristicas}-${Date.now()}`,
+          idCatalogoCaracteristica: campo.idCatalogoCaracteristicas,
+          idTipoCampo: campo.idTipoCampo,
+          nombreDelCampo: campo.nombreDelCampo,
+          valorPorDefecto: campo.valorPorDefecto || '',
+          valorRequerido: Boolean(campo.valorRequerido),
+          valorPrincipal: Boolean(campo.valorPrincipal),
+          idFichaRegistroCaracteristica: campo.idFichaRegistroCaracteristica || null
+        };
+
+        seccionesAgrupadas[seccionId].campos.push(campoNuevo);
+      });
+
+      // Convertir el objeto a array y actualizar el estado
+      const seccionesFinal = Object.values(seccionesAgrupadas);
+      setSecciones(seccionesFinal);
+    } catch (err) {
+      console.error("Error al cargar campos de ficha:", err);
+      // Mostrar error al usuario
+      setError('No se pudieron cargar los campos de la ficha');
     }
-  }, [idFichaRegistro]);
+  };
+
+  fetchCamposFicha();
+}, [idFichaRegistro]);
 
 
 
@@ -181,63 +195,113 @@ export default function DynamicFichaForm() {
 
 
 
-  useEffect(() => {
-    const fetchCatalogos = async () => {
-      try {
-        const res = await axios.get("http://localhost:4000/api/fichas/catalogo/CaracteristicasFicha");
-        const { secciones, tiposCampo, catalogoCaracteristicas } = res.data.data;
-
-        setTiposCampo(tiposCampo);
-        setSeccionesCatalogo(secciones);
-        setCatalogoCaracteristicas(catalogoCaracteristicas);
-      } catch (error) {
-        console.error("Error al obtener catálogos:", error);
+ useEffect(() => {
+  const fetchCatalogos = async () => {
+    try {
+      // 1. Realizar la petición con fetchWithAuth
+      const response = await fetchWithAuth("http://localhost:4000/api/fichas/catalogo/CaracteristicasFicha");
+      
+      // 2. Verificar si la respuesta es exitosa
+      if (!response.ok) {
+        throw new Error(`Error HTTP: ${response.status}`);
       }
-    };
+      
+      // 3. Parsear la respuesta JSON
+      const result = await response.json();
+      
+      // 4. Validar estructura de la respuesta
+      if (!result?.data) {
+        throw new Error('La respuesta no contiene la propiedad "data"');
+      }
+      
+      const { secciones, tiposCampo, catalogoCaracteristicas } = result.data;
 
-    fetchCatalogos();
-  }, []);
+      // 5. Validar tipos de datos recibidos
+      if (!Array.isArray(secciones) || !Array.isArray(tiposCampo) || !Array.isArray(catalogoCaracteristicas)) {
+        throw new Error('Los datos recibidos no son arrays válidos');
+      }
+
+      // 6. Actualizar los estados
+      setTiposCampo(tiposCampo);
+      setSeccionesCatalogo(secciones);
+      setCatalogoCaracteristicas(catalogoCaracteristicas);
+
+    } catch (error) {
+      console.error("Error al obtener catálogos:", error);
+      
+      // Mostrar error al usuario
+      setError('No se pudieron cargar los catálogos. Por favor, intente nuevamente.');
+      
+      // Reiniciar estados
+      setTiposCampo([]);
+      setSeccionesCatalogo([]);
+      setCatalogoCaracteristicas([]);
+    }
+  };
+
+  fetchCatalogos();
+}, []);
 
 
-  // Función para cargar opciones para un campo específico según su característica
   const fetchOpcionesParaCampo = async (idCampo, idCatalogoCaracteristica, idTipoCampo) => {
-    // Busca el tipoCampo por id para saber si es un tipo con opciones (ejemplo: dropdown)
-    const tipo = tiposCampo.find((t) => t.idTipoCampo === parseInt(idTipoCampo));
+  // Busca el tipoCampo por id para saber si es un tipo con opciones
+  const tipo = tiposCampo.find((t) => t.idTipoCampo === parseInt(idTipoCampo));
 
-    if (!tipo) return;
+  if (!tipo) return;
 
-    // Supongamos que el tipo que tiene opciones se llama "select" o "dropdown"
-    if (
-      idCatalogoCaracteristica &&
-      (tipo.nombre_tipo.toUpperCase().includes("LISTA") ||
-        tipo.nombre_tipo.toUpperCase().includes("OPCION MULTIPLE"))
-    ) {
-      try {
-        const res = await axios.get(
-          `http://localhost:4000/api/fichas/catalogo/OpcionesCaracteristicas/${idCatalogoCaracteristica}`
-        );
-        // Guarda las opciones para este campo
-        setOpcionesPorCampo((prev) => ({
-          ...prev,
-          [idCampo]: res.data.data || [],
-        }));
-      } catch (err) {
-        console.error("Error al cargar opciones para campo", idCampo, err);
-        // Limpia las opciones si falla
-        setOpcionesPorCampo((prev) => ({
-          ...prev,
-          [idCampo]: [],
-        }));
+  // Verificar si es un tipo que requiere opciones (lista desplegable, opción múltiple)
+  if (
+    idCatalogoCaracteristica &&
+    (tipo.nombre_tipo.toUpperCase().includes("LISTA") ||
+     tipo.nombre_tipo.toUpperCase().includes("OPCION MULTIPLE"))
+  ) {
+    try {
+      // Usar fetchWithAuth en lugar de axios
+      const response = await fetchWithAuth(
+        `http://localhost:4000/api/fichas/catalogo/OpcionesCaracteristicas/${idCatalogoCaracteristica}`
+      );
+
+      // Verificar si la respuesta es exitosa
+      if (!response.ok) {
+        throw new Error(`Error HTTP: ${response.status}`);
       }
-    } else {
-      // Si no es tipo con opciones, limpia las opciones para ese campo
+
+      // Parsear la respuesta JSON
+      const result = await response.json();
+
+      // Validar estructura de la respuesta
+      const opciones = result?.data || [];
+
+      // Guardar las opciones para este campo
+      setOpcionesPorCampo((prev) => ({
+        ...prev,
+        [idCampo]: opciones,
+      }));
+
+    } catch (err) {
+      console.error(`Error al cargar opciones para campo ${idCampo}:`, err);
+      
+      // Limpiar las opciones en caso de error
       setOpcionesPorCampo((prev) => ({
         ...prev,
         [idCampo]: [],
       }));
+      
+      // Opcional: Mostrar notificación de error al usuario
+      showNotification({
+        message: `No se pudieron cargar las opciones para este campo`,
+        type: "error",
+        duration: 3000
+      });
     }
-  };
-
+  } else {
+    // Si no es tipo con opciones, limpiar las opciones para ese campo
+    setOpcionesPorCampo((prev) => ({
+      ...prev,
+      [idCampo]: [],
+    }));
+  }
+};
   // Cuando cambie el campo idCatalogoCaracteristica o idTipoCampo, recarga las opciones
   useEffect(() => {
     secciones.forEach((sec) => {
@@ -324,120 +388,148 @@ export default function DynamicFichaForm() {
     );
 
   const insertarCamposFichas = async () => {
-    const payload = [];
+  // 1. Preparar el payload
+  const payload = secciones.flatMap((sec) => 
+    sec.campos.map((campo) => ({
+      idFichaRegistro,
+      idCatalogoCaracteristicas: parseInt(campo.idCatalogoCaracteristica),
+      idSeccion: parseInt(sec.idSeccionCatalogo),
+      idTipoCampo: parseInt(campo.idTipoCampo),
+      nombreDelCampo: campo.nombreDelCampo,
+      valorPorDefecto: campo.valorPorDefecto || null,
+      valorRequerido: campo.valorRequerido,
+      valorPrincipal: campo.valorPrincipal,
+    }))
+  );
 
-    secciones.forEach((sec) => {
-      sec.campos.forEach((campo) => {
-        payload.push({
-          idFichaRegistro,
-          idCatalogoCaracteristicas: parseInt(campo.idCatalogoCaracteristica),
-          idSeccion: parseInt(sec.idSeccionCatalogo),
-          idTipoCampo: parseInt(campo.idTipoCampo),
-          nombreDelCampo: campo.nombreDelCampo,
-          valorPorDefecto: campo.valorPorDefecto || null,
-          valorRequerido: campo.valorRequerido,
-          valorPrincipal: campo.valorPrincipal,
-        });
-      });
+  const body = {
+    Caracteristicas: payload,
+    idObjeto: 1
+  };
+
+  // 2. Log de depuración
+  console.log("🔍 Datos enviados al backend:", {
+    body: JSON.stringify(body, null, 2),
+    token: localStorage.getItem("token")
+  });
+
+  try {
+    // 3. Realizar la petición con fetchWithAuth
+    const response = await fetchWithAuth(
+      "http://localhost:4000/api/fichas/insFichaCaracteristicas",
+      {
+        method: "POST",
+        credentials: 'include', // Equivalente a withCredentials: true
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body)
+      }
+    );
+
+    // 4. Manejar la respuesta
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        errorData?.errors?.join(", ") || 
+        `Error HTTP: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const result = await response.json();
+    console.log("📦 Respuesta del servidor:", result);
+
+    // 5. Mostrar confirmación
+    await Swal.fire({
+      icon: "success",
+      title: "¡Formulario registrado!",
+      text: "Los campos del formulario fueron registrados correctamente.",
+      confirmButtonColor: "#253A69",
     });
 
-    const token = localStorage.getItem("token");
+    return result;
 
-    const body = {
-      Caracteristicas: payload,
-      idObjeto: 1
-    };
-
-    console.log("🔍 Datos enviados al backend:");
-    console.log("Token:", token);
-    console.log("Cuerpo de la solicitud:", JSON.stringify(body, null, 2));
-
-
-    try {
-      const res = await axios.post(
-        "http://localhost:4000/api/fichas/insFichaCaracteristicas",
-        body, // 👈 Aquí va el cuerpo de la petición (no en headers)
-        {
-          withCredentials: true, // 👈 Esto es lo correcto para enviar cookies de sesión
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
-      );
-      await Swal.fire({
-        icon: "success",
-        title: "¡Formulario registrado!",
-        text: "Los campos del formulario fueron registrados correctamente.",
-        confirmButtonColor: "#253A69",
-      });
-      console.log("📦 Respuesta del servidor:", res.data);
-    } catch (err) {
-      console.error("❌ Error al guardar los campos:", err);
-
-      // Intenta extraer los errores del backend
-      const errores = err.response?.data?.errors || [err.message || "Error desconocido"];
-
-      await Swal.fire({
-        icon: "error",
-        title: "Error al guardar",
-        html: errores.map(e => `<p>${e}</p>`).join(""), // Mostrar múltiples errores
-        confirmButtonColor: "#d33",
-      });
-    }
-  };
+  } catch (err) {
+    console.error("❌ Error al guardar los campos:", err);
+    
+    // 6. Mostrar error
+    await Swal.fire({
+      icon: "error",
+      title: "Error al guardar",
+      html: `<p>${err.message}</p>`,
+      confirmButtonColor: "#d33",
+    });
+    
+    throw err; // Re-lanzar el error para manejo adicional si es necesario
+  }
+};
 
   const eliminarCampoFicha = async (idFichaRegistroCaracteristica) => {
-    const token = localStorage.getItem("token");
-
-    const body = {
-      idFichaRegistroCaracteristica,
-      idObjeto: 1 // Cambia si tienes otro idObjeto para bitácora
-    };
-
-    console.log("🔍 Datos enviados para eliminar campo:");
-    console.log("Token:", token);
-    console.log("Cuerpo de la solicitud:", JSON.stringify(body, null, 2));
-
-    try {
-      const res = await axios.post(
-        "http://localhost:4000/api/fichas/delFichasCaracteristicas",
-        body,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
-      );
-
-      console.log("Respuesta eliminar campo:", res.data);
-
-      if (res.data?.data?.codigoError === 0) {
-        await Swal.fire({
-          icon: "success",
-          title: "¡Campo eliminado!",
-          text: "El campo fue eliminado correctamente.",
-          confirmButtonColor: "#253A69",
-        });
-        return true;
-      } else {
-        throw new Error(res.data?.data?.descripcion || "Error al eliminar el campo");
-      }
-    } catch (err) {
-      console.error("❌ Error al eliminar campo:", err);
-
-      const errores = err.response?.data?.errors || [err.message || "Error desconocido"];
-
-      await Swal.fire({
-        icon: "error",
-        title: "Error al eliminar",
-        html: errores.map(e => `<p>${e}</p>`).join(""),
-        confirmButtonColor: "#d33",
-      });
-
-      return false;
-    }
+  // 1. Preparar el cuerpo de la solicitud
+  const body = {
+    idFichaRegistroCaracteristica,
+    idObjeto: 1 // Cambia si tienes otro idObjeto para bitácora
   };
+
+  // 2. Log de depuración
+  console.log("🔍 Datos enviados para eliminar campo:", {
+    body: JSON.stringify(body, null, 2),
+    token: localStorage.getItem("token")
+  });
+
+  try {
+    // 3. Realizar la petición con fetchWithAuth
+    const response = await fetchWithAuth(
+      "http://localhost:4000/api/fichas/delFichasCaracteristicas",
+      {
+        method: "POST",
+        credentials: 'include',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body)
+      }
+    );
+
+    // 4. Manejar la respuesta
+    const result = await response.json();
+    console.log("📦 Respuesta del servidor:", result);
+
+    if (!response.ok) {
+      throw new Error(
+        result?.data?.descripcion || 
+        result?.errors?.join(", ") || 
+        `Error HTTP: ${response.status}`
+      );
+    }
+
+    // 5. Verificar código de error del backend
+    if (result?.data?.codigoError === 0) {
+      await Swal.fire({
+        icon: "success",
+        title: "¡Campo eliminado!",
+        text: "El campo fue eliminado correctamente.",
+        confirmButtonColor: "#253A69",
+      });
+      return true;
+    } else {
+      throw new Error(result?.data?.descripcion || "Error al eliminar el campo");
+    }
+
+  } catch (err) {
+    console.error("❌ Error al eliminar campo:", err);
+    
+    // 6. Mostrar error al usuario
+    await Swal.fire({
+      icon: "error",
+      title: "Error al eliminar",
+      html: `<p>${err.message}</p>`,
+      confirmButtonColor: "#d33",
+    });
+    
+    return false;
+  }
+};
 
 
   const handleVolver = () => {
