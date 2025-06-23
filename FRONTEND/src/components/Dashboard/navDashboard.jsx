@@ -50,11 +50,15 @@ const NavDashboard = () => {
     setMenuOpen(false); // Cierra el menú en dispositivos móviles
   };
 
+  const handlePerfilClick = () => {
+    navigate("/perfil");
+    setMenuOpen(false);
+  };
 
   // Menú desplegable para el perfil
   const profileMenu = (
     <Menu>
-      <Menu.Item key="profile" icon={<UserOutlined />}>
+      <Menu.Item key="profile" icon={<UserOutlined />}onClick={handlePerfilClick}>
         Perfil
       </Menu.Item>
       <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={handleLogoutClick}>

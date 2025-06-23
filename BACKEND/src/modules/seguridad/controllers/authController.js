@@ -306,3 +306,36 @@ export const resetPassword = async (req, res) => {
     return res.status(500).json(response.getResponse());
   }
 };
+
+
+// controllers/authController.js
+export const obtenerPerfilUsuario = async (req, res) => {
+  const response = new apiResponse();
+  
+  try {
+      const pool = await conexionbd();
+      const result = await pool.request()
+          .input('idUsuario', sql.Int, req.usuario.idUsuario)
+          .execute('Usuarios.splUsuariosObtener');
+
+      // Verificar si hay errores
+      if (result.recordset.length > 0 && result.recordset[0].codigoError) {
+          response.setHasError(true);
+          response.setErrors([result.recordset[0].descripcion]);
+          return res.status(404).json(response.getResponse());
+      }
+
+      // Obtener el primer registro (el usuario)
+      const usuario = result.recordset[0];
+      
+      // Eliminar campos sensibles antes de enviar la respuesta
+      delete usuario.contraseña;
+      
+      response.setData({ usuario });
+      res.status(200).json(response.getResponse());
+  } catch (error) {
+      response.setHasError(true);
+      response.setErrors(['Error al obtener el perfil del usuario']);
+      res.status(500).json(response.getResponse());
+  }
+};

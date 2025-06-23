@@ -16,6 +16,7 @@ const routeNames = {
   "estados-usuario": "Estados-Usuario",
   permisos:"Permisos",
   parametros:"Parametros",
+  perfil:"Perfil",
 
   //Eventos
   eventos: "Eventos",
@@ -50,6 +51,9 @@ const getHierarchy = (pathname) => {
   // Mapeo manual de la jerarquía seguridad, dependiendo de la ruta actual devuelve una jerarquía específica
   if (pathnames.includes("seguridad")) {
     return ["dashboard", "seguridad"];
+  }
+  if (pathnames.includes("perfil")) {
+    return ["dashboard", "perfil"];
   }
   if (pathnames.includes("estados-usuario")) {
     return ["dashboard", "seguridad", "usuarios", "estados-usuario"];
