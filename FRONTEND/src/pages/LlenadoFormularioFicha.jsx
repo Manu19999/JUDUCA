@@ -6,6 +6,7 @@ import BotonRegresar from "../components/Dashboard/BotonRegresar";
 import Nav from "../components/Dashboard/navDashboard";
 import Swal from "sweetalert2";
 import { fetchWithAuth } from '../utils/api';
+import { ToastContainer, toast } from "react-toastify";  // Importar toastify
 
 export default function LlenadoFicha() {
     const navigate = useNavigate();
@@ -31,90 +32,90 @@ export default function LlenadoFicha() {
         }
     }, [selectedFicha]);
 
-  useEffect(() => {
-  const cargarDatos = async () => {
-    try {
-      setLoading(true);
+    useEffect(() => {
+        const cargarDatos = async () => {
+            try {
+                setLoading(true);
 
-      // 1. Obtener campos de la ficha
-      const camposResponse = await fetchWithAuth(
-        `http://localhost:4000/api/fichas/camposFicha/${idFichaRegistro}`
-      );
-      
-      if (!camposResponse.ok) {
-        throw new Error(`Error al cargar campos: ${camposResponse.status}`);
-      }
-      
-      const camposData = await camposResponse.json();
-      const campos = camposData.data || [];
-      setCamposFicha(campos);
+                // 1. Obtener campos de la ficha
+                const camposResponse = await fetchWithAuth(
+                    `http://localhost:4000/api/fichas/camposFicha/${idFichaRegistro}`
+                );
 
-      // 2. Inicializar valores por defecto para campos tipo radio (idTipoCampo === 9)
-      const valoresInicialesRadio = campos.reduce((acc, campo) => {
-        if (parseInt(campo.idTipoCampo) === 9) {
-          const fieldName = `campo_${campo.idFichaRegistroCaracteristica}`;
-          acc[fieldName] = campo.valorPorDefecto || '';
-        }
-        return acc;
-      }, {});
+                if (!camposResponse.ok) {
+                    throw new Error(`Error al cargar campos: ${camposResponse.status}`);
+                }
 
-      setRadioValues(valoresInicialesRadio);
+                const camposData = await camposResponse.json();
+                const campos = camposData.data || [];
+                setCamposFicha(campos);
 
-      // 3. Agrupar campos por secciones (usa "General" como fallback)
-      const secciones = [...new Set(campos.map(campo => campo.seccion || "General"))];
-      setSecciones(secciones);
+                // 2. Inicializar valores por defecto para campos tipo radio (idTipoCampo === 9)
+                const valoresInicialesRadio = campos.reduce((acc, campo) => {
+                    if (parseInt(campo.idTipoCampo) === 9) {
+                        const fieldName = `campo_${campo.idFichaRegistroCaracteristica}`;
+                        acc[fieldName] = campo.valorPorDefecto || '';
+                    }
+                    return acc;
+                }, {});
 
-      // 4. Cargar opciones para campos tipo radio o lista
-      const camposConOpciones = campos.filter(campo =>
-        [9, 11].includes(parseInt(campo.idTipoCampo))
-      );
+                setRadioValues(valoresInicialesRadio);
 
-      const promesasOpciones = camposConOpciones.map(async campo => {
-        try {
-          const opcionesResponse = await fetchWithAuth(
-            `http://localhost:4000/api/fichas/catalogo/OpcionesCaracteristicas/${campo.idCatalogoCaracteristica}`
-          );
-          
-          if (!opcionesResponse.ok) {
-            console.warn(`Error al cargar opciones para campo ${campo.idCatalogoCaracteristica}`);
-            return {
-              idCampo: campo.idCatalogoCaracteristica,
-              opciones: []
-            };
-          }
-          
-          const opcionesData = await opcionesResponse.json();
-          return {
-            idCampo: campo.idCatalogoCaracteristica,
-            opciones: opcionesData.data || []
-          };
-        } catch (error) {
-          console.error(`Error al cargar opciones para campo ${campo.idCatalogoCaracteristica}:`, error);
-          return {
-            idCampo: campo.idCatalogoCaracteristica,
-            opciones: []
-          };
-        }
-      });
+                // 3. Agrupar campos por secciones (usa "General" como fallback)
+                const secciones = [...new Set(campos.map(campo => campo.seccion || "General"))];
+                setSecciones(secciones);
 
-      const resultados = await Promise.all(promesasOpciones);
-      const opcionesAgrupadas = resultados.reduce((acc, { idCampo, opciones }) => {
-        acc[idCampo] = opciones;
-        return acc;
-      }, {});
+                // 4. Cargar opciones para campos tipo radio o lista
+                const camposConOpciones = campos.filter(campo =>
+                    [9, 11].includes(parseInt(campo.idTipoCampo))
+                );
 
-      setOpcionesPorCampo(opcionesAgrupadas);
+                const promesasOpciones = camposConOpciones.map(async campo => {
+                    try {
+                        const opcionesResponse = await fetchWithAuth(
+                            `http://localhost:4000/api/fichas/catalogo/OpcionesCaracteristicas/${campo.idCatalogoCaracteristica}`
+                        );
 
-    } catch (err) {
-      console.error('Error al cargar datos:', err);
-      setError('Error al cargar los datos iniciales');
-    } finally {
-      setLoading(false);
-    }
-  };
+                        if (!opcionesResponse.ok) {
+                            console.warn(`Error al cargar opciones para campo ${campo.idCatalogoCaracteristica}`);
+                            return {
+                                idCampo: campo.idCatalogoCaracteristica,
+                                opciones: []
+                            };
+                        }
 
-  if (idFichaRegistro) cargarDatos();
-}, [idFichaRegistro]);
+                        const opcionesData = await opcionesResponse.json();
+                        return {
+                            idCampo: campo.idCatalogoCaracteristica,
+                            opciones: opcionesData.data || []
+                        };
+                    } catch (error) {
+                        console.error(`Error al cargar opciones para campo ${campo.idCatalogoCaracteristica}:`, error);
+                        return {
+                            idCampo: campo.idCatalogoCaracteristica,
+                            opciones: []
+                        };
+                    }
+                });
+
+                const resultados = await Promise.all(promesasOpciones);
+                const opcionesAgrupadas = resultados.reduce((acc, { idCampo, opciones }) => {
+                    acc[idCampo] = opciones;
+                    return acc;
+                }, {});
+
+                setOpcionesPorCampo(opcionesAgrupadas);
+
+            } catch (err) {
+                console.error('Error al cargar datos:', err);
+                setError('Error al cargar los datos iniciales');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (idFichaRegistro) cargarDatos();
+    }, [idFichaRegistro]);
 
 
     useEffect(() => {
@@ -182,74 +183,139 @@ export default function LlenadoFicha() {
 
 
     // Manejar el envío del formulario
-    // Manejar el envío del formulario
-const handleSubmit = async (e) => {
-    e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    if (!validateForm()) {
-        // Scroll al primer error
-        const firstError = Object.keys(errors)[0];
-        if (firstError) {
-            document.getElementById(firstError)?.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
+        if (!validateForm()) {
+            // Scroll al primer error
+            const firstError = Object.keys(errors)[0];
+            if (firstError) {
+                document.getElementById(firstError)?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+            return;
+        }
+
+        // Preparar datos para enviar
+        const campos = camposFicha.map(campo => ({
+            idFichaRegistroCaracteristica: campo.idFichaRegistroCaracteristica,
+            valor: campo.idTipoCampo === 9
+                ? radioValues[`campo_${campo.idFichaRegistroCaracteristica}`]
+                : formValues[`campo_${campo.idFichaRegistroCaracteristica}`]
+        }));
+
+        const payload = {
+            campos,
+            idObjeto: 1,
+            idEvento: selectedFicha.idEvento,
+            idFichaRegistro: idFichaRegistro
+        };
+
+        try {
+            // 1. Primero registrar al participante
+            const res = await fetchWithAuth(
+                "http://localhost:4000/api/fichas/insParticipanteEventos",
+                {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                }
+            );
+
+            const data = await res.json();
+
+            if (data && !data.hasError) {
+                // 2. Si el participante se registró correctamente, insertar la credencial
+                try {
+                    await handleInsertarCredencial();
+
+                    // Mostrar éxito solo después de ambas operaciones
+                    await Swal.fire({
+                        icon: "success",
+                        title: "¡Participante registrado!",
+                        text: "Participante y credencial registrados correctamente.",
+                        confirmButtonColor: "#253A69",
+                    });
+                    navigate("/llenar-fichas");
+                } catch (credError) {
+                    console.error('Error al insertar credencial:', credError);
+                    await Swal.fire({
+                        icon: "warning",
+                        title: "Participante registrado, pero...",
+                        text: "El participante se registró, pero hubo un problema al crear la credencial: " + (credError.message || "Error desconocido"),
+                        confirmButtonColor: "#253A69",
+                    });
+                }
+            } else {
+                throw new Error(data?.errors?.join(', ') || 'Error desconocido al registrar participante');
+            }
+        } catch (error) {
+            console.error('Error en el envío:', error);
+            await Swal.fire({
+                icon: "error",
+                title: "Error al guardar",
+                text: error.message || "Ocurrió un problema al registrar al participante.",
+                confirmButtonColor: "#d33",
             });
         }
-        return;
-    }
-
-    // Preparar datos para enviar
-    const campos = camposFicha.map(campo => ({
-        idFichaRegistroCaracteristica: campo.idFichaRegistroCaracteristica,
-        valor: campo.idTipoCampo === 9
-            ? radioValues[`campo_${campo.idFichaRegistroCaracteristica}`]
-            : formValues[`campo_${campo.idFichaRegistroCaracteristica}`]
-    }));
-
-    const payload = {
-        campos,
-        idObjeto: 1,
-        idEvento: selectedFicha.idEvento,
-        idFichaRegistro: idFichaRegistro
     };
 
-    try {
-        const res = await fetchWithAuth(
-            "http://localhost:4000/api/fichas/insParticipanteEventos",
-            {
-                method: "POST",
-                credentials: "include", // equivalente a withCredentials: true
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(payload)
-            }
-        );
-
-        const data = await res.json();
-
-        if (data && !data.hasError) {
-            await Swal.fire({
-                icon: "success",
-                title: "¡Participante registrado!",
-                text: "Participante registrado correctamente.",
-                confirmButtonColor: "#253A69",
-            });
-            navigate("/llenar-fichas");
-        } else {
-            throw new Error(data?.errors?.join(', ') || 'Error desconocido');
+    const handleInsertarCredencial = async () => {
+        if (!selectedFicha) {
+            toast.error("No se encontró la ficha seleccionada.");
+            return;
         }
-    } catch (error) {
-        console.error('Error en el envío:', error);
 
-        await Swal.fire({
-            icon: "error",
-            title: "Error al guardar",
-            text: error.message || "Ocurrió un problema al registrar al participante.",
-            confirmButtonColor: "#d33",
-        });
-    }
-};
+        const { idEvento, id } = selectedFicha;
+
+        if (!idEvento || isNaN(idEvento) || !id || isNaN(id)) {
+            toast.error("Los datos de la ficha seleccionada no son válidos.");
+            return;
+        }
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            toast.error("Token no disponible.");
+            return;
+        }
+
+        const credencial = {
+            idEvento,
+            activo: 1,
+            idFicha: id,
+            idObjeto: 1, // Este debe ser un número válido
+        };
+
+        console.log("Enviando credencial:", credencial);
+
+
+        try {
+            const response = await fetchWithAuth("http://localhost:4000/api/credencial/insCredencial", {
+                method: "POST",
+                credentials: 'include',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(credencial),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || data.hasError) {
+                throw new Error(data.errors?.[0] || "Error al insertar la credencial");
+            }
+
+            toast.success("Credencial insertada correctamente.");
+            // await obtenerCredenciales(); // si tienes esta función
+        } catch (error) {
+            console.error("Error:", error);
+            toast.error(error.message || "Error al insertar la credencial.");
+        }
+    };
 
     const handleVolver = () => {
         navigate("/llenar-fichas", {
