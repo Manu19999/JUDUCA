@@ -10,7 +10,7 @@ import { mostrarMensajeError } from "../../components/Crud/MensajeError"; // Imp
 import { Input, Form } from 'antd';
 import ValidatedInput from "../../utils/ValidatedInput"; 
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
-
+import { fetchWithAuth } from '../../utils/api';
 function Objetos() {
   const [showNuevoModal, setShowNuevoModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -23,7 +23,7 @@ function Objetos() {
   //función reutilizable para obtener los objetos
   const obtenerObjetos = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/objetos", {
+      const response = await fetchWithAuth("http://localhost:4000/api/objetos", {
         method: "GET",
         credentials: 'include',
         headers: {
@@ -86,7 +86,7 @@ function Objetos() {
     .then(async (values) => {
       try {
 
-        const response = await fetch("http://localhost:4000/api/objetos", {
+        const response = await fetchWithAuth("http://localhost:4000/api/objetos", {
           method: "POST",
           credentials: 'include',
           headers: {
@@ -129,7 +129,7 @@ function Objetos() {
       const values = await formEditar.validateFields();
 
       // Llamar a la API para actualizar el rol
-      const response = await fetch(`http://localhost:4000/api/objetos/${registroSeleccionado.idObjeto}`, {
+      const response = await fetchWithAuth(`http://localhost:4000/api/objetos/${registroSeleccionado.idObjeto}`, {
         method: "PUT",
         credentials: 'include',
         headers: {
@@ -170,7 +170,7 @@ function Objetos() {
     try {
       if (!registroSeleccionado) return;
 
-      const response = await fetch(`http://localhost:4000/api/objetos/${registroSeleccionado.idObjeto}`, {
+      const response = await fetchWithAuth(`http://localhost:4000/api/objetos/${registroSeleccionado.idObjeto}`, {
         method: "DELETE",
         credentials: 'include',
         headers: {

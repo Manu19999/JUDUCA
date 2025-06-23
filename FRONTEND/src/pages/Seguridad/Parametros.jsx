@@ -83,7 +83,7 @@ function Parametros() {
         },
         body: JSON.stringify({
           valor: values.valor,
-          idObjeto: 5, // ID del objeto 
+          idObjetoBitacora: 5, // ID del objeto 
         }),
       });
 

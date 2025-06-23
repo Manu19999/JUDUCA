@@ -10,7 +10,7 @@ import { Input, Form, Select, Switch } from 'antd';
 import SubirImagen from '../../components/SubirImagen';
 import ValidatedInput from "../../utils/ValidatedInput"; 
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
-
+import { fetchWithAuth } from '../../utils/api';
 function Universidades() {
   const [showNuevoModal, setShowNuevoModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -23,7 +23,7 @@ function Universidades() {
 
   const obtenerUniversidades = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/universidades", {
+      const response = await fetchWithAuth("http://localhost:4000/api/universidades", {
         method: "GET",
         credentials: 'include',
         headers: {
@@ -51,7 +51,7 @@ function Universidades() {
   useEffect(() => {
     const obtenerCiudades = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/ciudades");
+        const response = await fetchWithAuth("http://localhost:4000/api/ciudades");
         if (!response.ok) throw new Error("Error al obtener las ciudades");
 
         const data = await response.json();
@@ -123,7 +123,7 @@ function Universidades() {
     formNuevo.validateFields()
     .then(async (values) => {
       try {
-        const response = await fetch("http://localhost:4000/api/universidades", {
+        const response = await fetchWithAuth("http://localhost:4000/api/universidades", {
           method: "POST",
           credentials: 'include',
           headers: {
@@ -168,7 +168,7 @@ function Universidades() {
       const values = await formEditar.validateFields();
 
       // Llamar a la API para actualizar la universidad
-      const response = await fetch(`http://localhost:4000/api/universidades/${registroSeleccionado.idUniversidad}`, {
+      const response = await fetchWithAuth(`http://localhost:4000/api/universidades/${registroSeleccionado.idUniversidad}`, {
         method: "PUT",
         credentials: 'include',
         headers: {

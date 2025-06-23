@@ -16,7 +16,7 @@ import moment from 'moment';
 const { Option } = Select;
 const { TabPane } = Tabs;
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
-
+import { fetchWithAuth } from '../../utils/api';
 function Usuarios() {
   // Estados para controlar la visibilidad de los modales
   const [showNuevoModal, setShowNuevoModal] = useState(false);
@@ -140,7 +140,7 @@ function Usuarios() {
   //función reutilizable para obtener los roles
   const obtenerUsuarios = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/usuarios", {
+      const response = await fetchWithAuth("http://localhost:4000/api/usuarios", {
         method: "GET",
         credentials: 'include',
         headers: {
@@ -168,7 +168,7 @@ function Usuarios() {
   useEffect(() => {
     const obtenerGeneros = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/generos");
+        const response = await fetchWithAuth("http://localhost:4000/api/generos");
         if (!response.ok) throw new Error("Error al obtener los géneros");
         const data = await response.json();
         setGeneros(data.data);
@@ -180,7 +180,7 @@ function Usuarios() {
   
    const obtenerUniversidades = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/universidades", {
+        const response = await fetchWithAuth("http://localhost:4000/api/universidades", {
           method: "GET",
           credentials: 'include',
           headers: {
@@ -201,7 +201,7 @@ function Usuarios() {
   
     const obtenerRoles = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/roles", {
+        const response = await fetchWithAuth("http://localhost:4000/api/roles", {
           method: "GET",
           credentials: 'include',
           headers: {
@@ -338,7 +338,7 @@ function Usuarios() {
             idObjeto: 4, // ID del objeto según tu sistema
           };
 
-          const response = await fetch("http://localhost:4000/api/usuarios", {
+          const response = await fetchWithAuth("http://localhost:4000/api/usuarios", {
             method: "POST",
             credentials: 'include',
             headers: {
@@ -396,7 +396,7 @@ function Usuarios() {
       };
 
       // Llamar a la API para actualizar el usuario
-      const response = await fetch(`http://localhost:4000/api/usuarios/${registroSeleccionado.idUsuario}`, {
+      const response = await fetchWithAuth(`http://localhost:4000/api/usuarios/${registroSeleccionado.idUsuario}`, {
         method: "PUT",
         credentials: 'include',
         headers: {

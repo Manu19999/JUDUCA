@@ -3,6 +3,8 @@ import React, { Suspense } from "react";
 import Loader from "./components/Loader"; 
 // Importa el componente Breadcrumb
 import AppBreadcrumb from "./components/AppBreadcrumb";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Unauthorized from "./pages/Unauthorized";
 import "./styles/Credencial/credencial.css";
 
 
@@ -86,72 +88,78 @@ function App() {
       <Suspense fallback={<Loader />}>
       <Routes>
         {/* ruta para pagina de inicio, login y dashboard */}
+        {/* RUTAS PÚBLICAS */}
         <Route path="" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
 
-        {/* ruta para seguridad */}
-        <Route path="/seguridad" element={<CajaSeguridad />} />
-        <Route path="/usuarios" element={<Usuarios />} />
-        <Route path="/roles" element={<Roles />} />
-        <Route path="/universidades" element={<Universidades />} />
-        <Route path="/objetos" element={<Objetos />} />
-        <Route path="/bitacoras" element={<Bitacoras />} />
-        <Route path="/estados-usuario" element={<EstadosUsuario />} />
-        <Route path="/permisos" element={<Permisos />} />
-        <Route path="/parametros" element={<Parametros />} />
+        {/* RUTAS PRIVADAS */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          
+          
+          {/* ruta para seguridad */}
+          <Route path="/seguridad" element={<CajaSeguridad />} />
+          <Route path="/usuarios" element={<Usuarios />} />
+          <Route path="/roles" element={<Roles />} />
+          <Route path="/universidades" element={<Universidades />} />
+          <Route path="/objetos" element={<Objetos />} />
+          <Route path="/bitacoras" element={<Bitacoras />} />
+          <Route path="/estados-usuario" element={<EstadosUsuario />} />
+          <Route path="/permisos" element={<Permisos />} />
+          <Route path="/parametros" element={<Parametros />} />
 
-        {/* ruta para eventos */}
-        <Route path="/eventos" element={<CajaEvento />} />
-        <Route path="/crear-evento" element={<CreateEvent />} />
-        <Route path="/gestion-evento" element={<Eventos />} />
-        
+          {/* ruta para eventos */}
+          <Route path="/eventos" element={<CajaEvento />} />
+          <Route path="/crear-evento" element={<CreateEvent />} />
+          <Route path="/gestion-evento" element={<Eventos />} />
+          
 
-        {/* ruta para fichas */}
-        <Route path="/lista-fichas" element={<CajaFichas />} />
-        <Route path="/llenar-fichas" element={<Llena_Fichas />} />
-        <Route path="/fichas" element={<GestionFicha />} />
-        <Route path="/Formulario-fichas" element={<Formularios_Fichas />} />
-        <Route path="/ficha-participantes" element={<RegistroParticipante />} />
-        <Route path="/ficha-salud" element={<RegistroSalud />} />
-        <Route path="/OpcionFicha" element={<OpcionFicha />} />
-        <Route path="/LlenadoFicha" element={<LlenarFichas />} />
-        <Route path="/ListaPartticipantes" element={<ParticipantesRegistrados />} />
-
-
-
-
-        {/* ruta para credenciales */}
-        <Route path="/crearCredencial" element={<CreateCredencial />} />
-        <Route path="/confCredencial" element={<ConfigCredencial />} />
-        <Route path="/AsignacionCampos" element={<AsignarCampos />} />
-        <Route path="/DiseñadorCredencial" element={<DiseñadorCredencial />} />
-        <Route path="/escaneoCredencial" element={<EscanerCredencial />} />
-        <Route path="/credencialView" element={<CredencialView />} />
-        <Route path="/OpcionCredencial" element={<OpcionCredencial />} />
-        <Route path="/asignarcredencial" element={<AsignacionCredencial />} />
-
-        
-        {/* ruta para vouchers y tickets */}
-        <Route path="/vouchers" element={<CajaVouchers />} />
-        <Route path="/voucher" element={<Vouchers />} />
-        <Route path="/consumo" element={<ConsumosVouchers />} />
-        <Route path="/comedor" element={<Comedores />} />
-        <Route path="/Ticket" element={<Tickets />} />
-        <Route path="/nuevo-voucher" element={<NuevoVoucher />} />
+          {/* ruta para fichas */}
+          <Route path="/lista-fichas" element={<CajaFichas />} />
+          <Route path="/llenar-fichas" element={<Llena_Fichas />} />
+          <Route path="/fichas" element={<GestionFicha />} />
+          <Route path="/Formulario-fichas" element={<Formularios_Fichas />} />
+          <Route path="/ficha-participantes" element={<RegistroParticipante />} />
+          <Route path="/ficha-salud" element={<RegistroSalud />} />
+          <Route path="/OpcionFicha" element={<OpcionFicha />} />
+          <Route path="/LlenadoFicha" element={<LlenarFichas />} />
+          <Route path="/ListaPartticipantes" element={<ParticipantesRegistrados />} />
 
 
-        {/* ruta para juegos */}
-        <Route path="/JuegoView" element={<JuegoView />} />
 
-        {/* ruta para mantenimientos */}
-        <Route path="/mantenimientoView" element={<MantenimientoView />} />
-        <Route path="/MantenimientoPaises" element={<MantenimientoPaises />} />
-        <Route path="/MantenimientoCiudades" element={<MantenimientoCiudades />} />
-        <Route path="/MantenimientoInstalaciones" element={<MantenimientoInstalaciones />}/>
-        <Route path="/MantenimientoGeneros" element={<MantenimientoGeneros />} />
-        <Route path="/MantenimientoApiMap" element={<MantenimientoApiMap />} />
 
+          {/* ruta para credenciales */}
+          <Route path="/crearCredencial" element={<CreateCredencial />} />
+          <Route path="/confCredencial" element={<ConfigCredencial />} />
+          <Route path="/AsignacionCampos" element={<AsignarCampos />} />
+          <Route path="/DiseñadorCredencial" element={<DiseñadorCredencial />} />
+          <Route path="/escaneoCredencial" element={<EscanerCredencial />} />
+          <Route path="/credencialView" element={<CredencialView />} />
+          <Route path="/OpcionCredencial" element={<OpcionCredencial />} />
+          <Route path="/asignarcredencial" element={<AsignacionCredencial />} />
+
+          
+          {/* ruta para vouchers y tickets */}
+          <Route path="/vouchers" element={<CajaVouchers />} />
+          <Route path="/voucher" element={<Vouchers />} />
+          <Route path="/consumo" element={<ConsumosVouchers />} />
+          <Route path="/comedor" element={<Comedores />} />
+          <Route path="/Ticket" element={<Tickets />} />
+          <Route path="/nuevo-voucher" element={<NuevoVoucher />} />
+
+
+          {/* ruta para juegos */}
+          <Route path="/JuegoView" element={<JuegoView />} />
+
+          {/* ruta para mantenimientos */}
+          <Route path="/mantenimientoView" element={<MantenimientoView />} />
+          <Route path="/MantenimientoPaises" element={<MantenimientoPaises />} />
+          <Route path="/MantenimientoCiudades" element={<MantenimientoCiudades />} />
+          <Route path="/MantenimientoInstalaciones" element={<MantenimientoInstalaciones />}/>
+          <Route path="/MantenimientoGeneros" element={<MantenimientoGeneros />} />
+          <Route path="/MantenimientoApiMap" element={<MantenimientoApiMap />} />
+        </Route>
       </Routes>
       </Suspense>
     </Router>

@@ -126,17 +126,20 @@
 
 .paginacion {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   gap: 8px;
-  margin-top: 0.7rem;
-  padding: 0.8rem;
+  margin-top: 1.4rem;
+  padding: 0.3rem;
   border-radius: 8px;
+  flex-wrap: wrap; /* Permite que los botones pasen a otra línea */
+  line-height: 1; /* Asegura separación vertical entre líneas */
 }
 
+
 .paginacion button {
-  padding: 8px 14px;
-  font-size: 0.85rem;
+  padding: 9px 12px;
+  font-size: 0.9rem;
   border: 1px solid #cbd5e0;
   border-radius: 6px;
   background-color: white;
@@ -145,8 +148,7 @@
   transition: all 0.2s ease;
   min-width: 36px;
   font-weight: 500;
-  margin-top: -0.2rem;
-  margin-bottom: -0.9rem;
+  margin: 4px 0;
 }
 
 .paginacion button:hover {
@@ -454,8 +456,7 @@ button:active {
   }
 
   .paginacion button {
-    padding: 6px 12px;
-    font-size: 12px;
+    font-size: 0.8rem;
   }
 }
 
@@ -527,6 +528,15 @@ button:active {
   .estado-activo {
     font-size: 8.5px !important; /* 🔹 Reducir la fuente */
   }
+  .paginacion {
+    gap: 6px;
+    padding: 0.6rem;
+  }
+  
+  .paginacion button {
+    font-size: 0.75rem;
+    margin-top: -0.5rem;
+  }
 }
 
 @media (max-width: 646px) {
@@ -564,6 +574,13 @@ button:active {
 .filtros select {
   width: 50px;
 }
+}
+
+@media (max-width: 634px) {
+  .paginacion button {
+    padding: 8px 10px;
+    font-size: 0.7rem;
+  }
 }
 
 @media (max-width: 590px) {
@@ -618,16 +635,16 @@ button:active {
     max-height: 500px !important; /* Ajusta la altura máxima según lo necesites */
     height: auto;       /* Permite que el contenido se ajuste automáticamente */
   }
-.titulo-tabla{
-  font-size: 1.1rem;
-}
+  .titulo-tabla{
+    font-size: 1.1rem;
+  }
 
-.btn-nuevo-registro,
-.btn-generar-reporte,
-.btn-permisos{
-  font-size: 13px;
-  padding: 5px 6px;
-}
+  .btn-nuevo-registro,
+  .btn-generar-reporte,
+  .btn-permisos{
+    font-size: 13px;
+    padding: 5px 6px;
+  }
  
 
   /* Contenedor para agrupar los elementos y alinearlos en una fila */
@@ -651,11 +668,6 @@ button:active {
   .tabla th,
   .tabla td {
     padding: 8px;
-  }
-
-  .paginacion button {
-    padding: 5px 10px;
-    font-size: 12px;
   }
 }
 
