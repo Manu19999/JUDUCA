@@ -26,23 +26,17 @@ const CajaComedor = () => {
       id: 2,
       title: "Comedores",
       image: NuevoVoucherImage,
-      description: "tablas Mantenimiento de vouchers.",
-      route: "/Mantenimientosvoucher", 
+      description: "Comedores disponibles.",
+      route: "/Comedor", 
     },
     {
       id: 3,
       title: "Tipo de comida",
       image: NuevoVoucherImage,
       description: "tablas Mantenimiento de vouchers.",
-      route: "/Mantenimientosvoucher", 
+      route: "/TipoComidas", // Ruta a la que navegará al hacer clic
     },
- {
-      id: 4,
-      title: "Comedor ficha",
-      image: NuevoVoucherImage,
-      description: "tablas Mantenimiento de vouchers.",
-      route: "/Mantenimientosvoucher", 
-    },
+ 
   ];
 
   // Función para manejar el clic en una imagen

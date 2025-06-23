@@ -9,7 +9,7 @@ import ModalConfirmacion from "../../components/Crud/Modal/ModalConfirmacion";
 import { Form, Input, Row, Col, message } from "antd";
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
-import { FaArrowLeft, FaEdit, FaTrashAlt, FaReceipt  } from "react-icons/fa";
+import { FaPlus, FaEdit, FaTrashAlt } from "react-icons/fa";
 
 const UbicacionesComedor = () => {
   const [ubicaciones, setUbicaciones] = useState([]);
@@ -113,19 +113,27 @@ const columnas = [
   return (
     <div className="container mt-4">
       <Nav />
-      <BotonRegresar titulo="Ubicaciones de Comedores" />
-
- <div className="d-flex justify-content-between align-items-center mb-3 px-1">
-  <div style={{ width: "20%" }}></div>
-  <div style={{ width: "33%", textAlign: "center" }}>
+       <BotonRegresar to="/CajaComedor" text="Regresar" />
+     <div className="d-flex justify-content-between align-items-center mb-3 px-1">
+  <div style={{ width: "50%" }}></div>
+  <div style={{ width: "44%", textAlign: "center" }}>
     <h2 className="d-flex align-items-center">
-               Ubicacion de Comedores
+                Tipo Comida
             </h2>
   </div>
-  <div style={{ width: "20%", textAlign: "left", paddingTop: "50px" }}>
-    <Button variant="success" onClick={handleNuevoRegistro}>
-      Nueva Ubicación
-    </Button>
+     <div style={{ width: "22%", textAlign: "left", paddingTop: "40px" }}>
+  <Button
+    onClick={() => setIsModalOpen(true)}
+    style={{
+      backgroundColor: "#1890ff",
+      borderColor: "#1890ff",
+      color: "white",
+      display: "flex",
+      alignItems: "center"
+    }}
+  >
+    <FaPlus style={{ marginRight: "6px" }} /> Tipo Comida
+  </Button>
   </div>
 </div>
 
