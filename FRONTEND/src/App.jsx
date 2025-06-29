@@ -60,9 +60,13 @@ const AsignacionCredencial =React.lazy(() => import("./pages/Credenciales/Asigna
 const Vouchers =React.lazy(() => import("./pages/voucher"));
 const CajaVouchers =React.lazy(() => import("./pages/Vouchers/CajaVouchers"));
 const ConsumosVouchers =React.lazy(() => import("./pages/ConsumoVoucher"));
-const Comedores =React.lazy(() => import("./pages/Comedores"));
+const Comedores =React.lazy(() => import("./pages/Vouchers/Comedores"));
 const Tickets =React.lazy(() => import("./pages/tickets"));
 const NuevoVoucher =React.lazy(() => import("./pages/Vouchers/Nuevo-Voucher"));
+const Mantenimientosvoucher =React.lazy(() => import("./pages/Vouchers/ManteVoucher"));
+const CajaComedor =React.lazy(() => import("./pages/Vouchers/CajaComedor.jsx"));
+const UbicacionComedores =React.lazy(() => import("./pages/Vouchers/UbicacionComedores"));
+const TipoComidas =React.lazy(() => import("./pages/Vouchers/TipoComida"));
 
 //Juegos
 const JuegoView =React.lazy(() => import("./pages/Juegos/juegosView"));
@@ -142,13 +146,17 @@ function App() {
           <Route path="/asignarcredencial" element={<AsignacionCredencial />} />
 
           
-          {/* ruta para vouchers y tickets */}
-          <Route path="/vouchers" element={<CajaVouchers />} />
-          <Route path="/voucher" element={<Vouchers />} />
-          <Route path="/consumo" element={<ConsumosVouchers />} />
-          <Route path="/comedor" element={<Comedores />} />
-          <Route path="/Ticket" element={<Tickets />} />
-          <Route path="/nuevo-voucher" element={<NuevoVoucher />} />
+           {/* ruta para vouchers y tickets */}
+        <Route path="/vouchers" element={<CajaVouchers />} />
+        <Route path="/voucher" element={<Vouchers />} />
+        <Route path="/consumo" element={<ConsumosVouchers />} />
+        <Route path="/comedor" element={<Comedores />} />
+        <Route path="/Ticket" element={<Tickets />} />
+        <Route path="/nuevo-voucher" element={<NuevoVoucher />} />
+        <Route path="/Mantenimientosvoucher" element={<Mantenimientosvoucher />} /> 
+        <Route path="/CajaComedor" element={<CajaComedor/>} /> 
+        <Route path="/ubicacionComedores" element={<UbicacionComedores />} />
+        <Route path="/TipoComidas" element={<TipoComidas />} />
 
 
           {/* ruta para juegos */}

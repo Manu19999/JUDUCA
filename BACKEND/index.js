@@ -40,6 +40,9 @@ import Parametros from './src/modules/seguridad/routes/parametrosRoutes.js';
 
 //++++++++++++++++++++++++++  Importaciones de rutas de vouchers  ++++++++++++++++++++++++++
 import VoucherComidaRoutes   from './src/modules/vouchers/routes/voucherComidaRoutes.js';
+import UbicacionComedores from './src/modules/vouchers/routes/ubicacionesComedorRoutes.js'; // Asegúrate de que esta ruta sea correcta
+import Comedores from './src/modules/vouchers/routes/comedorRoutes.js'; // Asegúrate de que esta ruta sea correcta
+import TipoComida from './src/modules/vouchers/routes/tipoComidaRoutes.js'; // Asegúrate de que esta ruta sea correcta
 
 
 
@@ -102,6 +105,9 @@ app.use('/api/parametros', Parametros);
 
 //Vouchers
 app.use('/api/voucherComida', VoucherComidaRoutes); 
+app.use('/api/ubicacionComedores', UbicacionComedores); // Asegúrate de que esta ruta sea correcta
+app.use('/api/comedores', Comedores); // Asegúrate de que esta ruta sea correcta
+app.use('/api/tipoComida', TipoComida); // Asegúrate de que esta ruta sea correcta
 
 
 //++++++++++++++++++++++++++ Inicialización del servidor ++++++++++++++++++++++++++ 

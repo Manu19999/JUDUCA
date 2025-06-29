@@ -10,32 +10,33 @@ import NuevoVoucherImage from "../../../src/assets/Vouchernuevo.jpg";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Vouchers/CajaVoucher.css";
 
-const CajaVouchers = () => {
+const CajaComedor = () => {
   const navigate = useNavigate(); // Hook para la navegación
 
   // Define las cajas que se mostrarán
   const items = [
     {
       id: 1,
-      title: "Voucher",
-      image: VoucherImage,
-      description: "Gestión de vouchers existentes.",
-      route: "/voucher", 
+      title: "Ubicación de comedor",
+      image: NuevoVoucherImage,
+      description: "tablas Mantenimiento de vouchers.",
+      route: "/UbicacionComedores", // Ruta a la que navegará al hacer clic
+    },
+{
+      id: 2,
+      title: "Comedores",
+      image: NuevoVoucherImage,
+      description: "Comedores disponibles.",
+      route: "/Comedor", 
     },
     {
-      id: 2,
-      title: "Nuevo Voucher",
-      image: NuevoVoucherImage,
-      description: "Crear un nuevo voucher.",
-      route: "/nuevo-voucher", 
-    },
-     {
       id: 3,
-      title: "Mantenimiento",
+      title: "Tipo de comida",
       image: NuevoVoucherImage,
-      description: "Comedores, comidas, ubicaciones, etc.",
-      route: "/Mantenimientosvoucher", 
+      description: "tablas Mantenimiento de vouchers.",
+      route: "/TipoComidas", // Ruta a la que navegará al hacer clic
     },
+ 
   ];
 
   // Función para manejar el clic en una imagen
@@ -47,7 +48,7 @@ const CajaVouchers = () => {
     <section id="caja-voucher" className="caja-vouchers-container">
       <Container>
         <Nav />
-        <BotonRegresar to="/gestion-evento" text="Regresar"  />
+        <BotonRegresar to="/Mantenimientosvoucher" text="Regresar"  />
         {/* Botón para regresar al dashboard */}
         <div className="crud">
         
@@ -75,4 +76,4 @@ const CajaVouchers = () => {
   );
 };
 
-export default CajaVouchers;
+export default CajaComedor ;

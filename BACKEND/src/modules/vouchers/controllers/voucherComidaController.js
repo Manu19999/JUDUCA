@@ -29,48 +29,64 @@ export const getVouchersComidas = async (req, res) => {
     }
 };
 
-// Insertar un nuevo voucher
 export const insertVoucherComida = async (req, res) => {
-    const {
-        idEvento,
-        idUniversidad,
-        idDisenioCredencial,
-        fechaEmision,
-        fechaExpiracion,
-        cantidadDisponible,
-        fechaInicio,
-        fechaFinal,
-        activo,
-    } = req.body;
+  if (!req.usuario) {
+    return res.status(401).json({ error: 'Usuario no autenticado' });
+  }
+  const { idUsuario, nombreUsuario, idObjeto } = req.usuario;
 
-    try {
-        const pool = await conexionbd();  // Obtener el pool de conexiones
-        const request = pool.request();
+  const {
+    idEvento, idUniversidad, idDisenioCredencial,
+    fechaEmision, fechaExpiracion,
+    cantidadDisponible, fechaInicio, fechaFinal,
+    activo
+  } = req.body;
 
-        // Parámetros del procedimiento almacenado
-        request.input('idEvento', sql.Int, idEvento);
-        request.input('idUniversidad', sql.Int, idUniversidad);
-        request.input('idDisenioCredencial', sql.Int, idDisenioCredencial);
-        request.input('fechaEmision', sql.Date, fechaEmision);
-        request.input('fechaExpiracion', sql.Date, fechaExpiracion);
-        request.input('cantidadDisponible', sql.Int, cantidadDisponible);
-        request.input('fechaInicio', sql.Date, fechaInicio);
-        request.input('fechaFinal', sql.Date, fechaFinal);
-        request.input('activo', sql.Bit, activo);
+  // Validaciones y parseos...
+  const idEv  = parseInt(idEvento, 10);
+  const idUni = parseInt(idUniversidad, 10);
+  const idDis = parseInt(idDisenioCredencial, 10);
+  const qty   = parseInt(cantidadDisponible, 10);
+  if ([idEv, idUni, idDis, qty].some(v => isNaN(v))) {
+    return res.status(400).json({
+      error: 'Los campos numéricos deben ser válidos'
+    });
+  }
 
-        // Ejecutar el procedimiento almacenado
-        const result = await request.execute('sp_InsertVoucherComida');
+  try {
+    const pool = await conexionbd();
+    const request = pool.request();
+    request
+      .input('idEvento', sql.Int, idEv)
+      .input('idUniversidad', sql.Int, idUni)
+      .input('idDisenioCredencial', sql.Int, idDis)
+      .input('fechaEmision', sql.Date, fechaEmision)
+      .input('fechaExpiracion', sql.Date, fechaExpiracion)
+      .input('cantidadDisponible', sql.Int, qty)
+      .input('fechaInicio', sql.Date, fechaInicio)
+      .input('fechaFinal', sql.Date, fechaFinal)
+      .input('activo', sql.Bit, Boolean(activo))
+      .input('idUsuario', sql.Int, idUsuario)
+      .input('nombreUsuario', sql.NVarChar(90), nombreUsuario)
+      .input('idObjeto', sql.Int, idObjeto);
 
-        // Devolver el ID del voucher insertado
-        res.status(201).json({
-            message: 'Voucher insertado correctamente',
-            idVoucherComida: result.recordset[0].idVoucherComida,
-        });
-    } catch (error) {
-        console.error('Error al insertar el voucher:', error);
-        res.status(500).json({ error: 'Error al insertar el voucher', details: error.message });
+    const result = await request.execute('Comedores.splVouchersComidasInsertar');
+    const record = result.recordset?.[0] || {};
+
+    if (record.codigoError) {
+      return res.status(400).json({ error: record.descripcion });
     }
+    if (!record.idVoucherComida) {
+      return res.status(500).json({ error: 'SP no devolvió idVoucherComida' });
+    }
+
+    res.status(201).json({ message: 'Voucher insertado', idVoucherComida: record.idVoucherComida });
+  } catch (err) {
+    console.error('Error al insertar voucher:', err);
+    res.status(500).json({ error: 'Error interno', details: err.message });
+  }
 };
+
 
 
 
@@ -79,42 +95,109 @@ export const insertVoucherComida = async (req, res) => {
 
 // Actualizar un voucher existente
 export const updateVoucherComida = async (req, res) => {
-    const {
-        idVoucher,
-        idEvento,
-        idUniversidad,
-        idDisenioCredencial,
-        fechaEmision,
-        fechaExpiracion,
-        cantidadDisponible,
-        fechaInicio,
-        fechaFinal,
-        activo,
-    } = req.body;
+  if (!req.usuario) {
+    return res.status(401).json({ error: 'Usuario no autenticado' });
+  }
+  const { idUsuario, nombreUsuario, idObjeto } = req.usuario;
 
-    try {
-        const pool = await conexionbd();  // Obtener el pool de conexiones
-        const request = pool.request();
+  const {
+    idVoucherComida,   // ID del voucher a actualizar (muy importante)
+    idEvento,
+    idUniversidad,
+    idDisenioCredencial,
+    fechaEmision,
+    fechaExpiracion,
+    cantidadDisponible,
+    fechaInicio,
+    fechaFinal,
+    activo
+  } = req.body;
 
-        // Parámetros del procedimiento almacenado
-        request.input('idVoucher', sql.Int, idVoucher);
-        request.input('idEvento', sql.Int, idEvento);
-        request.input('idUniversidad', sql.Int, idUniversidad);
-        request.input('idDisenioCredencial', sql.Int, idDisenioCredencial);
-        request.input('fechaEmision', sql.Date, fechaEmision);
-        request.input('fechaExpiracion', sql.Date, fechaExpiracion);
-        request.input('cantidadDisponible', sql.Int, cantidadDisponible);
-        request.input('fechaInicio', sql.Date, fechaInicio);
-        request.input('fechaFinal', sql.Date, fechaFinal);
-        request.input('activo', sql.Bit, activo);
+  // Validaciones y parseos
+  const idVoucher = parseInt(idVoucherComida, 10);
+  const idEv      = parseInt(idEvento, 10);
+  const idUni     = parseInt(idUniversidad, 10);
+  const idDis     = parseInt(idDisenioCredencial, 10);
+  const qty       = parseInt(cantidadDisponible, 10);
+  if ([idVoucher, idEv, idUni, idDis, qty].some(v => isNaN(v))) {
+    return res.status(400).json({
+      error: 'Los campos numéricos deben ser válidos'
+    });
+  }
 
-        // Ejecutar el procedimiento almacenado
-        await request.execute('ActualizarVoucher');
+  try {
+    const pool = await conexionbd();
+    const request = pool.request();
+    request
+      .input('idVoucherComida', sql.Int, idVoucher)
+      .input('idEvento', sql.Int, idEv)
+      .input('idUniversidad', sql.Int, idUni)
+      .input('idDisenioCredencial', sql.Int, idDis)
+      .input('fechaEmision', sql.Date, fechaEmision)
+      .input('fechaExpiracion', sql.Date, fechaExpiracion)
+      .input('cantidadDisponible', sql.Int, qty)
+      .input('fechaInicio', sql.Date, fechaInicio)
+      .input('fechaFinal', sql.Date, fechaFinal)
+      .input('activo', sql.Bit, Boolean(activo))
+      .input('idUsuario', sql.Int, idUsuario)
+      .input('nombreUsuario', sql.NVarChar(90), nombreUsuario)
+      .input('idObjeto', sql.Int, idObjeto);
 
-        // Respuesta exitosa
-        res.status(200).json({ message: 'Voucher actualizado correctamente' });
-    } catch (error) {
-        console.error('Error al actualizar el voucher:', error);
-        res.status(500).json({ error: 'Error al actualizar el voucher', details: error.message });
+    const result = await request.execute('Comedores.splVouchersComidasActualizar');
+    const record = result.recordset?.[0] || {};
+
+    if (record.codigoError) {
+      return res.status(400).json({ error: record.descripcion });
     }
+    if (!record.idVoucherComida) {
+      return res.status(500).json({ error: 'SP no devolvió idVoucherComida' });
+    }
+
+    res.status(200).json({ message: 'Voucher actualizado', voucher: record });
+  } catch (err) {
+    console.error('Error al actualizar voucher:', err);
+    res.status(500).json({ error: 'Error interno', details: err.message });
+  }
 };
+
+
+// Eliminar un voucher por ID
+
+
+
+export const deleteVoucherComida = async (req, res) => {
+  if (!req.usuario) {
+    return res.status(401).json({ error: 'Usuario no autenticado' });
+  }
+
+  const { id } = req.params;
+  const { idUsuario, nombreUsuario, idObjeto } = req.usuario;
+
+  const idVoucher = parseInt(id, 10);
+  if (isNaN(idVoucher)) {
+    return res.status(400).json({ error: 'ID de voucher inválido' });
+  }
+
+  try {
+    const pool = await conexionbd();
+    const request = pool.request();
+    request
+      .input('idVoucherComida', sql.Int, idVoucher)
+      .input('idUsuario', sql.Int, idUsuario)
+      .input('nombreUsuario', sql.NVarChar(90), nombreUsuario)
+      .input('idObjeto', sql.Int, idObjeto);
+
+    const result = await request.execute('Comedores.splVouchersComidasEliminar');
+    const record = result.recordset?.[0] || {};
+
+    if (record.codigoError) {
+      return res.status(400).json({ error: record.descripcion });
+    }
+
+    res.status(200).json({ message: 'Voucher eliminado correctamente' });
+  } catch (err) {
+    console.error('Error al eliminar voucher:', err);
+    res.status(500).json({ error: 'Error interno', details: err.message });
+  }
+};
+//------------------------------------------------------------------------------------------------------------------------------
