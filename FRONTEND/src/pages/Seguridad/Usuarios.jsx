@@ -222,7 +222,7 @@ function Usuarios() {
   
     const obtenerEstadosUsuarios = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/estados-usuario", {
+        const response = await fetchWithAuth("http://localhost:4000/api/estados-usuario", {
           method: "GET",
           credentials: 'include',
           headers: {

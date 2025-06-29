@@ -18,8 +18,8 @@
 
 /* Contenedor principal */
 .navbar-container {
-  width: 85%;
-  max-width: 1300px;
+  width: 90%;
+  max-width: 1400px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -72,11 +72,13 @@
   transform: translateY(-50%);
   padding: 8px;
   border-radius: 5px;
+  
 }
 
-/* Cambio de icono y hover */
 .custom-toggle:hover {
-  background: rgba(0, 123, 255, 0.3);
+  background: rgba(173, 216, 230, 0.1);
+  padding: 0px 8px; /* Reduce el área del hover visualmente */
+  border-radius: 5px;
 }
 
 /* Menú de navegación */
@@ -150,6 +152,12 @@
   border-color: rgba(255, 255, 255, 0.3);
   transform: scale(1);
   opacity: 1;
+  background: rgba(173, 216, 230, 0.1);
+}
+
+.profile-dropdown-container {
+  margin-left: auto;
+  margin-right:-45px; /* Ajusta según necesites */
 }
 
 /* Botón Acceder */
@@ -183,8 +191,18 @@
 /* Responsive para móviles */
 @media (max-width: 991px) {
   .custom-toggle {
-    display: flex; /* Se muestra el botón de menú */
-    display: contents;
+    display: flex !important; /* Fuerza que se muestre */
+    position: absolute;
+    right: 20px; /* Ajusta esta distancia desde la derecha */
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    font-size: 30px;
+    color: white;
+    z-index: 1001; /* Asegura que esté por encima de otros elementos */
+    padding: 8px;
+    margin: 0; /* Elimina márgenes por defecto */
   }
 
   .custom-menu {
@@ -193,13 +211,12 @@
     left: 0;
     width: 100%;
     background: linear-gradient(to right, #253a69, #054d91);
-    padding: 0px; /* Reducir el padding */
-    display: none; /* Oculto en móviles por defecto */
+    padding: 2px 0; /* Añade padding vertical */
+    display: none;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    transition: all 0.3s ease-in-out;
-    gap: 0px; /* Espaciado entre elementos reducido */
+    align-items: center; /* Esto centra los elementos hijos horizontalmente */
+    justify-content: center; /* Centra verticalmente si hay espacio */
+    gap: 0px; /* Espaciado entre elementos */
   }
 
   .custom-menu.show {
@@ -232,6 +249,29 @@
   .navlink {
     margin-top: 13px;
   }
+  .navbar-container {
+    width: 88%;
+    max-width: 1400px;
+  }
+  .profile-dropdown-container {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+ 
+}
+
+@media (max-width: 890px) {
+  .navbar-container {
+    width: 85%;
+    max-width: 1400px;
+  }
+  .custom-toggle {
+    right: 15px; /* Puedes ajustar aún más a la derecha en pantallas pequeñas */
+    font-size: 28px; /* Opcional: reduce tamaño en pantallas muy pequeñas */
+  }
 }
 
 /* Ajustes responsivos */
@@ -247,5 +287,10 @@
 
   .logo-container {
     gap: 5px; /* Reduce espacio entre el logo y el texto */
+  }
+
+  .navbar-container {
+    width: 95%;
+    max-width: 1400px;
   }
 }

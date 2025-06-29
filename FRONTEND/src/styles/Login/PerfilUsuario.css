@@ -117,18 +117,17 @@
 }
 
 .data-item {
-    background: #f8fafc;
-    padding: 12px 15px;
+    background: rgba(248, 250, 252, 0.7);
+    padding: 15px;
     border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
-    border-left: 3px solid #1890ff;
+    border: 1px solid rgba(203, 213, 225, 0.3);
+    backdrop-filter: blur(5px);
     margin-bottom: 15px;
-    transition: all 0.3s ease;
 }
 
 .data-item:hover {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    border-left-color: #40a9ff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
 }
 
 .data-item > .ant-typography {

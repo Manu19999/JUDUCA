@@ -103,13 +103,17 @@ const NavDashboard = () => {
             Escaneo
           </a>
  */}
+
+        <div className="profile-dropdown-container">
           {/* Menú desplegable de perfil con ícono */}
           <Dropdown overlay={profileMenu} trigger={["click"]}>
             <a className="navlink" onClick={(e) => e.preventDefault()} style={{ cursor: "pointer" }}>
               <UserOutlined style={{ fontSize: "20px" }} /> <CaretDownFilled />
             </a>
           </Dropdown>
+        </div>
         </nav>
+         
       </div>
     </header>
   );

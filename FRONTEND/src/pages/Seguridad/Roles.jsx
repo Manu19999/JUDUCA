@@ -6,7 +6,6 @@ import { FaUserShield } from 'react-icons/fa';
 import ModalNuevo from "../../components/Crud/Modal/ModalNuevo";
 import ModalEditar from "../../components/Crud/Modal/ModalEditar";
 import ModalConfirmacion from "../../components/Crud/Modal/ModalConfirmacion";
-import ModalDetalles from "../../components/Crud/Modal/ModalDetalles";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito";
 import { mostrarMensajeError } from "../../components/Crud/MensajeError"; // Importar el componente de mensaje de error
 import { Input, Form } from 'antd';
@@ -17,7 +16,6 @@ function Roles() {
   const [showNuevoModal, setShowNuevoModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
   const [formNuevo] = Form.useForm(); // Formulario para el modal de nuevo registro
   const [formEditar] = Form.useForm(); // Formulario para el modal de edición
@@ -82,13 +80,6 @@ function Roles() {
     setRegistroSeleccionado(registro);
     setShowDeleteModal(true); // Abrir el modal de eliminación
   };
-
-    // Abrir modal de detalles
-    const handleDetails = (id) => {
-      const registro = roles.find((d) => d.idRol === id);
-      setRegistroSeleccionado(registro);
-      setShowDetailsModal(true);
-    };
 
   // Guardar nuevo registro
   const handleGuardarNuevo = async () => {
@@ -224,7 +215,6 @@ function Roles() {
         onPermisos={() => navigate('/permisos')}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        onDetails={handleDetails} // Función para abrir el modal de detalles
       />
 
       {/* Modal para Nuevo Registro */}
@@ -276,15 +266,6 @@ function Roles() {
         onHide={() => setShowDeleteModal(false)}
         onConfirmar={handleConfirmarDelete}
         mensaje={`¿Estás seguro de que deseas eliminar el rol ${registroSeleccionado?.nombre}?`}
-      />
-
-<ModalDetalles
-        show={showDetailsModal} // Controla la visibilidad del modal
-        onHide={() => setShowDetailsModal(false)} // Función para cerrar el modal
-        titulo="Detalles del Usuario" // Título del modal
-        tipo="roles"
-        detalles={registroSeleccionado || {}} // Detalles del usuario seleccionado
-        width={600} // Ancho personalizado
       />
     </div>
   );

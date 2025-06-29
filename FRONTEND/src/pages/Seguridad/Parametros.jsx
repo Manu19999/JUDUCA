@@ -3,22 +3,24 @@ import Tabla from "../../components/Crud/Tabla";
 import Nav from '../../components/Dashboard/navDashboard';
 import { FaCog } from 'react-icons/fa';
 import ModalEditar from "../../components/Crud/Modal/ModalEditar";
+import ModalDetalles from "../../components/Crud/Modal/ModalDetalles";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito";
 import { mostrarMensajeError } from "../../components/Crud/MensajeError"; // Importar el componente de mensaje de error
 import { Input, Form } from 'antd';
 import ValidatedInput from "../../utils/ValidatedInput"; 
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
-
+import { fetchWithAuth } from '../../utils/api';
 function Parametros() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
   const [formEditar] = Form.useForm(); // Formulario para el modal de edición
   const [parametros, setParametros] = useState([]); // Estado para almacenar los parametros
-  
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+
   //función reutilizable para obtener los parametros
   const obtenerParametros = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/parametros", {
+      const response = await fetchWithAuth("http://localhost:4000/api/parametros", {
         method: "GET",
         credentials: 'include',
         headers: {
@@ -45,11 +47,9 @@ function Parametros() {
   // Columnas de la tabla
   const columnas = [
     { nombre: '#', campo: 'indice', ancho: '5%' },
-    { nombre: 'Parámetro', campo: 'parametro', ancho: '35%' },
-    { nombre: 'Valor', campo: 'valor', ancho: '30%' },
-    { nombre: 'Actualizado', campo: 'fechaActualizacion', ancho: '40%' },
-    { nombre: 'Usuario', campo: 'usuarioRegistro', ancho: '30%' },
-    { nombre: 'Registrado', campo: 'fechaRegistro', ancho: '40%' },
+    { nombre: 'Parámetro', campo: 'parametro', ancho: '45%' },
+    { nombre: 'Valor', campo: 'valor', ancho: '25%' },
+    { nombre: 'Descripción', campo: 'descripcion', ancho: '40%' },
     { nombre: 'Acción', campo: 'accion', ancho: '15%' }
   ];
   
@@ -68,6 +68,13 @@ function Parametros() {
     formEditar.resetFields(); // Reiniciar el formulario
   };
 
+  // Abrir modal de detalles
+  const handleDetails = (id) => {
+    const registro = parametros.find((d) => d.idParametro === id);
+    setRegistroSeleccionado(registro);
+    setShowDetailsModal(true);
+  };
+
   // Guardar cambios en el registro editado (para parametros)
   const handleGuardarEdit = async () => {
     try {
@@ -75,7 +82,7 @@ function Parametros() {
       const values = await formEditar.validateFields();
 
       // Llamar a la API para actualizar el parametro
-      const response = await fetch(`http://localhost:4000/api/parametros/${registroSeleccionado.idParametro}`, {
+      const response = await fetchWithAuth(`http://localhost:4000/api/parametros/${registroSeleccionado.idParametro}`, {
         method: "PUT",
         credentials: 'include',
         headers: {
@@ -121,6 +128,7 @@ function Parametros() {
         icono={<FaCog className="icono-titulo" />}
         onGenerarReporte={() => console.log("Generar reporte en PDF")}
         onEdit={handleEdit}
+        onDetails={handleDetails} // Función para abrir el modal de detalles
       />
 
       {/* Modal para Editar Registro */}
@@ -174,6 +182,15 @@ function Parametros() {
             </Form.Item>
         </Form>
       </ModalEditar>
+
+      <ModalDetalles
+        show={showDetailsModal} // Controla la visibilidad del modal
+        onHide={() => setShowDetailsModal(false)} // Función para cerrar el modal
+        titulo="Detalles del Parámetro" // Título del modal
+        tipo="parametros"
+        detalles={registroSeleccionado || {}} // Detalles del usuario seleccionado
+        width={500} // Ancho personalizado
+      />
     </div>
   );
 }

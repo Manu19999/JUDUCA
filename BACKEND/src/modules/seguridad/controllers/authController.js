@@ -38,45 +38,81 @@ export const Login = async (req, res) => {
     try {
         const pool = await conexionbd();
         
-        // 1. Obtener usuario (solo email)
-        const result = await pool.request()
+        // 1. Verificar estado del usuario
+        const estadoResult = await pool.request()
             .input('email', sql.VarChar, email)
             .execute('Usuarios.splUsuariosAutenticar');
 
         // 2. Manejar errores
-        if (result.returnValue === 1 || result.returnValue === 2) {
-            const error = result.recordset[0]?.descripcion || 'El correo electrónico o la contraseña son incorrectos';
-            response.setErrors([error]);
-            response.setHasError(true);
-            return res.status(401).json(response.getResponse());
+        switch(estadoResult.returnValue) {
+            case 1: 
+                response.setErrors(['El correo electrónico o la contraseña son incorrectos']);
+                response.setHasError(true);
+                return res.status(401).json(response.getResponse());
+            case 2:
+                response.setErrors(['Su cuenta no está activa. Contacte al administrador.']);
+                response.setHasError(true);
+                return res.status(403).json(response.getResponse());
+            case 3:
+                const minutos = estadoResult.recordset[0]?.minutosRestantes || 30;
+                response.setErrors([`Cuenta bloqueada temporalmente. Intente nuevamente en ${minutos} minutos.`]);
+                response.setHasError(true);
+                return res.status(429).json(response.getResponse());
+            case 4:
+                response.setErrors(['Cuenta bloqueada permanentemente. Contacte al administrador.']);
+                response.setHasError(true);
+                return res.status(403).json(response.getResponse());
         }
-        
 
-        const user = result.recordset[0];
+        const user = estadoResult.recordset[0];
         
-        // 3. Verificar contraseña con bcrypt
+        // 3. Verificar contraseña
         const contraseñaValida = await bcrypt.compare(contrasena, user.contrasena);
         
         if (!contraseñaValida) {
-            response.setErrors(['El correo electrónico o la contraseña son incorrectos']);
+            // Incrementar intentos fallidos
+            await pool.request()
+                .input('email', sql.VarChar, email)
+                .execute('Usuarios.splIncrementarIntentosFallidos');
+            
+            // Obtener nuevo estado
+            const nuevoEstado = await pool.request()
+                .input('email', sql.VarChar, email)
+                .execute('Usuarios.splUsuariosAutenticar');
+                
+            response.setErrors([`Credenciales incorrectas. Intentos restantes: ${nuevoEstado.recordset[0]?.intentosRestantes || 0}`]);
             response.setHasError(true);
             return res.status(401).json(response.getResponse());
         }
 
-        // 4. Actualizar última conexión (opcional, podrías hacerlo en el SP)
+        // 4. Resetear intentos fallidos si es necesario
+        if (user.intentosFallidos > 0) {
+            await pool.request()
+                .input('email', sql.VarChar, email)
+                .execute('Usuarios.splResetearIntentosFallidos');
+        }
+
+        // 5. Registrar en bitácora (SOLO si la contraseña es correcta)
+        await pool.request()
+            .input('idUsuario', sql.Int, user.idUsuario)
+            .input('accion', sql.NVarChar, 'Login')
+            .input('descripcion', sql.NVarChar, `Inicio de sesión exitoso para el usuario ${user.nombreUsuario}`)
+            .execute('Logs.splRegistrarBitacoraLogin');
+
+        // 6. Actualizar última conexión
         await pool.request()
             .input('idUsuario', sql.Int, user.idUsuario)
             .execute('Usuarios.splActualizarUltimaConexion');
 
-        // 5. Generar tokens
+        // 7. Generar tokens
         const { accessToken, refreshToken } = generateTokens(user);
 
-        // 6. Configurar cookies seguras
+        // Configurar cookies...
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
-            maxAge: 1800000, // 30 minutos
+            maxAge: 1800000,
             path: '/'
         });
 
@@ -84,17 +120,19 @@ export const Login = async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
-            maxAge: 604800000, // 7 días
-            path: '/api/auth/refresh' // Solo accesible en la ruta de refresh
+            maxAge: 604800000,
+            path: '/api/auth/refresh'
         });
 
-        // 7. Limpiar datos sensibles en respuesta
-        const userResponse = { ...user };
-        delete userResponse.contrasena;
-        
-        response.setData({ 
+        // Respuesta exitosa usando apiResponse
+        response.setData({
             message: 'Autenticación exitosa',
-            usuario: userResponse
+            usuario: {
+                idUsuario: user.idUsuario,
+                email: user.email,
+                nombreUsuario: user.nombreUsuario,
+                idRol: user.idRol
+            }
         });
         
         return res.status(200).json(response.getResponse());
