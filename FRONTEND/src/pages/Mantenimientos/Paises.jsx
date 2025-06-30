@@ -6,18 +6,16 @@ import ModalNuevo from "../../components/Crud/Modal/ModalNuevo.jsx";
 import ModalEditar from "../../components/Crud/Modal/ModalEditar.jsx";
 import ModalConfirmacion from "../../components/Crud/Modal/ModalConfirmacion.jsx";
 import { mostrarMensajeExito } from "../../components/Crud/MensajeExito.jsx";
-import { mostrarMensajeError } from "../../components/Crud/MensajeError";
-import { Input, Form} from "antd";
+import { mostrarMensajeError } from "../../components/Crud/MensajeError.jsx"; // Importar el componente de mensaje de error
+import { Input,Form } from "antd";
 import { Button } from "react-bootstrap";
 import "../../styles/Credencial/credencial.css";
-import { FaTransgenderAlt } from 'react-icons/fa';
-import { FaArrowLeft } from "react-icons/fa";
-import BotonRegresar from "../../components/Dashboard/BotonRegresar";
-
-
-function MantenimientoGeneros() {
+import { FaGlobe } from "react-icons/fa";
+import { FaArrowLeft  } from "react-icons/fa";
+import BotonRegresar from "../../components/Dashboard/BotonRegresar.jsx";
+function MantenimientoPaises() {
   const navigate = useNavigate();
-
+    
   // Estados para controlar la visibilidad de los modales
   const [showNuevoModal, setShowNuevoModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -27,43 +25,43 @@ function MantenimientoGeneros() {
   // Hooks de Ant Design para gestionar formularios
   const [formNuevo] = Form.useForm(); // Formulario para el modal de nuevo registro
   const [formEditar] = Form.useForm(); // Formulario para el modal de edición
-  const [generos, setGeneros] = useState([]);
+  const [paises, setPaises] = useState([]);
 
-  // Llamar a la API para obtener los generos
+  // Llamar a la API para obtener los paises
   useEffect(() => {
-    const obtenerGeneros = async () => {
+    const obtenerPaises = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/generos"); // Endpoint de la API
+        const response = await fetch("http://localhost:4000/api/paises"); // Endpoint de la API
         if (!response.ok) {
-          throw new Error("Error al obtener los géneros");
+          throw new Error("Error al obtener los países");
         }
         const data = await response.json();
-        setGeneros(data.data); // Actualizar el estado con los generos obtenidos
+        setPaises(data.data); // Actualizar el estado con los paises obtenidos
       } catch (error) {
         console.error("Error:", error);
-        mostrarMensajeError("Error al cargar los géneros. Inténtalo de nuevo más tarde.");
+        mostrarMensajeError("Error al cargar los países. Inténtalo de nuevo más tarde.");
       }
     };
 
-    obtenerGeneros();
+    obtenerPaises();
   }, []); // El array vacío asegura que esto solo se ejecute una vez al montar el componente
   
+
 
   // Columnas de la tabla de usuarios
   const columnas = [
     { nombre: "#", campo: "indice", ancho: "5%" },
-    { nombre: "Descripción", campo: "descripcion", ancho: "20%" },
+    { nombre: "País", campo: "nombre", ancho: "30%" },
     { nombre: "Acción", campo: "accion", ancho: "10%" },
   ];
 
-  // Abrir modal de nuevo registro
   const handleNuevoRegistro = () => {
     setShowNuevoModal(true);
   };
 
   // Abrir modal de edición
   const handleEdit = (id) => {
-    const registro = generos.find((d) => d.idGenero === id); // Busca el usuario por ID
+    const registro = paises.find((d) => d.idPais === id); // Busca el usuario por ID
     setRegistroSeleccionado(registro); // Guarda el registro seleccionado
     setShowEditModal(true); // Abre el modal de edición
   };
@@ -77,62 +75,25 @@ function MantenimientoGeneros() {
 
   // Abrir modal de eliminación
   const handleDelete = (id) => {
-    const registro = generos.find((d) => d.idGenero === id);
+    const registro = paises.find((d) => d.idPais === id);
     setRegistroSeleccionado(registro);
     setShowDeleteModal(true); // Abrir el modal de eliminación
   };
 
   // Guardar nuevo registro
-  const handleGuardarNuevo = async () => {
-    formNuevo.validateFields()
-      .then(async (values) => {
-        try {
-          // Obtener el token almacenado correctamente
-          const token = localStorage.getItem("token");
-  
-          if (!token) {
-            throw new Error("No se encontró el token. Inicia sesión nuevamente.");
-          }
-  
-          // Hacer la petición al backend
-          const response = await fetch("http://localhost:4000/api/generos/", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`, // Agregar el token
-            },
-            body: JSON.stringify({
-              descripcion: values.descripcion,
-              idObjeto: 7, // Asegurar que este ID existe en Seguridad.tblObjetos
-            }),
-          });
-  
-          // Obtener la respuesta en formato JSON
-          const data = await response.json();
-  
-          if (!response.ok) {
-            throw new Error(data.errors?.[0] || "Error al insertar el género");
-          }
-  
-          // **Actualizar la tabla después de agregar un nuevo género**
-          setGeneros((prevGeneros) => [...prevGeneros, data.data]);
-  
-          // Cerrar el modal y limpiar el formulario
-          setShowNuevoModal(false);
-          formNuevo.resetFields();
-  
-          // Mostrar mensaje de éxito
-          mostrarMensajeExito("El género se ha registrado correctamente.");
-        } catch (error) {
-          console.error("Error:", error);
-          mostrarMensajeError(error.message);
-        }
+  const handleGuardarNuevo = () => {
+    formNuevo
+      .validateFields() // Valida los campos del formulario
+      .then((values) => {
+        console.log("Nuevo registro:", values);
+        setShowNuevoModal(false); // Cierra el modal
+        formNuevo.resetFields(); // Limpiar el formulario de nuevo registro
+        mostrarMensajeExito("El país se ha registrado correctamente."); // Mensaje de éxito
       })
       .catch((error) => {
-        console.error("Error al validar el formulario:", error);
+        console.error("Error al validar el formulario:", error); // Manejo de errores
       });
   };
-  
 
   // Guardar cambios en el registro editado
   const handleGuardarEdit = () => {
@@ -143,7 +104,7 @@ function MantenimientoGeneros() {
         setShowEditModal(false); // Cierra el modal
         setRegistroSeleccionado(null); // Limpia el registro seleccionado
         formEditar.resetFields(); // Limpia el formulario
-        mostrarMensajeExito("El género se ha actualizado correctamente."); // Mensaje de éxito
+        mostrarMensajeExito("El país se ha actualizado correctamente."); // Mensaje de éxito
       })
       .catch((error) => {
         console.error("Error al validar el formulario:", error); // Manejo de errores
@@ -153,19 +114,19 @@ function MantenimientoGeneros() {
   // Confirmar eliminación de un usuario
   const handleConfirmarDelete = () => {
     setShowDeleteModal(false);
-    mostrarMensajeExito("El género se ha eliminado correctamente.");
+    mostrarMensajeExito("El país se ha eliminado correctamente.");
   };
 
   return (
     <div className="crud">
       <Nav />
-      <BotonRegresar to="/mantenimientoView" text="Regresar"  />
+      <BotonRegresar to="/mantenimientos" text="Regresar"  />
       {/* componente de navegación del  navdashboard */}
       <Tabla
         columnas={columnas} // Columnas de la tabla
-        datos={generos.map((genero) => ({ ...genero, id: genero.idGenero }))} // Datos de la tabla
-        titulo="Gestión de Géneros" // Título de la tabla
-        icono={<FaTransgenderAlt  className="icono-titulo" />} // Ícono del título
+        datos={paises.map((pais) => ({ ...pais, id: pais.idPais }))}  // Datos de la tabla
+        titulo="Gestión de Países" // Título de la tabla
+        icono={<FaGlobe className="icono-titulo" />} // Ícono del título
         onNuevoRegistro={handleNuevoRegistro} // Función para abrir el modal de nuevo registro
         onGenerarReporte={() => console.log("Generar reporte en PDF")} // Función para generar reporte
         onEdit={handleEdit} // Función para abrir el modal de edición
@@ -176,16 +137,15 @@ function MantenimientoGeneros() {
       <ModalNuevo
         show={showNuevoModal} // Controla la visibilidad del modal
         onHide={() => setShowNuevoModal(false)} // Función para cerrar el modal
-        titulo="Nuevo Género" // Título del modal
+        titulo="Nuevo País" // Título del modal
         onGuardar={handleGuardarNuevo} // Función para guardar el nuevo registro
         form={formNuevo} // Pasar el formulario al modal
         width={500} // Ancho del modal
       >
         <Form layout="vertical" form={formNuevo}>
-          <Form.Item
-            label="Descripción"name="descripcion"rules={[{required: true,message: "La descripcion del genero es obligatorio",},]}>
-            <Input placeholder="Ingresa la descripción del género" />
-          </Form.Item>
+          <Form.Item label="Nombre" name="nombre" rules={[{ required: true, message: "El nombre del país es obligatorio",},]}>
+            <Input placeholder="Ingresa el nombre del país" />
+          </Form.Item>   
         </Form>
       </ModalNuevo>
 
@@ -193,16 +153,15 @@ function MantenimientoGeneros() {
       <ModalEditar
         show={showEditModal} // Controla la visibilidad del modal
         onHide={handleCerrarEditModal} // Función para cerrar el modal
-        titulo="Editar Genero" // Título del modal
+        titulo="Editar País" // Título del modal
         onGuardar={handleGuardarEdit} // Función para guardar los cambios
         form={formEditar} // Formulario del modal
         registroSeleccionado={registroSeleccionado} // Usuario seleccionado
         width={500} // Ancho del modal
-
       >
-        <Form layout="vertical" form={formEditar}initialValues={registroSeleccionado || {}}>
-          <Form.Item label="Descripción"name="descripcion"rules={[{required: true,message: "La descripcion del genero es obligatorio", },]} >
-            <Input placeholder="Ingresa la descripción del género" />
+        <Form layout="vertical" form={formEditar} initialValues={registroSeleccionado || {}}>
+          <Form.Item label="Nombre"name="nombre"rules={[{required: true, message: "El nombre del país es obligatorio",},]}>
+            <Input placeholder="Ingresa el nombre del país" />
           </Form.Item>
         </Form>
       </ModalEditar>
@@ -212,10 +171,10 @@ function MantenimientoGeneros() {
         show={showDeleteModal} // Controla la visibilidad del modal
         onHide={() => setShowDeleteModal(false)} // Función para cerrar el modal
         onConfirmar={handleConfirmarDelete} // Función para confirmar la eliminación
-        mensaje={`¿Estás seguro de que deseas eliminar el género ${registroSeleccionado?.descripcion}?`} // Mensaje de confirmación
+        mensaje={`¿Estás seguro de que deseas eliminar el país ${registroSeleccionado?.nombre}?`} // Mensaje de confirmación
       />
     </div>
   );
 }
 
-export default MantenimientoGeneros;
+export default MantenimientoPaises;

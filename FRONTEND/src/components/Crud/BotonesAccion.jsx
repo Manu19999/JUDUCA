@@ -1,16 +1,18 @@
 import React from "react";
 import { FaPlus, FaFilePdf, FaUserShield, FaToggleOn, FaCreditCard  } from "react-icons/fa";
-
+import useAuth from "../../hooks/useAuth";
 const BotonesAccion = ({ 
   onNuevoRegistro, 
   onGenerarReporte,
   onPermisos,
   onEstados,
-  onDiseñoCredencial
+  onDiseñoCredencial,
+  objetoNombre
 }) => {
+  const { hasPermission } = useAuth();
   return (
     <div className="botones-accion">
-      {onNuevoRegistro && (
+       {onNuevoRegistro && hasPermission(objetoNombre, 'insertar') && (
         <button onClick={onNuevoRegistro} className="btn-nuevo-registro">
           <FaPlus />
           <span>Nuevo</span>

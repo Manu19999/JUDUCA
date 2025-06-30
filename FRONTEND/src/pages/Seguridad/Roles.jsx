@@ -215,6 +215,7 @@ function Roles() {
         onPermisos={() => navigate('/permisos')}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        objetoNombre="Roles"
       />
 
       {/* Modal para Nuevo Registro */}

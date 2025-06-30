@@ -58,6 +58,7 @@ function Bitacora() {
         titulo="Bitacoras del Sistema"
         icono={<FaHistory className="icono-titulo" />}   
         onGenerarReporte={() => console.log("Generar reporte en PDF")}
+        objetoNombre="Bitacoras"
       />
     </div>
   );

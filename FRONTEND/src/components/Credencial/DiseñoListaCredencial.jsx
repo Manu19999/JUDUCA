@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
+import  useAuth  from "../../hooks/useAuth"; // Importa el hook de autenticación
 import TargetaEstado from "../Credencial/targetasEstadoCredencial";
 import agregarCredencial from "../../assets/FondosCredencial/ListaCredenciales.jpg";
 import configCredencial from "../../assets/FondosCredencial/DiseñoCredencial.jpg";
-import { ToastContainer, toast } from "react-toastify";  // Importar toastify
-import "react-toastify/dist/ReactToastify.css"; // Importar los estilos de toastify
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "../../styles/Inicio/EventCard.css";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import { fetchWithAuth } from '../../utils/api';
 
+// Definir los nombres de objetos para cada opción
+const CREDENCIAL_VIEWS = {
+  ASIGNAR_CREDENCIAL: 'AsignacionCredencial',
+  DISENADOR_CREDENCIAL: 'AsignacionCampos'
+};
+
 const Seleccion = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const { hasPermission } = useAuth(); // Obtiene la función para verificar permisos
   const [selectedFicha, setSelectedFicha] = useState(() => {
     const fichaFromState = location.state?.selectedFicha;
     const fichaFromStorage = localStorage.getItem("selectedFicha");
@@ -31,20 +38,28 @@ const Seleccion = () => {
     }
   }, [selectedFicha, location.state, navigate]);
 
-  const mantenimientosOptions = [
+  // Todas las opciones con sus permisos requeridos
+  const allOptions = [
     {
       id: 1,
       title: "Listado de participantes",
       image: agregarCredencial,
-      url: "/asignarcredencial"
+      url: "/asignarcredencial",
+      requiredPermission: CREDENCIAL_VIEWS.ASIGNAR_CREDENCIAL
     },
     {
       id: 2,
       title: "Diseñador de credencial",
       image: configCredencial,
-      url: "/AsignacionCampos"
+      url: "/AsignacionCampos",
+      requiredPermission: CREDENCIAL_VIEWS.DISENADOR_CREDENCIAL
     },
   ];
+
+  // Filtrar opciones basadas en los permisos del usuario
+  const visibleOptions = allOptions.filter(option => 
+    hasPermission(option.requiredPermission, 'consultar')
+  );
 
   const handleInsertarCredencial = async () => {
     if (!selectedFicha) {
@@ -75,7 +90,6 @@ const Seleccion = () => {
 
     console.log("Enviando credencial:", credencial);
 
-
     try {
       const response = await fetchWithAuth("http://localhost:4000/api/credencial/insCredencial", {
         method: "POST",
@@ -91,13 +105,11 @@ const Seleccion = () => {
       }
 
       toast.success("Credencial insertada correctamente.");
-      // await obtenerCredenciales(); // si tienes esta función
     } catch (error) {
       console.error("Error:", error);
       toast.error(error.message || "Error al insertar la credencial.");
     }
   };
-
 
   return (
     <Container>
@@ -114,25 +126,32 @@ const Seleccion = () => {
         </p>
       )}
 
-      <Row className="justify-content-center">
-        {mantenimientosOptions.map((Estado) => (
-          <Col key={Estado.id} xs={12} sm={6} md={4} lg={3} xl={2}>
-            <TargetaEstado
-              Estado={Estado}
-              selectedFicha={selectedFicha}
-              onClickEspecial={
-                Estado.id === 1
-                  ? async () => {
-                    await handleInsertarCredencial();
-                  }
-                  : null
-              }
-            />
-          </Col>
-        ))}
-      </Row>
+      {visibleOptions.length > 0 ? (
+        <Row className="justify-content-center">
+          {visibleOptions.map((Estado) => (
+            <Col key={Estado.id} xs={12} sm={6} md={4} lg={3} xl={2}>
+              <TargetaEstado
+                Estado={Estado}
+                selectedFicha={selectedFicha}
+                onClickEspecial={
+                  Estado.id === 1
+                    ? async () => {
+                      await handleInsertarCredencial();
+                    }
+                    : null
+                }
+              />
+            </Col>
+          ))}
+        </Row>
+      ) : (
+        <div className="text-center mt-5">
+          <p className="no-access-message">
+            No tienes permisos para acceder a ninguna opción de configuración de credencial
+          </p>
+        </div>
+      )}
 
-      {/* Aquí agregas el contenedor de Toast */}
       <ToastContainer />
     </Container>
   );

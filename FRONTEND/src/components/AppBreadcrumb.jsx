@@ -32,15 +32,15 @@ const routeNames = {
   LLenadoFicha:"LLenado-Ficha",
 
   //Mantenimientos
-  mantenimientoView: "Mantenimientos",
-  MantenimientoPaises: "Países",
-  MantenimientoCiudades: "Ciudades",
-  MantenimientoInstalaciones: "Instalaciones",
-  MantenimientoGeneros: "Géneros",
-  MantenimientoApiMap: "ApiMap",
+  mantenimientos: "Mantenimientos",
+  paises: "Países",
+  ciudades: "Ciudades",
+  instalaciones: "Instalaciones",
+  generos: "Géneros",
+  apiMap: "ApiMap",
 
   //Juegos
-  JuegoView:"Juegos",
+  juegos:"Juegos",
 
 };
 
@@ -99,8 +99,8 @@ const getHierarchy = (pathname) => {
   if (pathnames.includes("nuevo-voucher")){
     return ["dashboard", "eventos","gestion-evento","vouchers","nuevo-voucher"];
   }
-  if (pathnames.includes("JuegoView")) {
-    return ["dashboard", "eventos","gestion-evento","JuegoView"];
+  if (pathnames.includes("juegos")) {
+    return ["dashboard", "eventos","gestion-evento","juegos"];
   }
   if (pathnames.includes("OpcionFicha")) {
     return ["dashboard", "eventos","gestion-evento","lista-fichas","OpcionFicha"];
@@ -119,23 +119,23 @@ const getHierarchy = (pathname) => {
   }
 
   // Mapeo manual de la jerarquía mantenimientos
-  if (pathnames.includes("mantenimientoView")) {
-    return ["dashboard", "mantenimientoView"];
+  if (pathnames.includes("mantenimientos")) {
+    return ["dashboard", "mantenimientos"];
   }
-  if (pathnames.includes("MantenimientoPaises")) {
-    return ["dashboard", "mantenimientoView","MantenimientoPaises"];
+  if (pathnames.includes("paises")) {
+    return ["dashboard", "mantenimientos","paises"];
   }
-  if (pathnames.includes("MantenimientoCiudades")) {
-    return ["dashboard", "mantenimientoView","MantenimientoCiudades"];
+  if (pathnames.includes("ciudades")) {
+    return ["dashboard", "mantenimientos","ciudades"];
   }
-  if (pathnames.includes("MantenimientoInstalaciones")) {
-    return ["dashboard", "mantenimientoView","MantenimientoInstalaciones"];
+  if (pathnames.includes("instalaciones")) {
+    return ["dashboard", "mantenimientos","instalaciones"];
   }
-  if (pathnames.includes("MantenimientoGeneros")) {
-    return ["dashboard", "mantenimientoView","MantenimientoGeneros"];
+  if (pathnames.includes("generos")) {
+    return ["dashboard", "mantenimientos","generos"];
   }
-  if (pathnames.includes("MantenimientoApiMap")) {
-    return ["dashboard", "mantenimientoView","MantenimientoApiMap"];
+  if (pathnames.includes("apiMap")) {
+    return ["dashboard", "mantenimientos","apiMap"];
   }
 
   return pathnames;
@@ -171,7 +171,7 @@ const AppBreadcrumb = () => {
   };
 
   const handleMantenimientoClick = () => {
-    navigate("/mantenimientoView"); // navega a la ruta seguridad cuando se hace clic en el item "Seguridad"
+    navigate("/mantenimientos"); // navega a la ruta seguridad cuando se hace clic en el item "Seguridad"
   };
 
   const handleEventoClick = () => {
@@ -236,7 +236,7 @@ const AppBreadcrumb = () => {
               </Breadcrumb.Item>
             );
           }
-          if (name === "mantenimientoView") {
+          if (name === "mantenimientos") {
             return (
               <Breadcrumb.Item key={name}>
                 <span

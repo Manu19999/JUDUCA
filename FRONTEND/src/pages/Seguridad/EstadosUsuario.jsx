@@ -213,6 +213,7 @@ function EstadosUsuario() {
         onGenerarReporte={() => console.log("Generar reporte en PDF")}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        objetoNombre="EstadosUsuario"
       />
 
       {/* Modal para Nuevo Registro */}

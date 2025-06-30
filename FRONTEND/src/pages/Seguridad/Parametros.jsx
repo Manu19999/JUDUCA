@@ -129,6 +129,7 @@ function Parametros() {
         onGenerarReporte={() => console.log("Generar reporte en PDF")}
         onEdit={handleEdit}
         onDetails={handleDetails} // Función para abrir el modal de detalles
+        objetoNombre="Parametros"
       />
 
       {/* Modal para Editar Registro */}

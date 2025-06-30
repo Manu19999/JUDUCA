@@ -216,6 +216,7 @@ function Objetos() {
         onGenerarReporte={() => console.log("Generar reporte en PDF")}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        objetoNombre="Objetos"
       />
 
       {/* Modal para Nuevo Registro */}

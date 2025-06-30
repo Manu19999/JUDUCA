@@ -124,6 +124,18 @@ export const Login = async (req, res) => {
             path: '/api/auth/refresh'
         });
 
+        // 8. Obtener permisos del usuario
+        const permisosResult = await pool.request()
+        .input('idRol', sql.Int, user.idRol)
+        .execute('Seguridad.splObtenerPermisosPorRol');
+
+        const permisos = permisosResult.recordset.map(p => ({
+            objeto: p.nombreObjeto,
+            consultar: p.consultar,
+            insertar: p.insercion,
+            actualizar: p.actualizacion,
+            eliminar: p.eliminacion
+        }));
         // Respuesta exitosa usando apiResponse
         response.setData({
             message: 'Autenticación exitosa',
@@ -132,7 +144,8 @@ export const Login = async (req, res) => {
                 email: user.email,
                 nombreUsuario: user.nombreUsuario,
                 idRol: user.idRol
-            }
+            },
+            permisos: permisos
         });
         
         return res.status(200).json(response.getResponse());

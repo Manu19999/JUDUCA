@@ -219,6 +219,7 @@ function Universidades() {
         onNuevoRegistro={handleNuevoRegistro}
         onGenerarReporte={() => console.log("Generar reporte en PDF")}
         onEdit={handleEdit}
+        objetoNombre="Universidades"
       />
 
       {/* Modal para Nuevo Registro */}

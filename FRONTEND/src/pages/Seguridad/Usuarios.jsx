@@ -450,6 +450,7 @@ function Usuarios() {
         onEdit={handleEdit} // Función para abrir el modal de edición
         onDetails={handleDetails} // Función para abrir el modal de detalles
         onEstados={() => navigate('/estados-usuario')} // boton para estados de usuario
+        objetoNombre="Usuarios"
       />
 
       {/* Modal para Nuevo Registro */}

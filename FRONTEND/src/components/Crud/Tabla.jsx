@@ -5,7 +5,7 @@ import BotonesAccionFila from "./BotonesAccionFila"; // Importa el componente de
 import Paginacion from './Paginacion';
 import Filtros from './Filtros';
 
-const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarReporte, onPermisos, onEstados, onEdit, onDelete, onDetails, onPrintcredentials, onDiseñoCredencial}) => {
+const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarReporte, onPermisos, onEstados, onEdit, onDelete, onDetails, onPrintcredentials, onDiseñoCredencial, objetoNombre}) => {
   const [paginaActual, setPaginaActual] = useState(1);
   const [registrosPorPagina, setRegistrosPorPagina] = useState(8);
   const [busqueda, setBusqueda] = useState('');
@@ -57,6 +57,7 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
             onPermisos={onPermisos}
             onEstados={onEstados}
             onDiseñoCredencial={onDiseñoCredencial}
+            objetoNombre={objetoNombre}
           />
         )}
       </div>
@@ -101,6 +102,7 @@ const Tabla = ({ columnas, datos, titulo, icono, onNuevoRegistro, onGenerarRepor
                             onDelete={onDelete}
                             onDetails={onDetails} // Pasamos onDetails solo si está definido
                             onPrintcredentials={onPrintcredentials} 
+                            objetoNombre={objetoNombre}
                           />
                         ) : col.campo === "indice" ? (
                           datos.findIndex(d => d.id === fila.id) + 1 // Encuentra el índice original

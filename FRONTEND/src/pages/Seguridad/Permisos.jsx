@@ -245,6 +245,7 @@ function Permisos() {
         onNuevoRegistro={handleNuevoRegistro}
         onGenerarReporte={() => console.log("Generar reporte en PDF")}
         onEdit={handleEdit}
+        objetoNombre="Permisos"
       />
 
       {/* Modal para Nuevo Registro */}

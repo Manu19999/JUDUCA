@@ -13,7 +13,7 @@ import "../../styles/Credencial/credencial.css";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import { MdCode } from "react-icons/md";
 import { FaArrowLeft } from "react-icons/fa";
-import BotonRegresar from "../../components/Dashboard/BotonRegresar";
+import BotonRegresar from "../../components/Dashboard/BotonRegresar.jsx";
 const { Option } = Select;
 const { TabPane } = Tabs;
 
@@ -147,7 +147,7 @@ function MantenimientoApiMap() {
   return (
     <div className="crud">
       <Nav />
-      <BotonRegresar to="/mantenimientoView" text="Regresar"  />
+      <BotonRegresar to="/mantenimientos" text="Regresar"  />
       {/* componente de navegación del  navdashboard */}
       <Tabla
         columnas={columnas} // Columnas de la tabla
