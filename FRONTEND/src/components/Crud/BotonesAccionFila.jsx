@@ -1,7 +1,7 @@
 import React from "react";
-import { FaEdit, FaTrashAlt, FaEye } from "react-icons/fa";
+import { FaEdit, FaTrashAlt, FaEye, FaCreditCard } from "react-icons/fa";
 
-const BotonesAccionFila = ({ id, onEdit, onDelete, onDetails }) => {
+const BotonesAccionFila = ({ id, onEdit, onDelete, onDetails, onPrintcredentials}) => {
   return (
     <div className="d-flex flex-wrap gap-2 contenedor-botones">
       {/* Botón de Editar */}
@@ -22,6 +22,12 @@ const BotonesAccionFila = ({ id, onEdit, onDelete, onDetails }) => {
       {onDetails && (
         <button onClick={() => onDetails(id)} className="btn-detalles">
           <FaEye />
+        </button>
+      )}
+      {/* Botón de Editar */}
+      {onPrintcredentials && (
+        <button onClick={() => onPrintcredentials(id)} className="btn-actualizar">
+          <FaCreditCard />
         </button>
       )}
     </div>
