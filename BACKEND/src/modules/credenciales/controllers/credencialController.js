@@ -131,6 +131,36 @@ export const ObtenerDiseñoCredencialPorFicha = async (req, res) => {
 };
 
 
+export const ObtenerDiseñoCredencialPorParticipante = async (req, res) => {
+  const { idRegistroParticipanteEvento  } = req.params;
+  const response = new apiResponse(); // Instancia de apiResponse
+
+  try {
+    const pool = await conexionbd(); // Obtener conexión a la BD
+    const result = await pool
+      .request()
+      .input("idRegistroParticipanteEvento", idRegistroParticipanteEvento )
+      .execute("Credenciales.splDiseñoCredencialPorParticipanteObtener");
+
+    // Si no hay resultados
+    if (result.recordset.length === 0) {
+      response.setHasError(true);
+      response.setErrors(["No se encontraron campos asignados para esta participante."]);
+      return res.status(404).json(response.getResponse());
+    }
+
+    // Respuesta exitosa
+    response.setData(result.recordset);
+    return res.status(200).json(response.getResponse());
+  } catch (error) {
+    // Manejo de errores inesperados
+    response.setHasError(true);
+    response.setErrors([`Error al obtener el diseño de credencial: ${error.message}`]);
+    return res.status(500).json(response.getResponse());
+  }
+};
+
+
 
 
 

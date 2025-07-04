@@ -37,7 +37,7 @@ const BotonesAccion = ({
       {onDiseñoCredencial && (
         <button onClick={onDiseñoCredencial} className="btn-nuevo-registro">
           <FaCreditCard />
-          <span>Imprimir Diseño</span>
+          <span>Ver Diseño</span>
         </button>
       )}
       
