@@ -67,6 +67,7 @@ const Mantenimientosvoucher =React.lazy(() => import("./pages/Vouchers/ManteVouc
 const CajaComedor =React.lazy(() => import("./pages/Vouchers/CajaComedor.jsx"));
 const UbicacionComedores =React.lazy(() => import("./pages/Vouchers/UbicacionComedores"));
 const TipoComidas =React.lazy(() => import("./pages/Vouchers/TipoComida"));
+const AsignacionVouchers =React.lazy(() => import("./pages/Vouchers/AsignacionesVouchers"));
 
 //Juegos
 const JuegoView =React.lazy(() => import("./pages/Juegos/juegosView"));
@@ -157,6 +158,7 @@ function App() {
         <Route path="/CajaComedor" element={<CajaComedor/>} /> 
         <Route path="/ubicacionComedores" element={<UbicacionComedores />} />
         <Route path="/TipoComidas" element={<TipoComidas />} />
+        <Route path="/AsignacionVouchers" element={<AsignacionVouchers />} />
 
 
           {/* ruta para juegos */}

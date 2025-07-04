@@ -43,6 +43,7 @@ import VoucherComidaRoutes   from './src/modules/vouchers/routes/voucherComidaRo
 import UbicacionComedores from './src/modules/vouchers/routes/ubicacionesComedorRoutes.js'; // Asegúrate de que esta ruta sea correcta
 import Comedores from './src/modules/vouchers/routes/comedorRoutes.js'; // Asegúrate de que esta ruta sea correcta
 import TipoComida from './src/modules/vouchers/routes/tipoComidaRoutes.js'; // Asegúrate de que esta ruta sea correcta
+import AsignacionesVouchersRoutes from './src/modules/vouchers/routes/asignacionesVouchersRoutes.js'; // Asegúrate de que esta ruta sea correcta
 
 
 
@@ -108,6 +109,7 @@ app.use('/api/voucherComida', VoucherComidaRoutes);
 app.use('/api/ubicacionComedores', UbicacionComedores); // Asegúrate de que esta ruta sea correcta
 app.use('/api/comedores', Comedores); // Asegúrate de que esta ruta sea correcta
 app.use('/api/tipoComida', TipoComida); // Asegúrate de que esta ruta sea correcta
+app.use('/api/asignacionesVouchers', AsignacionesVouchersRoutes); // Asegúrate de que esta ruta sea correcta
 
 
 //++++++++++++++++++++++++++ Inicialización del servidor ++++++++++++++++++++++++++ 

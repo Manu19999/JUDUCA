@@ -21,14 +21,14 @@ const Mantenimientosvoucher = () => {
       title: "Asignación de Vouchers",
       image: VoucherImage,
       description: "Gestion de asignacion de vouchers.",
-      route: "/voucher", 
+      route: "/AsignacionVouchers", // Ruta a la que navegará al hacer clic
     },
     {
       id: 2,
       title: "Consumo de Vouchers",
       image: Consumo,
       description: "Listado de los comsumos de vouchers.",
-      route: "/nuevo-voucher", 
+      route: "", 
     },
         
 {
