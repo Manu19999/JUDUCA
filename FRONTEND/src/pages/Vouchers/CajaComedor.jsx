@@ -5,8 +5,9 @@ import { FaArrowLeft, FaEdit, FaTrashAlt, FaReceipt } from "react-icons/fa";
 import Nav from "../../components/Dashboard/navDashboard";
 
 // Importa las imágenes que usarás para las cajas
-import VoucherImage from "../../../src/assets/Voucher.jpg"; 
-import NuevoVoucherImage from "../../../src/assets/Vouchernuevo.jpg"; 
+import Ubicacioncomedor from "../../../src/assets/Ubicacioncomedor.jpg"; 
+import Comedores from "../../../src/assets/comedor.jpg"; 
+import Tipocomida from "../../../src/assets/Tipocomida.jpg"; 
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Vouchers/CajaVoucher.css";
 
@@ -18,21 +19,21 @@ const CajaComedor = () => {
     {
       id: 1,
       title: "Ubicación de comedor",
-      image: NuevoVoucherImage,
+      image: Ubicacioncomedor,
       description: "tablas Mantenimiento de vouchers.",
       route: "/UbicacionComedores", // Ruta a la que navegará al hacer clic
     },
 {
       id: 2,
       title: "Comedores",
-      image: NuevoVoucherImage,
+      image: Comedores,
       description: "Comedores disponibles.",
       route: "/Comedor", 
     },
     {
       id: 3,
       title: "Tipo de comida",
-      image: NuevoVoucherImage,
+      image: Tipocomida,
       description: "tablas Mantenimiento de vouchers.",
       route: "/TipoComidas", // Ruta a la que navegará al hacer clic
     },

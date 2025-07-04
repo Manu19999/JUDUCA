@@ -59,7 +59,7 @@ const AsignacionCredencial =React.lazy(() => import("./pages/Credenciales/Asigna
 //vouchers y tickets
 const Vouchers =React.lazy(() => import("./pages/voucher"));
 const CajaVouchers =React.lazy(() => import("./pages/Vouchers/CajaVouchers"));
-const ConsumosVouchers =React.lazy(() => import("./pages/ConsumoVoucher"));
+const ConsumosVouchers =React.lazy(() => import("./pages/Vouchers/ConsumoVoucher"));
 const Comedores =React.lazy(() => import("./pages/Vouchers/Comedores"));
 const Tickets =React.lazy(() => import("./pages/tickets"));
 const NuevoVoucher =React.lazy(() => import("./pages/Vouchers/Nuevo-Voucher"));

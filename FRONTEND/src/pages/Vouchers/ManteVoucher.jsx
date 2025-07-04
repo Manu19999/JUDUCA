@@ -6,7 +6,8 @@ import Nav from "../../components/Dashboard/navDashboard";
 
 // Importa las imágenes que usarás para las cajas
 import VoucherImage from "../../../src/assets/Voucher.jpg"; 
-import NuevoVoucherImage from "../../../src/assets/Vouchernuevo.jpg"; 
+import Comedores from "../../../src/assets/Comedores.jpg"; 
+import Consumo from "../../../src/assets/Consumo.jpg";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Vouchers/CajaVoucher.css";
 
@@ -19,22 +20,22 @@ const Mantenimientosvoucher = () => {
       id: 1,
       title: "Asignación de Vouchers",
       image: VoucherImage,
-      description: "Gestionar los comedores.",
+      description: "Gestion de asignacion de vouchers.",
       route: "/voucher", 
     },
     {
       id: 2,
       title: "Consumo de Vouchers",
-      image: NuevoVoucherImage,
-      description: "Crear un nuevo voucher.",
+      image: Consumo,
+      description: "Listado de los comsumos de vouchers.",
       route: "/nuevo-voucher", 
     },
         
 {
       id: 5,
       title: "Comedores",
-      image: NuevoVoucherImage,
-      description: "tablas Mantenimiento de vouchers.",
+      image: Comedores,
+      description: "tablas Mantenimiento de Comedores .",
       route: "/CajaComedor", 
     },
 

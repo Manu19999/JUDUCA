@@ -7,6 +7,7 @@ import Nav from "../../components/Dashboard/navDashboard";
 // Importa las imágenes que usarás para las cajas
 import VoucherImage from "../../../src/assets/Voucher.jpg"; 
 import NuevoVoucherImage from "../../../src/assets/Vouchernuevo.jpg"; 
+import ManteComidas from "../../../src/assets/ManteComidas.jpg";
 import BotonRegresar from "../../components/Dashboard/BotonRegresar";
 import "../../styles/Vouchers/CajaVoucher.css";
 
@@ -32,7 +33,7 @@ const CajaVouchers = () => {
      {
       id: 3,
       title: "Mantenimiento",
-      image: NuevoVoucherImage,
+      image: ManteComidas,
       description: "Comedores, comidas, ubicaciones, etc.",
       route: "/Mantenimientosvoucher", 
     },
